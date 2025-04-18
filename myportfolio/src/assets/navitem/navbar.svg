@@ -1,0 +1,25 @@
+<svg width="833" height="113" viewBox="0 0 833 113" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d_569_295)">
+<rect x="7" y="7" width="816" height="91" fill="#1A2B3D" shape-rendering="crispEdges"/>
+<rect x="9.5" y="9.5" width="811" height="86" stroke="black" stroke-width="5" shape-rendering="crispEdges"/>
+<rect x="533" y="51" width="86" height="10" fill="#344353"/>
+<rect x="1.5" y="-1.5" width="11" height="11" transform="matrix(1 0 0 -1 813 13)" fill="#CCC7A5" stroke="#99A1A9" stroke-width="3"/>
+<rect x="1.5" y="-1.5" width="11" height="11" transform="matrix(1 0 0 -1 813 102)" fill="#CCC7A5" stroke="#99A1A9" stroke-width="3"/>
+<rect x="1.5" y="-1.5" width="11" height="11" transform="matrix(1 0 0 -1 0 104)" fill="#CCC7A5" stroke="#99A1A9" stroke-width="3"/>
+<rect x="1.5" y="-1.5" width="11" height="11" transform="matrix(1 0 0 -1 0 11)" fill="#CCC7A5" stroke="#99A1A9" stroke-width="3"/>
+<line x1="350" y1="98.0234" x2="350" y2="9.00097" stroke="#67727E" stroke-width="4"/>
+<line x1="514" y1="98" x2="514" y2="11" stroke="#67727E" stroke-width="4"/>
+<line x1="651" y1="98" x2="651" y2="11" stroke="#67727E" stroke-width="4"/>
+</g>
+<defs>
+<filter id="filter0_d_569_295" x="0" y="0" width="833" height="113" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="6" dy="6"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_569_295"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_569_295" result="shape"/>
+</filter>
+</defs>
+</svg>

@@ -1,16 +1,12 @@
-import { useState } from 'react'
-
-import viteLogo from '/vite.svg'
-import './App.css'
-
+import React from "react";
+import { Navbar } from "./components/Navbar/Navbar.jsx";
+import "../styles/global.css";
 function App() {
- 
-
   return (
-    <>
-      <p>merhana</p>
-    </>
-  )
+    <div>
+      <Navbar />
+    </div>
+  );
 }
 
-export default App
+export default App;
