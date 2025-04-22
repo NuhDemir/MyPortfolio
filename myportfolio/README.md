@@ -1,12 +1,36 @@
-# React + Vite
+<p align="center">
+  <img src="./src/assets/img/project.png" alt="Project Preview" width="800"/>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# 🌐 Kişisel Portfolyo Web Sitesi
 
-Currently, two official plugins are available:
+Bu proje, kendi kişisel portfolyo sitemin modern web teknolojileri ile geliştirilmiş bir versiyonudur. Tüm tasarım Figma kullanılarak tarafımdan yapılmış, geliştirme süreci boyunca **React**, **GSAP**, **Axios** gibi kütüphaneler kullanılmıştır. Kod yapısı **frontend design pattern** odaklı olarak modüler ve ölçeklenebilir bir biçimde organize edilmiştir.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Kullanılan Teknolojiler
 
-## Expanding the ESLint configuration
+- **React** – Bileşen tabanlı kullanıcı arayüzü oluşturmak için
+- **GSAP** – Yumuşak ve etkileyici animasyonlar için
+- **Axios** – API istekleri ve veri çekme işlemleri için
+- **React Hooks** – Fonksiyonel bileşenlerde durum yönetimi
+- **Modüler Yapı** – `components`, `hooks`, `utils`, `style` gibi dizinlerle temiz yapı
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+
+## ✨ Özellikler
+
+- 🎨 Figma ile özenle hazırlanmış özgün tasarım
+- ⚙️ Temiz, anlaşılır ve sürdürülebilir kod yapısı
+- 🔁 API'den veri çekip dinamik olarak içerik güncelleme
+- 🎬 GSAP ile animasyonlu geçiş efektleri
+- 🌐 Responsive ve mobil uyumlu tasarım
+
+## 🛠️ Kurulum
+
+Projeyi yerel bilgisayarınızda çalıştırmak için aşağıdaki adımları izleyebilirsiniz:
+
+```bash
+git clone https://github.com/kullaniciadi/myportfolio.git
+cd myportfolio
+npm install
+npm run dev
+
+
