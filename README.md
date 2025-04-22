@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./myportfolio/src/assets/img/project.png" alt="Project Preview" width="500"/>
+  <img src="./myportfolio/src/assets/img/project.png" alt="Project Preview" width="600"/>
 </p>
 
 # 🌐 Kişisel Portfolyo Web Sitesi
