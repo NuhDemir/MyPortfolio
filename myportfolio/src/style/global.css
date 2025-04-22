@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
+
+/* Base variables */
+:root {
+  --font-primary: "Space Grotesk", sans-serif;
+  --color-bg-primary: #36b069;
+  --color-text-primary: #ffffff;
+  --color-accent: #57ffa5;
+  --color-accent-hover: #0db963;
+  --navbar-height: 60px;
+  --container-padding: 2rem;
+  --transition-default: all 0.3s ease;
+  --color-border: #ccc7a5;
+  --paper-color: #fff;
+}
+
+/* Reset and base styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  display: block;
+  padding-top: var(--navbar-height);
+}
+
+/* App container */
+
+.app-container.show {
+  opacity: 1;
+}
+
+.app-container.hide {
+  opacity: 0;
+}
+
+/* Content container - sits below navbar */
+.content-container {
+  flex: 1;
+  width: 100%;
+  margin-top: var(--navbar-height); /* Navbar yüksekliği kadar boşluk bırakır */
+  position: relative;
+}
+
+/* Links and buttons */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: var(--transition-default);
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+/* Smooth fade in animation utility */
+.fade-in {
+  animation: fadeIn 0.5s ease-in forwards;
+}

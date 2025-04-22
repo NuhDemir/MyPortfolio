@@ -1,0 +1,391 @@
+.about-container {
+  margin: 0 3% 0 3%;
+  max-width: 1600px;
+}
+
+/* Header styles */
+.header {
+  padding: 20px 20px 0;
+  color: #fff;
+}
+
+.header img {
+  width: 40%;
+  height: 40%;
+  margin-right: 10px;
+  margin-bottom: 20px;
+}
+
+/* About grid container */
+.about-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr; /* Stats column and services column */
+  border-top: 2px solid #000;
+  background: #ffffff65;
+}
+
+/* Stats styling */
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+}
+
+.stat-section {
+  padding: 20px;
+}
+
+.stat-section:first-child {
+  border-bottom: 2px solid #000;
+}
+
+.stat-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 16px;
+  color: #26261b;
+  font-weight: 700;
+}
+
+/* Services section styling */
+.services-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.service-card {
+  padding: 20px;
+  border-right: 2px solid #000;
+  border-bottom: 2px solid #000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+}
+
+.service-card:nth-child(2n) {
+  border-right: none;
+}
+
+.service-card:nth-child(3),
+.service-card:nth-child(4) {
+  border-bottom: none;
+}
+
+.service-card:nth-child(3) {
+  border-bottom: 2px solid #000;
+}
+.service-card:nth-child(4) {
+  border-bottom: 2px solid #000;
+}
+
+.icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+.service-card:hover .icon-wrapper {
+  transform: scale(1.1);
+}
+
+.service-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.service-desc {
+  font-size: 14px;
+  color: #000;
+  line-height: 1.4;
+  margin: 0 10px;
+}
+
+.learn-more {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  margin-top: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  -webkit-transition: transform 0.3s ease;
+  -moz-transition: transform 0.3s ease;
+  -ms-transition: transform 0.3s ease;
+  -o-transition: transform 0.3s ease;
+  color: #26261b;
+}
+
+.learn-more:after {
+  content: "→";
+  opacity: 0;
+  margin-left: 4px;
+  transition: opacity 0.3s ease, margin-left 0.3s ease;
+}
+
+.service-card:hover .learn-more:after {
+  opacity: 1;
+  margin-left: 8px;
+}
+
+.stat-value,
+.stat-label,
+.service-title,
+.service-desc {
+  will-change: transform, opacity;
+}
+
+/* Mobil küçük (<= 480px) */
+@media (max-width: 480px) {
+  /* Küçük telefonlar */
+  .about-grid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .stats-container {
+    border-right: none;
+    flex-direction: column;
+  }
+
+  .services-section {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    border-right: none;
+  }
+
+  .service-card:nth-child(3) {
+    border-bottom: 2px solid #000;
+  }
+
+  .header img {
+    width: 60%;
+    height: 60%;
+  }
+
+  .stat-value {
+    font-size: 24px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  .service-title {
+    font-size: 16px;
+  }
+
+  .service-desc {
+    font-size: 12px;
+  }
+
+  .icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Mobil normal (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Tüm telefonlar + küçük tabletler (dikey) */
+  .about-grid {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .stats-container {
+    border-right: none;
+    flex-direction: column;
+  }
+
+  .services-section {
+    grid-template-columns: 1fr;
+  }
+
+  .service-card {
+    border-right: none;
+  }
+
+  .service-card:nth-child(3) {
+    border-bottom: 2px solid #000;
+  }
+
+  .header img {
+    width: 60%;
+    height: 60%;
+  }
+
+  .stat-value {
+    font-size: 26px;
+  }
+}
+
+/* Tablet (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* iPad, Android tablet (yatay/dikey) */
+  .about-grid {
+    grid-template-columns: 180px 1fr; /* Slightly smaller stats column */
+  }
+
+  .services-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stat-section {
+    padding: 15px;
+  }
+
+  .header img {
+    width: 60%;
+    height: 60%;
+  }
+
+  .service-card {
+    padding: 15px;
+  }
+
+  .service-desc {
+    font-size: 13px;
+  }
+}
+
+/* Küçük Laptop (1025px - 1280px) */
+@media (min-width: 1025px) and (max-width: 1280px) {
+  /* Küçük dizüstüler */
+  .about-grid {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .about-container {
+    max-width: 1200px;
+  }
+
+  .header img {
+    padding-top: 10px;
+    width: 50%;
+    height: 50%;
+  }
+
+  .service-card {
+    padding: 20px;
+  }
+}
+
+/* Normal Laptop ve Masaüstü (1281px - 1536px) */
+@media (min-width: 1281px) and (max-width: 1536px) {
+  /* Full HD'ye kadar olan tüm ekranlar */
+  .about-grid {
+    grid-template-columns: 220px 1fr; /* Slightly larger stats column */
+  }
+
+  .about-container {
+    max-width: 1400px;
+  }
+
+  .header img {
+    padding-top: 10px;
+    width: 50%;
+    height: 50%;
+  }
+
+  .stat-value {
+    font-size: 32px;
+  }
+
+  .service-card {
+    padding: 25px;
+  }
+
+  .service-title {
+    font-size: 20px;
+  }
+
+  .service-desc {
+    font-size: 15px;
+  }
+}
+
+/* Büyük ekranlar (1536px ve üzeri) */
+@media (min-width: 1536px) {
+  /* 2K, 4K monitörler */
+  .about-grid {
+    grid-template-columns: 250px 1fr; /* Larger stats column */
+  }
+
+  .about-container {
+    max-width: 1800px;
+  }
+
+  .header {
+    font-size: 30px;
+    padding: 40px 30px;
+  }
+
+  .stat-value {
+    font-size: 36px;
+  }
+
+  .header img {
+    padding-top: 10px;
+    width: 50%;
+    height: 50%;
+  }
+
+  .stat-label {
+    font-size: 16px;
+  }
+
+  .service-card {
+    padding: 30px;
+    gap: 15px;
+  }
+
+  .service-title {
+    font-size: 22px;
+  }
+
+  .service-desc {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .icon-wrapper {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 15px;
+  }
+
+  .learn-more {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+}
+
+@supports (-webkit-overflow-scrolling: touch) {
+  .services-section {
+    transform: translate3d(0, 0, 0);
+  }
+}

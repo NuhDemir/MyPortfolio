@@ -1,113 +1,102 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useRef, useState, useEffect } from "react";
+import "./style/Navbar.css";
 import iconSvg from "../../assets/navitem/icon.svg";
 import LineSvg from "../../assets/main/Line.svg";
-// Ana Navbar Konteyneri
-const NavbarBackgroundContainer = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
+import hamburgerIcon from "../../assets/icons/navbar/hamburger.svg";
+import closeIcon from "../../assets/icons/navbar/close.svg";
+import { NavbarContainer } from "./NavbarContainer";
+import { NavItem } from "./NavItem";
+import { IconContainer } from "./IconContainer";
 
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-// İçerik Konteyneri
-const NavbarContainer = styled.div`
-  position: relative;
-  width: 340px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  background: #20262fff;
-  justify-content: space-between;
-  border: 1px solid #384456;
-`;
-
-// Logo Konteyneri
-const IconContainer = styled.div`
-  width: 40px;
-  height: 40px;
-  background: #0b1420;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #384456;
-`;
-
-// Navigasyon Öğeleri Konteyneri
-const NavItemsContainer = styled.div`
-  display: flex;
-  height: 100%;
-`;
-
-// Navigasyon Öğesi
-const NavItem = styled.div`
-  color: white;
-  font-size: 14px;
-  font-weight: 400;
-  cursor: pointer;
-  padding: 0 20px;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-right: 1px solid #384456;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #2a3747;
-  }
-
-  &:last-child {
-    border-right: none;
-  }
-`;
-
-// Dekoratif Nokta
-const DecorativeDot = styled.div`
-  width: 4px;
-  height: 4px;
-  background: white;
-  position: absolute;
-`;
-const NavbarOutline = styled.div`
-  margin-top: 60px;
-  left: 0;
-  position: fixed;
-  top: 0;
-  width: 1448px;
-`;
 export const Navbar = () => {
+  const iconRef = useRef(null);
+  const [showMenu, setShowMenu] = useState(true); // Navbar açık mı?
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollThreshold = 200; // örnek değer
+      if (window.scrollY > scrollThreshold) {
+        setShowMenu(false); // navbar'ı minimize et
+      } else {
+        setShowMenu(true);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleItemClick = (itemName) => {
+    console.log(`${itemName} öğesine tıklandı`);
+    setIsMobileMenuOpen(false); // menüyü kapat
+  };
+
   return (
-    <NavbarBackgroundContainer>
-      <NavbarContainer>
-        {/* Logo */}
-        <IconContainer>
-          <img src={iconSvg} alt="Icon" width="24px" height="24px" />
-        </IconContainer>
+    <>
+      {/* Sabit ikon (scroll sonrası sağ üstte görünür) */}
+      {!showMenu && (
+        <div
+          className="navbar-icon-fixed"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          <img
+            src={isMobileMenuOpen ? closeIcon : hamburgerIcon}
+            alt="Menu Toggle"
+            width="24"
+            height="24"
+          />
+        </div>
+      )}
 
-        {/* Navigasyon Öğeleri */}
-        <NavItemsContainer>
-          <NavItem>Hakkımda</NavItem>
-          <NavItem>Portfolio</NavItem>
-          <NavItem>İletişim</NavItem>
-        </NavItemsContainer>
+      {/* Ana navbar */}
+      <div
+        className={`navbar-background-container ${
+          !showMenu ? "navbar-hidden" : ""
+        }`}
+      >
+        <NavbarContainer>
+          <IconContainer>
+            <img
+              ref={iconRef}
+              src={iconSvg}
+              alt="Icon"
+              width="24px"
+              height="24px"
+            />
+          </IconContainer>
 
-        {/* Dekoratif Noktalar */}
-        <DecorativeDot style={{ left: -2, top: -2 }} />
-        <DecorativeDot style={{ right: -2, top: -2 }} />
-        <DecorativeDot style={{ left: -2, bottom: -2 }} />
-        <DecorativeDot style={{ right: -2, bottom: -2 }} />
-      </NavbarContainer>
+          <div className="nav-items-container">
+            <NavItem onClick={() => handleItemClick("About")}>About</NavItem>
+            <NavItem onClick={() => handleItemClick("Portfolio")}>
+              Portfolio
+            </NavItem>
+            <NavItem onClick={() => handleItemClick("Contact")}>
+              Contact
+            </NavItem>
+          </div>
 
-      <NavbarOutline>
-        <img src={LineSvg} alt="Line" width="1448px" />
-      </NavbarOutline>
-    </NavbarBackgroundContainer>
+          <div className="decorative-dot" style={{ left: -3, top: -3 }} />
+          <div className="decorative-dot" style={{ right: -3, top: -3 }} />
+          <div className="decorative-dot" style={{ left: -3, bottom: -3 }} />
+          <div className="decorative-dot" style={{ right: -3, bottom: -3 }} />
+        </NavbarContainer>
+
+        <div className="navbar-outline">
+          <img src={LineSvg} alt="Line" width={"2000px"} />
+        </div>
+      </div>
+
+      {/* Mobil Menü */}
+      {isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <NavItem onClick={() => handleItemClick("About")}>About</NavItem>
+          <NavItem onClick={() => handleItemClick("Portfolio")}>
+            Portfolio
+          </NavItem>
+          <NavItem onClick={() => handleItemClick("Contact")}>Contact</NavItem>
+        </div>
+      )}
+    </>
   );
 };

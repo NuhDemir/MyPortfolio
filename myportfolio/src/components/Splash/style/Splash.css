@@ -1,0 +1,48 @@
+.splash-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.5s ease;
+  background-color: #0ac285;
+}
+
+.splash-container.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.letter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splash-letter {
+  display: inline-block;
+  font-size: 5rem;
+  font-weight: bold;
+  color: #00296b;
+  opacity: 0;
+  transform: translateY(50px);
+  -webkit-transform: translateY(50px);
+  -moz-transform: translateY(50px);
+  -ms-transform: translateY(50px);
+  -o-transform: translateY(50px);
+  margin: 0 0.2rem;
+}
+@media (max-width: 1200px) {
+  .splash-letter {
+    font-size: 3.2rem;
+  }
+}
+@media (max-width: 768px) {
+  .splash-letter {
+    font-size: 2.5rem;
+  }
+}

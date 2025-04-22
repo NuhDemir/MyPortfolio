@@ -1,0 +1,737 @@
+/* Main container and section styles */
+section {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -100;
+  height: 100%;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+}
+
+.main-container {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  z-index: 50;
+  box-sizing: border-box;
+}
+
+.main-content {
+  max-width: 600px;
+  z-index: 10;
+  box-sizing: border-box;
+  width: 100%;
+  position: relative;
+}
+
+/* Title styles */
+.main-title {
+  font-size: clamp(2rem, 8vw, 8rem);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.5rem;
+  line-height: 0.9;
+  word-break: break-word;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  text-transform: uppercase;
+}
+
+.main-subtitle {
+  font-size: clamp(0.9rem, 3vw, 1.5rem);
+  background-color: #ccc7a5;
+  color: #26261b;
+  margin-bottom: clamp(1rem, 4vw, 2rem);
+  padding: 0.5rem 1rem;
+  text-transform: uppercase;
+  opacity: 0;
+  display: inline-block;
+  background-size: cover;
+  transition: opacity 0.5s ease;
+}
+
+/*--BUTTON--*/
+/* Container */
+.portfolio-button-container {
+  display: inline-block;
+  position: relative;
+}
+
+/* Button */
+
+.portfolio-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* ikonlar ve metin arasında boşluk */
+  padding: clamp(0.4rem, 2vw, 0.75rem) clamp(0.8rem, 3vw, 1.5rem);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 16px;
+  border: 2px solid var(--Black-100, #001429);
+  background-color: #fff;
+  box-shadow: -2px 4px 0px 0px #001429;
+  position: relative;
+
+  color: #001429; /* Yazı rengi buraya eklendi */
+  z-index: 2;
+}
+
+.portfolio-button:hover {
+  background-color: #15a559;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 5px rgba(0, 255, 0, 0.3);
+}
+
+.portfolio-button:active {
+  color: #001429;
+  transform: translateY(0);
+  box-shadow: 0 2px 3px rgba(0, 255, 0, 0.2);
+}
+
+/* Icon styling */
+.portfolio-button .icon {
+  color: #15a559;
+  width: clamp(16px, 2vw, 22px);
+  height: auto;
+}
+
+/* Image styles - positioned outside the section */
+.main-image {
+  position: absolute;
+  top: 30%;
+  margin: var(--navbar-height);
+  transform: translateY(-50%);
+  max-width: 50%;
+  max-height: 80vh;
+  z-index: 1;
+  display: block;
+  opacity: 1;
+  flex-shrink: 0;
+  will-change: opacity;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.main-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.audio-controls {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(10px, 3vw, 20px);
+  color: white;
+  width: 100%;
+  max-width: 520px;
+
+  overflow: hidden;
+  position: relative;
+}
+
+.audio-controls::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 10;
+}
+
+.audio-controls-inner {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+}
+
+.soundtrack-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.soundtrack-label {
+  font-size: clamp(12px, 2vw, 14px);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  opacity: 0.8;
+  position: relative;
+}
+
+.soundtrack-label::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: #001429;
+}
+
+.song-name {
+  font-size: clamp(14px, 2vw, 16px);
+  font-weight: 500;
+  font-style: italic;
+  opacity: 0.9;
+  text-transform: capitalize;
+  position: relative;
+  min-width: 100px;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.audio-player {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vw, 16px);
+  width: 100%;
+}
+
+.controls-wrapper {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 3vw, 20px);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.play-button img {
+  color: #001429;
+  background-color: #001429;
+  border-radius: 50%;
+  width: clamp(60px, 3vw, 70px);
+  height: auto;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  -o-border-radius: 50%;
+}
+
+.play-button,
+.next-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  position: relative;
+  min-width: clamp(30px, 5vw, 40px);
+  min-height: clamp(30px, 5vw, 40px);
+}
+
+.play-button::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  border-radius: 50%;
+
+  color: #ffffff;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+}
+
+.play-button:hover,
+.next-button:hover {
+  transform: scale(1.05);
+}
+
+.play-button:active,
+.next-button:active {
+  transform: scale(0.95);
+}
+
+.next-button {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  padding: clamp(6px, 1.5vw, 8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.timeline {
+  position: relative;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #3dff8e, #2ecc71);
+  border-radius: 5px;
+}
+
+.time {
+  display: flex;
+  justify-content: space-between;
+  font-size: clamp(10px, 1.5vw, 12px);
+  opacity: 0.8;
+  letter-spacing: 1px;
+  width: 100%;
+}
+
+/* Ripple effect for timeline clicks */
+.timeline-ripple {
+  position: absolute;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+/* Audio wave animation */
+@keyframes audioWave {
+  0% {
+    opacity: 0.2;
+    transform: scaleY(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1.5);
+  }
+  100% {
+    opacity: 0.2;
+    transform: scaleY(1);
+  }
+}
+
+.audio-controls::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+}
+
+/* Animation classes */
+.fade-in {
+  opacity: 1 !important;
+}
+
+/* Responsive layout classes */
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+/* ================================
+   === Desktop 2K Ekranlar (1920px ve altı) ===
+   ========================================== */
+@media (max-width: 1920px) {
+  .main-title {
+    font-size: clamp(7rem, 0vw, 10rem);
+  }
+
+  .main-container {
+    padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
+    justify-content: center;
+  }
+
+  .main-image {
+    max-width: 60%;
+    right: 5%;
+  }
+}
+
+/* ========================================
+     === Büyük Ekranlar (1600px ve altı) ===
+     ======================================== */
+@media (max-width: 1600px) {
+  .main-container {
+    padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
+    justify-content: center;
+  }
+
+  .main-image {
+    max-width: 40%;
+    right: 5%;
+  }
+  .audio-controls {
+    max-width: 90%;
+  }
+}
+
+/* ==========================================
+     === Standart Laptoplar (1400px ve altı) ===
+     ========================================== */
+@media (max-width: 1400px) {
+  .main-content {
+    max-width: 900px;
+  }
+  .main-title {
+    font-size: clamp(9rem, 8vw, 8rem);
+  }
+  .main-subtitle {
+    font-size: clamp(2rem, 3vw, 1.5rem);
+  }
+  .main-container {
+    padding: clamp(2rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
+    justify-content: center;
+  }
+
+  .main-image {
+    max-width: 40%;
+    right: 0%;
+  }
+  .audio-controls {
+    max-width: 80%;
+  }
+}
+
+/* ==============================================
+     === Küçük Laptop / Tablet Yatay (1200px ve altı) ===
+     ============================================== */
+@media (max-width: 1200px) {
+  .main-title {
+    font-size: clamp(7.6rem, 10vw, 1.2rem);
+  }
+
+  .main-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .main-container {
+    padding: clamp(4rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
+    justify-content: center;
+  }
+
+  .main-image {
+    max-width: 55%;
+    right: 0%;
+  }
+  .audio-controls {
+    max-width: 60%;
+  }
+  .main-content {
+    width: 100%;
+    left: 3.5%;
+  }
+}
+
+/* ==================================================
+     === Tabletler (993px ve altı, Bootstrap sm-md) ===
+     ================================================== */
+@media (max-width: 993px) {
+  .main-container {
+    justify-content: center;
+  }
+  .main-title {
+    font-size: clamp(7.5em, 10vw, 1.2rem);
+  }
+  .main-subtitle {
+    font-size: clamp(1rem, 3vw, 1.5rem);
+  }
+  .main-content {
+    width: 100%;
+    left: 3.5%;
+  }
+
+  .main-image {
+    max-width: 50%;
+    right: 0%;
+  }
+}
+
+/* ========================================
+     === Küçük Tabletler (768px ve altı) ===
+     ======================================== */
+@media (max-width: 768px) {
+  .audio-controls {
+    max-width: 73.2%;
+  }
+
+  .main-image {
+    max-width: 65%;
+    top: 35%;
+    right: 5%;
+    margin: 2rem auto;
+    display: block;
+    order: 1;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .main-title {
+    font-size: clamp(6rem, 8vw, 6rem);
+  }
+  .main-subtitle {
+    font-size: clamp(0.1rem, 3vw, 1.2rem);
+  }
+}
+
+/* ========================================================
+     === Büyük Telefonlar / Küçük Tabletler (600px ve altı) ===
+     ======================================================== */
+@media (max-width: 600px) {
+  .main-container {
+    padding: 1rem 15px 3.75rem 15px;
+  }
+
+  .main-title {
+    font-size: 5.5rem;
+  }
+
+  .main-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .portfolio-button {
+    padding: clamp(0.4rem, 2vw, 0.75rem) clamp(0.8rem, 3vw, 1.5rem);
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+  }
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .audio-controls {
+    max-width: 80%;
+    padding-bottom: 40px;
+  }
+  .main-image {
+    max-width: 75%;
+    right: 13%;
+    margin: 2rem auto;
+    display: block;
+    order: 1;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+/* ================================================
+     === Küçük Telefonlar (576px ve altı, Bootstrap xs) ===
+     ================================================ */
+@media (max-width: 576px) {
+  .main-container {
+    padding: 2rem 15px 3.6rem 15px;
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .main-title {
+    font-size: 3.5rem;
+  }
+
+  .main-subtitle {
+    font-size: 1rem;
+  }
+
+  .main-image {
+    max-width: 80%;
+    right: 11%;
+    margin: 2rem auto;
+    display: block;
+    order: 1;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    opacity: 70%;
+  }
+
+  .audio-controls {
+    max-width: 70%;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-bottom: 20px;
+  }
+
+  .main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .portfolio-button {
+    margin: 0 auto;
+  }
+}
+
+/* =====================================
+     === Dokunmatik Cihazlar için Fix ===
+     ===================================== */
+@media (max-width: 480px) {
+  .main-container {
+    padding: 0.2rem 15px 0.75rem 15px;
+    position: relative;
+    overflow-y: auto;
+  }
+
+  .portfolio-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .main-image {
+    max-width: 65%;
+    right: 15%;
+    margin: 2rem auto;
+    display: block;
+    order: 1;
+  }
+
+  .main-image img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    opacity: 70%;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .main-title {
+    font-size: 4.5rem;
+  }
+  .main-subtitle {
+  }
+}
+
+@media (hover: none) {
+  .portfolio-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .play-button:hover,
+  .next-button:hover {
+    transform: none;
+  }
+}
+
+/* ==========================================
+     === Dikey Mod (max yükseklik 0px) ===
+     ========================================== */
+
+/* ========================================
+     === Yatay Mod (max yükseklik 600px) ===
+     ======================================== */
+@media (max-height: 600px) and (orientation: landscape) {
+  .main-container {
+    overflow-y: auto;
+    margin: -60px 0 0 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem clamp(15px, 3vw, 30px);
+    gap: 2rem;
+  }
+
+  .main-content {
+    width: 50%;
+    max-width: 500px;
+    padding-top: 0;
+  }
+
+  .main-image {
+    width: 40%;
+    max-width: 500px;
+    margin: 0;
+    order: 2;
+  }
+}
+
+/* =====================================
+     === Karanlık Mod Desteği (Dark Mode) ===
+     ===================================== */
+@media (prefers-color-scheme: dark) {
+  .portfolio-button {
+    /* Arka plan için farklı renkler burada belirlenebilir */
+  }
+
+  .portfolio-button:hover {
+    background-color: #15a559;
+    color: white;
+  }
+}
+
+/* ====================================
+     === Yazdırma Modu (Print Mode) ===
+     ==================================== */
+@media print {
+  .main-title,
+  .main-subtitle,
+  .portfolio-button {
+    opacity: 1 !important;
+    color: #001429 !important;
+  }
+
+  .main-image {
+    position: relative;
+    max-width: 50%;
+    margin: 2rem auto;
+  }
+
+  .audio-controls {
+    display: none;
+  }
+}

@@ -1,0 +1,23 @@
+.project-list {
+  text-align: center;
+  margin: 80px 0;
+}
+
+.project-list-title {
+  color: #fff;
+  margin-bottom: 40px;
+  width: 22%;
+  height: 22%;
+}
+
+.project-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  z-index: 1;
+  position: relative; /* project-card-border'ın mutlak konumu için referans */
+}

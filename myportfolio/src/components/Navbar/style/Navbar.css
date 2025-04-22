@@ -1,0 +1,145 @@
+:root {
+  --navbar-height: 60px;
+}
+
+/* Ana navbar arka plan kapsayıcısı */
+.navbar-background-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px; /* veya ihtiyaç varsa artırılabilir */
+  background-color: var(--color-bg-primary);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+/* Menü kaybolduğunda */
+.navbar-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ana navbar kutusu */
+.navbar-container {
+  width: 318px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ccc7a5;
+  border: 2px solid #1e1f20;
+  position: relative;
+}
+
+/* Sol taraftaki ikon */
+.icon-container {
+  width: 40px;
+  height: 40px;
+  background: #999470;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #384456;
+}
+
+/* Menü öğeleri kapsayıcı */
+.nav-items-container {
+  display: flex;
+  height: 100%;
+}
+
+/* Tek bir menü öğesi */
+.nav-item {
+  color: #26261b;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  padding: 0 20px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #384456;
+  transition: background-color 0.3s ease;
+}
+
+.nav-item:hover {
+  background-color: #e1d89a;
+}
+
+.nav-item:last-child {
+  border-right: none;
+}
+
+/* Dekoratif noktalar */
+.decorative-dot {
+  width: 4px;
+  height: 4px;
+  background: white;
+  position: absolute;
+}
+
+/* Line.svg konumu */
+.navbar-outline {
+  position: absolute;
+  margin-top: var(--navbar-height);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Sabit hamburger ikon (scroll sonrası) */
+.navbar-icon-fixed {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  background: #0b1420;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #384456;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+/* Mobil menü (scroll sonrası açılan) */
+.mobile-menu {
+  position: fixed;
+  top: calc(var(--navbar-height) + 10px);
+  right: 16px;
+  background-color: #20262f;
+  border: 1px solid #384456;
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobile-menu .nav-item {
+  border-right: none;
+  border-bottom: 1px solid #384456;
+}
+
+.mobile-menu .nav-item:last-child {
+  border-bottom: none;
+}
+
+/* Küçük telefonlar */
+
+/* Animasyonlar */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
