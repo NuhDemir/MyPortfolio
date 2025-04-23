@@ -1,0 +1,201 @@
+.message-container {
+  width: 60%;
+  height: 80%;
+  margin: 60px auto;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 6px solid #000;
+  background: #fff;
+  box-shadow: 21px 21px 0px 0px rgba(0, 0, 0, 0.4);
+  width: 80%; /* Dikdörtgen şekli için genişliği sınırlayalım */
+  max-width: 800px; /* Maksimum genişlik belirleyelim */
+
+  .message-header {
+    text-align: center;
+    margin-bottom: 2rem;
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    p {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.6;
+    }
+  }
+
+  .message-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+
+      label {
+        font-weight: 500;
+        color: #555;
+        font-size: 0.9rem;
+      }
+
+      input,
+      textarea {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s;
+
+        &:focus {
+          outline: none;
+          border-color: #e53e3e;
+          box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+      }
+    }
+
+    .error-message {
+      color: #e53e3e;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      background-color: rgba(229, 62, 62, 0.1);
+      border-radius: 6px;
+    }
+
+    .send-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background-color: #e53e3e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+
+      &:hover {
+        background-color: #e82727;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+
+      &:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .arrow {
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+      }
+
+      &:hover .arrow {
+        transform: translateX(4px);
+      }
+
+      .loader {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    }
+  }
+
+  .success-message {
+    text-align: center;
+    padding: 2rem 0;
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      background-color: #48bb78;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+      color: #333;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 2rem;
+    }
+
+    .send-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      background-color: #e53e3e;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #e82727;
+      }
+    }
+  }
+}
+
+// Responsive tasarım için
+@media (max-width: 768px) {
+  .message-container {
+    padding: 1.5rem;
+    width: 90%; /* Daha dar cihazlarda genişlik artırılabilir */
+    max-width: 100%; /* En geniş alana kadar yayılabilir */
+
+    .message-header {
+      h1 {
+        font-size: 2rem;
+      }
+    }
+
+    .message-form .form-group {
+      gap: 1rem; /* Form elemanları arasındaki mesafeyi artır */
+    }
+
+    .send-button {
+      font-size: 1rem; /* Küçük cihazlarda buton fontu küçülür */
+      padding: 0.8rem 1.2rem; /* Buton boyutları küçülür */
+    }
+  }
+}

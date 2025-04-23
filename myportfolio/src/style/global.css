@@ -12,6 +12,31 @@
   --transition-default: all 0.3s ease;
   --color-border: #ccc7a5;
   --paper-color: #fff;
+  --subtitle-bg: #ccc7a5;
+  --subtitle-text-color: #26261b;
+
+  --navbar-bg: #ccc7a5;
+  --navbar-text-color: #26261b;
+  --button-bg: #be7d65;
+  --button-bg-hover: #001429;
+  --button-text-color: #001429;
+  --button-border-radius: 4px;
+  --button-padding: 10px 20px;
+  --button-font-size: 16px;
+  --button-hover-bg: var(--button-text-color);
+  --button-hover-text-color: var(--button-bg);
+  --social-links-bg: #247149;
+  --social-links-bg-hover: #0db963;
+  --social-links-text-color: #fff;
+  --about-bg: var(--paper-color);
+  --about-text-color: #26261b;
+  --projects-bg: var(--paper-color);
+  --projects-text-color: #26261b;
+
+  --comments-bg: var(--paper-color);
+  --comments-text-color: #022b52;
+  --comments-user-text-color: var(--about-text-color);
+  --comments-job-title-color: #555;
 }
 
 /* Reset and base styles */

@@ -36,7 +36,7 @@ section {
 .main-title {
   font-size: clamp(2rem, 8vw, 8rem);
   font-weight: 800;
-  color: white;
+  color: var(--paper-color);
   margin-bottom: 0.5rem;
   line-height: 0.9;
   word-break: break-word;
@@ -47,8 +47,8 @@ section {
 
 .main-subtitle {
   font-size: clamp(0.9rem, 3vw, 1.5rem);
-  background-color: #ccc7a5;
-  color: #26261b;
+  background-color: var(--subtitle-bg);
+  color: var(--subtitle-text-color);
   margin-bottom: clamp(1rem, 4vw, 2rem);
   padding: 0.5rem 1rem;
   text-transform: uppercase;
@@ -78,18 +78,18 @@ section {
   transition: all 0.3s ease;
   border-radius: 16px;
   border: 2px solid var(--Black-100, #001429);
-  background-color: #fff;
+  background-color: var(--button-bg);
   box-shadow: -2px 4px 0px 0px #001429;
   position: relative;
 
-  color: #001429; /* Yazı rengi buraya eklendi */
+  color: var(--button-text-color); /* Yazı rengi buraya eklendi */
   z-index: 2;
 }
 
 .portfolio-button:hover {
-  background-color: #15a559;
+  background-color: var(--button-bg-hover);
   transform: translateY(-2px);
-  box-shadow: 0 5px 5px rgba(0, 255, 0, 0.3);
+  box-shadow: 0 5px 5px var(--button-bg-hover);
 }
 
 .portfolio-button:active {
@@ -100,7 +100,7 @@ section {
 
 /* Icon styling */
 .portfolio-button .icon {
-  color: #15a559;
+  color: var(--button-text-color);
   width: clamp(16px, 2vw, 22px);
   height: auto;
 }
@@ -653,6 +653,7 @@ section {
     font-size: 4.5rem;
   }
   .main-subtitle {
+    font-size: 1rem;
   }
 }
 
@@ -709,8 +710,9 @@ section {
   }
 
   .portfolio-button:hover {
-    background-color: #15a559;
+    background-color: var(--button-bg-hover);
     color: white;
+    border-color: #2ecc71;
   }
 }
 
