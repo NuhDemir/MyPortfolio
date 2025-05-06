@@ -5,215 +5,220 @@ export const useGsapSplashAnimation = (
   containerRef,
   lettersRef,
   onComplete,
-  backgroundRef
+  backgroundCanvasRef
 ) => {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   useEffect(() => {
     const container = containerRef.current;
     const letters = lettersRef.current;
-    const background = backgroundRef?.current;
+    const backgroundCanvas = backgroundCanvasRef?.current;
+    const loaderBarContainer = container?.querySelector(
+      ".splash-loader-bar-container"
+    );
+    const loaderBar = container?.querySelector(".splash-loader-bar");
 
-    if (!container || letters.length === 0) return;
+    if (
+      !container ||
+      letters.length === 0 ||
+      !backgroundCanvas ||
+      !loaderBarContainer ||
+      !loaderBar
+    )
+      return;
 
-    // Check if animation has already played in this session
     const hasPlayedAnimation = sessionStorage.getItem("splashAnimationPlayed");
-
-    // If animation already played, mark as complete and trigger callback
     if (hasPlayedAnimation) {
       setAnimationComplete(true);
       if (onComplete) onComplete();
+      gsap.set(container, { autoAlpha: 0 });
       return;
     }
 
-    // Make container visible
     gsap.set(container, { autoAlpha: 1 });
+    gsap.set(loaderBarContainer, { opacity: 0, y: 20 });
+    gsap.set(loaderBar, { width: "0%" });
 
-    // Create particles for background if background element exists
-    if (background) {
-      // Create particles
-      const particleCount = 90;
-      const particles = [];
+    // --- Parçacık Sistemi (Orijinal Renk Tonlarıyla) ---
+    const particles = [];
+    if (backgroundCanvas) {
+      const particleCount = 70;
+      // Renkleri CSS değişkenlerinden alamasak da, aynı değerleri kullanacağız
+      const particleColors = ["#0AC285", "#00296B", "#E0E0E0"]; // Yeşil, Mavi ve açık gri/beyaz
 
       for (let i = 0; i < particleCount; i++) {
         const particle = document.createElement("div");
         particle.className = "splash-particle";
+        const size = Math.random() * 2.5 + 1; // Daha küçük, dijital parçacıklar
+        const chosenColor =
+          particleColors[Math.floor(Math.random() * particleColors.length)];
 
-        // Random size between 10px and 40px
-        const size = 10 + Math.random() * 30;
-
-        // Style the particle
         Object.assign(particle.style, {
           position: "absolute",
           width: `${size}px`,
           height: `${size}px`,
           borderRadius: "50%",
-          backgroundColor: `rgba(255, 255, 255, ${0.1 + Math.random() * 0.3})`,
-          top: `${Math.random() * 100}%`,
-          left: `${Math.random() * 100}%`,
-          pointerEvents: "none",
+          backgroundColor: chosenColor,
+          opacity: 0,
+          // Parçacıklara da hafif bir parlama ekleyebiliriz
+          boxShadow: `0 0 ${Math.random() * 4 + 3}px ${
+            chosenColor === "#E0E0E0" ? "rgba(224,224,224,0.7)" : chosenColor
+          }`,
         });
-
-        background.appendChild(particle);
+        backgroundCanvas.appendChild(particle);
         particles.push(particle);
       }
 
-      // Animate background
-      gsap.set(background, {
-        autoAlpha: 1,
-        background:
-          "radial-gradient(circle, rgba(25,25,50,1) 0%, rgba(10,10,25,1) 100%)",
-      });
-
-      // Create gradient background animation
-      gsap.to(background, {
-        background:
-          "radial-gradient(circle, rgba(40,40,80,1) 0%, rgba(20,20,40,1) 100%)",
-        duration: 3,
-        repeat: 1,
-        yoyo: true,
-        ease: "sine.inOut",
-      });
-
-      // Animate particles
       particles.forEach((particle) => {
-        gsap.fromTo(
-          particle,
-          {
-            scale: 0,
-            opacity: 0,
-            x: 0,
-            y: 0,
-          },
-          {
-            scale: 1 + Math.random() * 2,
-            opacity: 0.2 + Math.random() * 0.5,
-            x: (Math.random() - 0.5) * 100,
-            y: (Math.random() - 0.5) * 100,
-            duration: 2 + Math.random() * 3,
-            delay: Math.random() * 2,
-            ease: "power2.out",
-            repeat: 1,
-            yoyo: true,
-            onComplete: () => {
-              // Clean up particles when animation is done
-              if (particle.parentNode === background) {
-                background.removeChild(particle);
-              }
-            },
-          }
-        );
+        gsap.set(particle, {
+          x: Math.random() * backgroundCanvas.offsetWidth,
+          y: Math.random() * backgroundCanvas.offsetHeight,
+        });
+        gsap.to(particle, {
+          x: `+=${(Math.random() - 0.5) * 150}`,
+          y: `+=${(Math.random() - 0.5) * 150}`,
+          opacity: Math.random() * 0.6 + 0.2,
+          duration: Math.random() * 6 + 4,
+          delay: Math.random() * 1.5,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+        gsap.to(particle, {
+          opacity: Math.random() * 0.2,
+          duration: Math.random() * 1.2 + 0.6,
+          repeat: -1,
+          yoyo: true,
+          delay: Math.random() * 2.5,
+          ease: "power1.inOut",
+        });
       });
     }
 
-    // Create main timeline
     const tl = gsap.timeline({
       onComplete: () => {
-        setTimeout(() => {
-          setAnimationComplete(true);
-          sessionStorage.setItem("splashAnimationPlayed", "true");
-          if (onComplete) onComplete();
-
-          // Fade out background
-          if (background) {
-            gsap.to(background, {
-              autoAlpha: 0,
-              duration: 0.5,
-              ease: "power2.inOut",
-            });
-          }
-        }, 800);
+        gsap.to(container, {
+          autoAlpha: 0,
+          duration: 0.7,
+          ease: "power2.inOut",
+          onComplete: () => {
+            setAnimationComplete(true);
+            sessionStorage.setItem("splashAnimationPlayed", "true");
+            if (onComplete) onComplete();
+          },
+        });
       },
     });
 
-    // Text reveal animation with more fluid movement
+    tl.addLabel("start", "+=0.3");
+
+    tl.to(
+      loaderBarContainer,
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        ease: "power2.out",
+      },
+      "start"
+    ).to(
+      loaderBar,
+      {
+        width: "100%",
+        duration: 1.6,
+        ease: "circ.inOut", // Biraz daha yumuşak bir geçiş
+      },
+      "start+=0.1"
+    );
+
     tl.fromTo(
       letters,
       {
-        y: 120,
+        y: 50,
         opacity: 0,
-        rotationX: -20,
-        transformOrigin: "0% 50% -50",
+        rotationX: -80,
+        transformOrigin: "50% 100%",
       },
       {
         y: 0,
         opacity: 1,
         rotationX: 0,
-        stagger: 0.08,
-        duration: 0.5,
-        ease: "elastic.out(1, 0.8)",
-      }
-    )
-      // Add a subtle wave effect
-      .fromTo(
-        letters,
-        {
-          transformOrigin: "center bottom",
+        stagger: 0.09,
+        duration: 0.55,
+        ease: "back.out(1.4)",
+        onStart: function () {
+          this.targets().forEach((letter) => {
+            if (Math.random() < 0.1) {
+              gsap.to(letter, {
+                x: () => (Math.random() - 0.5) * 8,
+                opacity: () => Math.random() * 0.6 + 0.4,
+                color: "var(--theme-accent-green)", // Glitch sırasında renk değişimi
+                duration: 0.06,
+                repeat: 2,
+                yoyo: true,
+                delay: Math.random() * 0.15,
+                ease: "steps(1)",
+                onComplete: () =>
+                  gsap.to(letter, {
+                    color: "var(--theme-text-color)",
+                    duration: 0.1,
+                  }), // Rengi geri döndür
+              });
+            }
+          });
         },
-        {
-          y: (i) => Math.sin(i * 0.3) * 10,
-          duration: 0.5,
-          stagger: {
-            each: 0.04,
-            from: "start",
-            repeat: 0,
-            yoyo: true,
-          },
-          ease: "sine.inOut",
-        },
-        "-=0.5"
-      )
-      // Add a colorful highlight effect
-      .fromTo(
-        letters,
-        {
-          color: "inherit",
-          textShadow: "none",
-        },
-        {
-          color: (i) => {
-            const colors = ["#0AC285", "#0AC285", "#0AC285", "#0AC285"];
-            return colors[i % colors.length];
-          },
+      },
+      "start+=0.4"
+    );
 
-          duration: 0.5,
-          stagger: {
-            each: 0.04,
-            from: "center",
-          },
-          ease: "power2.inOut",
-        },
-        "-=1"
-      )
-      .to(letters, {
-        color: "inherit",
-        textShadow: "none",
-        duration: 0.5,
+    // Metin parlama efekti (CSS değişkenlerini kullanır)
+    tl.to(
+      letters,
+      {
+        // textShadow CSS değişkeniyle tanımlandığı için direkt onu kullanabiliriz
+        // Ancak GSAP'ta textShadow'u dinamik olarak değiştirmek daha esnek olabilir
+        // CSS'deki '--theme-glow' değişkenini burada taklit edelim
+        textShadow: `0 0 5px var(--theme-accent-green), 0 0 10px var(--theme-accent-green), 0 0 15px var(--theme-accent-green), 0 0 25px rgba(10, 194, 133, 0.5)`,
+        color: gsap.utils.wrap([
+          "var(--theme-text-color)",
+          "var(--theme-accent-green)",
+        ]), // Renkler arasında geçiş
+        duration: 0.35,
+        repeat: 1,
+        yoyo: true,
+        ease: "power1.inOut",
         stagger: {
-          each: 0.03,
-          from: "edges",
+          each: 0.04,
+          from: "center",
         },
-        ease: "power2.inOut",
-      })
-      // Final container fade out
-      .to(container, {
-        opacity: 0,
-        duration: 1.2,
-        delay: 0.2,
-        ease: "power3.inOut",
-      });
+      },
+      "-=0.4"
+    ).to(letters, {
+      // Parlamayı ve rengi normale döndür
+      textShadow: "0 0 3px rgba(0, 41, 107, 0.5)", // CSS'deki temel gölgeye geri dön
+      color: "var(--theme-text-color)",
+      duration: 0.3,
+      ease: "power1.inOut",
+      stagger: 0.03,
+    });
 
-    // Cleanup
+    tl.to({}, { duration: 0.7 }, ">");
+
     return () => {
       tl.kill();
-      if (background) {
-        // Clean up any remaining particles
-        while (background.firstChild) {
-          background.removeChild(background.firstChild);
+      if (backgroundCanvas) {
+        particles.forEach((particle) => {
+          if (particle.parentNode === backgroundCanvas) {
+            backgroundCanvas.removeChild(particle);
+          }
+          gsap.killTweensOf(particle);
+        });
+        while (backgroundCanvas.firstChild) {
+          backgroundCanvas.removeChild(backgroundCanvas.firstChild);
         }
       }
     };
-  }, [containerRef, lettersRef, backgroundRef, onComplete]);
+  }, [containerRef, lettersRef, backgroundCanvasRef, onComplete]);
 
   return { animationComplete };
 };

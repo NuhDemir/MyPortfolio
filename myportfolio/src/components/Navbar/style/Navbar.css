@@ -10,6 +10,7 @@
   width: 100%;
   height: 60px; /* veya ihtiyaç varsa artırılabilir */
   background-color: var(--color-bg-primary);
+  border-bottom: 1px solid #0b1420;
   z-index: 9999;
   display: flex;
   justify-content: center;

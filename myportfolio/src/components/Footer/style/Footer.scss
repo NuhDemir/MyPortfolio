@@ -1,0 +1,179 @@
+/* ./style/Footer.scss */
+
+// --- Variables ---
+// Approximate green from image
+$footer-text-color: #000000; // Black text/icons from image
+$footer-padding-vertical: 0.8rem;
+$footer-padding-horizontal: 1.5rem;
+$footer-icon-size: 1.1rem;
+$footer-logo-height: 20px;
+$footer-font-size: 0.9rem;
+$breakpoint-medium: 768px;
+$breakpoint-small: 480px;
+
+// --- Main Container ---
+.footer-main-container {
+  color: $footer-text-color;
+  padding: $footer-padding-vertical $footer-padding-horizontal;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #000000;
+  justify-content: space-between; // Distribute the 3 main sections
+  width: 100%;
+  box-sizing: border-box; // Include padding in width calculation
+  min-height: 50px; // Ensure a minimum height
+}
+
+// --- Section 1: Brand (Icon + Name) ---
+.footer-brand-section {
+  flex-shrink: 0; // Prevent shrinking too much
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; // Space between logo and name
+    text-decoration: none;
+    color: inherit; // Inherit color from parent
+
+    .footer-logo-svg {
+      height: $footer-logo-height;
+      width: auto; // Maintain aspect ratio
+      display: block; // Remove potential extra space below inline images
+    }
+
+    .footer-brand-name {
+      font-size: $footer-font-size;
+      font-weight: 500; // Slightly bolder perhaps
+      white-space: nowrap; // Prevent name from wrapping
+    }
+  }
+}
+
+// --- Section 2: Center Text ---
+.footer-center-text {
+  flex-grow: 1; // Allow this to take up available space if needed
+  text-align: center; // Center the text ("My Portfolio")
+  font-size: $footer-font-size;
+  padding: 0 1rem; // Add some horizontal padding so it's not touching edges
+  white-space: nowrap; // Prevent wrapping
+  overflow: hidden; // Hide if it overflows
+  text-overflow: ellipsis; // Add '...' if text is hidden
+}
+
+// --- Section 3: Social Links ---
+.footer-social-links {
+  flex-shrink: 0; // Prevent shrinking too much
+
+  nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem; // Space between social icons
+
+    li {
+      line-height: 1; // Prevent extra vertical space in list items
+    }
+
+    a {
+      color: $footer-text-color;
+      font-size: $footer-icon-size;
+      display: inline-flex; // Good for aligning font icons
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.2s ease-in-out;
+
+      &:hover {
+        opacity: 0.7; // Simple hover effect
+      }
+
+      // Style the react-icons SVG directly if needed
+      svg {
+        display: block;
+      }
+    }
+  }
+}
+
+// --- Responsive Adjustments ---
+
+// Medium Screens (e.g., Tablets)
+@media (max-width: $breakpoint-medium) {
+  .footer-main-container {
+    padding: ($footer-padding-vertical * 0.9) ($footer-padding-horizontal * 0.8);
+    gap: 1rem; // Reduce gap between main sections slightly if needed
+  }
+
+  .footer-brand-section {
+    a {
+      gap: 0.4rem;
+      .footer-brand-name {
+        font-size: ($footer-font-size * 0.95);
+      }
+    }
+  }
+
+  .footer-center-text {
+    font-size: ($footer-font-size * 0.95);
+    padding: 0 0.8rem;
+  }
+
+  .footer-social-links nav ul {
+    gap: 0.8rem; // Reduce gap between icons
+    a {
+      font-size: ($footer-icon-size * 0.95);
+    }
+  }
+}
+
+// Small Screens (e.g., Mobile) - Keeping horizontal layout as requested
+@media (max-width: $breakpoint-small) {
+  .footer-main-container {
+    padding: ($footer-padding-vertical * 0.7) ($footer-padding-horizontal * 0.5);
+    min-height: 40px; // Reduce min height
+    gap: 0.5rem; // Further reduce gap between sections
+  }
+
+  .footer-brand-section {
+    a {
+      gap: 0.3rem; // Minimal gap
+
+      .footer-logo-svg {
+        height: ($footer-logo-height * 0.85); // Smaller logo
+      }
+
+      .footer-brand-name {
+        font-size: ($footer-font-size * 0.85); // Smaller text
+        // Optionally hide name if space is extremely tight
+        // display: none;
+      }
+    }
+  }
+
+  .footer-center-text {
+    font-size: ($footer-font-size * 0.85); // Smaller text
+    padding: 0 0.4rem; // Less padding
+    // Optionally hide center text if space is extremely tight
+    // display: none;
+  }
+
+  .footer-social-links nav ul {
+    gap: 0.6rem; // Further reduce icon gap
+    a {
+      font-size: ($footer-icon-size * 0.85); // Smaller icons
+    }
+  }
+}
+
+/* Optional: Very extreme case - hide middle text completely */
+/*
+@media (max-width: 360px) {
+  .footer-center-text {
+     display: none;
+  }
+   .footer-main-container {
+     justify-content: space-between; // Reset justification if center is hidden
+   }
+}
+*/

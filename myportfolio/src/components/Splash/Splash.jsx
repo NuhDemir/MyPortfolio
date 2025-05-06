@@ -5,15 +5,17 @@ import "./style/splash.css";
 const Splash = ({ onComplete }) => {
   const splashContainerRef = useRef(null);
   const lettersRef = useRef([]);
+  const backgroundCanvasRef = useRef(null); // Parçacık/grid arka planı için
 
-  // "NUH DEMİR" yazısının harfleri
+  // "HOŞGELDİNİZ" yazısının harfleri
   const letters = "HOŞGELDİNİZ".split("");
 
   // GSAP animasyonunu başlat
   const { animationComplete } = useGsapSplashAnimation(
     splashContainerRef,
     lettersRef,
-    onComplete
+    onComplete,
+    backgroundCanvasRef // Yeni ref'i ilet
   );
 
   return (
@@ -21,6 +23,9 @@ const Splash = ({ onComplete }) => {
       ref={splashContainerRef}
       className={`splash-container ${animationComplete ? "hide" : ""}`}
     >
+      {/* Canvas/Grid/Scanlines için Arka Plan Elemanı */}
+      <div ref={backgroundCanvasRef} className="splash-background-canvas"></div>
+      <div className="scanline-overlay"></div> {/* Scanlines efekti için */}
       <div className="letters-container">
         {letters.map((letter, index) => (
           <span
@@ -31,6 +36,9 @@ const Splash = ({ onComplete }) => {
             {letter === " " ? "\u00A0" : letter}
           </span>
         ))}
+      </div>
+      <div className="splash-loader-bar-container">
+        <div className="splash-loader-bar"></div>
       </div>
     </div>
   );

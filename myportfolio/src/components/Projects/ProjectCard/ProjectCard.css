@@ -1,76 +1,203 @@
+/* src/components/ProjectCard/ProjectCard.css */
+
 .project-card-wrapper {
   position: relative;
-  width: 320px; /* border genişliği */
-  height: 320px; /* border yüksekliği */
-  margin: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 0;
+  display: block;
+  /* aspect-ratio: 1 / 1; */ /* <- KALDIRILDI: Orantısızlığı gidermek için bu satır kaldırıldı veya yorumlandı */
+  box-sizing: border-box;
 }
 
+/* Decorative Border (SVG) - Bu kısım aktif değilse kaldırılabilir */
 .project-card-border {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
+  width: 106%;
+  height: 106%;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 3;
   pointer-events: none;
+  object-fit: fill;
+  user-select: none;
 }
 
+/* Content Card */
 .project-card {
-  width: 296px; /* içerik kartı daha küçük */
-  height: 296px;
+  position: relative;
+  z-index: 2; /* Behind the border SVG */
+  width: 100%;
+  /* height: 100%; */ /* Wrapper kare olmadığından bu artık gerekli değil */
+  height: auto; /* <- DEĞİŞTİRİLDİ/EKLEDİ: Yükseklik içeriğe göre belirlensin */
+  min-height: 320px; /* Ensure a minimum height */
   background: var(--paper-color, #fff);
-  z-index: 0;
-  overflow: hidden;
-  padding: 20px;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+  border: 3px solid black;
+  padding: 1.25rem; /* Inner spacing (20px) */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  box-shadow: -8px 7px 0px 0px rgba(0, 0, 0, 0.44);
+  align-items: stretch; /* Children use full width */
+  box-shadow: 8px 8px 0px 0px black; /* Neubrutalist shadow */
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+  overflow: hidden; /* Hide overflowing content */
+}
+
+/* Optional Hover Effect */
+.project-card:hover {
+  transform: translate(3px, -3px);
+  box-shadow: 11px 11px 0px 0px black;
+}
+
+/* Image Container */
+.project-card-image-container {
+  width: 100%;
+  margin-bottom: 1rem; /* Space below image */
+  border: 3px solid black;
+  background-color: #f0f0f0; /* Placeholder color */
+  flex-shrink: 0; /* Prevent shrinking */
+  aspect-ratio: 16 / 10; /* Resim oranı korunuyor */
+  overflow: hidden; /* Ensure image fits */
 }
 
 .project-card-image {
-  width: 95%;
-  height: 90%;
-  object-fit: cover;
-  border: #26261b 2px solid;
-  margin-bottom: 20px;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Scale and crop image */
 }
 
-.project-card-header {
+/* Text Content Area */
+.project-card-content {
   width: 100%;
   display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Take remaining vertical space */
+}
+
+/* Header (Title & Link) */
+.project-card-header {
+  display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start; /* Align items to the top */
+  margin-bottom: 0.75rem; /* Space below header */
+  gap: 0.5rem; /* Space between title and link */
 }
 
 .project-card-title {
-  font-size: 1.2em;
-  color: #26261b;
+  font-size: 1.25em; /* Title size */
   font-weight: 700;
+  color: black;
   margin: 0;
-  max-width: 180px; /* 💡 maksimum genişlik tanımlandı */
+  line-height: 1.2;
+  /* Prevent long titles from breaking layout */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-grow: 1; /* Allow title to take available space */
 }
 
+/* Link (Arrow Button) */
+.project-card-link {
+  background-color: black;
+  padding: 8px;
+  border: none;
+  flex-shrink: 0; /* Don't shrink */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+.project-card-link:hover {
+  transform: scale(1.1);
+}
+
+.project-link-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  filter: invert(1) brightness(2); /* Make icon white */
+}
+
+/* Description Text */
 .project-card-description {
-  font-size: 13px;
+  font-size: 0.9em; /* Description size */
   font-weight: 400;
-  text-align: left;
-  color: #444;
+  color: #333;
+  line-height: 1.5;
+  margin: 0;
+  flex-grow: 1; /* Take remaining space below header */
+  /* Line clamping for multi-line ellipsis */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show max 3 lines */
+  -webkit-box-orient: vertical;
 }
 
-.project-card-link img {
-  width: 20px;
-  height: 20px;
-  margin-left: 10px;
-  transition: transform 0.3s ease;
+/* === RESPONSIVE ADJUSTMENTS === */
+
+@media (max-width: 992px) {
+  .project-card {
+    padding: 1rem;
+    box-shadow: 6px 6px 0px 0px black;
+    min-height: 280px;
+  }
+  .project-card-border {
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+  .project-card-image-container {
+    margin-bottom: 0.8rem;
+  }
+  .project-card-title {
+    font-size: 1.15em;
+  }
+  .project-card-description {
+    font-size: 0.85em;
+    -webkit-line-clamp: 2;
+  }
+  .project-card-link {
+    padding: 6px;
+  }
+  .project-link-icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .project-card {
+    padding: 0.8rem;
+    box-shadow: 5px 5px 0px 0px black;
+    border-width: 2px;
+    min-height: 260px;
+  }
+  .project-card-border {
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+  .project-card:hover {
+    transform: none; /* Hover efektini mobilde kaldırabiliriz */
+    box-shadow: 5px 5px 0px 0px black;
+  }
+  .project-card-image-container {
+    margin-bottom: 0.7rem;
+    border-width: 2px;
+    aspect-ratio: 16 / 9; /* More horizontal on mobile */
+  }
+  .project-card-header {
+    margin-bottom: 0.5rem;
+    gap: 0.4rem;
+  }
+  .project-card-title {
+    font-size: 1.05em;
+  }
+  .project-card-description {
+    font-size: 0.8em;
+    line-height: 1.4;
+    -webkit-line-clamp: 2;
+  }
+  .project-card-link {
+    padding: 5px;
+  }
+  .project-link-icon {
+    width: 14px;
+    height: 14px;
+  }
 }

@@ -1,14 +1,29 @@
 .message-container {
-  width: 60%;
-  height: 80%;
   margin: 60px auto;
   padding: 2rem;
   border-radius: 8px;
-  border: 6px solid #000;
+  border: 2px solid #000;
   background: #fff;
-  box-shadow: 21px 21px 0px 0px rgba(0, 0, 0, 0.4);
-  width: 80%; /* Dikdörtgen şekli için genişliği sınırlayalım */
-  max-width: 800px; /* Maksimum genişlik belirleyelim */
+  box-shadow: -8px 7px 0px 0px rgba(0, 0, 0, 0.44);
+  max-width: 750px;
+
+  .form-button {
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 20px 0 -20px 0;
+    background-color: #e53e3e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.75rem 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
 
   .message-header {
     text-align: center;
@@ -176,12 +191,11 @@
   }
 }
 
-// Responsive tasarım için
 @media (max-width: 768px) {
   .message-container {
     padding: 1.5rem;
-    width: 90%; /* Daha dar cihazlarda genişlik artırılabilir */
-    max-width: 100%; /* En geniş alana kadar yayılabilir */
+    width: 70%; /* Daha dar cihazlarda genişlik artırılabilir */
+    max-width: 80%; /* En geniş alana kadar yayılabilir */
 
     .message-header {
       h1 {

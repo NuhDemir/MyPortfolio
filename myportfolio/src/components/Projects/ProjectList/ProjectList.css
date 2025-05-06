@@ -1,23 +1,204 @@
-.project-list {
-  text-align: center;
-  margin: 80px 0;
+/* src/components/Projects/ProjectList/ProjectList.css veya ana stil dosyası */
+
+/* === Ana Proje Listesi Bölümü === */
+.project-list-section {
+  padding: 4rem 0; /* Bölüm üst/alt boşluğu */
+  position: relative; /* Ok butonlarını buna göre konumlandıracağız */
+  overflow: hidden; /* Yatay taşmaları ana bölüm seviyesinde de gizle */
 }
 
-.project-list-title {
-  color: #fff;
-  margin-bottom: 40px;
-  width: 22%;
-  height: 22%;
+/* Başlık SVG'si */
+.project-list-title-svg {
+  display: block;
+  margin: 0 auto 2.5rem auto; /* Ortala ve alt boşluk */
+  max-width: 250px;
+  height: auto;
 }
 
+/* Butonları ve kaydırılabilir listeyi saran wrapper */
+.project-list-wrapper {
+  position: relative; /* Butonlar için */
+  display: flex;
+  align-items: center;
+  padding: 0 1rem; /* Wrapper'a yan boşluk (butonlar buraya taşabilir) */
+  max-width: 1400px; /* İçeriğin max genişliği */
+  margin: 0 auto; /* Ortala */
+}
+
+/* === Kaydırılabilir Proje Konteyneri === */
 .project-list-container {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; /* Öğelerin alt satıra inmesini engelle */
+  justify-content: flex-start; /* Öğeleri soldan başlat */
+  align-items: stretch; /* Kart yüksekliklerini eşitle */
+  width: 100%; /* Wrapper içinde tam genişlik */
+  padding: 1rem 0.5rem; /* Kartlar etrafında dikey/yatay boşluk */
+  overflow-x: auto; /* Yatay kaydırmayı etkinleştir */
+  scroll-behavior: smooth;
+  gap: 1.5rem; /* Kartlar arası boşluk (24px) */
+
+  /* Kaydırma çubuğunu gizle */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.project-list-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Proje Kartları (Genişlik ve Min Genişlik Ayarları) */
+.project-list-container .project-card {
+  flex: 0 0 auto; /* Boyut sabit kalsın */
+  /* Varsayılan (geniş ekran): ~4 kart */
+  width: calc(25% - 1.125rem);
+  min-width: 280px;
+  /* ProjectCard.css'den gelen diğer stiller geçerli olur */
+}
+
+/* === Kaydırma Ok Butonları === */
+.scroll-button {
+  position: absolute; /* .project-list-wrapper'a göre konumlanır */
+  top: 50%; /* Dikeyde ortala */
+  transform: translateY(-50%); /* Tam ortalamak için */
+  z-index: 10; /* Kartların üzerinde görünsün */
+  background-color: rgba(255, 255, 255, 0.9); /* Hafif şeffaf beyaz */
+  border: 1px solid #ddd; /* İnce border */
+  border-radius: 50%; /* Yuvarlak buton */
+  width: 45px; /* Buton genişliği */
+  height: 45px; /* Buton yüksekliği */
+  display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px;
-  z-index: 1;
-  position: relative; /* project-card-border'ın mutlak konumu için referans */
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease,
+    transform 0.1s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+}
+.scroll-button:hover {
+  background-color: rgba(255, 255, 255, 1); /* Hover'da tam beyaz */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%) scale(1.05); /* Hafif büyüme efekti */
+}
+.scroll-button:active {
+  transform: translateY(-50%) scale(0.98); /* Tıklama efekti */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Ok ikonlarının stili */
+.scroll-button img {
+  width: 18px; /* İkon boyutu */
+  height: 18px; /* İkon boyutu */
+  opacity: 0.6; /* Biraz soluk */
+  pointer-events: none; /* İkonun tıklamayı engellememesi için */
+}
+.scroll-button:hover img {
+  opacity: 0.9; /* Hover'da daha belirgin */
+}
+
+/* Sol ve Sağ Buton Konumları */
+.scroll-button-left {
+  /* Wrapper padding'inin dışına çıkaralım */
+  left: -15px;
+}
+.scroll-button-right {
+  /* Wrapper padding'inin dışına çıkaralım */
+  right: -15px;
+}
+
+/* Yükleme, Hata ve Boş Durum Stilleri */
+.project-list-loading,
+.project-list-error,
+.project-list-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6c757d;
+  min-height: 200px; /* İçerik yokken bile biraz yükseklik */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.project-list-empty {
+  font-style: italic;
+}
+
+/* === Responsive Ayarlar === */
+@media (max-width: 1450px) {
+  /* Butonların içeri girmesi için breakpoint */
+  .scroll-button-left {
+    left: 5px;
+  }
+  .scroll-button-right {
+    right: 5px;
+  }
+}
+
+@media (max-width: 1200px) {
+  /* ~3 kart */
+  .project-list-container .project-card {
+    width: calc(33.33% - 1rem);
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 992px) {
+  /* ~2 kart */
+  .project-list-container .project-card {
+    width: calc(50% - 0.75rem);
+    min-width: 250px; /* Minimumu biraz daha ayarlayabiliriz */
+  }
+}
+
+@media (max-width: 768px) {
+  .project-list-section {
+    margin: 60px 0;
+  }
+  .project-list-title-svg {
+    max-width: 200px;
+    margin-bottom: 1.5rem;
+  }
+  .project-list-wrapper {
+    padding: 0;
+  } /* Mobil wrapper yan boşluğunu kaldır */
+  .project-list-container {
+    gap: 1rem;
+    padding: 0.5rem 30px; /* Oklar için yer bırakarak iç boşluk */
+    /* Mobilde kart genişliği min-width ile kontrol edilecek, belki biraz daha fazla görünür */
+    scroll-padding: 0 30px; /* Kaydırmanın kenarlarda bitmemesi için */
+  }
+  .project-list-container .project-card {
+    width: 65%; /* Mobilde ~1.5 kart */
+    min-width: 230px;
+  }
+  .scroll-button {
+    width: 40px;
+    height: 40px;
+    /* Mobil için butonları daha içeri al */
+    background-color: rgba(240, 240, 240, 0.9); /* Mobilde daha görünür */
+  }
+  .scroll-button img {
+    width: 15px;
+    height: 15px;
+  }
+  .scroll-button-left {
+    left: 10px;
+  } /* Daha içeride */
+  .scroll-button-right {
+    right: 10px;
+  } /* Daha içeride */
+}
+
+@media (max-width: 576px) {
+  .project-list-container .project-card {
+    width: 80%; /* Daha küçük mobilde ~1.2 kart */
+    min-width: 200px;
+  }
+  .project-list-container {
+    padding: 0.5rem 25px;
+    scroll-padding: 0 25px;
+  }
+  .scroll-button-left {
+    left: 5px;
+  }
+  .scroll-button-right {
+    right: 5px;
+  }
 }
