@@ -1,146 +1,239 @@
-:root {
-  --navbar-height: 60px;
-}
-
 /* Ana navbar arka plan kapsayıcısı */
 .navbar-background-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 60px; /* veya ihtiyaç varsa artırılabilir */
-  background-color: var(--color-bg-primary);
-  border-bottom: 1px solid #0b1420;
-  z-index: 9999;
+  height: var(--navbar-height); /* global.css'den */
+  background-color: var(--color-navbar-bg-container, var(--color-background-page));
+  border-bottom: 1px solid var(--color-navbar-border-container, var(--color-navbar-border));
+  z-index: 9990;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
+  transition: opacity var(--transition-duration-base) var(--transition-timing-function),
+              transform var(--transition-duration-base) var(--transition-timing-function);
 }
 
 /* Menü kaybolduğunda */
 .navbar-hidden {
   opacity: 0;
+  transform: translateY(-100%);
   pointer-events: none;
 }
 
-/* Ana navbar kutusu */
+/* Ana navbar kutusu (tasarımdaki ortadaki kutu) */
 .navbar-container {
-  width: 318px;
+  width: 328px;
   height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ccc7a5;
-  border: 2px solid #1e1f20;
+  background: var(--color-navbar-bg);
+  border: 2px solid var(--color-navbar-border);
   position: relative;
+  box-shadow: var(--box-shadow-sm);
 }
 
-/* Sol taraftaki ikon */
 .icon-container {
   width: 40px;
   height: 40px;
-  background: #999470;
+  background: var(--color-navbar-icon-bg);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #384456;
+  border-right: 1px solid var(--color-navbar-border);
+}
+.icon-container img {
+  color: var(--color-navbar-text); /* SVG fill="currentColor" ise */
+  filter: var(--theme-mode-icon-filter); /* Temaya göre SVG rengini ayarlar */
 }
 
-/* Menü öğeleri kapsayıcı */
 .nav-items-container {
   display: flex;
   height: 100%;
 }
 
-/* Tek bir menü öğesi */
 .nav-item {
-  color: #26261b;
-  font-size: 14px;
-  font-weight: 400;
+  color: var(--color-navbar-text);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
-  padding: 0 20px;
+  padding: 0 var(--spacing-md);
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-right: 1px solid #384456;
-  transition: background-color 0.3s ease;
+  border-right: 1px solid var(--color-navbar-border);
+  transition: background-color var(--transition-duration-short) ease;
 }
 
 .nav-item:hover {
-  background-color: #e1d89a;
+  background-color: var(--color-navbar-item-hover-bg);
 }
 
 .nav-item:last-child {
   border-right: none;
 }
 
-/* Dekoratif noktalar */
 .decorative-dot {
   width: 4px;
   height: 4px;
-  background: white;
+  background: var(--color-navbar-text); /* VEYA --color-text-on-secondary gibi */
   position: absolute;
+  border-radius: var(--border-radius-circle);
 }
 
-/* Line.svg konumu */
 .navbar-outline {
   position: absolute;
-  margin-top: var(--navbar-height);
+  top: var(--navbar-height);
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   width: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+.navbar-outline img { /* Line.svg */
+  width: 100vw;
+  max-width: 2000px;
+  display: block;
+  /* SVG stroke rengi ayarı: */
+  /* stroke: var(--color-navbar-border); */
 }
 
-/* Sabit hamburger ikon (scroll sonrası) */
+.theme-dark .navbar-outline img {
+  filter: invert(1) brightness(0.8); 
+}
+
+
 .navbar-icon-fixed {
   position: fixed;
-  top: 16px;
-  right: 16px;
-  width: 40px;
+  top: calc((var(--navbar-height) - 40px) / 2);
+  right: var(--spacing-md);
+  width: 0px;
   height: 40px;
-  background: #0b1420;
+  background: var(--color-navbar-icon-bg-fixed, var(--color-navbar-icon-bg));
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #384456;
+  border: 1px solid var(--color-navbar-border-fixed, var(--color-navbar-border));
+  border-radius: var(--border-radius-sm);
   cursor: pointer;
-  z-index: 9999;
+  z-index: 9995;
+  box-shadow: var(--box-shadow-sm);
+  transition: background-color var(--transition-duration-short);
+}
+.navbar-icon-fixed:hover {
+  background: var(--color-navbar-item-hover-bg); /* Ana hover rengini kullanabilir */
+}
+.navbar-icon-fixed img { /* hamburger.svg, close.svg */
+  width: 24px;
+  height: 24px;
+  filter: var(--theme-mode-icon-filter); /* Temaya göre SVG rengini ayarlar */
 }
 
-/* Mobil menü (scroll sonrası açılan) */
 .mobile-menu {
   position: fixed;
-  top: calc(var(--navbar-height) + 10px);
-  right: 16px;
-  background-color: #20262f;
-  border: 1px solid #384456;
+  top: calc(var(--navbar-height) + var(--spacing-xs));
+  right: var(--spacing-md);
+  background-color: var(--color-navbar-mobile-menu-bg, var(--color-navbar-bg));
+  border: 1px solid var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
+  border-radius: var(--border-radius-md);
   display: flex;
   flex-direction: column;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
+  z-index: 9994;
+  animation: fadeInMobileMenuNavbar var(--transition-duration-base) ease; /* Animasyon ismi güncellendi */
+  box-shadow: var(--box-shadow-base);
+  min-width: 180px;
 }
 
 .mobile-menu .nav-item {
   border-right: none;
-  border-bottom: 1px solid #384456;
+  border-bottom: 1px solid var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  text-align: left;
+  justify-content: flex-start;
 }
-
 .mobile-menu .nav-item:last-child {
   border-bottom: none;
 }
+.mobile-menu .nav-item:hover {
+  background-color: var(--color-navbar-item-hover-bg);
+}
 
-/* Küçük telefonlar */
+.theme-toggle-button {
+  position: fixed;
+  top: calc((var(--navbar-height) - 36px) / 2);
+  left: var(--spacing-md);
+  z-index: 9996;
+  padding: var(--spacing-xs);
+  color: var(--color-navbar-text);
+  border: 1px solid var(--color-navbar-border);
+  border-radius: var(--border-radius-circle);
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: var(--box-shadow-sm);
+  transition: background-color var(--transition-duration-short);
+  -webkit-transition: background-color var(--transition-duration-short);
+  -moz-transition: background-color var(--transition-duration-short);
+  -ms-transition: background-color var(--transition-duration-short);
+  -o-transition: background-color var(--transition-duration-short);
+}
+.theme-toggle-button:hover {
+  background-color: var(--color-navbar-item-hover-bg);
+  transform: scale(1.05);
+}
+/* MUI ikonları için filter (eğer SVG değil de MUI ikon kullanılıyorsa) */
+.theme-toggle-button svg {
+    filter: var(--theme-mode-icon-filter);
+}
 
-/* Animasyonlar */
-@keyframes fadeIn {
+
+@keyframes fadeInMobileMenuNavbar { /* İsim güncellendi */
   from {
     opacity: 0;
-    transform: translateY(-10%);
+    transform: translateY(-10px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-icon-fixed {
+    top: calc((var(--navbar-height) - 40px) / 2);
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle-button {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    top: calc((var(--navbar-height) - 32px) / 2);
+    left: var(--spacing-sm);
+  }
+  .navbar-icon-fixed {
+    right: var(--spacing-sm);
+    width: 36px;
+    height: 36px;
+    top: calc((var(--navbar-height) - 36px) / 2);
+  }
+  .navbar-icon-fixed img {
+    width: 20px;
+    height: 20px;
+  }
+  .mobile-menu {
+    right: var(--spacing-sm);
+    min-width: 160px;
   }
 }

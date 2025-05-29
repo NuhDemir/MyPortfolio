@@ -1,103 +1,267 @@
+/* src/style/global.css */
 @import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
 
-/* Base variables */
+/* === VARSAYILAN (LIGHT) TEMA DEĞİŞKENLERİ === */
 :root {
-  --font-primary: "Space Grotesk", sans-serif;
-  --color-bg-primary: #36b069;
-  --color-text-primary: #ffffff;
-  --color-accent: #57ffa5;
-  --color-accent-hover: #0db963;
+  /* --- Renk Paleti (Light Tema) --- */
+  --color-primary: #36B069;                     /* Yeşil Ana Renk */
+  --color-primary-darker: #2a8a53;              /* Yeşil Ana Renk Koyu Tonu */
+  --color-secondary: #CCC7A5;                  /* Bej/Gri - Navbar Arka Planı gibi */
+  --color-accent: #ffffff;                     /* Turuncu Vurgu */
+  --color-accent-hover: #cfffd5;                /* Açık Turuncu Vurgu Hover */
+
+  --color-background-page: #009a67;             /* Açık gri/beyazımsı sayfa arka planı */
+  --color-background-paper: var(--color-sec);           /* Beyaz Kağıt/Kart Arka Planı */
+  --color-background-paper-transparent: rgba(255, 255, 255, 0.85); /* %85 opak beyaz */
+  --color-background-overlay: rgba(0, 0, 0, 0.65); /* Modal vb. için overlay */
+  --color-background-tooltip: rgba(30, 30, 30, 0.92); /* Koyu tooltip arka planı */
+
+  --color-text-primary: #212529;                /* Koyu Ana Metin */
+  --color-text-secondary: #495057;              /* Gri İkincil Metin */
+  --color-text-muted: #6c757d;                  /* Soluk Gri Metin */
+  --color-text-on-primary: #FFFFFF;             /* Ana Renk (Yeşil) Üzerindeki Metin (Beyaz) */
+  --color-text-on-secondary: #26261b;           /* İkincil Renk (Bej/Gri) Üzerindeki Metin (Koyu) */
+  --color-text-on-accent: #FFFFFF;              /* Vurgu Rengi (Turuncu) Üzerindeki Metin (Beyaz) */
+  --color-text-link: var(--color-accent);         /* Linkler için Turuncu Vurgu */
+  --color-text-link-hover: var(--color-accent-hover); /* Link hover için Açık Turuncu */
+  --color-text-tooltip: #f0f0f0;                /* Açık renk tooltip metni */
+
+  --color-border-primary: #DEE2E6;              /* Açık Gri Genel Border */
+  --color-border-strong: #000000;               /* Siyah Neubrutalism Border */
+  --color-border-input: #CED4DA;                /* Input Border */
+  --color-border-input-focus: var(--color-accent); /* Turuncu Input Focus Border */
+  /* --color-accent (#FF7B00) -> RGB(255, 123, 0) */
+  --color-border-input-focus-shadow: rgba(255, 123, 0, 0.25); /* Turuncu Input Focus Gölgesi */
+
+  --color-button-primary-bg: var(--color-accent); /* Turuncu Buton Arka Planı */
+  --color-button-primary-text: var(--color-text-on-accent); /* Beyaz Buton Metni */
+  --color-button-primary-bg-hover: var(--color-accent-hover); /* Açık Turuncu Buton Hover */
+  --color-button-shadow: var(--color-border-strong); /* Siyah Buton Gölgesi (Neubrutalism) */
+  --color-button-disabled-text: rgba(255, 255, 255, 0.7); /* Beyaz metnin opak hali */
+  --color-button-loader-track: rgba(255, 255, 255, 0.3); /* Beyazın opak hali */
+  /* --color-accent (#FF7B00) -> RGB(255, 123, 0) */
+  --color-success-icon-glow: rgba(255, 123, 0, 0.4); /* Turuncu vurgunun opak hali */
+
+  --color-navbar-bg: var(--color-secondary);      /* Bej/Gri Navbar Arka Planı */
+  --color-navbar-text: #26261b;                  /* Navbar için özel koyu metin */
+  --color-navbar-border: #1e1f20;                /* Navbar için özel koyu border */
+  --color-navbar-icon-bg: #999470;               /* Navbar için özel ikon arka planı */
+  --color-navbar-item-hover-bg: #e1d89a; 
+    --color-navbar-bg-container: var(--color-background-page); /* Varsayılan, açık tema için */
+  --color-navbar-border-container: var(--color-navbar-border); /* Varsayılan, açık tema için */
+
+  --color-navbar-icon-bg-fixed: var(--color-navbar-icon-bg); /* Varsayılan, açık tema için */
+  --color-navbar-border-fixed: var(--color-navbar-border); /* Varsayılan, açık tema için */
+
+  --color-navbar-mobile-menu-bg: var(--color-navbar-bg); /* Varsayılan, açık tema için */
+  --color-navbar-mobile-menu-border: var(--color-navbar-border); /* Varsayılan, açık tema için */
+
+  --theme-mode-icon-filter: none;        /* Navbar için özel hover */
+
+  --color-social-links-bg: var(--color-primary); /* Yeşil Sosyal Link Arka Planı */
+  --color-social-links-text: var(--color-text-on-primary); /* Beyaz Sosyal Link Metni */
+  /* --color-social-links-border: rgba(255, 123, 0, 0.3); /* Turuncu Border - Bu değişken tanımında var ama kullanımda yoktu, gerekirse */
+  --color-social-links-hover-underline: var(--color-accent); /* Turuncu Alt Çizgi */
+
+  --color-footer-bg: var(--color-background-paper); /* Footer için beyaz kağıt arka planı */
+  --color-footer-text: var(--color-text-secondary); /* Gri footer metni */
+  --color-footer-border: var(--color-border-primary); /* Açık gri footer üst border */
+
+  /* Splash ekranı genellikle kendi renk paletine sahip olabilir veya temadan birkaç renk alabilir */
+  --color-splash-bg: #043f22a0;                  /* Bu sabit kalabilir veya temadan uyarlanabilir */
+  --color-splash-text: #ffffff;
+  --color-splash-accent: #0ac285;                /* Bu da sabit kalabilir */
+  --color-splash-grid: rgba(10, 194, 133, 0.12);
+  --color-splash-loader-bar-container-border: var(--color-splash-accent);
+  --color-splash-loader-bar-bg: var(--color-splash-accent);
+  --color-splash-scanlines-bg-mid: rgba(3, 8, 16, 0.65);
+  --color-splash-scanlines-bg-start: rgba(3, 8, 16, 0);
+
+  --color-error-bg: #F8D7DA;                     /* Hata mesajları için genel renkler */
+  --color-error-text: #721C24;
+  --color-error-border: #F5C6CB;
+  --color-error-accent-border: #DC3545;          /* Daha belirgin kırmızı */
+
+  --color-success-bg: #D4EDDA;                   /* Başarı mesajları için */
+  --color-success-text: #155724;
+
+  --color-spinner-track: rgba(0, 0, 0, 0.1);      /* Spinner arka planı */
+  --color-spinner-active: var(--color-accent);    /* Turuncu Spinner aktif kısmı */
+
+  /* Specific components from your design (global.css içinde tanımlı) */
+  --subtitle-bg: var(--color-secondary);          /* Bej/Gri Altbaşlık Arka Planı */
+  --subtitle-text-color: #26261b;                /* Altbaşlık için özel koyu metin */
+
+  --paper-color: var(--color-background-paper);   /* Global paper color (eski kullanım) */
+  --comments-bg: #FFFFFF;   /* Yorumlar için beyaz kağıt arka planı */
+  --comments-text-color: var(--color-text-primary); /* Yorum metni */
+  --comments-user-text-color: var(--color-text-primary); /* Yorum kullanıcı adı */
+  --comments-job-title-color: var(--color-text-secondary); /* Yorum iş unvanı */
+  --comments-shadow: #BFBFB4;                   /* Açık tema için yorum gölgesi */
+
+  /* --- Tipografi (Değişiklik yok, olduğu gibi kalabilir) --- */
+  --font-family-primary: "Space Grotesk", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-family-secondary: "Amatic SC", cursive;
+  --font-family-code: "Space Mono", monospace;
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem; --font-size-md: 1rem; --font-size-lg: 1.125rem; --font-size-xl: 1.25rem;
+  --font-size-h1: clamp(2.5rem, 6vw, 4rem); --font-size-h2: clamp(2rem, 5vw, 3rem); --font-size-h3: clamp(1.5rem, 4vw, 2.25rem);
+  --font-size-display: clamp(3rem, 8vw, 8rem); --font-size-main-subtitle: clamp(0.9rem, 3vw, 1.5rem);
+  --line-height-base: 1.6; --line-height-heading: 1.2;
+  --font-weight-light: 300; --font-weight-normal: 400; --font-weight-medium: 500; --font-weight-semibold: 600; --font-weight-bold: 700;
+
+  /* --- Boşluklandırma (Değişiklik yok, olduğu gibi kalabilir) --- */
+  --spacing-unit: 8px;
+  --spacing-xs: var(--spacing-unit); --spacing-sm: calc(var(--spacing-unit) * 2); --spacing-md: calc(var(--spacing-unit) * 3);
+  --spacing-lg: calc(var(--spacing-unit) * 4); --spacing-xl: calc(var(--spacing-unit) * 6); --spacing-xxl: calc(var(--spacing-unit) * 8);
+  --container-padding: var(--spacing-lg);
+
+  /* --- Diğer (Değişiklik yok, olduğu gibi kalabilir) --- */
   --navbar-height: 60px;
-  --container-padding: 2rem;
-  --transition-default: all 0.3s ease;
-  --color-border: #ccc7a5;
-  --paper-color: #fff;
-  --subtitle-bg: #ccc7a5;
-  --subtitle-text-color: #26261b;
-
-  --navbar-bg: #ccc7a5;
-  --navbar-text-color: #26261b;
-  --button-bg: #be7d65;
-  --button-bg-hover: #001429;
-  --button-text-color: #001429;
-  --button-border-radius: 4px;
-  --button-padding: 10px 20px;
-  --button-font-size: 16px;
-  --button-hover-bg: var(--button-text-color);
-  --button-hover-text-color: var(--button-bg);
-  --social-links-bg: #247149;
-  --social-links-bg-hover: #0db963;
-  --social-links-text-color: #fff;
-  --about-bg: var(--paper-color);
-  --about-text-color: #26261b;
-  --projects-bg: var(--paper-color);
-  --projects-text-color: #26261b;
-
-  --comments-bg: var(--paper-color);
-  --comments-text-color: #022b52;
-  --comments-user-text-color: var(--about-text-color);
-  --comments-job-title-color: #555;
+  --border-radius-sm: 2px; --border-radius-base: 4px; --border-radius-md: 6px; --border-radius-lg: 8px;
+  --border-radius-xl: 12px; --border-radius-pill: 50rem; --border-radius-circle: 50%;
+  --box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05); --box-shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --box-shadow-neubrutalist: 8px 8px 0px var(--color-border-strong);
+  --box-shadow-neubrutalist-sm: 5px 5px 0px var(--color-border-strong);
+  --transition-duration-short: 0.15s; --transition-duration-base: 0.3s; --transition-duration-long: 0.5s;
+  --transition-timing-function: ease-in-out;
+  --transition-default: all var(--transition-duration-base) var(--transition-timing-function);
 }
 
-/* Reset and base styles */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+/* === DARK TEMA DEĞİŞKENLERİ === */
+.theme-dark {
+  /* --- Renk Paleti (Dark Tema) --- */
+  --color-primary: #00296B;                     /* Koyu Mavi Ana Renk */
+  --color-primary-darker: #001D3D;              /* Çok Koyu Mavi (Ana Arka Plan olabilir) */
+  --color-secondary: #003F88;                  /* Orta Koyu Mavi (Navbar için) */
+  --color-accent: #99CDFF;                     /* Açık Mavi Vurgu */
+  --color-accent-hover: #CCE6FF;                /* Çok Açık Mavi Vurgu Hover */
+
+  --color-background-page: var(--color-primary-darker); /* Çok Koyu Mavi Sayfa Arka Planı */
+  --color-background-paper: #00255A;           /* Ana Mavi'den biraz daha koyu kağıt/kart */
+  --color-background-paper-transparent: rgba(0, 37, 90, 0.85); /* %85 opak --color-background-paper */
+  --color-background-overlay: rgba(0, 0, 0, 0.8);  /* Daha koyu overlay */
+  --color-background-tooltip: rgba(200, 220, 255, 0.92); /* Açık mavi tonlu tooltip arka planı */
+
+  --color-text-primary: var(--color-accent-hover); /* Çok Açık Mavi Ana Metin */
+  --color-text-secondary: var(--color-accent);   /* Açık Mavi İkincil Metin */
+  --color-text-muted: #87a7cc;                   /* Daha da soluk mavi */
+  --color-text-on-primary: var(--color-accent-hover); /* Koyu Mavi Üzerindeki Metin (Çok Açık Mavi) */
+  --color-text-on-secondary: var(--color-accent-hover); /* Orta Koyu Mavi Üzerindeki Metin (Çok Açık Mavi) */
+  --color-text-on-accent: var(--color-primary-darker); /* Açık Mavi Vurgu Üzerindeki Metin (Çok Koyu Mavi) */
+  --color-text-link: var(--color-accent);         /* Linkler için Açık Mavi Vurgu */
+  --color-text-link-hover: var(--color-accent-hover);
+  --color-text-tooltip: var(--color-primary-darker); /* Koyu tooltip metni */
+
+  --color-border-primary: #003F88;              /* Orta Koyu Mavi Genel Border */
+  --color-border-strong: var(--color-accent-hover); /* Çok Açık Mavi Neubrutalism Border */
+  --color-border-input: #003F88;                /* Orta Koyu Mavi Input Border */
+  --color-border-input-focus: var(--color-accent); /* Açık Mavi Input Focus Border */
+  /* --color-accent (#99CDFF) -> RGB(153, 205, 255) */
+  --color-border-input-focus-shadow: rgba(153, 205, 255, 0.3); /* Açık Mavi Input Focus Gölgesi */
+
+  --color-button-primary-bg: var(--color-accent); /* Açık Mavi Buton Arka Planı */
+  --color-button-primary-text: var(--color-text-on-accent); /* Koyu Mavi Buton Metni */
+  --color-button-primary-bg-hover: var(--color-accent-hover);
+  --color-button-shadow: var(--color-border-strong); /* Çok Açık Mavi Buton Gölgesi */
+  --color-button-disabled-text: rgba(0, 29, 61, 0.7); /* Koyu mavi metnin opak hali */
+  --color-button-loader-track: rgba(0, 29, 61, 0.3);
+  /* --color-accent (#99CDFF) -> RGB(153, 205, 255) */
+  --color-success-icon-glow: rgba(153, 205, 255, 0.4); /* Açık mavi vurgunun opak hali */
+
+  --color-navbar-bg: var(--color-primary);        /* Koyu Mavi Navbar Arka Planı */
+  --color-navbar-text: var(--color-accent-hover); /* Çok Açık Mavi Navbar Metni */
+  --color-navbar-border: var(--color-secondary);  /* Orta Koyu Mavi Navbar Border */
+  --color-navbar-icon-bg: var(--color-secondary); /* Orta Koyu Mavi İkon Arka Planı */
+  --color-navbar-item-hover-bg: #004C9E;         /* Navbar Arka Planından biraz daha açık mavi */
+ --color-navbar-bg-container: var(--color-primary-darker); /* Koyu tema için örnek */
+  --color-navbar-border-container: var(--color-secondary); /* Koyu tema için örnek */
+
+  --color-navbar-icon-bg-fixed: #0b1420; /* Koyu tema için özel (CSS'inizdeki gibi) */
+  --color-navbar-border-fixed: #384456; /* Koyu tema için özel (CSS'inizdeki gibi) */
+
+  --color-navbar-mobile-menu-bg: #20262f; /* Koyu tema için özel (CSS'inizdeki gibi) */
+  --color-navbar-mobile-menu-border: #384456; /* Koyu tema için özel (CSS'inizdeki gibi) */
+
+  --theme-mode-icon-filter: invert(90%) brightness(1.2) contrast(0.9);
+
+  --color-social-links-bg: var(--color-secondary);/* Orta Koyu Mavi Sosyal Link Arka Planı */
+  --color-social-links-text: var(--color-accent-hover); /* Çok Açık Mavi Sosyal Link Metni */
+  /* --color-social-links-border: rgba(153, 205, 255, 0.4); /* Açık Mavi Border - gerekirse */
+  --color-social-links-hover-underline: var(--color-accent); /* Açık Mavi Alt Çizgi */
+
+  --color-footer-bg: var(--color-background-paper); /* Koyu tema kağıt arka planı */
+  --color-footer-text: var(--color-text-secondary); /* Açık mavi ikincil metin */
+  --color-footer-border: var(--color-border-primary); /* Orta koyu mavi footer üst border */
+
+  /* Splash ekranı renkleri koyu tema için de aynı kalabilir, isteğe bağlı */
+  /* --color-splash-bg: ...; (koyu tema için farklı splash) */
+
+  --color-error-bg: rgba(205, 57, 59, 0.15);      /* Kırmızının hafif opak arkaplanı */
+  --color-error-text: #F5C6CB;                   /* Kırmızının açık tonu */
+  --color-error-border: rgba(205, 57, 59, 0.5);
+  --color-error-accent-border: #CD393B;           /* Belirgin kırmızı (değişken yoktu, eklendi) */
+
+  --color-success-bg: rgba(153, 205, 255, 0.1);   /* Açık mavinin hafif opak arkaplanı */
+  --color-success-text: var(--color-accent-hover);
+
+  --color-spinner-track: rgba(153, 205, 255, 0.2);/* Açık mavinin opak track'i */
+  --color-spinner-active: var(--color-accent);    /* Açık Mavi Spinner aktif kısmı */
+
+  --subtitle-bg: var(--color-secondary);          /* Orta Koyu Mavi Altbaşlık Arka Planı */
+  --subtitle-text-color: var(--color-accent-hover);/* Çok Açık Mavi Altbaşlık Metni */
+
+  --paper-color: var(--color-background-paper);
+  --comments-bg: var(--color-background-paper);
+  --comments-text-color: var(--color-text-primary);
+  --comments-user-text-color: var(--color-text-primary);
+  --comments-job-title-color: var(--color-text-secondary);
+  --comments-shadow: #001021;                   /* Çok koyu mavi gölge */
 }
 
-html,
+/* === Reset and Base Styles (Aynı kalabilir) === */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: var(--font-size-base); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
 body {
-  height: 100%;
-  width: 100%;
-  overflow-x: hidden; /* Prevents horizontal scrolling */
-  scroll-behavior: smooth;
+  font-family: var(--font-family-primary); font-weight: var(--font-weight-normal); line-height: var(--line-height-base);
+  color: var(--color-text-primary); background-color: var(--color-background-page);
+  min-height: 100vh; display: block; overflow-x: hidden;
+  padding-top: var(--navbar-height); position: relative;
+  transition: background-color var(--transition-duration-base) var(--transition-timing-function),
+              color var(--transition-duration-base) var(--transition-timing-function);
 }
-
-body {
-  font-family: var(--font-primary);
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--color-text-primary);
-  background-color: var(--color-bg-primary);
-  display: block;
-  padding-top: var(--navbar-height);
+a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-duration-short) var(--transition-timing-function); }
+a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
+h1, h2, h3, h4, h5, h6 { margin-bottom: var(--spacing-sm); font-weight: var(--font-weight-bold); line-height: var(--line-height-heading); color: var(--color-text-primary); }
+h1 { font-size: var(--font-size-h1); } h2 { font-size: var(--font-size-h2); } h3 { font-size: var(--font-size-h3); }
+button {
+  font-family: inherit; font-size: var(--font-size-md); padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-base); border: 1px solid transparent; cursor: pointer;
+  transition: var(--transition-default);
+  background-color: var(--color-button-primary-bg); color: var(--color-button-primary-text);
 }
+button:hover { background-color: var(--color-button-primary-bg-hover); }
+button:focus, button:focus-visible { outline: 2px auto var(--color-accent); outline-offset: 2px; }
 
-/* App container */
+/* --- App Container & Content (Aynı kalabilir) --- */
+.app-container { opacity: 0; transition: opacity var(--transition-duration-long) ease; }
+.app-container.show { opacity: 1; }
+.content-container { flex: 1; width: 100%; position: relative; }
 
-.app-container.show {
-  opacity: 1;
-}
-
-.app-container.hide {
+/* --- Mouse Light Effect Overlay (Aynı kalabilir, belki rgba rengi temadan alınabilir) --- */
+.mouse-light-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  pointer-events: none; z-index: 999;
+  background: radial-gradient( circle 200px at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    var(--color-mouse-light-center, rgba(200, 200, 255, 0.07)), /* Yeni değişken eklenebilir */
+    transparent 75% );
   opacity: 0;
 }
 
-/* Content container - sits below navbar */
-.content-container {
-  flex: 1;
-  width: 100%;
-  margin-top: var(--navbar-height); /* Navbar yüksekliği kadar boşluk bırakır */
-  position: relative;
-}
+/* Section base styling (Aynı kalabilir) */
+section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
 
-/* Links and buttons */
-a {
-  text-decoration: none;
-  color: inherit;
-  transition: var(--transition-default);
-}
-
-a:hover {
-  color: var(--color-accent);
-}
-
-/* Smooth fade in animation utility */
-.fade-in {
-  animation: fadeIn 0.5s ease-in forwards;
-}
+/* Utility for fade-in animation (Aynı kalabilir) */
+.fade-in { animation: fadeInAnimation var(--transition-duration-long) ease-in forwards; }
+@keyframes fadeInAnimation { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

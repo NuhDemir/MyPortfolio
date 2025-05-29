@@ -1,103 +1,109 @@
-/* src/components/common/style/Modal.css */
+/* frontend/src/components/common/style/Modal.css */
 
-/* Arka plan karartması */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: var(--color-background-overlay); /* Tema değişkeni */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-  opacity: 0; /* Başlangıç (GSAP kontrol) */
-  visibility: hidden; /* Başlangıç (GSAP kontrol) */
+  z-index: 10000; /* En üstte (Navbar'dan ve Splash'tan da üstte olmalı) */
+  opacity: 0; /* GSAP kontrol */
+  visibility: hidden; /* GSAP kontrol */
+  padding: var(--spacing-md); /* Kenarlardan biraz boşluk, modal taşmasın */
 }
 
-/* Modalın ana kutusu */
 .modal-container {
-  background-color: white;
-  padding: 2rem 2.5rem;
-  border-radius: 8px;
-  border: 3px solid black; /* Neubrutalism border */
-  box-shadow: 8px 8px 0px black; /* Neubrutalism shadow */
+  background-color: var(--color-background-paper); /* Tema değişkeni */
+  padding: var(--spacing-lg) var(--spacing-xl); /* Tema değişkenleri */
+  border-radius: var(--border-radius-lg); /* Tema değişkeni */
+  border: 3px solid var(--color-border-strong); /* Tema değişkeni */
+  box-shadow: var(--box-shadow-neubrutalist); /* Tema değişkeni */
   max-width: 700px;
-  width: 90%;
+  width: 100%; /* Overlay padding'i ile max-width'e kadar genişler */
   max-height: 85vh;
-  overflow-y: auto; /* İçerik taşarsa scroll */
+  overflow-y: auto;
   position: relative;
-  transform: scale(0.9) translateY(20px); /* Başlangıç (GSAP kontrol) */
-  opacity: 0; /* Başlangıç (GSAP kontrol) */
-  visibility: hidden; /* Başlangıç (GSAP kontrol) */
+  transform: scale(0.9) translateY(20px); /* GSAP kontrol */
+  opacity: 0; /* GSAP kontrol */
+  visibility: hidden; /* GSAP kontrol */
+  color: var(--color-text-primary); /* İçerik metin rengi */
 }
 
-/* Modal başlık bölümü */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 1rem;
-  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border-primary); /* Tema değişkeni */
+  padding-bottom: var(--spacing-md); /* Tema değişkeni */
+  margin-bottom: var(--spacing-lg); /* Tema değişkeni */
 }
 
-/* Modal başlığı */
 .modal-header h2 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #333;
+  font-size: var(--font-size-h3); /* Tema değişkeni */
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary); /* Tema değişkeni */
 }
 
-/* Kapatma butonu */
 .modal-close-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
+  padding: var(--spacing-xs); /* Tema değişkeni */
   line-height: 0;
-  color: #555;
-  transition: color 0.2s ease;
+  color: var(--color-text-muted); /* Tema değişkeni */
+  transition: color var(--transition-duration-short) ease;
 }
 .modal-close-button:hover {
-  color: #000;
+  color: var(--color-text-primary); /* Tema değişkeni */
+}
+.modal-close-button svg { /* react-icons için */
+  display: block;
 }
 
-/* Modal içeriği */
 .modal-content {
-  line-height: 1.6;
-  color: #444;
+  line-height: var(--line-height-base);
+  color: var(--color-text-secondary); /* İçerik metin rengi */
 }
 .modal-content h3 {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #333;
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
 }
 .modal-content h3:first-child {
   margin-top: 0;
 }
 .modal-content p {
-  margin-bottom: 1rem;
+  margin-bottom: var(--spacing-md);
 }
 .modal-content ul {
   list-style: disc;
-  margin-left: 1.5rem;
-  margin-bottom: 1rem;
+  margin-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 .modal-content li {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-sm);
+}
+.modal-content a {
+  color: var(--color-text-link);
+}
+.modal-content a:hover {
+  color: var(--color-text-link-hover);
 }
 
-/* Daha küçük ekranlar için */
+
 @media (max-width: 768px) {
   .modal-container {
-    padding: 1.5rem;
+    padding: var(--spacing-md) var(--spacing-lg);
     max-height: 90vh;
   }
   .modal-header h2 {
-    font-size: 1.3rem;
+    font-size: var(--font-size-xl);
   }
 }

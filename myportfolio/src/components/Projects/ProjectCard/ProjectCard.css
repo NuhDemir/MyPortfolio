@@ -1,203 +1,143 @@
-/* src/components/ProjectCard/ProjectCard.css */
+/* frontend/src/components/Projects/ProjectCard/ProjectCard.css */
 
 .project-card-wrapper {
   position: relative;
   display: block;
-  /* aspect-ratio: 1 / 1; */ /* <- KALDIRILDI: Orantısızlığı gidermek için bu satır kaldırıldı veya yorumlandı */
   box-sizing: border-box;
+  height: 100%; /* ProjectList'teki align-items: stretch için */
 }
 
-/* Decorative Border (SVG) - Bu kısım aktif değilse kaldırılabilir */
-.project-card-border {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 106%;
-  height: 106%;
-  transform: translate(-50%, -50%) scale(1);
-  z-index: 3;
-  pointer-events: none;
-  object-fit: fill;
-  user-select: none;
+/* Decorative Border (SVG) - Bu kısım aktif değilse kaldırılabilir veya tema ile uyumlu hale getirilebilir */
+.project-card-border { /* Eğer kullanılacaksa */
+  /* ... stilleri kalabilir, renkleri SVG'den veya filter ile ayarlanabilir ... */
 }
 
-/* Content Card */
 .project-card {
   position: relative;
-  z-index: 2; /* Behind the border SVG */
+  z-index: 2;
   width: 100%;
-  /* height: 100%; */ /* Wrapper kare olmadığından bu artık gerekli değil */
-  height: auto; /* <- DEĞİŞTİRİLDİ/EKLEDİ: Yükseklik içeriğe göre belirlensin */
-  min-height: 320px; /* Ensure a minimum height */
-  background: var(--paper-color, #fff);
-  border: 3px solid black;
-  padding: 1.25rem; /* Inner spacing (20px) */
+  height: 100%; /* Wrapper'dan gelen yüksekliği alsın */
+  background: var(--color-background-paper); /* Tema değişkeni */
+  border: 3px solid var(--color-border-strong); /* Tema değişkeni */
+  padding: var(--spacing-md); /* Tema değişkeni */
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* Children use full width */
-  box-shadow: 8px 8px 0px 0px black; /* Neubrutalist shadow */
-  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
-  overflow: hidden; /* Hide overflowing content */
+  align-items: stretch;
+  box-shadow: var(--box-shadow-neubrutalist); /* Tema değişkeni */
+  transition: transform var(--transition-duration-short) ease-out,
+              box-shadow var(--transition-duration-short) ease-out;
+  overflow: hidden;
+  color: var(--color-text-primary); /* Ana metin rengi */
 }
 
-/* Optional Hover Effect */
 .project-card:hover {
   transform: translate(3px, -3px);
-  box-shadow: 11px 11px 0px 0px black;
+  box-shadow: 11px 11px 0px 0px var(--color-border-strong); /* Biraz daha büyük gölge */
 }
 
-/* Image Container */
 .project-card-image-container {
   width: 100%;
-  margin-bottom: 1rem; /* Space below image */
-  border: 3px solid black;
-  background-color: #f0f0f0; /* Placeholder color */
-  flex-shrink: 0; /* Prevent shrinking */
-  aspect-ratio: 16 / 10; /* Resim oranı korunuyor */
-  overflow: hidden; /* Ensure image fits */
+  margin-bottom: var(--spacing-md); /* Tema değişkeni */
+  border: 3px solid var(--color-border-strong); /* Tema değişkeni */
+  background-color: var(--color-border-primary); /* Placeholder için hafif bir renk */
+  flex-shrink: 0;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
 }
 
 .project-card-image {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Scale and crop image */
+  object-fit: cover;
 }
 
-/* Text Content Area */
 .project-card-content {
   width: 100%;
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Take remaining vertical space */
+  flex-grow: 1;
 }
 
-/* Header (Title & Link) */
 .project-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Align items to the top */
-  margin-bottom: 0.75rem; /* Space below header */
-  gap: 0.5rem; /* Space between title and link */
+  align-items: flex-start;
+  margin-bottom: var(--spacing-sm); /* Tema değişkeni */
+  gap: var(--spacing-sm);
 }
 
 .project-card-title {
-  font-size: 1.25em; /* Title size */
-  font-weight: 700;
-  color: black;
+  font-size: var(--font-size-xl); /* Tema değişkeni */
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary); /* Tema değişkeni */
   margin: 0;
-  line-height: 1.2;
-  /* Prevent long titles from breaking layout */
+  line-height: var(--line-height-heading);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex-grow: 1; /* Allow title to take available space */
+  flex-grow: 1;
 }
 
-/* Link (Arrow Button) */
 .project-card-link {
-  background-color: black;
-  padding: 8px;
+  background-color: var(--color-border-strong); /* Tema değişkeni */
+  padding: var(--spacing-xs); /* Tema değişkeni */
   border: none;
-  flex-shrink: 0; /* Don't shrink */
+  border-radius: var(--border-radius-sm); /* Hafif yuvarlaklık */
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-duration-short) ease;
   cursor: pointer;
 }
 .project-card-link:hover {
   transform: scale(1.1);
 }
 
-.project-link-icon {
-  width: 18px;
+.project-link-icon { /* GoToProjectArrow.svg */
+  width: 18px; /* Sabit kalabilir */
   height: 18px;
   display: block;
-  filter: invert(1) brightness(2); /* Make icon white */
+  /* SVG'nin rengi genellikle beyaz veya açık renk olmalı, arka planı koyu olduğu için */
+  filter: invert(1) brightness(2); /* Beyaz yapar */
 }
 
-/* Description Text */
 .project-card-description {
-  font-size: 0.9em; /* Description size */
-  font-weight: 400;
-  color: #333;
-  line-height: 1.5;
+  font-size: var(--font-size-sm); /* Tema değişkeni */
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-secondary); /* Tema değişkeni */
+  line-height: var(--line-height-base);
   margin: 0;
-  flex-grow: 1; /* Take remaining space below header */
-  /* Line clamping for multi-line ellipsis */
+  flex-grow: 1;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Show max 3 lines */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
 
-/* === RESPONSIVE ADJUSTMENTS === */
-
+/* === RESPONSIVE AYARLAR === */
 @media (max-width: 992px) {
   .project-card {
-    padding: 1rem;
-    box-shadow: 6px 6px 0px 0px black;
-    min-height: 280px;
+    padding: var(--spacing-sm);
+    box-shadow: var(--box-shadow-neubrutalist-sm);
   }
-  .project-card-border {
-    transform: translate(-50%, -50%) scale(1.05);
-  }
-  .project-card-image-container {
-    margin-bottom: 0.8rem;
-  }
-  .project-card-title {
-    font-size: 1.15em;
-  }
-  .project-card-description {
-    font-size: 0.85em;
-    -webkit-line-clamp: 2;
-  }
-  .project-card-link {
-    padding: 6px;
-  }
-  .project-link-icon {
-    width: 16px;
-    height: 16px;
-  }
+  .project-card-image-container { margin-bottom: var(--spacing-sm); }
+  .project-card-title { font-size: var(--font-size-lg); }
+  .project-card-description { font-size: var(--font-size-sm); -webkit-line-clamp: 2; }
+  .project-link-icon { width: 16px; height: 16px; }
 }
 
 @media (max-width: 576px) {
   .project-card {
-    padding: 0.8rem;
-    box-shadow: 5px 5px 0px 0px black;
+    padding: calc(var(--spacing-sm) * 0.8);
+    box-shadow: 4px 4px 0px 0px var(--color-border-strong);
     border-width: 2px;
-    min-height: 260px;
   }
-  .project-card-border {
-    transform: translate(-50%, -50%) scale(1.04);
-  }
-  .project-card:hover {
-    transform: none; /* Hover efektini mobilde kaldırabiliriz */
-    box-shadow: 5px 5px 0px 0px black;
-  }
-  .project-card-image-container {
-    margin-bottom: 0.7rem;
-    border-width: 2px;
-    aspect-ratio: 16 / 9; /* More horizontal on mobile */
-  }
-  .project-card-header {
-    margin-bottom: 0.5rem;
-    gap: 0.4rem;
-  }
-  .project-card-title {
-    font-size: 1.05em;
-  }
-  .project-card-description {
-    font-size: 0.8em;
-    line-height: 1.4;
-    -webkit-line-clamp: 2;
-  }
-  .project-card-link {
-    padding: 5px;
-  }
-  .project-link-icon {
-    width: 14px;
-    height: 14px;
-  }
+  .project-card:hover { transform: none; box-shadow: 4px 4px 0px 0px var(--color-border-strong); }
+  .project-card-image-container { margin-bottom: var(--spacing-xs); border-width: 2px; aspect-ratio: 16 / 9; }
+  .project-card-header { margin-bottom: var(--spacing-xs); gap: var(--spacing-xs); }
+  .project-card-title { font-size: var(--font-size-md); }
+  .project-card-description { font-size: calc(var(--font-size-sm) * 0.9); line-height: 1.4; -webkit-line-clamp: 2; }
+  .project-link-icon { width: 14px; height: 14px; }
 }

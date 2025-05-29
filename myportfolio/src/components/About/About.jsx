@@ -26,7 +26,7 @@ const services = [
     id: "programming",
     icon: ProgrammingLangSvg,
     iconBgColor: "#ffdc58",
-    textColor: "#26261B",
+   
     title: "Programming Lang",
     description: "Modern dillerle ölçeklenebilir kod yazma.",
     modalContent: <ProgrammingLangContent />,
@@ -35,7 +35,7 @@ const services = [
     id: "devtools",
     icon: DevToolsTechSvg,
     iconBgColor: "#9c27b0",
-    textColor: "#26261B",
+   
     title: "Dev Tools & Tech",
     description: "Verimlilik için en yeni araçları kullanma.",
     modalContent: <DevToolsTechContent />,
@@ -44,7 +44,7 @@ const services = [
     id: "podcast",
     icon: PodcastTalksSvg,
     iconBgColor: "#f44336",
-    textColor: "#26261B",
+   
     title: "Podcast & Talks",
     description: "Bilgi ve teknoloji trendlerini paylaşma.",
     modalContent: <PodcastTalksContent />,
@@ -53,7 +53,7 @@ const services = [
     id: "projects",
     icon: ProjectsWorkSvg,
     iconBgColor: "#2196f3",
-    textColor: "#26261B",
+    
     title: "Projects & Work",
     description: "Kalite odaklı etkili projeler sunma.",
     modalContent: <ProjectsWorkContent />,

@@ -1,5 +1,13 @@
+/* src/index.css */
+
+/* Bu dosya src/style/global.css'i import etmeli */
+/* Veya global.css'in içeriğini doğrudan buraya taşıyabilirsiniz. */
+/* Tercihen ayrı tutmak daha düzenli. */
+
+/* Eğer Vite'nin varsayılan :root stilleri varsa, bunları kaldırın veya yorumlayın. */
+/*
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -12,16 +20,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+*/
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
+/* Vite'nin body stillerini de kaldırın veya yorumlayın */
+/*
 body {
   margin: 0;
   display: flex;
@@ -29,7 +31,9 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+*/
 
+/*
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -66,3 +70,4 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+*/

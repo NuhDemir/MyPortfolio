@@ -1,71 +1,89 @@
 // frontend/src/components/Navbar/Navbar.jsx
 import React, { useRef, useState, useEffect } from "react";
-import "./style/Navbar.css";
+import "./style/Navbar.css"; // Kendi CSS'inizi kullanıyoruz
+import { useTheme } from "../../context/ThemeContext";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+
+// Kendi SVG'leriniz
 import iconSvgUrl from "../../assets/navitem/icon.svg";
-// import { ReactComponent as IconSVG } from "../../assets/navitem/icon.svg"; // Alternatif SVG kullanımı
 import LineSvg from "../../assets/main/Line.svg";
 import hamburgerIcon from "../../assets/icons/navbar/hamburger.svg";
 import closeIcon from "../../assets/icons/navbar/close.svg";
-import { NavbarContainer } from "./NavbarContainer";
-import { NavItem } from "./NavItem";
-import { IconContainer } from "./IconContainer";
-import { useScrollAnimation } from "../../hooks/useScrollAnimation"; // Hook'u import ettik
+
+// MUI Icons (Sadece tema butonu için)
+import Brightness4Icon from '@mui/icons-material/Brightness4'; // Dark Mode Icon
+import Brightness7Icon from '@mui/icons-material/Brightness7'; // Light Mode Icon
+
+// Eski NavbarContainer, NavItem, IconContainer bileşenleri artık doğrudan bu dosyada
+// veya hala ayrı dosyalardaysa ve bu CSS'e uyumluysa kullanılabilir.
+// Şimdilik doğrudan div ve class'larla ilerliyorum.
 
 export const Navbar = ({
   onScrollToAbout,
   onScrollToProjects,
   onScrollToContact,
 }) => {
-  const iconRef = useRef(null); // İkon animasyonu için ref
-  const [showMenu, setShowMenu] = useState(true); // Ana menünün görünürlüğü
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobil menünün açık/kapalı durumu
+  const { theme, toggleTheme } = useTheme();
+  const iconRef = useRef(null); // Ana logo/ikon için ref (useScrollAnimation için)
+  const [showFullMenu, setShowFullMenu] = useState(true); // Ortadaki menünün görünürlüğü
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // Mobil menü açık mı?
 
-  // Scroll animasyon hook'unu ikon referansıyla çağır
-  useScrollAnimation(iconRef);
+  useScrollAnimation(iconRef); // Bu hook ana ikona animasyon ekliyor
 
-  // Ana menünün scroll'a göre gösterilip gizlenmesi için useEffect
   useEffect(() => {
     const handleScroll = () => {
-      const scrollThreshold = 200; // Navbar'ın kaybolma eşiği
+      const scrollThreshold = 150; // Bu eşik değerini ayarlayabilirsiniz
       if (window.scrollY > scrollThreshold) {
-        setShowMenu(false);
+        setShowFullMenu(false);
       } else {
-        setShowMenu(true);
-        // Ana menü göründüğünde mobil menü de açıksa kapat (isteğe bağlı ama daha iyi UX)
-        // setIsMobileMenuOpen(false);
+        setShowFullMenu(true);
+        // Eğer tam menü görünür hale gelirse ve mobil menü açıksa, mobil menüyü kapat
+        if (isMobileMenuOpen) setIsMobileMenuOpen(false);
       }
     };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isMobileMenuOpen]); // isMobileMenuOpen bağımlılığını ekledik
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // Sadece mount ve unmount'ta çalışır
-
-  // Mobil menüyü kapatma fonksiyonu
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  // Navigasyon linkine tıklandığında ilgili bölüme git ve mobil menüyü kapat
   const handleNavClick = (scrollFunction) => {
     if (scrollFunction) scrollFunction();
     closeMobileMenu();
   };
 
-  // Mobil menüyü aç/kapat fonksiyonu
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const navItemsData = [
+    { label: 'About', action: () => handleNavClick(onScrollToAbout) },
+    { label: 'Project', action: () => handleNavClick(onScrollToProjects) },
+    { label: 'Contact', action: () => handleNavClick(onScrollToContact) },
+  ];
 
   return (
     <>
-      {/* Sabit Hamburger/Kapatma İkonu */}
-      {/* Bu ikon sadece ana menü gizliyken (showMenu === false) görünür */}
-      {!showMenu && (
+      {/* Tema Değiştirici Buton */}
+      <button
+        onClick={toggleTheme}
+        className="theme-toggle-button"
+        aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      >
+        {/* MUI İkonları Kullanımı */}
+        {theme === 'light' ? <Brightness4Icon fontSize="inherit" /> : <Brightness7Icon fontSize="inherit" />}
+      </button>
+
+      {/* Sabit Hamburger/Kapatma İkonu (Tam menü gizliyken görünür) */}
+      {!showFullMenu && (
         <div
           className="navbar-icon-fixed"
-          onClick={toggleMobileMenu} // Tıklandığında mobil menüyü aç/kapat
+          onClick={toggleMobileMenu}
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="mobile-menu-list"
         >
           <img
             src={isMobileMenuOpen ? closeIcon : hamburgerIcon}
             alt="Menu Toggle"
-            width="24"
-            height="24"
+            // width ve height CSS'den geliyor
           />
         </div>
       )}
@@ -73,45 +91,38 @@ export const Navbar = ({
       {/* Ana Navbar Kapsayıcısı */}
       <div
         className={`navbar-background-container ${
-          showMenu ? "" : "navbar-hidden" // Ana menü görünürlüğüne göre class
+          showFullMenu ? "" : "navbar-hidden"
         }`}
       >
-        <NavbarContainer>
-          <IconContainer>
-            {" "}
-            {/* Hover animasyonu için parent element */}
+        <div className="navbar-container"> {/* Ortadaki kutu */}
+          <div className="icon-container"> {/* Sol ikon */}
             <img
-              ref={iconRef} // GSAP animasyonları için ref burada
+              ref={iconRef} // useScrollAnimation için
               src={iconSvgUrl}
               alt="Icon"
-              width="24px"
+              width="24px" // CSS'den de ayarlanabilir
               height="24px"
               onClick={() => {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                closeMobileMenu(); // Sayfa başına gidince mobil menüyü kapat
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                closeMobileMenu(); // Sayfa başına gidince mobil menüyü de kapat
               }}
-              style={{ cursor: "pointer", display: "block" }} // `display: block` img'nin layout'unu iyileştirebilir
-            />
-            {/* Alternatif SVG Component Kullanımı:
-            <IconSVG
-              ref={iconRef} // Eğer IconSVG forwardRef kullanıyorsa
-              width="24px"
-              height="24px"
-              onClick={() => { ... }}
               style={{ cursor: 'pointer', display: 'block' }}
-            /> */}
-          </IconContainer>
+            />
+          </div>
 
-          <div className="nav-items-container">
-            <NavItem onClick={() => handleNavClick(onScrollToAbout)}>
-              About
-            </NavItem>
-            <NavItem onClick={() => handleNavClick(onScrollToProjects)}>
-              Project
-            </NavItem>
-            <NavItem onClick={() => handleNavClick(onScrollToContact)}>
-              Contact
-            </NavItem>
+          <div className="nav-items-container"> {/* Menü öğeleri */}
+            {navItemsData.map((item) => (
+              <div
+                key={item.label}
+                className="nav-item" // NavItem.jsx yerine doğrudan class
+                onClick={item.action}
+                role="button" // Erişilebilirlik için
+                tabIndex={0} // Klavye ile focus alabilmesi için
+                onKeyPress={(e) => e.key === 'Enter' && item.action()} // Enter ile tetikleme
+              >
+                {item.label}
+              </div>
+            ))}
           </div>
 
           {/* Dekoratif Noktalar */}
@@ -119,34 +130,36 @@ export const Navbar = ({
           <div className="decorative-dot" style={{ right: -3, top: -3 }} />
           <div className="decorative-dot" style={{ left: -3, bottom: -3 }} />
           <div className="decorative-dot" style={{ right: -3, bottom: -3 }} />
-        </NavbarContainer>
+        </div>
 
-        {/* Navbar Altındaki Çizgi SVG */}
-        {/* Bu çizgi, ana navbar görünürken onunla birlikte gösterilmeli */}
-        {showMenu && (
+        {/* Navbar Altındaki Çizgi SVG (Tam menü görünürken) */}
+        {showFullMenu && (
           <div className="navbar-outline">
             <img
               src={LineSvg}
-              alt="Line"
-              style={{ width: "100vw", maxWidth: "2000px", display: "block" }} // display:block eklendi
+              alt="" // Dekoratif olduğu için alt boş bırakılabilir veya gizlenebilir
+              aria-hidden="true"
+              // style CSS'den geliyor
             />
           </div>
         )}
       </div>
 
-      {/* Mobil Menü */}
-      {/* Mobil menü, isMobileMenuOpen true VE ana menü gizli (showMenu false) iken görünür */}
-      {isMobileMenuOpen && !showMenu && (
-        <div className="mobile-menu">
-          <NavItem onClick={() => handleNavClick(onScrollToAbout)}>
-            About
-          </NavItem>
-          <NavItem onClick={() => handleNavClick(onScrollToProjects)}>
-            Project
-          </NavItem>
-          <NavItem onClick={() => handleNavClick(onScrollToContact)}>
-            Contact
-          </NavItem>
+      {/* Mobil Menü (Açık ve tam menü gizliyken görünür) */}
+      {isMobileMenuOpen && !showFullMenu && (
+        <div className="mobile-menu" id="mobile-menu-list" role="menu">
+          {navItemsData.map((item) => (
+            <div
+              key={item.label}
+              className="nav-item" // Mobil menüdeki öğeler için de aynı class
+              onClick={item.action}
+              role="menuitem" // Erişilebilirlik
+              tabIndex={0}
+              onKeyPress={(e) => e.key === 'Enter' && item.action()}
+            >
+              {item.label}
+            </div>
+          ))}
         </div>
       )}
     </>

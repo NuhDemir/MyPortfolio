@@ -1,0 +1,65 @@
+# .gitignore (MyPortfolio/ klasörünün kökünde)
+
+# İşletim sistemi tarafından oluşturulan dosyalar
+.DS_Store
+Thumbs.db
+
+# Log dosyaları
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editör konfigürasyonları ve çalışma alanı dosyaları
+.idea
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+
+# Bağımlılık dizinleri (Hem backend hem de frontend için)
+# Genel kural, tüm node_modules klasörlerini yok sayar
+node_modules/
+# Eğer spesifik olmak isterseniz:
+# backend/node_modules/
+# myportfolio/node_modules/
+
+# Environment değişkenleri dosyası (Sadece backend için)
+backend/.env
+backend/.env.*
+# Eğer frontend'de de .env dosyası varsa ve gizlenmesi gerekiyorsa:
+# myportfolio/.env
+# myportfolio/.env.*
+
+# Build çıktıları (Eğer varsa)
+# backend/dist/
+# myportfolio/dist/
+# myportfolio/build/
+
+# Vite cache
+myportfolio/.vite/
+
+# NPM cache dosyaları
+.npm
+
+# Yarn cache dosyaları (eğer Yarn kullanılıyorsa)
+.yarn/cache
+.yarn/plugnplay
+.yarn/unplugged
+.yarnrc.yml
+
+# PNPM cache dosyaları (eğer PNPM kullanılıyorsa)
+.pnpm-store/
+
+# Test raporları ve coverage
+coverage/
+.nyc_output/
+
+# Geçici dosyalar
+*.tmp
+*.swp

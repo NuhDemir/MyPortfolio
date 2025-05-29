@@ -1,179 +1,161 @@
-/* ./style/Footer.scss */
+// frontend/src/components/Footer/style/Footer.scss
 
-// --- Variables ---
-// Approximate green from image
-$footer-text-color: #000000; // Black text/icons from image
-$footer-padding-vertical: 0.8rem;
-$footer-padding-horizontal: 1.5rem;
-$footer-icon-size: 1.1rem;
-$footer-logo-height: 20px;
-$footer-font-size: 0.9rem;
-$breakpoint-medium: 768px;
-$breakpoint-small: 480px;
-
-// --- Main Container ---
 .footer-main-container {
-  color: $footer-text-color;
-  padding: $footer-padding-vertical $footer-padding-horizontal;
+  background-color: var(--color-footer-bg);
+  color: var(--color-footer-text);
+  padding: var(--spacing-sm) var(--spacing-md);
   display: flex;
   align-items: center;
-  border-top: 1px solid #000000;
-  justify-content: space-between; // Distribute the 3 main sections
+  border-top: 1px solid var(--color-footer-border);
+  justify-content: space-between;
   width: 100%;
-  box-sizing: border-box; // Include padding in width calculation
-  min-height: 50px; // Ensure a minimum height
+  box-sizing: border-box;
+  min-height: 50px; // Bu sabit kalabilir veya tema değişkeni olabilir
 }
 
-// --- Section 1: Brand (Icon + Name) ---
 .footer-brand-section {
-  flex-shrink: 0; // Prevent shrinking too much
-
+  flex-shrink: 0; // Küçülmesini engelle
   a {
     display: flex;
     align-items: center;
-    gap: 0.5rem; // Space between logo and name
+    gap: var(--spacing-sm);
     text-decoration: none;
-    color: inherit; // Inherit color from parent
+    color: inherit; // Parent'tan (.footer-main-container) rengi alır
 
-    .footer-logo-svg {
-      height: $footer-logo-height;
-      width: auto; // Maintain aspect ratio
-      display: block; // Remove potential extra space below inline images
+    .footer-logo-svg { // SVG'nin fill/stroke'u tema ile uyumlu olmalı
+      height: 20px; // Veya --icon-size-sm gibi bir değişken
+      width: auto;
+      display: block;
+      // SVG'nin rengini tema ile değiştirmek için:
+      // fill: currentColor; // Eğer SVG bu şekilde ayarlandıysa
+      // veya CSS filter kullanılabilir.
+      // Örnek: .theme-dark & { filter: invert(1) brightness(1.5); } (eğer ikon koyuysa)
     }
 
     .footer-brand-name {
-      font-size: $footer-font-size;
-      font-weight: 500; // Slightly bolder perhaps
-      white-space: nowrap; // Prevent name from wrapping
+      font-size: var(--font-size-md);
+      font-weight: var(--font-weight-medium);
+      white-space: nowrap; // İsim alt satıra geçmesin
     }
   }
 }
 
-// --- Section 2: Center Text ---
 .footer-center-text {
-  flex-grow: 1; // Allow this to take up available space if needed
-  text-align: center; // Center the text ("My Portfolio")
-  font-size: $footer-font-size;
-  padding: 0 1rem; // Add some horizontal padding so it's not touching edges
-  white-space: nowrap; // Prevent wrapping
-  overflow: hidden; // Hide if it overflows
-  text-overflow: ellipsis; // Add '...' if text is hidden
+  flex-grow: 1; // Ortadaki metin kalan alanı doldursun
+  text-align: center;
+  font-size: var(--font-size-sm);
+  padding: 0 var(--spacing-md); // Yanlardan boşluk
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; // Sığmazsa ... ile bitir
+
+  span, a { // İçindeki linkler ve span'lar da footer metin rengini alsın
+    color: var(--color-footer-text);
+  }
+  a:hover {
+    // color: var(--color-text-link-hover); // Genel link hover rengi
+    // Veya footer için özel bir hover rengi tanımlanabilir:
+    color: var(--color-footer-link-hover, var(--color-text-link-hover));
+    // global.css'e eklenebilir:
+    // :root { --color-footer-link-hover: var(--color-accent); }
+    // .theme-dark { --color-footer-link-hover: var(--color-accent); }
+  }
 }
 
-// --- Section 3: Social Links ---
 .footer-social-links {
-  flex-shrink: 0; // Prevent shrinking too much
-
+  flex-shrink: 0; // Küçülmesini engelle
   nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
     align-items: center;
-    gap: 1rem; // Space between social icons
+    gap: var(--spacing-md); // İkonlar arası boşluk
 
     li {
-      line-height: 1; // Prevent extra vertical space in list items
+      line-height: 1; // Ekstra dikey boşluğu engelle
     }
 
     a {
-      color: $footer-text-color;
-      font-size: $footer-icon-size;
-      display: inline-flex; // Good for aligning font icons
+      color: var(--color-footer-text); // İkonların rengi
+      font-size: var(--font-size-lg); // İkon boyutu için (react-icons kullanılıyorsa)
+      display: inline-flex; // Hizalama için
       align-items: center;
       justify-content: center;
-      transition: opacity 0.2s ease-in-out;
+      transition: color var(--transition-duration-short), opacity var(--transition-duration-short);
 
       &:hover {
-        opacity: 0.7; // Simple hover effect
+        // opacity: 0.75; // Hafif soluklaşma
+        color: var(--color-footer-link-hover, var(--color-text-link-hover)); // Hover rengi
       }
 
-      // Style the react-icons SVG directly if needed
-      svg {
-        display: block;
+      svg { // react-icons için
+        display: block; // Hizalama
       }
     }
   }
 }
 
-// --- Responsive Adjustments ---
+// === Responsive Ayarlar (SCSS değişkenleri breakpoint için kalabilir) ===
+$breakpoint-medium: 768px;
+$breakpoint-small: 480px;
 
-// Medium Screens (e.g., Tablets)
-@media (max-width: $breakpoint-medium) {
+@media (max-width: $breakpoint-medium) { // Tabletler ve daha küçükleri
   .footer-main-container {
-    padding: ($footer-padding-vertical * 0.9) ($footer-padding-horizontal * 0.8);
-    gap: 1rem; // Reduce gap between main sections slightly if needed
+    padding: calc(var(--spacing-sm) * 0.9) var(--spacing-sm); // Padding azaltıldı
+    gap: var(--spacing-sm); // Ana elemanlar arası boşluk azaltıldı
+    flex-wrap: wrap; /* Sığmazsa alt satıra geçebilir */
+    justify-content: center; /* Ortala */
   }
-
   .footer-brand-section {
+    order: 1; // Sol başta kalsın
+    flex-basis: 100%; /* Mobilde tam genişlik alabilir veya auto */
+    text-align: center; /* Markayı ortala */
+    margin-bottom: var(--spacing-xs); /* Alttaki elemandan boşluk */
     a {
-      gap: 0.4rem;
+      justify-content: center; /* Marka linkini ortala */
+      gap: var(--spacing-xs);
       .footer-brand-name {
-        font-size: ($footer-font-size * 0.95);
+        font-size: var(--font-size-sm);
       }
     }
   }
-
   .footer-center-text {
-    font-size: ($footer-font-size * 0.95);
-    padding: 0 0.8rem;
+    order: 3; // En alta
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs) var(--spacing-sm); // Padding ayarlandı
+    flex-basis: 100%; /* Tam genişlik */
   }
-
-  .footer-social-links nav ul {
-    gap: 0.8rem; // Reduce gap between icons
-    a {
-      font-size: ($footer-icon-size * 0.95);
+  .footer-social-links {
+    order: 2; // Markadan sonra, merkez metinden önce
+    flex-basis: 100%; /* Mobilde tam genişlik alabilir */
+    justify-content: center; /* Sosyal ikonları ortala */
+    margin-bottom: var(--spacing-xs);
+    nav ul {
+      justify-content: center; /* İkonları ortala */
+      gap: var(--spacing-md); // İkon arası boşluk biraz daha fazla olabilir
+      a { font-size: var(--font-size-xl); } // İkonları biraz büyüt
     }
   }
 }
 
-// Small Screens (e.g., Mobile) - Keeping horizontal layout as requested
-@media (max-width: $breakpoint-small) {
+@media (max-width: $breakpoint-small) { // Çok küçük ekranlar
   .footer-main-container {
-    padding: ($footer-padding-vertical * 0.7) ($footer-padding-horizontal * 0.5);
-    min-height: 40px; // Reduce min height
-    gap: 0.5rem; // Further reduce gap between sections
+    padding: var(--spacing-xs) var(--spacing-xs); // Daha da az padding
+    min-height: auto; // Yükseklik içeriğe göre
+    gap: var(--spacing-xs);
   }
-
-  .footer-brand-section {
-    a {
-      gap: 0.3rem; // Minimal gap
-
-      .footer-logo-svg {
-        height: ($footer-logo-height * 0.85); // Smaller logo
-      }
-
-      .footer-brand-name {
-        font-size: ($footer-font-size * 0.85); // Smaller text
-        // Optionally hide name if space is extremely tight
-        // display: none;
-      }
+  .footer-brand-section a {
+    .footer-logo-svg { height: 18px; } // Logoyu biraz küçült
+    .footer-brand-name {
+      // display: none; // Çok küçükse ismi tamamen gizle (isteğe bağlı)
     }
   }
-
   .footer-center-text {
-    font-size: ($footer-font-size * 0.85); // Smaller text
-    padding: 0 0.4rem; // Less padding
-    // Optionally hide center text if space is extremely tight
-    // display: none;
+    font-size: calc(var(--font-size-sm) * 0.85); // Metni biraz daha küçült
   }
-
   .footer-social-links nav ul {
-    gap: 0.6rem; // Further reduce icon gap
-    a {
-      font-size: ($footer-icon-size * 0.85); // Smaller icons
-    }
+    gap: var(--spacing-sm); // İkon arası boşluğu azalt
+    a { font-size: var(--font-size-lg); } // İkonları normale döndür
   }
 }
-
-/* Optional: Very extreme case - hide middle text completely */
-/*
-@media (max-width: 360px) {
-  .footer-center-text {
-     display: none;
-  }
-   .footer-main-container {
-     justify-content: space-between; // Reset justification if center is hidden
-   }
-}
-*/

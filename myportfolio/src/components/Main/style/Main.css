@@ -36,7 +36,7 @@ section {
 .main-title {
   font-size: clamp(2rem, 8vw, 8rem);
   font-weight: 800;
-  color: var(--paper-color);
+  color: var(--color-text-on-primary);
   margin-bottom: 0.5rem;
   line-height: 0.9;
   word-break: break-word;

@@ -1,59 +1,70 @@
-.comments {
-  max-width: 680px; /* Keep max-width for large screens */
-  width: 100%; /* Allow it to shrink on smaller screens */
-  margin: 0 auto; /* Center the stack */
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Default alignment, overridden by align-self */
+// frontend/src/components/Comments/style/Comments.scss
+
+// SCSS değişkenleri yerine CSS değişkenleri kullanılacak.
+// $comments-bg: var(--comments-bg); // Bu şekilde doğrudan kullanılamaz.
+// CSS'de zaten var(--comments-bg) tanımlı.
+
+.comments-container { // Bu section'a verilebilir
+  padding: var(--spacing-xl) var(--container-padding);
+  background-color: var(--color-background-page); // Veya özel bir arka plan
 }
 
 .comments-header {
-  padding: 0 20px 10px 20px; /* Keep vertical/inner padding */
-  /* margin-left: 40px; <-- Remove fixed margin */
-  width: 100%; /* Take available width */
-  margin-left: 20px;
-  margin-bottom: 10px; /* Add some space below header */
+  padding: 0 var(--spacing-md) var(--spacing-sm) var(--spacing-md);
+  width: 100%;
+  margin-left: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 
-  img {
-    width: 85%; /* Responsive width relative to header */
-    max-width: 600px; /* Limit image size on large screens */
-    height: auto; /* Maintain aspect ratio */
+  img { // commentsHeader.svg
+    width: 85%;
+    max-width: 600px;
+    height: auto;
+    // SVG'nin fill/stroke değerleri tema ile uyumlu olmalı veya CSS ile ayarlanmalı
   }
 }
 
-.comment-item {
-  background: var(--comments-bg, #fff); /* Add fallback */
-  border-radius: 2px;
-  border: 3px solid #000;
-  box-shadow: 8px 8px 0px 0px #bfbfb4;
-  padding: 20px;
-  width: 70%; /* Slightly wider base width */
-  max-width: 500px; /* Limit max width */
+.comments {
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
   position: relative;
-  margin-bottom: -35px; /* Adjust overlap */
-  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.comment-item {
+  background: var(--comments-bg); // CSS değişkeni
+  border-radius: var(--border-radius-sm); // Tema değişkeni
+  border: 3px solid var(--color-border-strong); // Tema değişkeni
+  box-shadow: 8px 8px 0px 0px var(--comments-shadow); // Tema değişkeni
+  padding: var(--spacing-md); // Tema değişkeni
+  width: 70%;
+  max-width: 500px;
+  position: relative;
+  margin-bottom: -35px; // Bu sabit kalabilir, tasarım tercihi
+  transition: all var(--transition-duration-base) ease; // Tema değişkeni
   z-index: 1;
   cursor: pointer;
 
   &.active {
     transform: translateZ(40px) rotate(0deg) !important;
     z-index: 20 !important;
-    box-shadow: 10px 10px 0px 0px #bfbfb4;
+    box-shadow: 10px 10px 0px 0px var(--comments-shadow); // Tema değişkeni
   }
 
   .comment-content {
-    padding-bottom: 12px;
+    padding-bottom: var(--spacing-sm); // Tema değişkeni
   }
 
   .text {
-    font-size: 17px; /* Base font size */
-    color: var(--comments-text-color, #333);
-    line-height: 1.6;
-    font-weight: 600;
-    margin-bottom: 10px;
+    font-size: var(--font-size-lg); // Tema değişkeni
+    color: var(--comments-text-color); // CSS değişkeni
+    line-height: var(--line-height-base);
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: var(--spacing-sm);
     font-style: italic;
-    quotes: "" " " "";
+    quotes: "“" "”"; // Daha yaygın tırnak işaretleri
 
     &::before {
       content: open-quote;
@@ -64,160 +75,94 @@
   }
 
   .username {
-    font-weight: bold;
-    font-size: 15px;
-    color: var(--comments-user-text-color, #111);
-    margin-bottom: 3px;
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-md); // Tema değişkeni
+    color: var(--comments-user-text-color); // CSS değişkeni
+    margin-bottom: var(--spacing-xs);
   }
 
   .job-title {
-    color: var(--comments-job-title-color, #555);
-    font-size: 13px;
+    color: var(--comments-job-title-color); // CSS değişkeni
+    font-size: var(--font-size-sm); // Tema değişkeni
   }
 
-  /* Positioning using percentages relative to the centered .comments */
+  // Positioning (Bu kısım tasarımsal olduğu için sabit kalabilir)
   &:nth-child(1) {
     align-self: flex-start;
     z-index: 4;
     transform: rotate(-3deg);
-    margin-left: 5%; /* Push slightly left */
+    margin-left: 5%;
   }
-
   &:nth-child(2) {
     transform: rotate(2deg);
     align-self: flex-end;
-    background: var(--comments-bg-alt, #e8f4ff);
+    // background: var(--comments-bg-alt, #e8f4ff); // Alternatif bir arkaplan için değişken
     z-index: 3;
-    margin-right: 5%; /* Push slightly right */
+    margin-right: 5%;
   }
-
   &:nth-child(3) {
     transform: rotate(-2deg);
     align-self: flex-start;
     z-index: 2;
-    margin-left: 8%; /* Vary position */
+    margin-left: 8%;
   }
-
   &:nth-child(4) {
     transform: rotate(3deg);
     align-self: flex-end;
-    background: var(--comments-bg-alt, #e8f4ff);
+    // background: var(--comments-bg-alt, #e8f4ff);
     z-index: 1;
-    margin-right: 8%; /* Vary position */
+    margin-right: 8%;
   }
 }
 
-/* === Media Queries for Responsiveness === */
-
-/* Medium Screens (e.g., tablets) */
+/* === Media Queries (Font ve boşluklar için tema değişkenleri kullanılabilir) === */
 @media (max-width: 768px) {
   .comments-container {
-    padding: 30px 3%; /* Slightly less horizontal padding */
+    padding: var(--spacing-lg) calc(var(--container-padding) * 0.5);
   }
-  .comments {
-    /* max-width remains effective */
-  }
-
   .comments-header img {
-    width: 400px;
-    max-width: 680px; /* Slightly smaller max image */
-    margin-bottom: 25px;
+    max-width: 400px; /* Sabit kalabilir */
+    margin-bottom: var(--spacing-lg);
   }
-
   .comment-item {
-    width: 80%; /* Wider cards */
-    padding: 15px;
+    width: 80%;
+    padding: var(--spacing-sm);
     margin-bottom: -30px;
-    box-shadow: 6px 6px 0px 0px #bfbfb4;
-
+    box-shadow: 6px 6px 0px 0px var(--comments-shadow);
     &.active {
       transform: translateZ(30px) rotate(0deg) !important;
-      box-shadow: 8px 8px 0px 0px #bfbfb4;
+      box-shadow: 8px 8px 0px 0px var(--comments-shadow);
     }
-
-    .text {
-      font-size: 16px;
-    }
-    .username {
-      font-size: 14px;
-    }
-    .job-title {
-      font-size: 12px;
-    }
-
-    /* Adjust positioning */
-    &:nth-child(1) {
-      margin-left: 4%;
-    }
-    &:nth-child(2) {
-      margin-right: 4%;
-    }
-    &:nth-child(3) {
-      margin-left: 6%;
-    }
-    &:nth-child(4) {
-      margin-right: 6%;
-    }
+    .text { font-size: var(--font-size-md); }
+    .username { font-size: var(--font-size-sm); }
+    .job-title { font-size: calc(var(--font-size-sm) * 0.9); }
   }
 }
 
-/* Small Screens (e.g., mobile phones) */
 @media (max-width: 576px) {
-  .comments-container {
-    padding: 20px 2%; /* Even less padding */
-  }
-
   .comments-header img {
-    width: 400px;
-    max-width: 550px;
-    margin-bottom: 20px;
+    max-width: 300px; /* Daha küçük */
+    margin-bottom: var(--spacing-md);
   }
-
   .comment-item {
-    width: 70%; /* Wider still */
-    padding: 20px;
+    width: 90%; /* Neredeyse tam genişlik */
+    padding: var(--spacing-sm);
     margin-bottom: -25px;
-    box-shadow: 4px 4px 0px 0px #bfbfb4;
+    box-shadow: 4px 4px 0px 0px var(--comments-shadow);
     border-width: 2px;
-
     &.active {
       transform: translateZ(20px) rotate(0deg) !important;
-      box-shadow: 6px 6px 0px 0px #bfbfb4;
+      box-shadow: 6px 6px 0px 0px var(--comments-shadow);
     }
+    .text { font-size: var(--font-size-sm); line-height: 1.5; margin-bottom: var(--spacing-xs); }
+    .username { font-size: var(--font-size-sm); }
+    .job-title { font-size: calc(var(--font-size-sm) * 0.85); }
 
-    .text {
-      font-size: 14px;
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-    .username {
-      font-size: 13px;
-    }
-    .job-title {
-      font-size: 11px;
-    }
-
-    /* Stack more vertically, reduce rotation and offset */
-    &:nth-child(1) {
-      transform: rotate(-1.5deg);
-      margin-left: 2%;
-      align-self: center;
-    } /* Center align */
-    &:nth-child(2) {
-      transform: rotate(1deg);
+    &:nth-child(1), &:nth-child(2), &:nth-child(3), &:nth-child(4) {
+      transform: rotate(0deg); /* Mobilde rotasyonu kaldır */
+      margin-left: 0;
       margin-right: 0;
-      margin-left: 0;
       align-self: center;
-    } /* Center align */
-    &:nth-child(3) {
-      transform: rotate(-1deg);
-      margin-left: 0;
-      align-self: center;
-    } /* Center align */
-    &:nth-child(4) {
-      transform: rotate(1.5deg);
-      margin-right: 2%;
-      align-self: center;
-    } /* Center align */
+    }
   }
 }

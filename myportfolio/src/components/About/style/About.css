@@ -1,44 +1,43 @@
-.about-container {
-  margin: 0 3% 0 3%;
-  max-width: 1600px;
+/* frontend/src/components/About/style/About.css */
+
+.about-container { /* This class should be on the <section id="about-section"> in App.jsx */
+   padding: var(--spacing-xl) var(--container-padding);
+
+  }
+  
+.header { /* Class for the div containing the SmileSvg */
+  padding-bottom: var(--spacing-lg); /* Space below the header image */
+ color: var(--color-text-primary); /* Not directly used for text here */
 }
 
-/* Header styles */
-.header {
-  padding: 20px 20px 0;
-  color: #fff;
+.header img { /* SmileSvg */
+  width: 40%; /* Adjust as needed */
+  max-width: 300px; /* Prevent it from becoming too large */
+  height: auto;
+  display: block; /* Remove extra space below image */
+  margin: 0 auto var(--spacing-md) auto; /* Center the image */
+
+   
 }
 
-.header img {
-  width: 40%;
-  height: 40%;
-  margin-right: 10px;
-  margin-bottom: 20px;
-}
-
-/* About grid container */
 .about-grid {
   display: grid;
-  grid-template-columns: 200px 1fr; /* Stats column and services column */
-  border-top: 2px solid #000;
-  background: #ffffff65;
+  grid-template-columns: 250px 1fr; /* Adjust stats column width as needed */
+  border-top: 2px solid var(--color-border-strong);
+  border-bottom: 2px solid var(--color-border-strong); /* Add bottom border for consistency */
+  background: var(--color-background-paper); 
 }
 
-/* Stats styling */
 .stats-container {
   display: flex;
   flex-direction: column;
-  border-right: 2px solid #000;
-  border-bottom: 2px solid #000;
+  border-right: 2px solid var(--color-border-strong);
+  padding: var(--spacing-lg); /* Inner padding for stats */
+  gap: var(--spacing-lg); /* Space between stat cards */
+color: var(--color-text-primary); /* Not directly used for text here */
+  background: var(--color-background-paper); /* Default, can be overridden if needed */
 }
 
-.stat-section {
-  padding: 20px;
-}
-
-.stat-section:first-child {
-  border-bottom: 2px solid #000;
-}
 
 .stat-card {
   display: flex;
@@ -46,346 +45,270 @@
 }
 
 .stat-value {
-  font-size: 28px;
-  font-weight: bold;
-  margin-bottom: 5px;
+  font-size: var(--font-size-h2); /* Prominent stat value */
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text-primary);
+  line-height: 1.1;
 }
 
 .stat-label {
-  font-size: 16px;
-  color: #26261b;
-  font-weight: 700;
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* Services section styling */
 .services-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr); /* 2 services per row */
 }
 
 .service-card {
-  padding: 20px;
-  border-right: 2px solid #000;
-  border-bottom: 2px solid #000;
+  padding: var(--spacing-lg); /* Generous padding for service cards */
+  border-right: 2px solid var(--color-border-strong);
+  border-bottom: 2px solid var(--color-border-strong);
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: transform 0.3s ease;
+  gap: var(--spacing-md); /* Space between elements inside the card */
+  transition: transform var(--transition-duration-short) ease,
+              box-shadow var(--transition-duration-short) ease;
+  background-color: var(--color-background-paper); /* Default, can be overridden if needed */
 }
 
 .service-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-4px) scale(1.01); /* Subtle lift and scale */
+  box-shadow: var(--box-shadow-base); /* Themed shadow on hover */
+  z-index: 1; /* Ensure it's above other cards on hover */
+  position: relative; /* For z-index to work properly with transform */
 }
 
+/* Adjust borders for a 2x2 grid */
+/* If 2nd column, no right border */
 .service-card:nth-child(2n) {
   border-right: none;
 }
-
+/* If it's the last row (assuming max 4 services, so 3rd and 4th are last row) */
 .service-card:nth-child(3),
 .service-card:nth-child(4) {
-  border-bottom: none;
+  /* border-bottom: none; */ /* Removed this to keep bottom border from .about-grid */
 }
+/* If there are more than 4 services, this logic for last row needs adjustment or JS */
 
-.service-card:nth-child(3) {
-  border-bottom: 2px solid #000;
-}
-.service-card:nth-child(4) {
-  border-bottom: 2px solid #000;
-}
 
 .icon-wrapper {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 48px; /* Slightly larger icons */
+  height: 48px;
+  border-radius: var(--border-radius-circle);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
-  transition: transform 0.3s ease;
+  /* margin-bottom: var(--spacing-sm); /* Replaced by gap in .service-card */
+  transition: transform var(--transition-duration-short) ease;
+  /* iconBgColor is passed as a prop, so this style remains in JSX */
 }
 .service-card:hover .icon-wrapper {
-  transform: scale(1.1);
+  transform: scale(1.15); /* More pronounced hover for icon */
+}
+.service-icon { /* For SVGs inside icon-wrapper */
+  width: 24px; /* Adjust icon size within wrapper */
+  height: 24px;
+  /* color: var(--color-text-on-accent); /* If iconBgColor is an accent color */
+  /* The actual SVG fill/stroke should be themed or set to currentColor */
 }
 
 .service-title {
-  font-size: 18px;
-  font-weight: 600;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-on-primary);
+  line-height: var(--line-height-heading);
 }
 
 .service-desc {
-  font-size: 14px;
-  color: #000;
-  line-height: 1.4;
-  margin: 0 10px;
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+  /* margin: 0 var(--spacing-sm); /* Replaced by gap in .service-card */
+  flex-grow: 1; /* Allow description to take available space */
 }
 
 .learn-more {
   background: transparent;
   border: none;
-  padding: 0;
-  font-size: 14px;
-  font-weight: 500;
+  padding: var(--spacing-xs) 0; /* Add some vertical padding for clickability */
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   text-align: left;
-  margin-top: 10px;
-
-  display: inline-flex;
+  /* margin-top: var(--spacing-sm); /* Replaced by gap in .service-card */
+  color: var(--color-text-link);
+  display: inline-flex; /* Allows alignment and gap for arrow */
   align-items: center;
-  transition: transform 0.3s ease;
-  -webkit-transition: transform 0.3s ease;
-  -moz-transition: transform 0.3s ease;
-  -ms-transition: transform 0.3s ease;
-  -o-transition: transform 0.3s ease;
-  color: #26261b;
+  align-self: flex-start; /* Ensure it doesn't stretch */
+  transition: color var(--transition-duration-short) ease,
+              transform var(--transition-duration-short) ease;
 }
-
+.learn-more:hover {
+  color: var(--color-text-link-hover);
+  transform: translateX(3px); /* Slight move on hover */
+}
 .learn-more:after {
   content: "→";
-  opacity: 0;
-  margin-left: 4px;
-  transition: opacity 0.3s ease, margin-left 0.3s ease;
-}
-
-.service-card:hover .learn-more:after {
-  opacity: 1;
-  margin-left: 8px;
+  opacity: 1; /* Always visible or control with hover */
+  margin-left: var(--spacing-xs);
+  transition: opacity var(--transition-duration-short) ease,
+              transform var(--transition-duration-short) ease; /* For potential hover effects on arrow */
 }
 
 .stat-value,
 .stat-label,
 .service-title,
-.service-desc {
+.service-desc,
+.icon-wrapper {
   will-change: transform, opacity;
 }
 
-/* Mobil küçük (<= 480px) */
-@media (max-width: 480px) {
-  /* Küçük telefonlar */
+
+/* === Responsive Stiller === */
+
+@media (max-width: 1024px) { /* Tablet and smaller */
+  .about-grid {
+    grid-template-columns: 200px 1fr; /* Smaller stats column */
+  }
+  .stats-container {
+    padding: var(--spacing-lg);
+  }
+  .service-card {
+    padding: var(--spacing-lg);
+  }
+  .service-title {
+    font-size: var(--font-size-lg);
+  }
+}
+
+@media (max-width: 768px) { /* Mobile landscape and portrait */
+  .about-container {
+    padding: var(--spacing-lg) var(--spacing-md); /* Less horizontal padding */
+  }
+  .header img {
+    width: 50%;
+    max-width: 200px;
+  }
   .about-grid {
     grid-template-columns: 1fr; /* Single column layout */
   }
-
   .stats-container {
-    border-right: none;
-    flex-direction: column;
+    border-right: none; /* No right border in single column */
+    flex-direction: row; /* Stats side-by-side */
+    flex-wrap: wrap; /* Allow wrapping if too many stats */
+    justify-content: space-around; /* Distribute stats */
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+    border-bottom: 2px solid var(--color-border-strong); /* Keep bottom border */
   }
-
-  .services-section {
-    grid-template-columns: 1fr;
+  .stat-card {
+    flex-basis: calc(50% - var(--spacing-sm)); /* Two stats per row */
+    text-align: center; /* Center stat text */
   }
-
-  .service-card {
-    border-right: none;
-  }
-
-  .service-card:nth-child(3) {
-    border-bottom: 2px solid #000;
-  }
-
-  .header img {
-    width: 60%;
-    height: 60%;
-  }
-
   .stat-value {
-    font-size: 24px;
+    font-size: var(--font-size-h3);
   }
-
-  .stat-label {
-    font-size: 12px;
+  .services-section {
+    grid-template-columns: 1fr; /* Single column for services */
   }
-
-  .service-title {
-    font-size: 16px;
+  .service-card {
+    border-right: none; /* No right border in single column */
   }
-
-  .service-desc {
-    font-size: 12px;
+  /* Ensure last service card has no bottom border if it's the absolute last one */
+  .service-card:last-child {
+     /* border-bottom: none; */ /* Only if it's the very last item in the grid overall */
   }
-
-  .icon-wrapper {
-    width: 32px;
-    height: 32px;
+  .service-card:nth-child(2n) { /* This rule is for 2-column, not needed for 1-column */
+    /* border-right: none; */
   }
 }
 
-/* Mobil normal (481px - 768px) */
-@media (min-width: 481px) and (max-width: 768px) {
-  /* Tüm telefonlar + küçük tabletler (dikey) */
-  .about-grid {
-    grid-template-columns: 1fr; /* Single column layout */
+@media (max-width: 480px) { /* Small mobile */
+  .about-container {
+    padding: var(--spacing-md) var(--spacing-sm);
   }
-
+  .header img {
+    width: 60%;
+    max-width: 150px;
+  }
   .stats-container {
-    border-right: none;
-    flex-direction: column;
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
   }
-
-  .services-section {
-    grid-template-columns: 1fr;
+  .stat-card {
+    flex-basis: 100%; /* One stat per row */
   }
-
-  .service-card {
-    border-right: none;
-  }
-
-  .service-card:nth-child(3) {
-    border-bottom: 2px solid #000;
-  }
-
-  .header img {
-    width: 60%;
-    height: 60%;
-  }
-
   .stat-value {
-    font-size: 26px;
+    font-size: var(--font-size-xl);
   }
-}
-
-/* Tablet (769px - 1024px) */
-@media (min-width: 769px) and (max-width: 1024px) {
-  /* iPad, Android tablet (yatay/dikey) */
-  .about-grid {
-    grid-template-columns: 180px 1fr; /* Slightly smaller stats column */
-  }
-
-  .services-section {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stat-section {
-    padding: 15px;
-  }
-
-  .header img {
-    width: 60%;
-    height: 60%;
-  }
-
-  .service-card {
-    padding: 15px;
-  }
-
-  .service-desc {
-    font-size: 13px;
-  }
-}
-
-/* Küçük Laptop (1025px - 1280px) */
-@media (min-width: 1025px) and (max-width: 1280px) {
-  /* Küçük dizüstüler */
-  .about-grid {
-    grid-template-columns: 200px 1fr;
-  }
-
-  .about-container {
-    max-width: 1200px;
-  }
-
-  .header img {
-    padding-top: 10px;
-    width: 50%;
-    height: 50%;
-  }
-
-  .service-card {
-    padding: 20px;
-  }
-}
-
-/* Normal Laptop ve Masaüstü (1281px - 1536px) */
-@media (min-width: 1281px) and (max-width: 1536px) {
-  /* Full HD'ye kadar olan tüm ekranlar */
-  .about-grid {
-    grid-template-columns: 220px 1fr; /* Slightly larger stats column */
-  }
-
-  .about-container {
-    max-width: 1400px;
-  }
-
-  .header img {
-    padding-top: 10px;
-    width: 50%;
-    height: 50%;
-  }
-
-  .stat-value {
-    font-size: 32px;
-  }
-
-  .service-card {
-    padding: 25px;
-  }
-
-  .service-title {
-    font-size: 20px;
-  }
-
-  .service-desc {
-    font-size: 15px;
-  }
-}
-
-/* Büyük ekranlar (1536px ve üzeri) */
-@media (min-width: 1536px) {
-  /* 2K, 4K monitörler */
-  .about-grid {
-    grid-template-columns: 250px 1fr; /* Larger stats column */
-  }
-
-  .about-container {
-    max-width: 1800px;
-  }
-
-  .header {
-    font-size: 30px;
-    padding: 40px 30px;
-  }
-
-  .stat-value {
-    font-size: 36px;
-  }
-
-  .header img {
-    padding-top: 10px;
-    width: 50%;
-    height: 50%;
-  }
-
   .stat-label {
-    font-size: 16px;
+    font-size: var(--font-size-sm);
   }
-
   .service-card {
-    padding: 30px;
-    gap: 15px;
+    padding: var(--spacing-md);
+    gap: var(--spacing-sm);
   }
-
-  .service-title {
-    font-size: 22px;
-  }
-
-  .service-desc {
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
   .icon-wrapper {
-    width: 48px;
-    height: 48px;
-    margin-bottom: 15px;
+    width: 40px;
+    height: 40px;
   }
-
+  .service-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .service-title {
+    font-size: var(--font-size-lg);
+  }
+  .service-desc {
+    font-size: var(--font-size-sm);
+  }
   .learn-more {
-    font-size: 16px;
-    margin-top: 15px;
+    font-size: var(--font-size-sm);
   }
 }
 
+
+.service-card:nth-child(1), .service-card:nth-child(2) { border-bottom: 2px solid var(--color-border-strong); }
+.service-card:nth-child(odd) { border-right: 2px solid var(--color-border-strong); }
+.service-card:nth-child(3), .service-card:nth-child(4) { border-bottom: none; } 
+.service-card:nth-child(even) { border-right: none; }
+
+.services-section .service-card {
+  border: none; /* Remove all individual borders first */
+}
+/* Add borders back strategically */
+.services-section .service-card:nth-child(odd) { /* 1st and 3rd card (left column) */
+  border-right: 2px solid var(--color-border-strong);
+}
+.services-section .service-card:nth-child(1),
+.services-section .service-card:nth-child(2) { /* 1st and 2nd card (top row) */
+  border-bottom: 2px solid var(--color-border-strong);
+}
+
+/* If single column on mobile, this simplified logic needs to be overridden */
+@media (max-width: 768px) {
+  .services-section .service-card,
+  .services-section .service-card:nth-child(odd),
+  .services-section .service-card:nth-child(1),
+  .services-section .service-card:nth-child(2) {
+    border-right: none; /* No right borders in single column */
+    border-bottom: 2px solid var(--color-border-strong); /* All cards have bottom border */
+  }
+  .services-section .service-card:last-child {
+    border-bottom: none; /* Except the very last card */
+  }
+}
+
+
+/* For browsers that support smooth scrolling on touch devices */
 @supports (-webkit-overflow-scrolling: touch) {
-  .services-section {
-    transform: translate3d(0, 0, 0);
+  .services-section { /* Not really applicable here as it's not a scrolling container */
+    /* transform: translate3d(0, 0, 0); */ /* Could be applied to individual cards if they had complex animations */
   }
 }

@@ -1,141 +1,116 @@
+/* frontend/src/components/SocialLinks/style/SocialLinks.css */
+
 .social-links {
-  position: relative;
+  position: relative; /* Eğer app-container içinde ise relative kalabilir */
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #247149;
-  padding: 0.8em 0;
-  border-top: 1px solid rgba(0, 255, 0, 0.3);
-  border-bottom: 1px solid rgba(0, 255, 0, 0.3);
-
-  width: 100vw; /* Tüm görünüm genişliği kadar yayılmasını sağlar */
-  left: 0; /* Sayfanın soluna yasla */
+  flex-wrap: wrap; /* Küçük ekranlarda sığmazsa alt alta geçsin */
+  gap: var(--spacing-lg); /* Tema değişkeni, linkler arası boşluk */
+  background-color: var(--color-social-links-bg); /* Tema değişkeni */
+  padding: var(--spacing-md) 0; /* Tema değişkeni */
+  border-top: 1px solid var(--color-social-links-border); /* Tema değişkeni */
+  border-bottom: 1px solid var(--color-social-links-border); /* Tema değişkeni */
+  width: 100%; /* Sayfa genişliği kadar */
+  /* left: 0; Bu artık gereksiz olabilir eğer parent'ı tam genişlikteyse */
   box-sizing: border-box;
-  z-index: 10;
-  gap: rem;
+  z-index: 10; /* Navbar'ın altında, içeriğin üstünde olabilir */
 }
 
 .social-link {
-  color: #fff;
-  font-size: 1.5rem;
+  color: var(--color-social-links-text); /* Tema değişkeni */
+  font-size: var(--font-size-lg); /* Tema değişkeni */
+  font-weight: var(--font-weight-medium);
   text-decoration: none;
   position: relative;
-  transition: color 0.3s ease;
-  padding: 0.5rem; /* Add some padding around links for better clickability */
+  transition: color var(--transition-duration-short) ease;
+  padding: var(--spacing-xs) var(--spacing-sm); /* Tıklama alanını genişlet */
 }
 
-.social-link::after {
+.social-link::after { /* Alt çizgi efekti */
   content: "";
-  position: relative;
-  bottom: -4px;
-  left: 0;
+  position: absolute; /* Linke göre konumlanır */
+  bottom: -2px; /* Metnin biraz altına */
+  left: 50%; /* Ortadan başlasın */
+  transform: translateX(-50%); /* Tam ortala */
   width: 0;
   height: 2px;
-  background-color: #00ff00;
-  transition: width 0.3s ease;
+  background-color: var(--color-social-links-hover-underline); /* Tema değişkeni */
+  transition: width var(--transition-duration-short) ease;
 }
 
+.social-link:hover {
+  color: var(--color-social-links-text); /* Hover'da renk değişimi isteğe bağlı */
+}
 .social-link:hover::after {
-  width: 100%;
+  width: 80%; /* Tam genişlik yerine biraz daha kısa hoş durabilir */
 }
 
-/* Responsive styles */
-@media (max-width: 1200px) {
-  .social-links {
-    gap: 1.5rem;
-    flex-wrap: wrap; /* Allow links to wrap on smaller screens */
-  }
-  /* Your 1200px styles here */
-}
-
-@media (max-width: 992px) {
-  .social-links {
-    gap: 1rem;
-    flex-wrap: wrap; /* Allow links to wrap on smaller screens */
-  }
-  /* Your 992px styles here */
-}
-
-@media (max-width: 768px) {
-  .social-links {
-    gap: 1rem;
-    flex-wrap: wrap; /* Allow links to wrap on smaller screens */
-  }
-}
-
-@media (max-width: 480px) {
-  .social-links {
-    padding: 0.8rem 0;
-  }
-
-  .social-link {
-    font-size: 0.9rem;
-  }
-}
-
-/* Splash screen styles */
-.splash-overlay {
+/* Splash screen for social links */
+.splash-overlay { /* Bu class SocialLinkSplash.jsx'e atanmalı */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 15, 15, 0.9);
-  color: white;
+  background: var(--color-background-overlay); /* Tema değişkeni */
+  color: var(--color-text-on-primary); /* Overlay üzerindeki metin rengi */
   display: flex;
+  flex-direction: column; /* Mesajı alta almak için */
   justify-content: center;
   align-items: center;
-  z-index: 9999;
+  z-index: 9999; /* Splash en üstte */
+  /* opacity ve visibility GSAP/hook ile yönetiliyor */
 }
 
-.splash-content {
-  font-size: 2rem;
-  font-weight: bold;
+.splash-content { /* Bu class SocialLinkSplash.jsx'e atanmalı */
+  font-size: var(--font-size-h3); /* Tema değişkeni */
+  font-weight: var(--font-weight-semibold);
+  padding: var(--spacing-lg);
+  background-color: var(--color-background-paper); /* Mesaj için bir kutu */
+  color: var(--color-text-primary); /* Kutu içindeki metin rengi */
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-lg);
+  text-align: center;
+}
+/* Splash için basit bir yükleme ikonu eklenebilir */
+.splash-content::before {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto var(--spacing-md) auto;
+  border: 3px solid var(--color-spinner-track);
+  border-top-color: var(--color-spinner-active);
+  border-radius: var(--border-radius-circle);
+  animation: socialLinkSpin 1s linear infinite;
+}
+@keyframes socialLinkSpin {
+  to { transform: rotate(360deg); }
 }
 
-/*==RESPONSİVE MEDİA==*/
 
-@media (max-width: 900px) {
-  .social-link {
-    font-size: 1.8rem; /* Adjust font size for smaller screens */
-  }
-}
-
+/* Responsive styles */
 @media (max-width: 768px) {
+  .social-links {
+    gap: var(--spacing-md); /* Daha az boşluk */
+    padding: var(--spacing-sm) 0;
+  }
   .social-link {
-    font-size: 1.6rem; /* Adjust font size for smaller screens */
+    font-size: var(--font-size-md); /* Daha küçük font */
   }
 }
 
-@media (max-width: 698px) {
-  .social-link {
-    font-size: 1.4rem; /* Adjust font size for smaller screens */
+@media (max-width: 480px) {
+  .social-links {
+    gap: var(--spacing-sm);
+    justify-content: space-around; /* Daha iyi dağılım */
   }
-}
-
-@media (max-width: 600px) {
   .social-link {
-    font-size: 1.2rem; /* Adjust font size for smaller screens */
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-xs);
   }
-}
-@media (max-width: 500px) {
-  .social-link {
-    font-size: 1rem; /* Adjust font size for smaller screens */
-  }
-}
-@media (max-width: 420px) {
-  .social-link {
-    font-size: 0.8rem; /* Adjust font size for smaller screens */
-  }
-}
-@media (max-width: 390px) {
-  .social-link {
-    font-size: 0.6rem; /* Adjust font size for smaller screens */
-  }
-}
-
-@media (max-width: 312px) {
-  .social-link {
-    font-size: 0.5rem; /* Adjust font size for smaller screens */
+  .splash-content {
+    font-size: var(--font-size-lg);
   }
 }
