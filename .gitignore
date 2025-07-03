@@ -1,11 +1,9 @@
-# .gitignore (MyPortfolio/ klasörünün kökünde)
-
-# İşletim sistemi tarafından oluşturulan dosyalar
+# ───────────── OS TARAFINDAN OLUŞTURULANLAR ─────────────
 .DS_Store
 Thumbs.db
 
-# Log dosyaları
-logs
+# ───────────── LOG DOSYALARI ─────────────
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -13,8 +11,8 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Editör konfigürasyonları ve çalışma alanı dosyaları
-.idea
+# ───────────── EDITÖR VE IDE AYARLARI ─────────────
+.idea/
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -22,44 +20,98 @@ lerna-debug.log*
 !.vscode/extensions.json
 *.sublime-workspace
 
-# Bağımlılık dizinleri (Hem backend hem de frontend için)
-# Genel kural, tüm node_modules klasörlerini yok sayar
+# ───────────── NODE MODULES (GENEL KURAL) ─────────────
 node_modules/
-# Eğer spesifik olmak isterseniz:
+# veya belirli alt dizinlerdeki node_modules:
 # backend/node_modules/
+# frontend/node_modules/
 # myportfolio/node_modules/
 
-# Environment değişkenleri dosyası (Sadece backend için)
+# ───────────── ENV DOSYALARI (GİZLİ TUTULMALI) ─────────────
+.env
+.env.*
 backend/.env
 backend/.env.*
-# Eğer frontend'de de .env dosyası varsa ve gizlenmesi gerekiyorsa:
-# myportfolio/.env
-# myportfolio/.env.*
+frontend/.env
+frontend/.env.*
+myportfolio/.env
+myportfolio/.env.*
 
-# Build çıktıları (Eğer varsa)
-# backend/dist/
-# myportfolio/dist/
-# myportfolio/build/
+# ───────────── BUILD / DERLEME ÇIKTILARI ─────────────
+build/
+dist/
+backend/build/
+backend/dist/
+frontend/build/
+frontend/dist/
+myportfolio/build/
+myportfolio/dist/
 
-# Vite cache
+# ───────────── VITE CACHE (Eğer Vite kullanıyorsan) ─────────────
+.vite/
 myportfolio/.vite/
+frontend/.vite/
 
-# NPM cache dosyaları
-.npm
+# ───────────── NEXT.js (Kullanıyorsan) ─────────────
+.next/
 
-# Yarn cache dosyaları (eğer Yarn kullanılıyorsa)
-.yarn/cache
-.yarn/plugnplay
-.yarn/unplugged
-.yarnrc.yml
+# ───────────── TEMPORARY / GEÇİCİ DOSYALAR ─────────────
+*.tmp
+*.temp
+*.swp
+*.swo
 
-# PNPM cache dosyaları (eğer PNPM kullanılıyorsa)
-.pnpm-store/
-
-# Test raporları ve coverage
+# ───────────── TEST VE COVERAGE ÇIKTILARI ─────────────
 coverage/
 .nyc_output/
+test-output/
+cypress/videos/
+cypress/screenshots/
 
-# Geçici dosyalar
-*.tmp
-*.swp
+# ───────────── NPM/YARN/PNPM CACHE VE AYARLAR ─────────────
+.npm/
+.yarn/cache/
+.yarn/plugnplay/
+.yarn/unplugged/
+.pnpm-store/
+.yarnrc.yml
+.pnpm-debug.log
+
+# ───────────── VERITABANI, BACKUP VE LOCAL DOSYALAR ─────────────
+*.sqlite
+*.sqlite3
+*.db
+*.bak
+*.sql
+dump.sql
+
+# ───────────── SYSTEM / MAC-SPECIFIC ─────────────
+.AppleDouble
+.LSOverride
+Icon?
+ehthumbs.db
+Desktop.ini
+
+# ───────────── OUTPUT / EXPORT / ZIP DOSYALARI ─────────────
+*.zip
+*.tar
+*.gz
+*.rar
+
+# ───────────── FIREBASE / ANALYTICS / ANALOG DOSYALAR (varsa) ─────────────
+firebase-debug.log
+firebase.json
+
+# ───────────── PUBLIC (EĞER SADECE BUILD VARSA, RAW PUBLIC DİZİNİNİ DEĞİL) ─────────────
+public/static/
+
+# ───────────── PM2 LOGS (Node.js process yöneticisi kullanıyorsan) ─────────────
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# ───────────── STORYBOOK / DOCS / DOCUSAURUS GİBİ ARAÇLAR ─────────────
+.out/
+storybook-static/
+docs/.vitepress/dist/

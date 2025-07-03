@@ -16,7 +16,7 @@ const PodcastTalksContent = () => {
           discussing software development trends, career advice, and interviews
           with industry professionals. You can listen on{" "}
           <a
-            href="https://open.spotify.com/show/your-podcast-id"
+            href="https://open.spotify.com/show/0a8ZmRsXCWKaOFjKIEN38q?si=b08a136895f340a8"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -24,11 +24,11 @@ const PodcastTalksContent = () => {
           </a>
           ,{" "}
           <a
-            href="https://podcasts.apple.com/podcast/your-podcast-id"
+            href="https://youtube.com/playlist?list=PLiw0pe3ARm0SX4pQ6nHDqZboa4ymQQuuc&si=9UCKW6cNherIgjTm"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Apple Podcasts
+            Youtube Podcast
           </a>
           , etc. {/* Gerçek linkleri ekleyin */}
         </li>

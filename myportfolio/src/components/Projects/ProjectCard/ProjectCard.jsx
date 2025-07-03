@@ -1,27 +1,19 @@
-// src/components/ProjectCard/ProjectCard.jsx
-// Bu dosyada değişiklik yapmaya GEREK YOK. Önceki haliyle kalabilir.
+// src/components/Projects/ProjectCard/ProjectCard.jsx
 import React from "react";
-import "./ProjectCard.css";
+import "./ProjectCard.css"; // CSS dosyasının adı doğru olmalı, eğer farklıysa düzeltin
 import GoToProjectArrowSvg from "../../../assets/icons/project/GoToProjectArrow.svg";
-import imageSvg from "../../../assets/img/image.svg";
-// import borderSvg from "../../../assets/icons/project/border.svg";
+import imageSvg from "../../../assets/img/image.svg"; // Varsayılan görsel için
 
 const ProjectCard = ({
   title = "Proje Başlığı",
   description = "Proje açıklaması buraya gelecek.",
   link = "#",
-  image,
+  image, // Bu prop GitHub'dan gelen görsel URL'si olacak
 }) => {
-  const imageSource = image || imageSvg;
+  const imageSource = image || imageSvg; // Eğer GitHub'dan görsel gelmezse varsayılanı kullan
 
   return (
     <div className="project-card-wrapper">
-      {/* <img
-        className="project-card-border"
-        src={borderSvg}
-        alt=""
-        aria-hidden="true"
-      /> */}
       <div className="project-card">
         <div className="project-card-image-container">
           <img
@@ -49,7 +41,6 @@ const ProjectCard = ({
               />
             </a>
           </div>
-          {/* Açıklama metni olduğu gibi kalıyor */}
           <p className="project-card-description">
             {description || "Açıklama mevcut değil."}
           </p>

@@ -34,13 +34,6 @@ function App() {
 
   useMouseLightEffect(true); // Bu hook kendi içinde bir overlay oluşturuyor
 
-  // App container'ın splash sonrası görünürlüğünü yönetmek için
-  // CSS transition'ı zaten global.css'de tanımlı (.app-container ve .app-container.show)
-  // Bu useEffect, splash tamamlandığında app-container'a 'show' class'ını eklemek için
-  // veya doğrudan style ile opacity değiştirmek için kullanılabilir.
-  // Ancak Splash.jsx'in onComplete'i doğrudan app-container'ın görünürlüğünü tetikleyebilir.
-  // Mevcut yapıda splashComplete state'i ile class yönetimi yapılıyor, bu yeterli.
-
   return (
     <>
       {!splashComplete && <Splash onComplete={handleSplashComplete} />}

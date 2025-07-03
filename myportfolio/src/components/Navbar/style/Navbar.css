@@ -6,6 +6,7 @@
   width: 100%;
   height: var(--navbar-height); /* global.css'den */
   background-color: var(--color-navbar-bg-container, var(--color-background-page));
+  backdrop-filter: blur(1px);
   border-bottom: 1px solid var(--color-navbar-border-container, var(--color-navbar-border));
   z-index: 9990;
   display: flex;

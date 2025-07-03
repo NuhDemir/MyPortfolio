@@ -1,41 +1,50 @@
 /* frontend/src/components/About/style/About.css */
 
-.about-container { /* This class should be on the <section id="about-section"> in App.jsx */
-   padding: var(--spacing-xl) var(--container-padding);
+.about-container { /* Bu sınıf App.jsx içindeki <section id="about-section"> üzerinde olmalı */
+  padding: var(--spacing-xl) var(--container-padding);
+}
 
-  }
-  
-.header { /* Class for the div containing the SmileSvg */
-  padding-bottom: var(--spacing-lg); /* Space below the header image */
- color: var(--color-text-primary); /* Not directly used for text here */
+.header { /* SmileSvg'yi içeren div için sınıf */
+  padding-bottom: var(--spacing-lg); /* Başlık resminin altındaki boşluk */
 }
 
 .header img { /* SmileSvg */
-  width: 40%; /* Adjust as needed */
-  max-width: 300px; /* Prevent it from becoming too large */
+  width: 40%; /* Gerektiği gibi ayarlayın */
+  max-width: 300px; /* Çok büyümesini engelleyin */
   height: auto;
-  display: block; /* Remove extra space below image */
-  margin: 0 auto var(--spacing-md) auto; /* Center the image */
-
-   
+  display: block; /* Resmin altındaki ekstra boşluğu kaldırın */
+  margin: 0 auto var(--spacing-md) auto; /* Resmi ortalayın */
 }
 
 .about-grid {
   display: grid;
-  grid-template-columns: 250px 1fr; /* Adjust stats column width as needed */
+  grid-template-columns: 250px 1fr; /* İstatistik sütun genişliğini gerektiği gibi ayarlayın */
   border-top: 2px solid var(--color-border-strong);
-  border-bottom: 2px solid var(--color-border-strong); /* Add bottom border for consistency */
-  background: var(--color-background-paper); 
+  border-bottom: 2px solid var(--color-border-strong); /* Tutarlılık için alt kenarlık ekleyin */
+  background: var( --color-background-paper-transparent);
 }
 
 .stats-container {
   display: flex;
   flex-direction: column;
   border-right: 2px solid var(--color-border-strong);
-  padding: var(--spacing-lg); /* Inner padding for stats */
-  gap: var(--spacing-lg); /* Space between stat cards */
-color: var(--color-text-primary); /* Not directly used for text here */
-  background: var(--color-background-paper); /* Default, can be overridden if needed */
+  padding: var(--spacing-lg); /* İstatistikler için iç dolgu */
+  gap: var(--spacing-lg); /* İstatistik kartları arasındaki boşluk */
+  background: var( --color-background-paper-transparent); /* Varsayılan, gerekirse üzerine yazılabilir */
+}
+
+/* Yükleme ve Hata Mesajları için stiller (4. adımdan) */
+.stats-container .loading-message,
+.stats-container .error-message {
+  text-align: center;
+  padding: var(--spacing-md);
+  color: var(--color-text-secondary);
+  width: 100%;
+}
+
+.stats-container .error-message {
+  color: var(--color-error, #d32f2f); /* Eğer --color-error yoksa varsayılan kırmızı */
+  font-weight: var(--font-weight-semibold);
 }
 
 
@@ -45,7 +54,7 @@ color: var(--color-text-primary); /* Not directly used for text here */
 }
 
 .stat-value {
-  font-size: var(--font-size-h2); /* Prominent stat value */
+  font-size: var(--font-size-h2); /* Belirgin istatistik değeri */
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-xs);
   color: var(--color-text-primary);
@@ -62,66 +71,70 @@ color: var(--color-text-primary); /* Not directly used for text here */
 
 .services-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 services per row */
+  /* Varsayılan olarak 2 sütunlu, mobil için @media query içinde değiştirilecek */
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .service-card {
-  padding: var(--spacing-lg); /* Generous padding for service cards */
+  padding: var(--spacing-lg); /* Hizmet kartları için geniş dolgu */
+  /* Varsayılan olarak her karta kenarlık ekleyelim, sonra spesifik durumlarla kaldıralım */
   border-right: 2px solid var(--color-border-strong);
   border-bottom: 2px solid var(--color-border-strong);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md); /* Space between elements inside the card */
+  gap: var(--spacing-md); /* Kart içindeki öğeler arasındaki boşluk */
   transition: transform var(--transition-duration-short) ease,
               box-shadow var(--transition-duration-short) ease;
-  background-color: var(--color-background-paper); /* Default, can be overridden if needed */
+  background-color: var( --color-background-paper-transparent); /* Varsayılan, gerekirse üzerine yazılabilir */
+  position: relative; /* z-index'in transform ile düzgün çalışması için */
 }
 
 .service-card:hover {
-  transform: translateY(-4px) scale(1.01); /* Subtle lift and scale */
-  box-shadow: var(--box-shadow-base); /* Themed shadow on hover */
-  z-index: 1; /* Ensure it's above other cards on hover */
-  position: relative; /* For z-index to work properly with transform */
+  transform: translateY(-4px) scale(1.01); /* Hafif yükselme ve ölçeklenme */
+  box-shadow: var(--box-shadow-base); /* Üzerine gelindiğinde temalı gölge */
+  z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde olmasını sağlayın */
 }
 
-/* Adjust borders for a 2x2 grid */
-/* If 2nd column, no right border */
-.service-card:nth-child(2n) {
-  border-right: none;
+/* Masaüstü ve üzeri (2 sütunlu düzen) için kenarlık ayarlamaları */
+@media (min-width: 769px) {
+  /* İkinci sütundaki kartların (çift numaralı) sağ kenarlığı olmamalıdır */
+  .services-section .service-card:nth-child(2n) {
+    border-right: none;
+  }
+
+  /* Son satırdaki kartların (2 sütunlu bir ızgara için en fazla 2 öğe) alt kenarlığı olmamalıdır.
+     Bu, .about-grid'in genel alt kenarlığının son görünür kenarlık olmasını sağlar. */
+  .services-section .service-card:nth-last-child(-n + 2) {
+    border-bottom: none;
+  }
 }
-/* If it's the last row (assuming max 4 services, so 3rd and 4th are last row) */
-.service-card:nth-child(3),
-.service-card:nth-child(4) {
-  /* border-bottom: none; */ /* Removed this to keep bottom border from .about-grid */
-}
-/* If there are more than 4 services, this logic for last row needs adjustment or JS */
 
 
 .icon-wrapper {
-  width: 48px; /* Slightly larger icons */
+  width: 48px; /* Biraz daha büyük ikonlar */
   height: 48px;
   border-radius: var(--border-radius-circle);
   display: flex;
   align-items: center;
   justify-content: center;
-  /* margin-bottom: var(--spacing-sm); /* Replaced by gap in .service-card */
   transition: transform var(--transition-duration-short) ease;
-  /* iconBgColor is passed as a prop, so this style remains in JSX */
+  /* iconBgColor bir prop olarak geçirilir, bu nedenle bu stil JSX'te kalır */
 }
+
 .service-card:hover .icon-wrapper {
-  transform: scale(1.15); /* More pronounced hover for icon */
+  transform: scale(1.15); /* İkon için daha belirgin üzerine gelme efekti */
 }
-.service-icon { /* For SVGs inside icon-wrapper */
-  width: 24px; /* Adjust icon size within wrapper */
+
+.service-icon { /* icon-wrapper içindeki SVG'ler için */
+  width: 24px; /* Sarmalayıcı içindeki ikon boyutunu ayarlayın */
   height: 24px;
-  /* color: var(--color-text-on-accent); /* If iconBgColor is an accent color */
-  /* The actual SVG fill/stroke should be themed or set to currentColor */
+  /* Gerçek SVG dolgusu/konturu temalı olmalı veya currentColor olarak ayarlanmalıdır */
 }
 
 .service-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-on-primary);
+  color: var(--color-text-on-primary); /* Bunun background-paper ile kontrast oluşturduğundan emin olun */
   line-height: var(--line-height-heading);
 }
 
@@ -129,52 +142,62 @@ color: var(--color-text-primary); /* Not directly used for text here */
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
   line-height: var(--line-height-base);
-  /* margin: 0 var(--spacing-sm); /* Replaced by gap in .service-card */
-  flex-grow: 1; /* Allow description to take available space */
+  flex-grow: 1; /* Açıklamanın mevcut alanı kaplamasına izin verin */
 }
 
 .learn-more {
   background: transparent;
   border: none;
-  padding: var(--spacing-xs) 0; /* Add some vertical padding for clickability */
+  padding: var(--spacing-xs) 0; /* Tıklanabilirlik için biraz dikey dolgu ekleyin */
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   text-align: left;
-  /* margin-top: var(--spacing-sm); /* Replaced by gap in .service-card */
   color: var(--color-text-link);
-  display: inline-flex; /* Allows alignment and gap for arrow */
+  display: inline-flex; /* Ok için hizalama ve boşluk sağlar */
   align-items: center;
-  align-self: flex-start; /* Ensure it doesn't stretch */
+  align-self: flex-start; /* Esnememesini sağlayın */
   transition: color var(--transition-duration-short) ease,
               transform var(--transition-duration-short) ease;
 }
+
 .learn-more:hover {
-  color: var(--color-text-link-hover);
-  transform: translateX(3px); /* Slight move on hover */
-}
-.learn-more:after {
-  content: "→";
-  opacity: 1; /* Always visible or control with hover */
-  margin-left: var(--spacing-xs);
-  transition: opacity var(--transition-duration-short) ease,
-              transform var(--transition-duration-short) ease; /* For potential hover effects on arrow */
+  background-color: #ffffff00; /* Bu muhtemelen `background: transparent;` ile aynı etkiyi yapar,
+                                   ya da `var(--color-background-transparent)` gibi bir değişken kullanılabilir.
+                                   Şu anki haliyle bırakıyorum, işlevselse sorun yok. */
+  color: var(--color-text-link-hover); /* Üzerine gelindiğinde renk değişimi */
+  transform: translateX(3px); /* Üzerine gelindiğinde hafif hareket */
 }
 
+.learn-more:after {
+  content: "→";
+  opacity: 1; /* Her zaman görünür veya üzerine gelindiğinde kontrol edilir */
+  margin-left: var(--spacing-xs);
+  transition: opacity var(--transition-duration-short) ease,
+              transform var(--transition-duration-short) ease; /* Ok üzerindeki potansiyel üzerine gelme efektleri için */
+}
+
+/* Performans için: tarayıcıya yaklaşan değişiklikler hakkında ipucu verin */
+.service-card {
+  will-change: transform, box-shadow; /* .service-card üzerine gelme efekti için eklendi */
+}
 .stat-value,
 .stat-label,
 .service-title,
 .service-desc,
-.icon-wrapper {
+.icon-wrapper { /* Orijinal kural; potansiyel JS animasyonları veya daha geniş kapsam varsayılarak korundu */
   will-change: transform, opacity;
+}
+.learn-more {
+  will-change: color, transform; /* .learn-more üzerine gelme efekti için eklendi */
 }
 
 
-/* === Responsive Stiller === */
+/* === Duyarlı Stiller === */
 
-@media (max-width: 1024px) { /* Tablet and smaller */
+@media (max-width: 1024px) { /* Tablet ve daha küçükleri */
   .about-grid {
-    grid-template-columns: 200px 1fr; /* Smaller stats column */
+    grid-template-columns: 200px 1fr; /* Daha küçük istatistik sütunu */
   }
   .stats-container {
     padding: var(--spacing-lg);
@@ -187,49 +210,51 @@ color: var(--color-text-primary); /* Not directly used for text here */
   }
 }
 
-@media (max-width: 768px) { /* Mobile landscape and portrait */
+@media (max-width: 768px) { /* Mobil yatay ve dikey (tek sütunlu düzen) */
   .about-container {
-    padding: var(--spacing-lg) var(--spacing-md); /* Less horizontal padding */
+    padding: var(--spacing-lg) var(--spacing-md); /* Daha az yatay dolgu */
   }
   .header img {
     width: 50%;
     max-width: 200px;
   }
   .about-grid {
-    grid-template-columns: 1fr; /* Single column layout */
+    grid-template-columns: 1fr; /* Tek sütunlu düzen */
   }
   .stats-container {
-    border-right: none; /* No right border in single column */
-    flex-direction: row; /* Stats side-by-side */
-    flex-wrap: wrap; /* Allow wrapping if too many stats */
-    justify-content: space-around; /* Distribute stats */
+    border-right: none; /* Tek sütunda sağ kenarlık yok */
+    flex-direction: row; /* İstatistikler yan yana */
+    flex-wrap: wrap; /* Çok fazla istatistik varsa kaydırmaya izin ver */
+    justify-content: space-around; /* İstatistikleri dağıt */
     padding: var(--spacing-md);
     gap: var(--spacing-md);
-    border-bottom: 2px solid var(--color-border-strong); /* Keep bottom border */
+    border-bottom: 2px solid var(--color-border-strong); /* İstatistikleri hizmetlerden ayırır */
   }
   .stat-card {
-    flex-basis: calc(50% - var(--spacing-sm)); /* Two stats per row */
-    text-align: center; /* Center stat text */
+    flex-basis: calc(50% - var(--spacing-sm)); /* Satır başına iki istatistik */
+    text-align: center; /* İstatistik metnini ortala */
   }
   .stat-value {
     font-size: var(--font-size-h3);
   }
+
   .services-section {
-    grid-template-columns: 1fr; /* Single column for services */
+    grid-template-columns: 1fr; /* Hizmetler için tek sütun */
   }
-  .service-card {
-    border-right: none; /* No right border in single column */
+
+  .services-section .service-card {
+    border-right: none; /* Tek sütunda tüm kartların sağ kenarlığı yok */
+    /* Alt kenarlık varsayılan olarak .service-card'dan gelir, sadece sonuncuyu kaldıracağız */
   }
-  /* Ensure last service card has no bottom border if it's the absolute last one */
-  .service-card:last-child {
-     /* border-bottom: none; */ /* Only if it's the very last item in the grid overall */
-  }
-  .service-card:nth-child(2n) { /* This rule is for 2-column, not needed for 1-column */
-    /* border-right: none; */
+
+  /* Mobil tek sütun düzeninde, sadece en son hizmet kartının alt kenarlığı olmamalıdır.
+     .about-grid'in genel alt kenarlığı son görünür kenarlık olur. */
+  .services-section .service-card:last-child {
+    border-bottom: none;
   }
 }
 
-@media (max-width: 480px) { /* Small mobile */
+@media (max-width: 480px) { /* Küçük mobil */
   .about-container {
     padding: var(--spacing-md) var(--spacing-sm);
   }
@@ -242,7 +267,7 @@ color: var(--color-text-primary); /* Not directly used for text here */
     gap: var(--spacing-sm);
   }
   .stat-card {
-    flex-basis: 100%; /* One stat per row */
+    flex-basis: 100%; /* Satır başına bir istatistik */
   }
   .stat-value {
     font-size: var(--font-size-xl);
@@ -273,42 +298,4 @@ color: var(--color-text-primary); /* Not directly used for text here */
   }
 }
 
-
-.service-card:nth-child(1), .service-card:nth-child(2) { border-bottom: 2px solid var(--color-border-strong); }
-.service-card:nth-child(odd) { border-right: 2px solid var(--color-border-strong); }
-.service-card:nth-child(3), .service-card:nth-child(4) { border-bottom: none; } 
-.service-card:nth-child(even) { border-right: none; }
-
-.services-section .service-card {
-  border: none; /* Remove all individual borders first */
-}
-/* Add borders back strategically */
-.services-section .service-card:nth-child(odd) { /* 1st and 3rd card (left column) */
-  border-right: 2px solid var(--color-border-strong);
-}
-.services-section .service-card:nth-child(1),
-.services-section .service-card:nth-child(2) { /* 1st and 2nd card (top row) */
-  border-bottom: 2px solid var(--color-border-strong);
-}
-
-/* If single column on mobile, this simplified logic needs to be overridden */
-@media (max-width: 768px) {
-  .services-section .service-card,
-  .services-section .service-card:nth-child(odd),
-  .services-section .service-card:nth-child(1),
-  .services-section .service-card:nth-child(2) {
-    border-right: none; /* No right borders in single column */
-    border-bottom: 2px solid var(--color-border-strong); /* All cards have bottom border */
-  }
-  .services-section .service-card:last-child {
-    border-bottom: none; /* Except the very last card */
-  }
-}
-
-
-/* For browsers that support smooth scrolling on touch devices */
-@supports (-webkit-overflow-scrolling: touch) {
-  .services-section { /* Not really applicable here as it's not a scrolling container */
-    /* transform: translate3d(0, 0, 0); */ /* Could be applied to individual cards if they had complex animations */
-  }
-}
+/* @supports (-webkit-overflow-scrolling: touch) {} - Bu yorum satırı kaldırılabilir. */
