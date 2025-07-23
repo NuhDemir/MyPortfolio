@@ -1,17 +1,16 @@
 import { z } from "zod";
 
-export const createBlogSchema = z.object({
-  title: z.string().min(1, "Blog başlığı boş olamaz."),
-  content: z.string.min(1, "Blog içeriği boş olamaz."),
-  tags: z.array(z.string.trim()).optional(),
-  category: z.string().trim().optional(),
-
-  thumbnail: z.string
-    .url("Geçerli bir görsel URL\ si olmalı.")
+const createBlogSchema = z.object({
+  title: z.string().min(1, "Başlık boş bırakılamaz."),
+  content: z.string().min(10, "Blog içeriği en az 10 karakter olmalıdır."),
+  tags: z.string().optional().or(z.literal("")), // Virgülle ayrılmış string bekliyoruz
+  category: z.string().optional().or(z.literal("")),
+  isPublished: z
+    .union([z.literal("true"), z.literal("false"), z.boolean()])
     .optional()
-    .or(z.literal("")),
-  isPublished: z.boolean().optional(),
+    .default(false), // Frontend'den string 'true'/'false' veya boolean gelebilir
 });
 
-// Blog Güncelleme için şema(tüm alanlar isteğe bağlı olabilir.)
-export const updateBlogSchema = createBlogSchema.partial();
+const updateBlogSchema = createBlogSchema.partial();
+
+export { createBlogSchema, updateBlogSchema };

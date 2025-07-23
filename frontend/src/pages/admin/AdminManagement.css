@@ -1,0 +1,135 @@
+.admin-management-page {
+  padding: 20px;
+  background-color: var(--admin-background);
+  color: var(--admin-text-color);
+}
+
+.admin-management-page h1 {
+  margin-bottom: 20px;
+}
+
+.admin-add-new-btn {
+  background-color: var(--admin-sidebar-bg);
+  color: var(--admin-sidebar-text);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+.admin-add-new-btn:hover {
+  opacity: 0.9;
+}
+
+.admin-form-container {
+  background-color: var(--admin-navbar-bg);
+  padding: 25px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px var(--admin-navbar-shadow);
+}
+
+.admin-form-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="file"],
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: var(--admin-background);
+  color: var(--admin-text-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.image-preview {
+  max-width: 200px;
+  margin-top: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.form-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form-actions .cancel-btn {
+  background-color: #777;
+  color: white;
+}
+
+.admin-list-container {
+  background-color: var(--admin-navbar-bg);
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px var(--admin-navbar-shadow);
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.admin-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-list-container th,
+.admin-list-container td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-background);
+}
+
+.list-thumbnail {
+  width: 80px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.action-buttons button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.action-buttons .edit-btn {
+  background-color: #3498db;
+  color: white;
+}
+.action-buttons .delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}

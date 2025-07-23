@@ -27,7 +27,8 @@
   padding: var(--spacing-xs) var(--spacing-sm); /* Tıklama alanını genişlet */
 }
 
-.social-link::after { /* Alt çizgi efekti */
+.social-link::after {
+  /* Alt çizgi efekti */
   content: "";
   position: absolute; /* Linke göre konumlanır */
   bottom: -2px; /* Metnin biraz altına */
@@ -35,19 +36,24 @@
   transform: translateX(-50%); /* Tam ortala */
   width: 0;
   height: 2px;
-  background-color: var(--color-social-links-hover-underline); /* Tema değişkeni */
+  background-color: var(
+    --color-social-links-hover-underline
+  ); /* Tema değişkeni */
   transition: width var(--transition-duration-short) ease;
 }
 
 .social-link:hover {
-  color: var(--color-social-links-text); /* Hover'da renk değişimi isteğe bağlı */
+  color: var(
+    --color-social-links-text
+  ); /* Hover'da renk değişimi isteğe bağlı */
 }
 .social-link:hover::after {
   width: 80%; /* Tam genişlik yerine biraz daha kısa hoş durabilir */
 }
 
 /* Splash screen for social links */
-.splash-overlay { /* Bu class SocialLinkSplash.jsx'e atanmalı */
+.splash-overlay {
+  /* Bu class SocialLinkSplash.jsx'e atanmalı */
   position: fixed;
   top: 0;
   left: 0;
@@ -63,7 +69,8 @@
   /* opacity ve visibility GSAP/hook ile yönetiliyor */
 }
 
-.splash-content { /* Bu class SocialLinkSplash.jsx'e atanmalı */
+.splash-content {
+  /* Bu class SocialLinkSplash.jsx'e atanmalı */
   font-size: var(--font-size-h3); /* Tema değişkeni */
   font-weight: var(--font-weight-semibold);
   padding: var(--spacing-lg);
@@ -75,7 +82,7 @@
 }
 /* Splash için basit bir yükleme ikonu eklenebilir */
 .splash-content::before {
-  content: '';
+  content: "";
   display: block;
   width: 30px;
   height: 30px;
@@ -86,9 +93,10 @@
   animation: socialLinkSpin 1s linear infinite;
 }
 @keyframes socialLinkSpin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
-
 
 /* Responsive styles */
 @media (max-width: 768px) {

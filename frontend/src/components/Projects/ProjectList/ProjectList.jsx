@@ -1,11 +1,7 @@
-// src/components/Projects/ProjectList/ProjectList.jsx
-import React, { useState, useEffect, useRef } from "react";
+// frontend/src/components/Projects/ProjectList/ProjectList.jsx
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
-import {
-  fetchUserRepos,
-  fetchReadmeContent,
-  extractFirstImageUrlFromReadme,
-} from "../../../services/githubApi";
+import { getProjects } from "../../../services/projectService";
 import LoadingSpinner from "../../common/LoadingSpinner";
 import ErrorMessage from "../../common/ErrorMessage";
 import "./ProjectList.css";
@@ -19,64 +15,37 @@ const ProjectList = () => {
   const [error, setError] = useState(null);
   const listContainerRef = useRef(null);
 
-  useEffect(() => {
-    const loadProjects = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const repos = await fetchUserRepos();
-        const filteredRepos = repos.filter(
-          (repo) => !repo.fork && !repo.archived
-        );
+  // useCallback ile fonksiyonun gereksiz yere yeniden oluşmasını engelliyoruz.
+  const loadProjects = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const fetchedData = await getProjects(); // Veriyi al
 
-        const projectsWithImages = await Promise.all(
-          filteredRepos.map(async (repo) => {
-            let imageUrl = null;
-            try {
-              const readmeContent = await fetchReadmeContent(repo.full_name);
-              if (readmeContent) {
-                imageUrl = extractFirstImageUrlFromReadme(readmeContent);
-                if (imageUrl && !imageUrl.startsWith("http")) {
-                  console.warn(
-                    `README image for ${repo.name} might be relative: ${imageUrl}. Assuming it's in the repo assets.`
-                  );
-                  // Eğer göreceli ise ve GitHub'da doğru bir şekilde gösteriliyorsa,
-                  // repo'nun html_url'sinden veya raw content URL'sinden tam bir URL oluşturmak gerekebilir.
-                  // Şimdilik basit bir kontrol yapıyoruz.
-                  // imageUrl = `https://raw.githubusercontent.com/${repo.full_name}/${repo.default_branch}/${imageUrl.startsWith('./') ? imageUrl.substring(2) : imageUrl}`;
-                  // Bu satır karmaşıklaşabilir, README'deki resimlerin mutlak URL'ler olması en iyisidir.
-                  // Şimdilik null bırakıp, fallback avatarı kullanmasını sağlayalım.
-                  imageUrl = null;
-                }
-              }
-            } catch (readmeError) {
-              console.error(
-                `Error fetching README for ${repo.full_name}:`,
-                readmeError
-              );
-            }
-
-            return {
-              id: repo.id,
-              name: repo.name.replace(/-/g, " ").replace(/_/g, " "),
-              description: repo.description,
-              image: imageUrl || repo.owner?.avatar_url,
-              html_url: repo.html_url,
-            };
-          })
+      // --- ÇÖZÜM: Gelen verinin bir dizi olup olmadığını kontrol et ---
+      if (Array.isArray(fetchedData)) {
+        setProjects(fetchedData); // Eğer bir dizi ise state'i güncelle
+      } else {
+        // Eğer dizi değilse, bu bir hata durumudur.
+        console.error(
+          "API'den beklenen format (dizi) gelmedi, gelen veri:",
+          fetchedData
         );
-        setProjects(projectsWithImages);
-      } catch (err) {
-        setError(
-          err.message || "Projeler yüklenirken bilinmeyen bir hata oluştu."
-        );
-      } finally {
-        setLoading(false);
+        throw new Error("Projeler yüklenirken bir format hatası oluştu.");
       }
-    };
+    } catch (err) {
+      // Hata mesajını yakala ve state'e ata
+      setError(
+        err.message || "Projeler yüklenirken bilinmeyen bir hata oluştu."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []); // Bağımlılığı olmadığı için boş dizi yeterli
 
+  useEffect(() => {
     loadProjects();
-  }, []);
+  }, [loadProjects]); // loadProjects fonksiyonuna bağımlı hale getir
 
   const scrollList = (direction) => {
     if (listContainerRef.current) {
@@ -88,6 +57,7 @@ const ProjectList = () => {
     }
   };
 
+  // Yükleme durumu gösterimi
   if (loading) {
     return (
       <div className="project-list-section" id="projects-section">
@@ -103,6 +73,7 @@ const ProjectList = () => {
     );
   }
 
+  // Hata durumu gösterimi
   if (error) {
     return (
       <div className="project-list-section" id="projects-section">
@@ -118,6 +89,7 @@ const ProjectList = () => {
     );
   }
 
+  // Proje yoksa gösterilecek mesaj (Bu kısım .map'ten önce olduğu için hatayı engeller)
   if (projects.length === 0) {
     return (
       <div className="project-list-section" id="projects-section">
@@ -127,12 +99,13 @@ const ProjectList = () => {
           alt="My Projects"
         />
         <div className="project-list-empty">
-          GitHub'da gösterilecek proje bulunamadı.
+          Henüz hiç proje eklenmemiş. Admin panelinden proje ekleyebilirsiniz.
         </div>
       </div>
     );
   }
 
+  // Başarılı veri yükleme durumu
   return (
     <div className="project-list-section" id="projects-section">
       <img
@@ -149,13 +122,15 @@ const ProjectList = () => {
           <img src={leftArrowIcon} alt="Sol Ok" />
         </button>
         <div className="project-list-container" ref={listContainerRef}>
+          {/* Bu kısma gelindiğinde 'projects'in bir dizi olduğu garantilenmiş olur. */}
           {projects.map((project) => (
             <ProjectCard
-              key={project.id}
-              title={project.name}
+              key={project._id}
+              title={project.title}
               description={project.description}
-              image={project.image}
-              link={project.html_url}
+              image={project.imageUrl}
+              link={project.liveUrl || project.githubUrl}
+              tags={project.tags}
             />
           ))}
         </div>

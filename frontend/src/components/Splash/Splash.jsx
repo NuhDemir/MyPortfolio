@@ -1,45 +1,65 @@
 import React, { useRef } from "react";
 import { useGsapSplashAnimation } from "../../hooks/useGsapSplashAnimation";
-import "./style/splash.css";
+import styles from "./Splash.module.css";
 
 const Splash = ({ onComplete }) => {
   const splashContainerRef = useRef(null);
   const lettersRef = useRef([]);
-  const backgroundCanvasRef = useRef(null); // Parçacık/grid arka planı için
+  const matrixCanvasRef = useRef(null);
+  const loaderRef = useRef(null);
 
-  // "HOŞGELDİNİZ" yazısının harfleri
-  const letters = "HOŞGELDİNİZ".split("");
+  const letters = "NUH DEMİR".split("");
 
-  // GSAP animasyonunu başlat
   const { animationComplete } = useGsapSplashAnimation(
     splashContainerRef,
     lettersRef,
-    onComplete,
-    backgroundCanvasRef // Yeni ref'i ilet
+    matrixCanvasRef,
+    loaderRef,
+    onComplete
   );
 
   return (
     <div
       ref={splashContainerRef}
-      className={`splash-container ${animationComplete ? "hide" : ""}`}
+      className={`${styles.splashContainer} ${
+        animationComplete ? styles.hide : ""
+      }`}
     >
-      {/* Canvas/Grid/Scanlines için Arka Plan Elemanı */}
-      <div ref={backgroundCanvasRef} className="splash-background-canvas"></div>
-      <div className="scanline-overlay"></div> {/* Scanlines efekti için */}
-      <div className="letters-container">
-        {letters.map((letter, index) => (
-          <span
-            key={index}
-            ref={(el) => (lettersRef.current[index] = el)}
-            className="splash-letter"
-          >
-            {letter === " " ? "\u00A0" : letter}
-          </span>
-        ))}
+      <canvas ref={matrixCanvasRef} className={styles.matrixCanvas} />
+
+      <div className={styles.scanlineOverlay}></div>
+
+      <div className={styles.mainContent}>
+        <div className={styles.lettersContainer}>
+          {letters.map((letter, index) => (
+            <span
+              key={index}
+              ref={(el) => (lettersRef.current[index] = el)}
+              className={styles.splashLetter}
+            >
+              {letter}
+            </span>
+          ))}
+        </div>
+
+        <div className={styles.subtitleContainer}>
+          <span className={styles.subtitle}>FULL STACK DEVELOPER</span>
+        </div>
+
+        <div className={styles.loaderContainer}>
+          <div ref={loaderRef} className={styles.loaderBar}></div>
+          <div className={styles.loaderText}>INITIALIZING MATRIX...</div>
+        </div>
       </div>
-      <div className="splash-loader-bar-container">
-        <div className="splash-loader-bar"></div>
+
+      <div className={styles.cornerDecorations}>
+        <div className={styles.cornerTopLeft}></div>
+        <div className={styles.cornerTopRight}></div>
+        <div className={styles.cornerBottomLeft}></div>
+        <div className={styles.cornerBottomRight}></div>
       </div>
+
+      <div className={styles.noiseOverlay}></div>
     </div>
   );
 };

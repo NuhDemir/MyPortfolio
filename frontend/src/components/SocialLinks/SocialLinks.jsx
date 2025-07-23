@@ -2,36 +2,28 @@
 import React, { useState } from "react";
 import "./style/SocialLinks.css";
 import SocialLinkSplash from "./SocialLinkSplash";
-
-// PDF dosyasını import et
-import NuhDemirCV from "../../assets/cv/NuhDemirCV.pdf"; // PDF dosyasının doğru yolunu kontrol et
+import NuhDemirCV from "../../assets/cv/NuhDemirCV.pdf";
 
 const SocialLinks = () => {
   const [loading, setLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState("Sayfa yükleniyor..."); // Splash için mesaj
+  const [loadingMessage, setLoadingMessage] = useState("");
 
-  const handleClick = (
-    e,
-    href,
-    isExternal = true,
-    message = "Sayfa yükleniyor..."
-  ) => {
-    e.preventDefault(); // Her zaman default davranışı engelle
+  const handleLinkClick = (e, href, isExternal = true, message = "") => {
+    e.preventDefault();
     setLoadingMessage(message);
     setLoading(true);
 
     setTimeout(() => {
       if (isExternal) {
-        // Dış linkler veya aynı sekmede açılacak iç linkler için
         window.location.href = href;
       } else {
-        // Yeni sekmede açılacak PDF veya diğer assetler için
         window.open(href, "_blank");
+        // Splash ekranını kapatmak için ek gecikme
+        setTimeout(() => {
+          setLoading(false);
+        }, 1500);
       }
-      // Yönlendirme/açma sonrası loading state'ini sıfırlamak isteyebiliriz
-      // ama yeni sayfa açılacağı/yükleneceği için genellikle gerek kalmaz.
-      // setLoading(false);
-    }, 1000); // 1 saniyelik efekt
+    }, 1000); // Splash görünme süresi
   };
 
   return (
@@ -41,16 +33,16 @@ const SocialLinks = () => {
           href="https://github.com/NuhDemir"
           className="social-link"
           onClick={(e) =>
-            handleClick(
+            handleLinkClick(
               e,
               "https://github.com/NuhDemir",
               true,
               "GitHub açılıyor..."
             )
           }
-          target="_blank" // Dış linkleri yeni sekmede açmak genellikle daha iyi bir UX'tir
+          target="_blank"
           rel="noopener noreferrer"
-          aria-label="GitHub profilimi ziyaret et"
+          aria-label="GitHub profilini ziyaret et"
         >
           Github
         </a>
@@ -58,31 +50,28 @@ const SocialLinks = () => {
           href="https://www.youtube.com/@Yaz%C4%B1l%C4%B1mK%C4%B1raathanesi"
           className="social-link"
           onClick={(e) =>
-            handleClick(
+            handleLinkClick(
               e,
               "https://www.youtube.com/@Yaz%C4%B1l%C4%B1mK%C4%B1raathanesi",
               true,
-              "Youtube açılıyor..."
+              "YouTube açılıyor..."
             )
           }
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Youtube kanalımı ziyaret et"
+          aria-label="YouTube kanalını ziyaret et"
         >
           Youtube
         </a>
-        {/* CV Linki */}
         <a
-          href={NuhDemirCV} // Import edilen PDF dosyasının URL'si
+          href={NuhDemirCV}
           className="social-link"
           onClick={(e) =>
-            handleClick(e, NuhDemirCV, false, "CV görüntüleniyor...")
-          } // isExternal: false (çünkü window.open kullanacağız)
-          // target="_blank" ve rel="noopener noreferrer" zaten handleClick içinde window.open ile yönetilecek
-          // ama direkt HTML'de de belirtmek iyi bir pratiktir.
+            handleLinkClick(e, NuhDemirCV, false, "CV görüntüleniyor...")
+          }
           target="_blank"
-          rel="noopener noreferrer" // PDF yeni sekmede açılacağı için
-          aria-label="CV'mi görüntüle"
+          rel="noopener noreferrer"
+          aria-label="CV'yi görüntüle"
         >
           CV
         </a>
@@ -90,7 +79,7 @@ const SocialLinks = () => {
           href="https://www.linkedin.com/in/nuh-demir-69b737261/"
           className="social-link"
           onClick={(e) =>
-            handleClick(
+            handleLinkClick(
               e,
               "https://www.linkedin.com/in/nuh-demir-69b737261/",
               true,
@@ -99,7 +88,7 @@ const SocialLinks = () => {
           }
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="LinkedIn profilimi ziyaret et"
+          aria-label="LinkedIn profilini ziyaret et"
         >
           LinkedIn
         </a>
@@ -107,7 +96,7 @@ const SocialLinks = () => {
           href="https://www.instagram.com/yazilimkiraathanesi/"
           className="social-link"
           onClick={(e) =>
-            handleClick(
+            handleLinkClick(
               e,
               "https://www.instagram.com/yazilimkiraathanesi/",
               true,
@@ -116,13 +105,12 @@ const SocialLinks = () => {
           }
           target="_blank"
           rel="noopener noreferrer"
-          aria-label="Instagram profilimi ziyaret et"
+          aria-label="Instagram profilini ziyaret et"
         >
           Instagram
         </a>
       </div>
-      <SocialLinkSplash show={loading} message={loadingMessage} />{" "}
-      {/* Mesajı prop olarak geç */}
+      <SocialLinkSplash show={loading} message={loadingMessage} />
     </>
   );
 };

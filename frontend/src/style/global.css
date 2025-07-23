@@ -272,3 +272,109 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
 /* Utility for fade-in animation */
 .fade-in { animation: fadeInAnimation var(--transition-duration-long) ease-in forwards; }
 @keyframes fadeInAnimation { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+
+
+
+/*ADMİN PAGE*/
+
+.admin-login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - var(--navbar-height)); /* Navbar yüksekliğini düşür */
+  background-color: var(--color-background-page);
+  padding: var(--spacing-md);
+}
+
+.login-container {
+  background-color: var(--color-background-paper);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-base);
+  width: 100%;
+  max-width: 400px; /* Maksimum genişlik belirle */
+  text-align: center;
+  border: 1px solid var(--color-border-strong); /* Neubrutalism tarzı için */
+  box-shadow: var(--box-shadow-neubrutalist); /* Neubrutalism gölge */
+  transition: all var(--transition-duration-base) var(--transition-timing-function);
+}
+
+.login-container h2 {
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-h2);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+  text-align: left; /* Label ve inputları sola hizala */
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border-input);
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-paper);
+  transition: all var(--transition-duration-short) var(--transition-timing-function);
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus {
+  outline: none;
+  border-color: var(--color-border-input-focus);
+  box-shadow: 0 0 0 3px var(--color-border-input-focus-shadow);
+}
+
+.login-container button {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin-top: var(--spacing-md);
+  background-color: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+  border: 1px solid var(--color-button-primary-bg); /* Butonun kendi renginde border */
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  transition: var(--transition-default);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+}
+
+.login-container button:hover:not(:disabled) {
+  background-color: var(--color-button-primary-bg-hover);
+  border-color: var(--color-button-primary-bg-hover);
+  transform: translate(2px, 2px); /* Neubrutalism hover efekti */
+  box-shadow: 3px 3px 0px var(--color-border-strong);
+}
+
+.login-container button:disabled {
+  background-color: var(--color-secondary);
+  color: var(--color-button-disabled-text);
+  cursor: not-allowed;
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+  opacity: 0.7;
+}
+
+.error-message {
+  color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+  border: 1px solid var(--color-error-border);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-base);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  text-align: center;
+  animation: fadeInAnimation 0.3s ease-out; /* Hata mesajı için animasyon */
+}
