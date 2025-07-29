@@ -7,10 +7,10 @@ import Modal from "../common/Modal.jsx"; // Modal'ı import et
 import useGsapAnimations from "../../hooks/useAboutGsapAnimation.js"; // GSAP hook'unu import et
 
 // İkonları ve İçerikleri import et
-import { ReactComponent as ProgrammingLangSvg } from "/assets/icons/about/programmingLanguage.svg?react";
-import { ReactComponent as DevToolsTechSvg } from "/assets/icons/about/DevToolsTech.svg?react";
-import { ReactComponent as PodcastTalksSvg } from "/assets/icons/about/PodcastTalks.svg?react";
-import { ReactComponent as ProjectsWorkSvg } from "/assets/icons/about/ProjectsWork.svg?react";
+import ProgrammingLangSvg from "/assets/icons/about/programmingLanguage.svg";
+import DevToolsTechSvg from "/assets/icons/about/DevToolsTech.svg";
+import PodcastTalksSvg from "/assets/icons/about/PodcastTalks.svg";
+import ProjectsWorkSvg from "/assets/icons/about/ProjectsWork.svg";
 
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
