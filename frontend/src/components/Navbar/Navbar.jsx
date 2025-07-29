@@ -5,10 +5,10 @@ import { useTheme } from "../../context/ThemeContext";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 // Kendi SVG'leriniz
-import iconSvgUrl from "../../../public/icons/navitem/icon.svg";
-import LineSvg from "../../../public/icons/main/Line.svg";
-import hamburgerIcon from "../../../public/icons/navbar/hamburger.svg";
-import closeIcon from "../../../public/icons/navbar/close.svg";
+import iconSvgUrl from "../../assets/icons/navitem/icon.svg";
+import LineSvg from "../../assets/icons/main/Line.svg";
+import hamburgerIcon from "../../assets/icons/navbar/hamburger.svg";
+import closeIcon from "../../assets/icons/navbar/close.svg";
 
 // MUI Icons (Sadece tema butonu için)
 import Brightness4Icon from "@mui/icons-material/Brightness4"; // Dark Mode Icon

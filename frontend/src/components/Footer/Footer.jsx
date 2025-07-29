@@ -2,7 +2,7 @@ import React from "react";
 import { FaDribbble, FaInstagram, FaMediumM, FaTwitter } from "react-icons/fa";
 
 import "./style/Footer.scss"; // Import SCSS file
-import iconSvg from "../../../public/icons/footer/Vector.svg";
+import iconSvg from "../../assets/icons/footer/Vector.svg";
 
 // Removed companyName prop as the name is fixed in the design
 const Footer = () => {

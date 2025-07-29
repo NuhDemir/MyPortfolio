@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useRef, useEffect } from "react";
-import playSvg from "../../../public/icons/play.svg";
-import pauseSvg from "../../../public/icons/pause.svg";
-import nextSvg from "../../../public/icons/next.svg";
+import playSvg from "../../assets/icons/play.svg";
+import pauseSvg from "../../assets/icons/pause.svg";
+import nextSvg from "../../assets/icons/next.svg";
 
 // Option 1: Import audio files directly (preferred in React)
 // import audioFile1 from "/audio/alisamadim.mp3";
