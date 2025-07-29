@@ -7,10 +7,10 @@ import Modal from "../common/Modal.jsx"; // Modal'ı import et
 import useGsapAnimations from "../../hooks/useAboutGsapAnimation.js"; // GSAP hook'unu import et
 
 // İkonları ve İçerikleri import et
-import ProgrammingLangSvg from "../../assets/icons/about/programmingLanguage.svg";
-import DevToolsTechSvg from "../../assets/icons/about/DevToolsTech.svg";
-import PodcastTalksSvg from "../../assets/icons/about/PodcastTalks.svg";
-import ProjectsWorkSvg from "../../assets/icons/about/ProjectsWork.svg";
+import ProgrammingLangSvg from "/icons/about/programmingLanguage.svg";
+import DevToolsTechSvg from "/icons/about/DevToolsTech.svg";
+import PodcastTalksSvg from "/icons/about/PodcastTalks.svg";
+import ProjectsWorkSvg from "/icons/about/ProjectsWork.svg";
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
 import PodcastTalksContent from "./ServiceCard/ModalContents/PodcastTalksContent.jsx";
@@ -26,7 +26,7 @@ const services = [
     id: "programming",
     icon: ProgrammingLangSvg,
     iconBgColor: "#ffdc58",
-   
+
     title: "Programming Lang",
     description: "Modern dillerle ölçeklenebilir kod yazma.",
     modalContent: <ProgrammingLangContent />,
@@ -35,7 +35,7 @@ const services = [
     id: "devtools",
     icon: DevToolsTechSvg,
     iconBgColor: "#9c27b0",
-   
+
     title: "Dev Tools & Tech",
     description: "Verimlilik için en yeni araçları kullanma.",
     modalContent: <DevToolsTechContent />,
@@ -44,7 +44,7 @@ const services = [
     id: "podcast",
     icon: PodcastTalksSvg,
     iconBgColor: "#f44336",
-   
+
     title: "Podcast & Talks",
     description: "Bilgi ve teknoloji trendlerini paylaşma.",
     modalContent: <PodcastTalksContent />,
@@ -53,7 +53,7 @@ const services = [
     id: "projects",
     icon: ProjectsWorkSvg,
     iconBgColor: "#2196f3",
-    
+
     title: "Projects & Work",
     description: "Kalite odaklı etkili projeler sunma.",
     modalContent: <ProjectsWorkContent />,

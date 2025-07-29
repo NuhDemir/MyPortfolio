@@ -1,12 +1,12 @@
 import React, { forwardRef, useState, useRef, useEffect } from "react";
-import playSvg from "../../assets/icons/play.svg";
-import pauseSvg from "../../assets/icons/pause.svg";
-import nextSvg from "../../assets/icons/next.svg";
+import playSvg from "/icons/play.svg";
+import pauseSvg from "/icons/pause.svg";
+import nextSvg from "/icons/next.svg";
 
 // Option 1: Import audio files directly (preferred in React)
-// import audioFile1 from "../../assets/audio/alisamadim.mp3";
-// import audioFile2 from "../../assets/audio/ardina-bakma-yolcu.mp3";
-// import audioFile3 from "../../assets/audio/uzun-ince-bir-yoldayim.mp3";
+// import audioFile1 from "/audio/alisamadim.mp3";
+// import audioFile2 from "/audio/ardina-bakma-yolcu.mp3";
+// import audioFile3 from "/audio/uzun-ince-bir-yoldayim.mp3";
 
 const AudioControls = forwardRef((props, ref) => {
   const [isPlaying, setIsPlaying] = useState(false);

@@ -1,6 +1,6 @@
 // src/components/Comments/CommentsHeader.jsx (veya dosya yolu neyse)
 import React from "react";
-import CommentsHeaderSvg from "../../assets/icons/comments/commentsHeader.svg";
+import CommentsHeaderSvg from "/icons/comments/commentsHeader.svg";
 import useCommentHeaderAnimation from "../../hooks/useCommentHeaderAnimation"; // Yeni hook'u import et
 import "./style/Comments.scss"; // Veya ilgili CSS dosyanız
 

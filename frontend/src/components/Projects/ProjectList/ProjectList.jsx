@@ -5,9 +5,9 @@ import { getProjects } from "../../../services/projectService";
 import LoadingSpinner from "../../common/LoadingSpinner";
 import ErrorMessage from "../../common/ErrorMessage";
 import "./ProjectList.css";
-import MyProjectsSvg from "../../../assets/icons/MyProject.svg";
-import leftArrowIcon from "../../../assets/icons/arrows/left-arrow.svg";
-import rightArrowIcon from "../../../assets/icons/arrows/right-arrow.svg";
+import MyProjectsSvg from "/icons/MyProject.svg";
+import leftArrowIcon from "/icons/arrows/left-arrow.svg";
+import rightArrowIcon from "/icons/arrows/right-arrow.svg";
 
 const ProjectList = () => {
   const [projects, setProjects] = useState([]);
