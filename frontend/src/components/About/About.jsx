@@ -24,7 +24,7 @@ const GITHUB_USERNAME = "NuhDemir";
 const services = [
   {
     id: "programming",
-    icon: <ProgrammingLangSvg />,
+    icon: ProgrammingLangSvg,
     iconBgColor: "#ffdc58",
 
     title: "Programming Lang",
@@ -33,7 +33,7 @@ const services = [
   },
   {
     id: "devtools",
-    icon: <DevToolsTechSvg />,
+    icon: DevToolsTechSvg,
     iconBgColor: "#9c27b0",
 
     title: "Dev Tools & Tech",
@@ -42,7 +42,7 @@ const services = [
   },
   {
     id: "podcast",
-    icon: <PodcastTalksSvg />,
+    icon: PodcastTalksSvg,
     iconBgColor: "#f44336",
 
     title: "Podcast & Talks",
@@ -51,7 +51,7 @@ const services = [
   },
   {
     id: "projects",
-    icon: <ProjectsWorkSvg />,
+    icon: ProjectsWorkSvg,
     iconBgColor: "#2196f3",
 
     title: "Projects & Work",
