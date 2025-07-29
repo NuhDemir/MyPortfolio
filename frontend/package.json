@@ -16,6 +16,7 @@
     "@mui/icons-material": "^7.1.0",
     "@mui/material": "^7.1.0",
     "axios": "^1.10.0",
+    "lucide-react": "^0.534.0",
     "myportfolio": "file:",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

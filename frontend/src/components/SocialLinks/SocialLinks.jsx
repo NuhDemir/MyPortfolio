@@ -1,114 +1,97 @@
-// frontend/src/components/SocialLinks/SocialLinks.jsx
-import React, { useState } from "react";
-import "./style/SocialLinks.css";
+import React, { useState, useRef, useEffect } from "react";
+import { Github, Youtube, Linkedin, Instagram, FileText } from "lucide-react";
+import { useSound } from "../../hooks/useSound";
 import SocialLinkSplash from "./SocialLinkSplash";
+import "./style/SocialLinks.css";
 import NuhDemirCV from "../../cv/NuhDemirCV.pdf";
+
+// Merkezi Konfigürasyon: Linkleri, ikonları ve mesajları tek bir yerden yönet
+const socialLinksConfig = [
+  {
+    name: "Github",
+    href: "https://github.com/NuhDemir",
+    Icon: Github,
+    message: "GitHub reposu yükleniyor...",
+  },
+  {
+    name: "YouTube",
+    href: "https://www.youtube.com/@Yaz%C4%B1l%C4%B1mK%C4%B1raathanesi",
+    Icon: Youtube,
+    message: "YouTube kanalı açılıyor...",
+  },
+  {
+    name: "CV",
+    href: NuhDemirCV,
+    Icon: FileText,
+    isExternal: false,
+    message: "CV belgesi hazırlanıyor...",
+  },
+  {
+    name: "LinkedIn",
+    href: "https://www.linkedin.com/in/nuh-demir-69b737261/",
+    Icon: Linkedin,
+    message: "LinkedIn profili getiriliyor...",
+  },
+  {
+    name: "Instagram",
+    href: "https://www.instagram.com/yazilimkiraathanesi/",
+    Icon: Instagram,
+    message: "Instagram sayfasına bağlanılıyor...",
+  },
+];
 
 const SocialLinks = () => {
   const [loading, setLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
+  const timeoutRef = useRef(null);
 
-  const handleLinkClick = (e, href, isExternal = true, message = "") => {
+  // Sesleri hook ile tanımla
+  const playHoverSound = useSound("/audio/hover-click.mp3", 0.2);
+  const playClickSound = useSound("/audio/action-click.mp3", 0.4);
+
+  useEffect(() => {
+    return () => clearTimeout(timeoutRef.current);
+  }, []);
+
+  const handleLinkClick = (e, link) => {
     e.preventDefault();
-    setLoadingMessage(message);
+    playClickSound(); // Tıklama sesini çal
+
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+
+    setLoadingMessage(link.message);
     setLoading(true);
 
-    setTimeout(() => {
-      if (isExternal) {
-        window.location.href = href;
+    timeoutRef.current = setTimeout(() => {
+      if (link.isExternal !== false) {
+        window.location.href = link.href;
       } else {
-        window.open(href, "_blank");
-        // Splash ekranını kapatmak için ek gecikme
-        setTimeout(() => {
-          setLoading(false);
-        }, 1500);
+        window.open(link.href, "_blank");
+        timeoutRef.current = setTimeout(() => setLoading(false), 1200);
       }
-    }, 1000); // Splash görünme süresi
+    }, 800);
   };
 
   return (
     <>
-      <div className="social-links">
-        <a
-          href="https://github.com/NuhDemir"
-          className="social-link"
-          onClick={(e) =>
-            handleLinkClick(
-              e,
-              "https://github.com/NuhDemir",
-              true,
-              "GitHub açılıyor..."
-            )
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub profilini ziyaret et"
-        >
-          Github
-        </a>
-        <a
-          href="https://www.youtube.com/@Yaz%C4%B1l%C4%B1mK%C4%B1raathanesi"
-          className="social-link"
-          onClick={(e) =>
-            handleLinkClick(
-              e,
-              "https://www.youtube.com/@Yaz%C4%B1l%C4%B1mK%C4%B1raathanesi",
-              true,
-              "YouTube açılıyor..."
-            )
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="YouTube kanalını ziyaret et"
-        >
-          Youtube
-        </a>
-        <a
-          href={NuhDemirCV}
-          className="social-link"
-          onClick={(e) =>
-            handleLinkClick(e, NuhDemirCV, false, "CV görüntüleniyor...")
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="CV'yi görüntüle"
-        >
-          CV
-        </a>
-        <a
-          href="https://www.linkedin.com/in/nuh-demir-69b737261/"
-          className="social-link"
-          onClick={(e) =>
-            handleLinkClick(
-              e,
-              "https://www.linkedin.com/in/nuh-demir-69b737261/",
-              true,
-              "LinkedIn açılıyor..."
-            )
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="LinkedIn profilini ziyaret et"
-        >
-          LinkedIn
-        </a>
-        <a
-          href="https://www.instagram.com/yazilimkiraathanesi/"
-          className="social-link"
-          onClick={(e) =>
-            handleLinkClick(
-              e,
-              "https://www.instagram.com/yazilimkiraathanesi/",
-              true,
-              "Instagram açılıyor..."
-            )
-          }
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram profilini ziyaret et"
-        >
-          Instagram
-        </a>
+      <div className="social-links-container">
+        <div className="social-links-grid">
+          {socialLinksConfig.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              className="social-button"
+              onMouseEnter={playHoverSound}
+              onClick={(e) => handleLinkClick(e, link)}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${link.name} profilini ziyaret et`}
+            >
+              <link.Icon className="social-icon" size={20} strokeWidth={2} />
+              <span className="social-text">{link.name}</span>
+            </a>
+          ))}
+        </div>
       </div>
       <SocialLinkSplash show={loading} message={loadingMessage} />
     </>

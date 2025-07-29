@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import "./style/Navbar.css";
 import { useTheme } from "../../context/ThemeContext";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
+import { useSound } from "../../hooks/useSound"; // Ses hook'unu import et
 
 // SVG dosyaları
 import iconSvgUrl from "/assets/icons/navitem/icon.svg";
@@ -23,6 +24,10 @@ export const Navbar = ({
   const [showFullMenu, setShowFullMenu] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Sesleri tanımla
+  const playHoverSound = useSound("/audio/hover-click.mp3", 0.2);
+  const playClickSound = useSound("/audio/action-click.mp3", 0.4);
+
   useScrollAnimation(iconRef);
 
   useEffect(() => {
@@ -39,12 +44,30 @@ export const Navbar = ({
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobileMenuOpen]);
 
+  // Tıklama olaylarını yöneten yardımcı fonksiyonlar
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
+
   const handleNavClick = (scrollFunction) => {
+    playClickSound(); // Tıklama sesini çal
     if (scrollFunction) scrollFunction();
     closeMobileMenu();
   };
-  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+
+  const toggleMobileMenu = () => {
+    playClickSound(); // Tıklama sesini çal
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleThemeToggle = () => {
+    playClickSound(); // Tıklama sesini çal
+    toggleTheme();
+  };
+
+  const handleIconClick = () => {
+    playClickSound(); // Tıklama sesini çal
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    closeMobileMenu();
+  };
 
   const navItemsData = [
     { label: "About", action: () => handleNavClick(onScrollToAbout) },
@@ -54,8 +77,10 @@ export const Navbar = ({
 
   return (
     <>
+      {/* Tema Değiştirme Butonu */}
       <button
-        onClick={toggleTheme}
+        onClick={handleThemeToggle}
+        onMouseEnter={playHoverSound}
         className="theme-toggle-button"
         aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
       >
@@ -66,10 +91,12 @@ export const Navbar = ({
         )}
       </button>
 
+      {/* Mobil Menü İkonu (Hamburger/Kapatma) */}
       {!showFullMenu && (
         <div
           className="navbar-icon-fixed"
           onClick={toggleMobileMenu}
+          onMouseEnter={playHoverSound}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu-list"
         >
@@ -80,24 +107,26 @@ export const Navbar = ({
         </div>
       )}
 
+      {/* Ana Navbar Konteyneri */}
       <div
         className={`navbar-background-container ${
           showFullMenu ? "" : "navbar-hidden"
         }`}
       >
         <div className="navbar-container">
-          <div className="icon-container">
+          <div
+            className="icon-container"
+            onClick={handleIconClick}
+            onMouseEnter={playHoverSound}
+            style={{ cursor: "pointer" }}
+          >
             <img
               ref={iconRef}
               src={iconSvgUrl}
               alt="Icon"
               width="24px"
               height="24px"
-              onClick={() => {
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                closeMobileMenu();
-              }}
-              style={{ cursor: "pointer", display: "block" }}
+              style={{ display: "block" }}
             />
           </div>
 
@@ -107,6 +136,7 @@ export const Navbar = ({
                 key={item.label}
                 className="nav-item"
                 onClick={item.action}
+                onMouseEnter={playHoverSound}
                 role="button"
                 tabIndex={0}
                 onKeyPress={(e) => e.key === "Enter" && item.action()}
@@ -116,12 +146,14 @@ export const Navbar = ({
             ))}
           </div>
 
+          {/* Köşe Noktaları */}
           <div className="decorative-dot" style={{ left: -3, top: -3 }} />
           <div className="decorative-dot" style={{ right: -3, top: -3 }} />
           <div className="decorative-dot" style={{ left: -3, bottom: -3 }} />
           <div className="decorative-dot" style={{ right: -3, bottom: -3 }} />
         </div>
 
+        {/* Alt Çizgi SVG'si */}
         {showFullMenu && (
           <div className="navbar-outline">
             <img src={LineSvg} alt="" aria-hidden="true" />
@@ -129,6 +161,7 @@ export const Navbar = ({
         )}
       </div>
 
+      {/* Açılan Mobil Menü */}
       {isMobileMenuOpen && !showFullMenu && (
         <div className="mobile-menu" id="mobile-menu-list" role="menu">
           {navItemsData.map((item) => (
@@ -136,6 +169,7 @@ export const Navbar = ({
               key={item.label}
               className="nav-item"
               onClick={item.action}
+              onMouseEnter={playHoverSound}
               role="menuitem"
               tabIndex={0}
               onKeyPress={(e) => e.key === "Enter" && item.action()}

@@ -1,33 +1,18 @@
-:root {
-  --splash-primary: #0cb845;
-  --splash-primary-darker: #678d74;
-  --splash-secondary: #dad8c5;
-  --splash-accent: #a3c4a8;
-  --splash-accent-hover: #89ab8e;
-  --splash-bg: #36b069;
-  --splash-paper: #ffffff;
-  --splash-text-primary: #2d2d2d;
-  --splash-text-secondary: #4a4a4a;
-  --splash-border: #1c733a;
-  --neubrutal-shadow: 8px 8px 0px;
-  --neubrutal-border: 4px solid;
-}
-
+/* Ana Splash Konteyneri */
 .splashContainer {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(135deg, #cce3d1, #36b069, #a3c4a8);
+  /* global.css'teki tema renklerini kullanıyoruz */
+  background-color: var(--color-background-page);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
   overflow: hidden;
-  border: var(--neubrutal-border) var(--splash-primary);
-  box-shadow: inset var(--neubrutal-shadow) var(--splash-primary-darker);
-  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .splashContainer.hide {
@@ -35,43 +20,17 @@
   pointer-events: none;
 }
 
-.matrixCanvas {
+/* Arka Plan Parçacıkları için Canvas */
+.particleCanvas {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
-  filter: blur(0.5px) brightness(0.8);
+  z-index: 0;
 }
 
-.scanlineOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(12, 184, 69, 0.1) 2px,
-    rgba(12, 184, 69, 0.1) 4px
-  );
-  animation: scanlines 0.1s linear infinite;
-  mix-blend-mode: screen;
-}
-
-@keyframes scanlines {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(4px);
-  }
-}
-
+/* Ana İçerik Alanı */
 .mainContent {
   position: relative;
   z-index: 10;
@@ -81,129 +40,85 @@
   text-align: center;
 }
 
+/* Harfleri Saran Konteyner */
 .lettersContainer {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-bottom: 40px;
-  perspective: 1000px;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  perspective: 1200px; /* 3D efekt için */
 }
 
+/* Her harfin 3D dönüşü için sarmalayıcı */
+.letterWrapper {
+  transform-style: preserve-3d;
+}
+
+/* Her Bir Harfin Stili */
 .splashLetter {
   display: inline-block;
   font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: 6rem;
-  font-weight: 900;
-  color: var(--splash-text-primary);
-  text-shadow: 0 0 10px var(--splash-accent), 0 0 20px var(--splash-accent),
-    0 0 30px var(--splash-accent);
-  margin: 0 0.2rem;
+  font-size: clamp(3rem, 12vw, 6rem);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  background: var(--color-background-paper);
+  border: 3px solid var(--color-text-primary);
+  border-radius: var(--border-radius-base);
+  padding: 0.5rem 1rem;
+  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+
+  /* Animasyon başlangıç durumu (GSAP tarafından kontrol edilecek) */
   opacity: 0;
-  transform: translateY(100px) rotateX(-90deg) scale(0.5);
-  background: var(--splash-paper);
-  border: var(--neubrutal-border) var(--splash-primary);
-  padding: 10px 15px;
-  box-shadow: var(--neubrutal-shadow) var(--splash-primary-darker);
-  position: relative;
-  overflow: hidden;
+  transform: translateY(50px) rotateX(-90deg);
 }
 
-.splashLetter::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(12, 184, 69, 0.3),
-    transparent
-  );
-  animation: letterScan 2s ease-in-out infinite;
+/* Boşluk karakteri için özel stil (görünmez kutu) */
+.splashLetter:empty {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
 }
 
-@keyframes letterScan {
-  0% {
-    left: -100%;
-  }
-  50% {
-    left: 100%;
-  }
-  100% {
-    left: -100%;
-  }
-}
-
+/* Alt Başlık */
 .subtitleContainer {
-  margin-bottom: 50px;
+  margin-bottom: 2.5rem;
 }
 
 .subtitle {
+  display: inline-block;
   font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--splash-paper);
-  background: var(--splash-primary);
-  padding: 15px 30px;
-  border: var(--neubrutal-border) var(--splash-text-primary);
-  box-shadow: var(--neubrutal-shadow) var(--splash-primary-darker);
-  letter-spacing: 3px;
-  opacity: 0;
-  transform: translateX(-50px) skew(-10deg);
-}
-
-.loaderContainer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-}
-
-.loaderBar {
-  width: 400px;
-  height: 20px;
-  background: var(--splash-paper);
-  border: var(--neubrutal-border) var(--splash-primary);
-  box-shadow: var(--neubrutal-shadow) var(--splash-primary-darker);
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(30px);
-}
-
-.loaderBar::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--splash-primary),
-    var(--splash-accent),
-    var(--splash-primary)
-  );
-  box-shadow: 0 0 10px var(--splash-accent),
-    inset 0 0 10px rgba(12, 184, 69, 0.5);
-}
-
-.loaderText {
-  font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 4vw, 1.25rem);
   font-weight: 600;
-  color: var(--splash-text-primary);
-  background: var(--splash-paper);
-  padding: 10px 20px;
-  border: var(--neubrutal-border) var(--splash-primary);
-  box-shadow: var(--neubrutal-shadow) var(--splash-primary-darker);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-paper);
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--color-text-primary);
+  box-shadow: 4px 4px 0px 0px var(--color-text-primary);
   letter-spacing: 2px;
+
+  /* Animasyon başlangıç durumu */
   opacity: 0;
-  transform: translateY(20px);
 }
 
+/* Yükleme Çubuğu */
+.loaderContainer {
+  width: 300px;
+  height: 16px;
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  padding: 4px;
+
+  /* Animasyon başlangıç durumu */
+  opacity: 0;
+}
+
+.loaderBarFill {
+  width: 0%; /* Genişlik GSAP tarafından kontrol edilecek */
+  height: 100%;
+  background-color: var(--color-primary);
+}
+
+/* Köşe Dekorasyonları */
 .cornerDecorations {
   position: absolute;
   width: 100%;
@@ -212,17 +127,11 @@
   pointer-events: none;
 }
 
-.cornerTopLeft,
-.cornerTopRight,
-.cornerBottomLeft,
-.cornerBottomRight {
+.corner {
   position: absolute;
-  width: 80px;
-  height: 80px;
-  border: var(--neubrutal-border) var(--splash-primary);
-  background: rgba(12, 184, 69, 0.1);
-  box-shadow: var(--neubrutal-shadow) var(--splash-primary-darker),
-    inset 0 0 20px rgba(163, 196, 168, 0.2);
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-text-primary);
 }
 
 .cornerTopLeft {
@@ -230,7 +139,6 @@
   left: 20px;
   border-right: none;
   border-bottom: none;
-  transform: rotate(0deg);
 }
 
 .cornerTopRight {
@@ -238,7 +146,6 @@
   right: 20px;
   border-left: none;
   border-bottom: none;
-  transform: rotate(90deg);
 }
 
 .cornerBottomLeft {
@@ -246,7 +153,6 @@
   left: 20px;
   border-right: none;
   border-top: none;
-  transform: rotate(-90deg);
 }
 
 .cornerBottomRight {
@@ -254,88 +160,43 @@
   right: 20px;
   border-left: none;
   border-top: none;
-  transform: rotate(180deg);
 }
 
-.noiseOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 3;
-  opacity: 0.15;
-  background-image: radial-gradient(
-      circle at 25% 25%,
-      var(--splash-accent) 2px,
-      transparent 2px
-    ),
-    radial-gradient(
-      circle at 75% 75%,
-      var(--splash-accent) 1px,
-      transparent 1px
-    );
-  background-size: 50px 50px, 30px 30px;
-  animation: noise 0.2s steps(2) infinite;
-}
-
-@keyframes noise {
-  0% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(-1px, 1px);
-  }
-  100% {
-    transform: translate(1px, -1px);
-  }
-}
-
+/* === DUYARLILIK AYARLARI === */
 @media (max-width: 768px) {
+  .lettersContainer {
+    gap: 0.5rem;
+  }
   .splashLetter {
-    font-size: 3.5rem;
-    padding: 8px 12px;
-    margin: 0 0.1rem;
+    font-size: clamp(2rem, 10vw, 3.5rem);
+    padding: 0.25rem 0.75rem;
+    box-shadow: 4px 4px 0px 0px var(--color-text-primary);
   }
 
   .subtitle {
     font-size: 1rem;
-    padding: 10px 20px;
-    letter-spacing: 2px;
+    padding: 0.5rem 1rem;
   }
 
-  .loaderBar {
-    width: 300px;
-    height: 16px;
-  }
-
-  .loaderText {
-    font-size: 1rem;
-    padding: 8px 15px;
+  .loaderContainer {
+    width: 250px;
+    height: 14px;
   }
 }
 
 @media (max-width: 480px) {
+  .lettersContainer {
+    gap: 0.25rem;
+  }
   .splashLetter {
-    font-size: 2.5rem;
-    padding: 6px 10px;
+    font-size: clamp(1.5rem, 8vw, 2.5rem);
+    border-width: 2px;
+    box-shadow: 3px 3px 0px 0px var(--color-text-primary);
   }
 
-  .subtitle {
-    font-size: 0.9rem;
-    padding: 8px 16px;
-  }
-
-  .loaderBar {
-    width: 250px;
-    height: 14px;
-  }
-
-  .cornerTopLeft,
-  .cornerTopRight,
-  .cornerBottomLeft,
-  .cornerBottomRight {
-    width: 60px;
-    height: 60px;
+  .corner {
+    width: 30px;
+    height: 30px;
+    border-width: 2px;
   }
 }

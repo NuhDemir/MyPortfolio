@@ -1,51 +1,42 @@
-// src/components/Projects/ProjectCard/ProjectCard.jsx
 import React from "react";
-import "./ProjectCard.css"; // CSS dosyasının adı doğru olmalı, eğer farklıysa düzeltin
-import GoToProjectArrowSvg from "/assets/icons/project/GoToProjectArrow.svg";
-import imageSvg from "/assets/icons/img/image.svg"; // Varsayılan görsel için
+import { ArrowUpRight } from "lucide-react";
+import "./ProjectCard.css";
+import imageSvg from "/assets/icons/img/image.svg";
 
-const ProjectCard = ({
-  title = "Proje Başlığı",
-  description = "Proje açıklaması buraya gelecek.",
-  link = "#",
-  image, // Bu prop GitHub'dan gelen görsel URL'si olacak
-}) => {
-  const imageSource = image || imageSvg; // Eğer GitHub'dan görsel gelmezse varsayılanı kullan
+const ProjectCard = ({ project, onClick }) => {
+  const { title, description, imageUrl, tags } = project;
+  const imageSource = imageUrl || imageSvg;
+  // Kartın altındaki renkli şerit için ilk etiketi alıyoruz
+  const primaryTag = tags[0] || "Proje";
 
   return (
-    <div className="project-card-wrapper">
-      <div className="project-card">
-        <div className="project-card-image-container">
+    <div className="project-card-v2-wrapper" onClick={() => onClick(project)}>
+      <div className="project-card-v2">
+        <div className="project-card-v2-image-container">
           <img
             src={imageSource}
             alt={`${title} Proje Görseli`}
-            className="project-card-image"
+            className="project-card-v2-image"
           />
         </div>
-        <div className="project-card-content">
-          <div className="project-card-header">
-            <h3 className="project-card-title" title={title}>
-              {title}
-            </h3>
-            <a
-              href={link}
-              className="project-card-link"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${title} projesine git`}
-            >
-              <img
-                src={GoToProjectArrowSvg}
-                alt="Projeye Git"
-                className="project-link-icon"
-              />
-            </a>
+        <div className="project-card-v2-content">
+          <div className="project-card-v2-tags">
+            {/* Sadece ilk 3 etiketi gösterelim */}
+            {tags.slice(0, 3).map((tag, index) => (
+              <span key={index} className="project-card-v2-tag">
+                {tag}
+              </span>
+            ))}
           </div>
-          <p className="project-card-description">
-            {description || "Açıklama mevcut değil."}
-          </p>
+          <h3 className="project-card-v2-title">{title}</h3>
+          <p className="project-card-v2-description">{description}</p>
+          <div className="project-card-v2-footer">
+            <span>Detayları Gör</span>
+            <ArrowUpRight size={20} className="project-card-v2-arrow" />
+          </div>
         </div>
       </div>
+      <div className="project-card-v2-primary-tag">{primaryTag}</div>
     </div>
   );
 };

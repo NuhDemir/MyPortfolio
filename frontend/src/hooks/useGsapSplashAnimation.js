@@ -1,144 +1,155 @@
 import { useEffect, useState } from "react";
-import { gsap } from "gsap";
+import gsap from "gsap";
 
 export const useGsapSplashAnimation = (
-  containerRef,
+  splashContainerRef,
   lettersRef,
-  matrixCanvasRef,
-  loaderRef,
+  particleCanvasRef,
+  subtitleRef,
+  loaderBarFillRef,
+  loaderContainerRef,
   onComplete
 ) => {
   const [animationComplete, setAnimationComplete] = useState(false);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    const letters = lettersRef.current;
-    const canvas = matrixCanvasRef.current;
-    const loader = loaderRef.current;
+  useEffect(
+    () => {
+      // Referansların varlığını kontrol et
+      const elements = [
+        splashContainerRef.current,
+        ...lettersRef.current,
+        particleCanvasRef.current,
+        subtitleRef.current,
+        loaderBarFillRef.current,
+        loaderContainerRef.current,
+      ];
+      if (elements.some((el) => !el)) return;
 
-    if (!container || !letters.length || !canvas || !loader) return;
-
-    const hasPlayedAnimation = sessionStorage.getItem("matrixSplashPlayed");
-    if (hasPlayedAnimation) {
-      setAnimationComplete(true);
-      if (onComplete) onComplete();
-      gsap.set(container, { autoAlpha: 0 });
-      return;
-    }
-
-    // Basit matrix efekti
-    const ctx = canvas.getContext("2d");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const matrixChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    const fontSize = 16;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(0);
-
-    const drawMatrix = () => {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.08)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#00ff00";
-      ctx.font = `${fontSize}px Courier New`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const char =
-          matrixChars[Math.floor(Math.random() * matrixChars.length)];
-        const x = i * fontSize;
-        const y = drops[i] * fontSize;
-
-        ctx.fillText(char, x, y);
-
-        if (y > canvas.height && Math.random() > 0.98) {
-          drops[i] = 0;
-        }
-        drops[i]++;
+      // Animasyonu daha önce oynatıldıysa atla
+      const hasPlayed = sessionStorage.getItem("splashAnimationPlayed");
+      if (hasPlayed) {
+        setAnimationComplete(true);
+        if (onComplete) onComplete();
+        gsap.set(splashContainerRef.current, { display: "none" });
+        return;
       }
-    };
 
-    const matrixInterval = setInterval(drawMatrix, 80);
+      // Canvas ve Parçacık Sistemi
+      const canvas = particleCanvasRef.current;
+      const ctx = canvas.getContext("2d");
+      let particles = [];
+      const resizeCanvas = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
 
-    // Başlangıç durumu
-    gsap.set(container, { autoAlpha: 1 });
-    gsap.set(letters, { opacity: 0, y: 50 });
-    gsap.set(".subtitle", { opacity: 0 });
-    gsap.set(loader, { opacity: 0 });
+      const createParticles = () => {
+        const particleCount = 70;
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            vx: (Math.random() - 0.5) * 1,
+            vy: (Math.random() - 0.5) * 1,
+            size: Math.random() * 2 + 1,
+            // Temadan renk al (örnek)
+            color:
+              Math.random() > 0.5
+                ? "var(--color-primary)"
+                : "var(--color-accent)",
+          });
+        }
+      };
 
-    const tl = gsap.timeline({
-      onComplete: () => {
-        clearInterval(matrixInterval);
-        gsap.to(container, {
-          autoAlpha: 0,
-          duration: 0.8,
-          ease: "power2.inOut",
-          onComplete: () => {
-            setAnimationComplete(true);
-            sessionStorage.setItem("matrixSplashPlayed", "true");
-            if (onComplete) onComplete();
-          },
+      const animateParticles = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
         });
-      },
-    });
+        requestAnimationFrame(animateParticles);
+      };
 
-    // Basit animasyon sırası
-    tl.to(loader, {
-      opacity: 1,
-      duration: 0.5,
-      ease: "power2.out",
-    })
-      .to(
-        loader,
+      createParticles();
+      animateParticles();
+
+      // GSAP Animasyon Zaman Çizelgesi (Timeline)
+      const tl = gsap.timeline({
+        onComplete: () => {
+          gsap.to(splashContainerRef.current, {
+            opacity: 0,
+            duration: 0.6,
+            ease: "power2.inOut",
+            onComplete: () => {
+              setAnimationComplete(true);
+              sessionStorage.setItem("splashAnimationPlayed", "true");
+              if (onComplete) onComplete();
+            },
+          });
+        },
+      });
+
+      // Animasyon sekansı
+      tl.to(
+        loaderContainerRef.current,
         {
-          scaleX: 1,
-          duration: 1.5,
-          ease: "power2.inOut",
-          onUpdate: function () {
-            const progress = this.progress();
-            if (loader) {
-              loader.style.setProperty("--progress", `${progress * 100}%`);
-            }
+          opacity: 1,
+          duration: 0.5,
+          ease: "power2.out",
+        },
+        "+=0.5"
+      )
+        .to(
+          loaderBarFillRef.current,
+          {
+            width: "100%",
+            duration: 1.5,
+            ease: "power2.inOut",
           },
-        },
-        "+=0.2"
-      )
-      .to(
-        letters,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.08,
-          ease: "power2.out",
-        },
-        "-=0.5"
-      )
-      .to(
-        ".subtitle",
-        {
-          opacity: 1,
-          duration: 0.4,
-          ease: "power2.out",
-        },
-        "-=0.2"
-      )
-      .to({}, { duration: 0.8 }); // Son bekleyiş
+          "-=0.2"
+        )
+        .to(
+          lettersRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+          },
+          "-=1"
+        )
+        .to(
+          subtitleRef.current,
+          {
+            opacity: 1,
+            duration: 0.7,
+            ease: "power3.out",
+          },
+          "-=0.5"
+        )
+        .to({}, { duration: 0.5 }); // Sonunda kısa bir bekleme süresi
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      tl.kill();
-      clearInterval(matrixInterval);
-      window.removeEventListener("resize", handleResize);
-      gsap.killTweensOf([letters, ".subtitle", loader]);
-    };
-  }, [containerRef, lettersRef, matrixCanvasRef, loaderRef, onComplete]);
+      // Temizlik fonksiyonu
+      return () => {
+        window.removeEventListener("resize", resizeCanvas);
+        tl.kill();
+      };
+    },
+    [
+      /* bağımlılıkları ekle */
+    ]
+  );
 
   return { animationComplete };
 };

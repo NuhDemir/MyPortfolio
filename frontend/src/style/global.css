@@ -15,6 +15,7 @@
   --color-background-paper-transparent: rgba(255, 255, 255, 0.20);
   --color-background-overlay: rgba(50, 70, 50, 0.05); /* Çok hafif yeşilimsi overlay */
   --color-background-tooltip: #ecebe6;
+--color-background-paper-translucent: rgba(255, 255, 255, 0.75);
 
   /* === Metin Renkleri === */
   --color-text-primary: #2d2d2d;       /* Koyu gri, yumuşak siyah yerine geçer */
@@ -140,6 +141,7 @@
   --color-background-paper-transparent: rgba(22, 27, 34, 0.95); /* %95 opak paper */
   --color-background-overlay: rgba(0, 0, 0, 0.8); /* Koyu overlay */
   --color-background-tooltip: rgba(240, 246, 252, 0.95); /* Açık tooltip arka planı */
+--color-background-paper-translucent: rgba(22, 27, 34, 0.75);
 
   --color-text-primary: #f0f6fc;                /* GitHub Dark Beyazımsı Ana Metin */
   --color-text-secondary: #8b949e;              /* GitHub Dark Gri İkincil Metin */

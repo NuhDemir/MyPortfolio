@@ -1,165 +1,123 @@
-/* frontend/src/components/Projects/ProjectList/ProjectList.css */
-
-.project-list-section {
-  padding: var(--spacing-xl) 0;
+.project-card-v2-wrapper {
   position: relative;
-  overflow: hidden;
-  background-color: var(--color-background-page);
-}
-
-.project-list-title-svg {
-  display: block;
-  margin: 0 auto var(--spacing-lg) auto;
-  max-width: 250px;
-  height: auto;
-}
-
-.project-list-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 0 var(--spacing-sm);
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.project-list-container {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: stretch;
-  width: 100%;
-  padding: var(--spacing-md) var(--spacing-xs);
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  gap: var(--spacing-lg);
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.project-list-container::-webkit-scrollbar {
-  display: none;
-}
-
-.project-list-container .project-card-wrapper {
-  flex: 0 0 auto;
-  /* Başlangıçta ~4 kart, boşlukları hesaba katarak */
-  width: calc(25% - var(--spacing-lg) * 3/4);
-  /* Daha küçük ekranlarda 4 kart sığmazsa minimum genişlik */
-  min-width: 300px; /* Bu değeri projenize göre ayarlayın, 4 kart sığmayacaksa kaydırma başlar */
-}
-
-.scroll-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  background-color: rgba(fromVar(--color-background-paper, #ffffff), 0.9); /* fromVar yoksa, rgba(var(--rgb-background-paper, 255,255,255), 0.9) gibi */
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--border-radius-circle);
-  width: 45px;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
   cursor: pointer;
-  transition: background-color var(--transition-duration-short) ease,
-              box-shadow var(--transition-duration-short) ease,
-              transform var(--transition-duration-short) ease;
-  box-shadow: var(--box-shadow-sm);
-  color: var(--color-text-primary);
-}
-.scroll-button:hover {
-  background-color: var(--color-background-paper);
-  box-shadow: var(--box-shadow-base);
-  transform: translateY(-50%) scale(1.05);
-}
-.scroll-button:active {
-  transform: translateY(-50%) scale(0.98);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.scroll-button img {
-  width: 18px;
-  height: 18px;
-  opacity: 0.7;
-  pointer-events: none;
-}
-.scroll-button:hover img {
-  opacity: 1;
-}
-
-.scroll-button-left { left: -15px; }
-.scroll-button-right { right: -15px; }
-
-.project-list-loading,
-.project-list-error,
-.project-list-empty {
-  text-align: center;
-  padding: var(--spacing-xl) var(--spacing-md);
-  color: var(--color-text-muted);
-  min-height: 200px;
+.project-card-v2 {
+  height: 100%;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: 8px 8px 0px 0px var(--color-text-primary);
+  transition: all var(--transition-duration-short) ease-out;
+}
+
+.project-card-v2-wrapper:hover .project-card-v2 {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0px 0px var(--color-text-primary);
+}
+
+.project-card-v2-image-container {
   width: 100%;
-}
-.project-list-empty {
-  font-style: italic;
-}
-
-
-@media (max-width: 1450px) { /* Maksimum genişlik konteynerı için */
-  .scroll-button-left { left: var(--spacing-xs); }
-  .scroll-button-right { right: var(--spacing-xs); }
+  aspect-ratio: 16 / 10;
+  background-color: var(--color-background-page);
+  overflow: hidden;
+  flex-shrink: 0;
+  border-bottom: 2px solid var(--color-text-primary);
 }
 
-@media (max-width: 1300px) { /* ~3 kart sığdırmaya başla */
-  .project-list-container .project-card-wrapper {
-    width: calc(33.333% - var(--spacing-lg) * 2/3);
-    min-width: 280px;
-  }
+.project-card-v2-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
-@media (max-width: 992px) { /* ~2 kart sığdırmaya başla */
-  .project-list-container .project-card-wrapper {
-    width: calc(50% - var(--spacing-lg) * 1/2);
-    min-width: 260px;
-  }
+.project-card-v2-wrapper:hover .project-card-v2-image {
+  transform: scale(1.05);
 }
 
-@media (max-width: 768px) { /* Mobil görünüm, kaydırma daha belirgin olacak */
-  .project-list-section { padding: var(--spacing-lg) 0; } /* Padding'i margin değil padding olarak güncelledim, section'a ait olmalı */
-  .project-list-title-svg { max-width: 200px; margin-bottom: var(--spacing-md); } /* margin-bottom'u biraz azalttım */
-  .project-list-wrapper { padding: 0; }
-  .project-list-container {
-    gap: var(--spacing-md);
-    padding: var(--spacing-sm) calc(var(--spacing-md) + var(--spacing-xs));
-    scroll-padding: 0 calc(var(--spacing-md) + var(--spacing-xs)); /* Kaydırma butonları için */
-  }
-  .project-list-container .project-card-wrapper {
-    width: 65%; /* Daha büyük bir yüzde, bir kartın daha fazlasını gösterir */
-    min-width: 240px; /* Mobil için minimum genişlik */
-  }
-  .scroll-button {
-    width: 40px;
-    height: 40px;
-    background-color: rgba(fromVar(--color-background-paper, #ffffff), 0.95);
-  }
-  .scroll-button img { width: 15px; height: 15px; }
-  .scroll-button-left { left: var(--spacing-sm); }
-  .scroll-button-right { right: var(--spacing-sm); }
+.project-card-v2-content {
+  padding: var(--spacing-md);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-@media (max-width: 576px) { /* En küçük mobil ekranlar */
-  .project-list-container .project-card-wrapper {
-    width: 80%; /* Neredeyse tam ekran, biraz sonraki kart görünür */
-    min-width: 220px;
-  }
-  .project-list-container {
-    padding: var(--spacing-xs) calc(var(--spacing-sm) + var(--spacing-xs));
-    scroll-padding: 0 calc(var(--spacing-sm) + var(--spacing-xs));
-    gap: var(--spacing-sm); /* Daha küçük boşluk */
-  }
-  .scroll-button-left { left: var(--spacing-xs); }
-  .scroll-button-right { right: var(--spacing-xs); }
+.project-card-v2-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.project-card-v2-tag {
+  background-color: transparent;
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: var(--border-radius-base);
+  border: 1px solid var(--color-border-primary);
+}
+
+.project-card-v2-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-heading);
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.project-card-v2-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(var(--line-height-base) * var(--font-size-sm) * 3);
+}
+
+.project-card-v2-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+}
+
+.project-card-v2-arrow {
+  transition: transform 0.3s ease;
+}
+
+.project-card-v2-wrapper:hover .project-card-v2-arrow {
+  transform: translate(4px, -4px);
+}
+
+.project-card-v2-primary-tag {
+  position: absolute;
+  bottom: -2px; /* Kartın kenarlığı ile hizalı */
+  left: 20px;
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent, var(--color-text-primary));
+  border: 2px solid var(--color-text-primary);
+  border-bottom: none;
+  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
+  padding: 4px 12px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+}
+.theme-dark .project-card-v2-primary-tag {
+  color: var(--color-background-page);
 }

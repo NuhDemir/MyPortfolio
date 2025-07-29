@@ -1,124 +1,162 @@
-/* frontend/src/components/SocialLinks/style/SocialLinks.css */
+/* Ana Konteyner: Grenli doku ve scanline efektleri içerir */
+.social-links-container {
+  padding: var(--spacing-lg) var(--spacing-md);
+  background-color: var(--color-navbar-bg-container);
+  position: relative;
+  overflow: hidden; /* Sahte elemanların taşmasını engeller */
+}
 
-.social-links {
-  position: relative; /* Eğer app-container içinde ise relative kalabilir */
+/* Grenli doku efekti için sahte eleman */
+.social-links-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,..."); /* SVG data URI for grain */
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  /* SVG Grain data URI */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Linklerin grid yapısı */
+.social-links-grid {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+
+/* Her bir sosyal link ("Tuş") */
+.social-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap; /* Küçük ekranlarda sığmazsa alt alta geçsin */
-  gap: var(--spacing-lg); /* Tema değişkeni, linkler arası boşluk */
-  background-color: var(--color-social-links-bg); /* Tema değişkeni */
-  padding: var(--spacing-md) 0; /* Tema değişkeni */
-  border-top: 1px solid var(--color-social-links-border); /* Tema değişkeni */
-  border-bottom: 1px solid var(--color-social-links-border); /* Tema değişkeni */
-  width: 100%; /* Sayfa genişliği kadar */
-  /* left: 0; Bu artık gereksiz olabilir eğer parent'ı tam genişlikteyse */
-  box-sizing: border-box;
-  z-index: 10; /* Navbar'ın altında, içeriğin üstünde olabilir */
-}
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-lg);
 
-.social-link {
-  color: var(--color-social-links-text); /* Tema değişkeni */
-  font-size: var(--font-size-lg); /* Tema değişkeni */
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   text-decoration: none;
+
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  border-radius: var(--border-radius-base);
+
+  /* 3D Tuş Efekti */
+  box-shadow: 0px 5px 0px 0px var(--color-text-primary);
+
   position: relative;
-  transition: color var(--transition-duration-short) ease;
-  padding: var(--spacing-xs) var(--spacing-sm); /* Tıklama alanını genişlet */
+  top: 0;
+  transition: all var(--transition-duration-short) ease-out;
 }
 
-.social-link::after {
-  /* Alt çizgi efekti */
-  content: "";
-  position: absolute; /* Linke göre konumlanır */
-  bottom: -2px; /* Metnin biraz altına */
-  left: 50%; /* Ortadan başlasın */
-  transform: translateX(-50%); /* Tam ortala */
-  width: 0;
-  height: 2px;
-  background-color: var(
-    --color-social-links-hover-underline
-  ); /* Tema değişkeni */
-  transition: width var(--transition-duration-short) ease;
+/* Hover ve Aktif ("Basılma") Durumları */
+.social-button:hover {
+  top: 2px;
+  box-shadow: 0px 3px 0px 0px var(--color-text-primary);
 }
 
-.social-link:hover {
-  color: var(
-    --color-social-links-text
-  ); /* Hover'da renk değişimi isteğe bağlı */
-}
-.social-link:hover::after {
-  width: 80%; /* Tam genişlik yerine biraz daha kısa hoş durabilir */
+.social-button:active {
+  top: 5px;
+  box-shadow: 0px 0px 0px 0px var(--color-text-primary);
 }
 
-/* Splash screen for social links */
-.splash-overlay {
-  /* Bu class SocialLinkSplash.jsx'e atanmalı */
+.social-icon {
+  margin-bottom: -2px; /* İkonu metinle daha iyi hizala */
+}
+
+/* === YENİ SPLASH EKRANI: Terminal Teması === */
+.splash-overlay-v2 {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--color-background-overlay); /* Tema değişkeni */
-  color: var(--color-text-on-primary); /* Overlay üzerindeki metin rengi */
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
   display: flex;
-  flex-direction: column; /* Mesajı alta almak için */
   justify-content: center;
   align-items: center;
-  z-index: 9999; /* Splash en üstte */
-  /* opacity ve visibility GSAP/hook ile yönetiliyor */
+  z-index: 9999;
 }
 
-.splash-content {
-  /* Bu class SocialLinkSplash.jsx'e atanmalı */
-  font-size: var(--font-size-h3); /* Tema değişkeni */
-  font-weight: var(--font-weight-semibold);
+.splash-content-v2 {
+  width: 90%;
+  max-width: 600px;
+  background-color: #0c0c0c;
+  border: 2px solid #555;
+  border-radius: var(--border-radius-base);
+  font-family: var(--font-family-code, "Courier New", Courier, monospace);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.splash-terminal-header {
+  background-color: #222;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-bottom: 2px solid #555;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ccc;
+  font-size: var(--font-size-sm);
+}
+
+.splash-terminal-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+.splash-terminal-buttons span {
+  width: 12px;
+  height: 12px;
+  background-color: #444;
+  border-radius: 50%;
+  border: 1px solid #666;
+}
+
+.splash-terminal-body {
   padding: var(--spacing-lg);
-  background-color: var(--color-background-paper); /* Mesaj için bir kutu */
-  color: var(--color-text-primary); /* Kutu içindeki metin rengi */
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--box-shadow-lg);
-  text-align: center;
+  color: #00ff41; /* Klasik terminal yeşili */
+  font-size: var(--font-size-md);
+  min-height: 80px;
+  display: flex;
+  align-items: center;
 }
-/* Splash için basit bir yükleme ikonu eklenebilir */
-.splash-content::before {
-  content: "";
-  display: block;
-  width: 30px;
-  height: 30px;
-  margin: 0 auto var(--spacing-md) auto;
-  border: 3px solid var(--color-spinner-track);
-  border-top-color: var(--color-spinner-active);
-  border-radius: var(--border-radius-circle);
-  animation: socialLinkSpin 1s linear infinite;
+
+.splash-prompt {
+  color: #ccc;
+  margin-right: var(--spacing-xs);
 }
-@keyframes socialLinkSpin {
-  to {
-    transform: rotate(360deg);
+
+.splash-cursor {
+  display: inline-block;
+  background-color: #00ff41;
+  width: 10px;
+  height: 1.2em;
+  animation: blink 1s steps(1) infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
   }
 }
 
-/* Responsive styles */
+/* === RESPONSIVE STİLLER === */
 @media (max-width: 768px) {
-  .social-links {
-    gap: var(--spacing-md); /* Daha az boşluk */
-    padding: var(--spacing-sm) 0;
-  }
-  .social-link {
-    font-size: var(--font-size-md); /* Daha küçük font */
-  }
-}
-
-@media (max-width: 480px) {
-  .social-links {
+  .social-links-grid {
     gap: var(--spacing-sm);
-    justify-content: space-around; /* Daha iyi dağılım */
   }
-  .social-link {
-    font-size: var(--font-size-sm);
-    padding: var(--spacing-xs);
-  }
-  .splash-content {
-    font-size: var(--font-size-lg);
+  .social-button {
+    font-size: var(--font-size-md);
+    padding: var(--spacing-sm) var(--spacing-md);
   }
 }

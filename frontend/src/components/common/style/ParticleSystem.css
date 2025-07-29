@@ -1,0 +1,85 @@
+/* Ana konteyner, tüm katmanları ve canvas'ı sarmalar. */
+.particle-canvas-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Üzerindeki tıklamaların ana içeriğe gitmesini sağlar */
+  z-index: 0; /* İçeriğin arkasında ama sayfa arkaplanının önünde */
+  overflow: hidden; /* Kenarlardan taşan efektleri gizle */
+}
+
+/* Canvas'ın kendisi */
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Parçacıkları ve parıltıyı biraz yumuşatmak için hafif bir bulanıklık */
+  filter: blur(0.5px);
+}
+
+/* Nostaljik efektler için sahte elemanlar (pseudo-elements) */
+.particle-canvas-container::before,
+.particle-canvas-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1; /* Canvas'ın üzerinde olmaları için */
+}
+
+/* VIGNETTE (Kenar Karartma) Efekti */
+.particle-canvas-container::after {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
+  opacity: 0.8;
+}
+/* Karanlık modda vignette efektini daha belirgin yap */
+.theme-dark .particle-canvas-container::after {
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* SCANLINE (Tarama Çizgisi) Efekti */
+.particle-canvas-container::before {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 3px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  opacity: 0.5;
+  animation: scanline-jitter 0.2s linear infinite;
+}
+.theme-dark .particle-canvas-container::before {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 3px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+}
+
+/* Scanline'ların hafifçe titremesini sağlayan animasyon */
+@keyframes scanline-jitter {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 4px;
+  }
+}

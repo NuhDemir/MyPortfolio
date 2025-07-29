@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "title": "Portfolyo Sitesi (Bu Proje)",
+    "description": "React, GSAP ve modern web teknolojileri kullanılarak oluşturulmuş interaktif kişisel portfolyo sitesi.",
+    "imageUrl": "/images/project-portfolio.png",
+    "liveUrl": "https://www.nuhdemir.com",
+    "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
+    "tags": ["React", "GSAP", "Vite", "CSS Variables", "Responsive"],
+    "details": "<h3>Proje Hakkında</h3><p>Bu portfolyo sitesi, modern frontend geliştirme becerilerimi sergilemek amacıyla oluşturulmuştur. Tamamen duyarlı bir tasarıma sahip olup, GSAP (GreenSock Animation Platform) ile zenginleştirilmiş akıcı animasyonlar içerir. Tema değiştirme (Açık/Koyu Mod) özelliği ve interaktif bir ses oynatıcı gibi özellikler barındırır.</p><h4>Kullanılan Teknolojiler:</h4><ul><li><strong>Frontend:</strong> React.js, Vite</li><li><strong>Animasyon:</strong> GSAP</li><li><strong>Stil:</strong> Saf CSS (CSS Değişkenleri ile), SASS</li><li><strong>Diğer:</strong> Axios, React-Router-Dom</li></ul>"
+  },
+  {
+    "id": 2,
+    "title": "E-Ticaret Platformu API",
+    "description": "Node.js, Express ve MongoDB kullanılarak geliştirilmiş, ölçeklenebilir bir e-ticaret platformu backend'i.",
+    "imageUrl": "/images/project-ecommerce.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/ecommerce-api",
+    "tags": ["Node.js", "Express", "MongoDB", "JWT", "REST API"],
+    "details": "<h3>Proje Hakkında</h3><p>Bu proje, bir e-ticaret sitesinin tüm backend altyapısını içerir. Ürün yönetimi, kullanıcı kimlik doğrulama, sepet işlemleri ve sipariş yönetimi gibi temel modüllere sahiptir. Güvenlik için JWT (JSON Web Token) tabanlı bir kimlik doğrulama sistemi kullanılmıştır.</p><h4>Özellikler:</h4><ul><li>Kullanıcı kaydı ve girişi (JWT ile)</li><li>Admin ve kullanıcı rolleri</li><li>Ürün ekleme, silme, güncelleme ve listeleme (CRUD)</li><li>Sipariş oluşturma ve yönetimi</li></ul>"
+  },
+  {
+    "id": 3,
+    "title": "Flutter İşaret Dili Çevirmeni",
+    "description": "Konuşmayı metne ve işaret dili görsellerine çeviren, Flutter ile geliştirilmiş bir mobil uygulama prototipi.",
+    "imageUrl": "/images/project-sign-language.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/flutter-sign-language",
+    "tags": ["Flutter", "Dart", "Mobil", "Erişilebilirlik"],
+    "details": "<h3>Proje Hakkında</h3><p>İşitme engelli bireylerle iletişimi kolaylaştırmayı hedefleyen bu mobil uygulama, Flutter ile cross-platform (iOS/Android) olarak geliştirilmiştir. Cihazın mikrofonundan alınan ses verisini metne çevirir ve bu metne karşılık gelen Türk İşaret Dili (TİD) görsellerini ekranda gösterir.</p><h4>Teknik Detaylar:</h4><ul><li><strong>Platform:</strong> Flutter (Dart dili ile)</li><li><strong>Konuşma-Metin:</strong> Cihazın yerel speech-to-text API'ları.</li><li><strong>UI/UX:</strong> Materyal Tasarım prensiplerine uygun, basit ve kullanıcı dostu arayüz.</li></ul>"
+  },
+  {
+    "id": 4,
+    "title": "JavaScript Öğreniyorum",
+    "description": "Temel ve ileri düzey JavaScript kavramlarını kapsayan, başlangıç seviyesindeki geliştiricilere yönelik eğitici bir kaynak.",
+    "imageUrl": "/images/project-js-learn.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/javascript-ogreniyorum",
+    "tags": ["JavaScript", "Eğitim", "Dokümantasyon"],
+    "details": "<h3>Proje Hakkında</h3><p>Bu GitHub reposu, JavaScript'e yeni başlayanlar veya bilgilerini tazelemek isteyenler için bir rehber niteliğindedir. ES6+ özellikleri, asenkron programlama, DOM manipülasyonu ve daha birçok konuyu anlaşılır örneklerle açıklamaktadır.</p><h4>İçerik Başlıkları:</h4><ul><li>Değişkenler, Veri Tipleri ve Operatörler</li><li>Fonksiyonlar ve Kapsam (Scope)</li><li>Diziler ve Nesneler</li><li>Asenkron JavaScript (Promises, async/await)</li></ul>"
+  },
+  {
+    "id": 5,
+    "title": "React Görev Yöneticisi",
+    "description": "React Context API ve Reducer kullanarak oluşturulmuş, sürükle-bırak özellikli modern bir görev yönetim panosu.",
+    "imageUrl": "/images/project-task-manager.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir",
+    "tags": ["React", "Context API", "Reducer", "Sürükle-Bırak"],
+    "details": "<h3>Proje 5 Detayları</h3><p>React'in ileri düzey state yönetimi yeteneklerini sergileyen bir proje.</p>"
+  },
+  {
+    "id": 6,
+    "title": "Next.js Blog Platformu",
+    "description": "Markdown destekli, statik site üretimi (SSG) ve sunucu tarafı render (SSR) özellikli, SEO dostu bir blog.",
+    "imageUrl": "/images/project-blog.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir",
+    "tags": ["Next.js", "Markdown", "SSG", "SEO"],
+    "details": "<h3>Proje 6 Detayları</h3><p>Next.js'in gücünü kullanarak oluşturulmuş, yüksek performanslı bir blog platformu.</p>"
+  },
+  {
+    "id": 7,
+    "title": "Veri Görselleştirme Paneli",
+    "description": "D3.js ve React kullanarak dinamik ve interaktif grafiklerle veri görselleştirmesi yapan bir dashboard.",
+    "imageUrl": "/images/project-dashboard.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir",
+    "tags": ["React", "D3.js", "Veri Görselleştirme"],
+    "details": "<h3>Proje 7 Detayları</h3><p>Büyük veri setlerini anlamlı grafiklere dönüştüren interaktif bir panel.</p>"
+  },
+  {
+    "id": 8,
+    "title": "Online Anket Uygulaması",
+    "description": "Firebase ve Vue.js ile oluşturulmuş, gerçek zamanlı sonuç takibi sunan bir anket oluşturma ve yanıtlama uygulaması.",
+    "imageUrl": "/images/project-survey.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir",
+    "tags": ["Vue.js", "Firebase", "Realtime DB"],
+    "details": "<h3>Proje 8 Detayları</h3><p>Kullanıcıların kolayca anket oluşturup paylaşabildiği gerçek zamanlı bir platform.</p>"
+  }
+]

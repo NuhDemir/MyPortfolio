@@ -1,193 +1,222 @@
-import React, { forwardRef, useState, useRef, useEffect } from "react";
-import playSvg from "/assets/icons/play.svg";
-import pauseSvg from "/assets/icons/pause.svg";
-import nextSvg from "/assets/icons/next.svg";
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
+import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
 
-// Option 1: Import audio files directly (preferred in React)
-// import audioFile1 from "/audio/alisamadim.mp3";
-// import audioFile2 from "/audio/ardina-bakma-yolcu.mp3";
-// import audioFile3 from "/audio/uzun-ince-bir-yoldayim.mp3";
+const AudioControls = forwardRef(
+  ({ onIsPlayingChange, onAudioDataChange }, ref) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [currentTime, setCurrentTime] = useState(0);
+    const [duration, setDuration] = useState(0);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [volume, setVolume] = useState(0.7);
+    const [isMuted, setIsMuted] = useState(false);
 
-const AudioControls = forwardRef((props, ref) => {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const audioRef = useRef(null);
-  const progressRef = useRef(null);
+    const audioRef = useRef(null);
+    const progressRef = useRef(null);
+    const audioContextRef = useRef(null);
+    const analyserRef = useRef(null);
+    const dataArrayRef = useRef(null);
+    const sourceRef = useRef(null);
+    const animationFrameRef = useRef(null);
 
-  // Option 1: Use imported audio files
-  // const songs = [
-  //   { file: audioFile1, name: "Alışamadım" },
-  //   { file: audioFile2, name: "Ardına Bakma Yolcu" },
-  //   { file: audioFile3, name: "Uzun İnce Bir Yoldayım - Aşık Veysel" },
-  // ];
+    const songs = [
+      { path: "/audio/alisamadim.mp3", name: "Alışamadım" },
+      { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
+      {
+        path: "/audio/uzunincebiryoldayim.mp3",
+        name: "Uzun İnce Bir Yoldayım",
+      },
+    ];
 
-  // Option 2: Use public folder (using this option in the code below)
-  const songs = [
-    { path: "/audio/alisamadim.mp3", name: "Alışamadım" },
-    { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
-    {
-      path: "/audio/uzunincebiryoldayim.mp3",
-      name: "Uzun İnce Bir Yoldayım - Aşık Veysel",
-    },
-  ];
+    const setupAudioContext = useCallback(() => {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        analyserRef.current = audioContextRef.current.createAnalyser();
+        analyserRef.current.fftSize = 256;
+        const bufferLength = analyserRef.current.frequencyBinCount;
+        dataArrayRef.current = new Uint8Array(bufferLength);
+      }
+      if (audioRef.current && !sourceRef.current) {
+        sourceRef.current = audioContextRef.current.createMediaElementSource(
+          audioRef.current
+        );
+        sourceRef.current.connect(analyserRef.current);
+        analyserRef.current.connect(audioContextRef.current.destination);
+      }
+    }, []);
 
-  // Get the current song path
-  const getCurrentSongPath = () => {
-    return songs[currentSongIndex].path;
-  };
+    useEffect(() => {
+      const randomIndex = Math.floor(Math.random() * songs.length);
+      setCurrentSongIndex(randomIndex);
+    }, []);
 
-  // Get the current song name
-  const getCurrentSongName = () => {
-    return songs[currentSongIndex].name;
-  };
+    const analyzeAudio = useCallback(() => {
+      if (analyserRef.current && dataArrayRef.current) {
+        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+        onAudioDataChange([...dataArrayRef.current]);
+      }
+      animationFrameRef.current = requestAnimationFrame(analyzeAudio);
+    }, [onAudioDataChange]);
 
-  // Initialize with a random song on component mount
-  useEffect(() => {
-    const randomIndex = Math.floor(Math.random() * songs.length);
-    setCurrentSongIndex(randomIndex);
-  }, []);
+    const togglePlay = async () => {
+      setupAudioContext();
+      if (audioContextRef.current?.state === "suspended") {
+        await audioContextRef.current.resume();
+      }
 
-  const togglePlay = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
+      const newIsPlaying = !isPlaying;
+      setIsPlaying(newIsPlaying);
+      onIsPlayingChange(newIsPlaying);
+
+      if (newIsPlaying) {
+        await audioRef.current.play();
+        analyzeAudio();
       } else {
-        const playPromise = audioRef.current.play();
-
-        // Handle play promise to catch errors
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              // Playback started successfully
-              setIsPlaying(true);
-            })
-            .catch((error) => {
-              // Auto-play was prevented
-              console.error("Playback error:", error);
-              setIsPlaying(false);
-            });
-          return;
+        audioRef.current.pause();
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
         }
       }
-      setIsPlaying(!isPlaying);
-    }
-  };
+    };
 
-  const changeToRandomSong = () => {
-    // Make sure we don't get the same song again
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * songs.length);
-    } while (newIndex === currentSongIndex && songs.length > 1);
+    const changeToRandomSong = () => {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * songs.length);
+      } while (newIndex === currentSongIndex && songs.length > 1);
 
-    setCurrentSongIndex(newIndex);
-    setCurrentTime(0);
-    setIsPlaying(false);
+      setCurrentSongIndex(newIndex);
+      setCurrentTime(0);
 
-    // If we were playing, start playing the new song immediately
-    if (isPlaying && audioRef.current) {
-      // Need to wait for the audio element to update its src
-      setTimeout(() => {
-        const playPromise = audioRef.current.play();
-        if (playPromise !== undefined) {
-          playPromise
-            .then(() => {
-              setIsPlaying(true);
-            })
-            .catch((error) => {
-              console.error("Error playing next track:", error);
-            });
+      // Şarkı değişince oynatmayı durdur ve state'i güncelle
+      const wasPlaying = isPlaying;
+      if (wasPlaying) {
+        audioRef.current.pause();
+        setIsPlaying(false);
+        onIsPlayingChange(false);
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current);
         }
-      }, 100);
-    }
-  };
+      }
 
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
+      // Eğer çalıyorsa, yeni şarkıyı hemen başlat
+      setTimeout(() => {
+        if (wasPlaying) {
+          togglePlay();
+        }
+      }, 150);
+    };
+
+    const handleVolumeChange = (e) => {
+      const newVolume = parseFloat(e.target.value);
+      setVolume(newVolume);
+      if (audioRef.current) audioRef.current.volume = newVolume;
+      if (newVolume > 0 && isMuted) setIsMuted(false);
+    };
+
+    const toggleMute = () => {
+      const newMutedState = !isMuted;
+      setIsMuted(newMutedState);
+      audioRef.current.volume = newMutedState ? 0 : volume;
+    };
+
+    const handleTimeUpdate = () => {
+      if (!audioRef.current) return;
       setCurrentTime(audioRef.current.currentTime);
-      if (progressRef.current) {
+      if (progressRef.current && audioRef.current.duration) {
         const progress =
           (audioRef.current.currentTime / audioRef.current.duration) * 100;
         progressRef.current.style.width = `${progress}%`;
       }
-    }
-  };
+    };
 
-  const handleLoadedMetadata = () => {
-    if (audioRef.current) {
+    const handleLoadedMetadata = () => {
+      if (!audioRef.current) return;
       setDuration(audioRef.current.duration);
-      // Reset progress bar
-      if (progressRef.current) {
-        progressRef.current.style.width = "0%";
-      }
-    }
-  };
+      audioRef.current.volume = isMuted ? 0 : volume;
+    };
 
-  const handleTimelineClick = (e) => {
-    if (audioRef.current) {
+    const handleTimelineClick = (e) => {
+      if (!audioRef.current || !audioRef.current.duration) return;
       const timeline = e.currentTarget;
       const rect = timeline.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
       audioRef.current.currentTime = pos * audioRef.current.duration;
-    }
-  };
+    };
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = Math.floor(time % 60);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-  };
+    const formatTime = (time) => {
+      if (isNaN(time) || time === 0) return "0:00";
+      const minutes = Math.floor(time / 60);
+      const seconds = Math.floor(time % 60);
+      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    };
 
-  // Add error handler for audio element
-  const handleError = (e) => {
-    console.error("Audio error:", e);
-    console.error("Failed to load:", getCurrentSongPath());
-  };
-
-  return (
-    <div ref={ref} className="audio-controls">
-      <div className="soundtrack-info">
-        <div className="soundtrack-label">SOUNDTRACK</div>
-        <div className="song-name">{getCurrentSongName()}</div>
+    return (
+      <div ref={ref} className="audio-controls">
+        <div className="soundtrack-info">
+          <div className="soundtrack-label">SOUNDTRACK</div>
+          <div className="song-name">{songs[currentSongIndex].name}</div>
+        </div>
+        <div className="audio-player">
+          <div className="controls-wrapper">
+            <button className="control-button play-button" onClick={togglePlay}>
+              {isPlaying ? (
+                <Pause size={28} strokeWidth={1.5} />
+              ) : (
+                <Play size={28} strokeWidth={1.5} />
+              )}
+            </button>
+            <button className="control-button" onClick={changeToRandomSong}>
+              <SkipForward size={22} strokeWidth={1.5} />
+            </button>
+            <div className="volume-control">
+              <button
+                className="control-button volume-button"
+                onClick={toggleMute}
+              >
+                {isMuted || volume === 0 ? (
+                  <VolumeX size={20} strokeWidth={1.5} />
+                ) : (
+                  <Volume2 size={20} strokeWidth={1.5} />
+                )}
+              </button>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="volume-slider"
+              />
+            </div>
+          </div>
+          <div className="timeline" onClick={handleTimelineClick}>
+            <div className="progress-bg"></div>
+            <div className="progress" ref={progressRef}></div>
+          </div>
+          <div className="time">
+            <span>{formatTime(currentTime)}</span>
+            <span>{formatTime(duration)}</span>
+          </div>
+          <audio
+            ref={audioRef}
+            src={songs[currentSongIndex].path}
+            onTimeUpdate={handleTimeUpdate}
+            onLoadedMetadata={handleLoadedMetadata}
+            onEnded={changeToRandomSong}
+            crossOrigin="anonymous"
+          />
+        </div>
       </div>
-      <div className="audio-player">
-        <div className="controls-wrapper">
-          <button className="play-button" onClick={togglePlay}>
-            {isPlaying ? (
-              <img src={pauseSvg} alt="Pause" width="65" height="65" />
-            ) : (
-              <img src={playSvg} alt="Play" width="65" height="65" />
-            )}
-          </button>
-          <button className="next-button" onClick={changeToRandomSong}>
-            <img src={nextSvg} alt="Next" width="40" height="40" />
-          </button>
-        </div>
-        <div className="timeline" onClick={handleTimelineClick}>
-          <div className="progress-bg"></div>
-          <div className="progress" ref={progressRef}></div>
-        </div>
-        <div className="time">
-          <span>{formatTime(currentTime)}</span>
-          <span>{formatTime(duration)}</span>
-        </div>
-        <audio
-          ref={audioRef}
-          src={getCurrentSongPath()}
-          onTimeUpdate={handleTimeUpdate}
-          onLoadedMetadata={handleLoadedMetadata}
-          onError={handleError}
-          onEnded={() => {
-            setIsPlaying(false);
-            // Optionally, play the next song automatically
-            // changeToRandomSong();
-          }}
-        />
-      </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default AudioControls;

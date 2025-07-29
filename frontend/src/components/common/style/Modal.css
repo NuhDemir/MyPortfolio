@@ -15,6 +15,27 @@
   visibility: hidden; /* GSAP kontrol */
   padding: var(--spacing-md); /* Kenarlardan biraz boşluk, modal taşmasın */
 }
+/* ... mevcut stillerinizin sonuna ekleyin ... */
+
+.project-modal-links {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-primary);
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.project-modal-links a {
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  color: var(--color-text-link);
+  transition: color 0.2s ease;
+}
+
+.project-modal-links a:hover {
+  color: var(--color-text-link-hover);
+  text-decoration: underline;
+}
 
 .modal-container {
   background-color: var(--color-background-paper); /* Tema değişkeni */
@@ -61,7 +82,8 @@
 .modal-close-button:hover {
   color: var(--color-text-primary); /* Tema değişkeni */
 }
-.modal-close-button svg { /* react-icons için */
+.modal-close-button svg {
+  /* react-icons için */
   display: block;
 }
 
@@ -96,7 +118,6 @@
 .modal-content a:hover {
   color: var(--color-text-link-hover);
 }
-
 
 @media (max-width: 768px) {
   .modal-container {
