@@ -1,8 +1,7 @@
-/* Ana Splash Konteyneri */
+/* === Temel Splash Konteyneri === */
 .splashContainer {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100vw;
   height: 100vh;
   background-color: var(--color-background-page);
@@ -12,9 +11,7 @@
   z-index: 9999;
   overflow: hidden;
   transition: opacity 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-  padding: var(
-    --spacing-md
-  ); /* Mobilde içeriğin kenarlara yapışmasını engeller */
+  padding: var(--spacing-md);
 }
 
 .splashContainer.hide {
@@ -22,17 +19,16 @@
   pointer-events: none;
 }
 
-/* Arka Plan Parçacıkları için Canvas */
+/* === Partikül Canvas === */
 .particleCanvas {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   z-index: 0;
 }
 
-/* Ana İçerik Alanı */
+/* === Ana İçerik === */
 .mainContent {
   position: relative;
   z-index: 10;
@@ -43,38 +39,36 @@
   width: 100%;
 }
 
-/* Harfleri Saran Konteyner */
+/* === Harf Konteyneri === */
 .lettersContainer {
   display: flex;
   justify-content: center;
-  gap: clamp(0.25rem, 2vw, 1rem); /* Ekran boyutuna göre esnek boşluk */
+  gap: clamp(0.25rem, 2vw, 1rem);
   margin-bottom: 2rem;
   perspective: 1200px;
+  flex-wrap: wrap;
 }
 
-/* Her harfin 3D dönüşü için sarmalayıcı */
+/* === Harf Sarmalayıcı === */
 .letterWrapper {
   transform-style: preserve-3d;
 }
 
-/* Her Bir Harfin Stili */
+/* === Harf Stili === */
 .splashLetter {
   display: inline-block;
   font-family: "Space Grotesk", system-ui, sans-serif;
-  font-size: clamp(
-    2rem,
-    13vw,
-    6rem
-  ); /* Ekran boyutuna göre esnek font boyutu */
+  font-size: clamp(2rem, 13vw, 6rem);
   font-weight: 700;
   color: var(--color-text-primary);
   background: var(--color-background-paper);
   border: 3px solid var(--color-text-primary);
   border-radius: var(--border-radius-base);
-  padding: 0.25em 0.5em; /* Font boyutuna göre esnek padding */
-  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+  padding: 0.25em 0.5em;
+  box-shadow: 6px 6px 0 var(--color-text-primary);
   opacity: 0;
   transform: translateY(50px) rotateX(-90deg);
+  transition: all 0.4s ease;
 }
 
 .splashLetter:empty {
@@ -83,7 +77,7 @@
   box-shadow: none;
 }
 
-/* Alt Başlık */
+/* === Alt Başlık === */
 .subtitleContainer {
   margin-bottom: 2.5rem;
 }
@@ -97,15 +91,15 @@
   background-color: var(--color-background-paper);
   padding: 0.75rem 1.5rem;
   border: 2px solid var(--color-text-primary);
-  box-shadow: 4px 4px 0px 0px var(--color-text-primary);
+  box-shadow: 4px 4px 0 var(--color-text-primary);
   letter-spacing: 2px;
   opacity: 0;
 }
 
-/* Yükleme Çubuğu */
+/* === Yükleme Çubuğu === */
 .loaderContainer {
   width: 90%;
-  max-width: 300px; /* Maksimum genişliği koru */
+  max-width: 300px;
   height: 16px;
   background-color: var(--color-background-paper);
   border: 2px solid var(--color-text-primary);
@@ -119,11 +113,10 @@
   background-color: var(--color-primary);
 }
 
-/* Köşe Dekorasyonları */
+/* === Köşe Dekorasyonları === */
 .cornerDecorations {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   z-index: 5;
   pointer-events: none;
 }
@@ -141,18 +134,21 @@
   border-right: none;
   border-bottom: none;
 }
+
 .cornerTopRight {
   top: 20px;
   right: 20px;
   border-left: none;
   border-bottom: none;
 }
+
 .cornerBottomLeft {
   bottom: 20px;
   left: 20px;
   border-right: none;
   border-top: none;
 }
+
 .cornerBottomRight {
   bottom: 20px;
   right: 20px;
@@ -161,32 +157,49 @@
 }
 
 /* === DUYARLILIK AYARLARI === */
-/* Tablet boyutunda büyük bir değişiklik gerekmiyor, clamp() çoğu işi yapıyor. */
-
-/* Mobil Cihazlar (768px ve altı) */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .splashLetter {
-    box-shadow: 4px 4px 0px 0px var(--color-text-primary);
+    font-size: clamp(1.75rem, 10vw, 4.5rem);
   }
   .subtitle {
     padding: 0.5rem 1rem;
-  }
-  .loaderContainer {
-    height: 14px;
+    font-size: clamp(0.75rem, 3vw, 1.1rem);
   }
 }
 
-/* En Küçük Mobil Cihazlar (480px ve altı) */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .splashLetter {
+    box-shadow: 4px 4px 0 var(--color-text-primary);
     border-width: 2px;
-    box-shadow: 3px 3px 0px 0px var(--color-text-primary);
-  }
-  .subtitle {
-    letter-spacing: 1px;
   }
 
-  /* Mobilde köşe dekorasyonlarını gizleyerek arayüzü sadeleştir */
+  .loaderContainer {
+    height: 14px;
+    padding: 3px;
+  }
+
+  .corner {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .splashLetter {
+    font-size: clamp(1.5rem, 12vw, 3rem);
+    box-shadow: 3px 3px 0 var(--color-text-primary);
+  }
+
+  .subtitle {
+    letter-spacing: 1px;
+    padding: 0.4rem 0.75rem;
+  }
+
+  .loaderContainer {
+    height: 12px;
+    padding: 2px;
+  }
+
   .corner {
     display: none;
   }

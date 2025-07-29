@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Layout ve Ana Sayfa Bileşenleri
+// Ana Deneyim Bileşenleri (Mevcut Siteniz)
 import { Navbar } from "./components/Navbar/Navbar.jsx";
 import Main from "./components/Main/Main.jsx";
 import About from "./components/About/About.jsx";
@@ -11,31 +11,31 @@ import MessageForm from "./components/Message/MessageForm.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import SocialLinks from "./components/SocialLinks/SocialLinks.jsx";
 import Splash from "./components/Splash/Splash.jsx";
-import ParticleSystem from "./components/common/ParticleSystem.jsx"; // Yeni parçacık sistemi
+import ParticleSystem from "./components/common/ParticleSystem.jsx";
 
-// Admin Paneli Bileşenleri (Eğer varsa)
-// import ProtectedRoute from "./components/common/ProtectedRoute.jsx";
-// import AdminLayout from "./components/Admin/AdminLayout.jsx";
-// ... diğer admin importları
+// Yeni Deneyim Sayfaları (İskelet olarak)
+import DeveloperExperience from "./pages/DeveloperExperience";
+import RecruiterExperience from "./pages/RecruiterExperience";
 
 // Özel Hook'lar ve Context
-import { useMouseLightEffect } from "./hooks/useMouseLightEffect";
+import { useDynamicCursor } from "./hooks/useDynamicCursor.js";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
+import { useUserRole } from "./context/UserRoleContext.jsx"; // Rol Context'i
 
 // Stil Dosyaları
 import "./style/global.css";
 
-// --- Ana Sayfa İçeriğini Barındıran ve State'leri Yöneten Yardımcı Bileşen ---
-const AppContent = () => {
+// --- 1. VARSAYILAN DENEYİM (Mevcut Siteniz) ---
+// Bu bileşen, henüz rol seçilmediğinde gösterilecek olan standart portfolyo sitenizdir.
+const DefaultExperience = () => {
   const { theme } = useTheme();
-
-  // Parçacık sistemi ve ses kontrolcüsü için merkezi state'ler
   const [splashComplete, setSplashComplete] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [audioData, setAudioData] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // Navbar'dan yumuşak kaydırma için ref'ler
+  useDynamicCursor(); // Dinamik imleci etkinleştir
+
   const aboutRef = useRef(null);
   const projectsRef = useRef(null);
   const contactRef = useRef(null);
@@ -50,30 +50,21 @@ const AppContent = () => {
     }
   };
 
-  // Scroll pozisyonunu dinleyen useEffect
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Mouse efektini sadece splash bittikten sonra başlat
-  useMouseLightEffect(splashComplete);
-
   return (
     <>
-      {/* Splash ekranı tamamlanana kadar gösterilir */}
       {!splashComplete && <Splash onComplete={handleSplashComplete} />}
-
-      {/* Parçacık sistemi arka planda her zaman render edilir ve state'leri prop olarak alır */}
       <ParticleSystem
         audioData={audioData}
         scrollY={scrollY}
         isDarkMode={theme === "dark"}
         isPlaying={isPlaying}
       />
-
-      {/* Ana uygulama içeriği, splash bittikten sonra görünür hale gelir */}
       <div className={`app-container ${splashComplete ? "show" : ""}`}>
         <Navbar
           onScrollToAbout={() => scrollToSection(aboutRef)}
@@ -81,15 +72,12 @@ const AppContent = () => {
           onScrollToContact={() => scrollToSection(contactRef)}
         />
         <div className="content-container">
-          {/* Main bileşenine state'leri güncelleyecek fonksiyonları prop olarak iletiyoruz */}
           <Main
             onIsPlayingChange={setIsPlaying}
             onAudioDataChange={setAudioData}
           />
         </div>
         <SocialLinks />
-
-        {/* Sayfanın diğer bölümleri */}
         <section id="about-section" ref={aboutRef}>
           <About />
         </section>
@@ -102,33 +90,44 @@ const AppContent = () => {
         <section id="contact-section" ref={contactRef}>
           <MessageForm />
         </section>
-
         <Footer />
       </div>
     </>
   );
 };
 
-// --- Ana Uygulama Bileşeni (Sadece Yönlendirme ve Tema Sağlayıcı) ---
+// --- 2. ANA UYGULAMA BİLEŞENİ (Yönlendirici) ---
 function App() {
+  const { hasSelectedRole, role } = useUserRole();
+
+  // Rol seçimine göre hangi arayüzün render edileceğini belirleyen fonksiyon
+  const renderExperience = () => {
+    // Eğer bir rol seçilmişse, ilgili deneyimi render et
+    if (hasSelectedRole) {
+      switch (role) {
+        case "developer":
+          return <DeveloperExperience />;
+        case "recruiter":
+          return <RecruiterExperience />;
+        default:
+          // Beklenmedik bir rol değeri varsa varsayılana dön
+          return <DefaultExperience />;
+      }
+    }
+    // Eğer henüz bir rol seçilmemişse, varsayılan siteyi göster
+    return <DefaultExperience />;
+  };
+
   return (
     <ThemeProvider>
+      {/* UserRoleProvider zaten main.jsx'te olduğu için burada tekrar gerek yok */}
       <Router>
-        <Routes>
-          {/* Ana sayfa ve admin dışı tüm yolları AppContent'e yönlendir */}
-          <Route path="/*" element={<AppContent />} />
-
-          {/* Admin paneli rotalarınız varsa buraya ekleyebilirsiniz: */}
-          {/* 
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<AdminDashboard />} />
-              <Route path="projects" element={<AdminProjectManagement />} />
-            </Route>
-          </Route> 
-          */}
-        </Routes>
+        {/*
+          Routes ve Route kullanmak yerine, doğrudan renderExperience fonksiyonunu çağırıyoruz.
+          Bu, tüm sayfanın "deneyim"e göre değiştiği durumlarda daha basit bir yaklaşımdır.
+          Eğer /developer, /recruiter gibi URL'ler isterseniz, o zaman Routes/Route yapısı kullanılır.
+        */}
+        {renderExperience()}
       </Router>
     </ThemeProvider>
   );

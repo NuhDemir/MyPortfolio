@@ -1,0 +1,50 @@
+[
+  {
+    "id": "proj-01",
+    "title": "Portfolyo Sitesi (Bu Proje)",
+    "description": "Kullanıcı rolüne göre dinamik olarak değişen, GSAP ve React tabanlı interaktif portfolyo.",
+    "imageUrl": "/images/project-portfolio.png",
+    "liveUrl": "https://www.nuhdemir.com",
+    "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
+    "tags": ["React", "GSAP", "Context API", "Vite", "Framer Motion"],
+    "fileName": "useDynamicCursor.js",
+    "language": "javascript",
+    "codeSnippet": "import { useEffect, useRef } from 'react';\nimport { gsap } from 'gsap';\n\nexport const useDynamicCursor = () => {\n  const cursorRef = useRef(null);\n\n  useEffect(() => {\n    if (!cursorRef.current) {\n      cursorRef.current = document.createElement('div');\n      cursorRef.current.className = 'dynamic-cursor';\n      document.body.appendChild(cursorRef.current);\n    }\n\n    const cursor = cursorRef.current;\n    const cursorXQuickTo = gsap.quickTo(cursor, 'x', { duration: 0.5, ease: 'power3' });\n    const cursorYQuickTo = gsap.quickTo(cursor, 'y', { duration: 0.5, ease: 'power3' });\n\n    // ... (daha fazla kod)\n  }, []);\n};"
+  },
+  {
+    "id": "proj-02",
+    "title": "E-Ticaret Platformu API",
+    "description": "Node.js, Express ve MongoDB ile oluşturulmuş, JWT ile güvence altına alınmış RESTful API.",
+    "imageUrl": "/images/project-ecommerce.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/ecommerce-api",
+    "tags": ["Node.js", "Express", "MongoDB", "JWT", "Mongoose"],
+    "fileName": "authMiddleware.js",
+    "language": "javascript",
+    "codeSnippet": "const jwt = require('jsonwebtoken');\n\nmodule.exports = function (req, res, next) {\n  const token = req.header('x-auth-token');\n  if (!token) {\n    return res.status(401).json({ msg: 'No token, authorization denied' });\n  }\n\n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded.user;\n    next();\n  } catch (err) {\n    res.status(401).json({ msg: 'Token is not valid' });\n  }\n};"
+  },
+  {
+    "id": "proj-03",
+    "title": "Flutter İşaret Dili Çevirmeni",
+    "description": "Konuşmayı metne ve işaret dili görsellerine çeviren, Flutter ile geliştirilmiş mobil uygulama.",
+    "imageUrl": "/images/project-sign-language.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/flutter-sign-language",
+    "tags": ["Flutter", "Dart", "Mobil", "SpeechToText"],
+    "fileName": "translator_screen.dart",
+    "language": "dart",
+    "codeSnippet": "import 'package:flutter/material.dart';\nimport 'package:speech_to_text/speech_to_text.dart' as stt;\n\nclass TranslatorScreen extends StatefulWidget {\n  @override\n  _TranslatorScreenState createState() => _TranslatorScreenState();\n}\n\nclass _TranslatorScreenState extends State<TranslatorScreen> {\n  stt.SpeechToText _speech;\n  bool _isListening = false;\n  String _text = 'Press the button and start speaking';\n\n  @override\n  void initState() {\n    super.initState();\n    _speech = stt.SpeechToText();\n  }\n\n  // ... (daha fazla kod)\n}"
+  },
+  {
+    "id": "proj-04",
+    "title": "React Görev Yöneticisi",
+    "description": "React Context API ve Reducer kullanarak oluşturulmuş, sürükle-bırak özellikli görev panosu.",
+    "imageUrl": "/images/project-task-manager.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir",
+    "tags": ["React", "Context API", "Reducer", "Drag&Drop"],
+    "fileName": "TaskContext.js",
+    "language": "jsx",
+    "codeSnippet": "import React, { createContext, useReducer } from 'react';\n\nexport const TaskContext = createContext();\n\nconst taskReducer = (state, action) => {\n  switch (action.type) {\n    case 'ADD_TASK':\n      return [...state, { id: Date.now(), text: action.payload, status: 'todo' }];\n    case 'MOVE_TASK':\n      // Logic to move task between columns\n      return state.map(task => \n        task.id === action.payload.taskId \n        ? { ...task, status: action.payload.newStatus }\n        : task\n      );\n    default:\n      return state;\n  }\n};\n\nexport const TaskProvider = ({ children }) => {\n  const [tasks, dispatch] = useReducer(taskReducer, []);\n  // ... (daha fazla kod)\n};"
+  }
+]

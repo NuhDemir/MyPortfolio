@@ -26,7 +26,6 @@
   color: var(--color-text-primary);
   margin-bottom: 0.5rem;
   line-height: 0.95;
-  word-break: break-word;
   text-transform: uppercase;
 }
 
@@ -38,6 +37,8 @@
   padding: 0.5rem 1rem;
   text-transform: uppercase;
   display: inline-block;
+  /* Hafif CRT ekran efekti */
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3), 0 0 2px var(--color-primary);
 }
 
 /* === PORTFOLYO BUTONU === */
@@ -60,19 +61,12 @@
   border: 2px solid var(--color-text-primary);
   background-color: transparent;
   box-shadow: 4px 4px 0px 0px var(--color-text-primary);
-  position: relative;
   color: var(--color-text-primary);
   z-index: 2;
 }
-
 .portfolio-button:hover {
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px 0px var(--color-text-primary);
-}
-
-.portfolio-button .icon {
-  width: clamp(16px, 2vw, 22px);
-  height: auto;
 }
 
 /* === ANA RESİM === */
@@ -84,28 +78,39 @@
   max-width: 45%;
   max-height: 90vh;
   z-index: 1;
-  will-change: opacity, transform;
 }
-
 .main-image img {
   width: 100%;
   height: auto;
   object-fit: contain;
 }
 
-/* === SES OYNATICI (AUDIO CONTROLS) === */
+/* === SES OYNATICI (AUDIO CONTROLS) - NOSTALJİK TASARIM === */
 .audio-controls {
   display: flex;
   flex-direction: column;
   color: var(--color-text-primary);
   width: 100%;
   max-width: 480px;
-  background-color: var(--color-background-paper-transparent);
-  backdrop-filter: blur(5px);
-  border: 1px solid var(--color-border-primary);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-base);
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--border-radius-base);
+  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+  position: relative;
+}
+/* Grenli doku efekti */
+.audio-controls::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 .soundtrack-info {
@@ -113,40 +118,66 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-sm);
-  gap: 10px;
+  border-bottom: 1px solid var(--color-border-primary);
+  padding-bottom: var(--spacing-sm);
+  position: relative;
+  z-index: 1;
 }
-
 .soundtrack-label {
   font-size: var(--font-size-sm);
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  opacity: 0.8;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
 }
-
 .song-name {
+  font-family: var(--font-family-code, monospace);
   font-size: var(--font-size-sm);
-  font-weight: 500;
-  font-style: italic;
-  text-align: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .audio-player {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
-.controls-wrapper {
+/* Zaman Çubuğu ve Göstergesi */
+.timeline-container {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
 }
+.time-display {
+  font-family: var(--font-family-code, monospace);
+  font-size: var(--font-size-md);
+  background-color: var(--color-background-page);
+  color: var(--color-text-on-primary);
+  padding: 4px 8px;
+  border-radius: var(--border-radius-sm);
+}
+.theme-dark .time-display {
+  color: var(--color-text-primary);
+}
+.timeline {
+  flex-grow: 1;
+  height: 8px;
+  background-color: var(--color-secondary);
+  border: 1px solid var(--color-text-primary);
+  cursor: pointer;
+}
+.progress {
+  height: 100%;
+  width: 0%;
+  background-color: var(--color-primary);
+}
 
+/* Kontroller */
+.controls-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 .control-button {
   background: none;
   border: none;
@@ -155,169 +186,116 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s ease, opacity 0.2s ease;
   color: var(--color-text-primary);
-  opacity: 0.9;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
-
 .control-button:hover {
   transform: scale(1.1);
-  opacity: 1;
+}
+.control-button:active {
+  transform: scale(0.95);
 }
 
+/* Play/Pause Butonu */
 .play-button {
-  background-color: var(--color-text-primary);
-  color: var(--color-background-page);
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  color: var(--color-text-primary);
+  box-shadow: 3px 3px 0px 0px var(--color-text-primary);
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  transition: all 0.1s ease-out;
+}
+.play-button:hover {
+  background-color: var(--color-accent);
+}
+.play-button:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0px 0px var(--color-text-primary);
 }
 
+/* Ses Ayarı */
 .volume-control {
   display: flex;
   align-items: center;
   gap: 8px;
 }
-
 .volume-slider {
   -webkit-appearance: none;
   appearance: none;
-  width: 80px;
-  height: 4px;
-  background: var(--color-text-muted);
+  width: 90px;
+  height: 6px;
+  background: var(--color-secondary);
+  border: 1px solid var(--color-text-primary);
   outline: none;
-  border-radius: 5px;
   cursor: pointer;
 }
-
 .volume-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 14px;
   height: 14px;
   background: var(--color-text-primary);
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.volume-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  background: var(--color-text-primary);
-  border-radius: 50%;
-  border: none;
+  border: 2px solid var(--color-background-paper);
+  box-shadow: 0 0 0 1px var(--color-text-primary);
   cursor: pointer;
 }
 
-.timeline {
-  position: relative;
-  height: 6px;
-  background: var(--color-text-muted);
-  border-radius: 3px;
-  cursor: pointer;
-  overflow: hidden;
-  width: 100%;
-}
-
-.progress {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 0%;
-  background: var(--color-text-primary);
-  border-radius: 3px;
-}
-
-.time {
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  width: 100%;
-}
-
-/* ======================================= */
 /* === DUYARLILIK (RESPONSIVE) STİLLERİ === */
-/* ======================================= */
-
-/* TABLET VE KÜÇÜK LAPTOPLAR (992px ve altı) */
 @media (max-width: 992px) {
   .main-container {
-    align-items: center; /* İçeriği yatayda ortala */
-    text-align: center; /* Metinleri ortala */
+    align-items: center;
+    text-align: center;
   }
-
-  /* Ana resmi gizleyerek içeriğe daha fazla yer aç */
   .main-image {
     display: none;
   }
-
   .main-content {
     max-width: 90%;
   }
-
   .audio-controls {
-    margin: 0 auto; /* Ses oynatıcıyı ortala */
-  }
-
-  .portfolio-button-container {
-    margin-bottom: var(--spacing-md);
+    margin: 0 auto;
   }
 }
 
-/* MOBİL CİHAZLAR (768px ve altı) */
 @media (max-width: 768px) {
   .main-title {
     font-size: clamp(3rem, 15vw, 4.5rem);
   }
-
-  .main-subtitle {
-    margin-bottom: var(--spacing-lg);
-  }
-
   .audio-controls {
-    max-width: 100%; /* Tam genişlik kullan */
+    max-width: 100%;
   }
-
   .controls-wrapper {
-    justify-content: center; /* Butonları ortala */
+    justify-content: space-around;
   }
-
-  /* Çok küçük ekranlarda ses ayar çubuğunu gizle */
   .volume-control {
     display: none;
   }
 }
 
-/* YATAY MOD (LANDSCAPE) */
 @media (max-height: 600px) and (orientation: landscape) and (max-width: 992px) {
   .main-container {
     flex-direction: row;
     justify-content: space-around;
     gap: 2rem;
-    text-align: left; /* Metin hizalamasını sıfırla */
+    text-align: left;
   }
-
   .main-content {
     width: 50%;
     max-width: 450px;
   }
-
   .main-image {
-    display: block; /* Yatay modda resmi tekrar göster */
+    display: block;
     position: relative;
     transform: none;
     top: auto;
     right: auto;
     width: 40%;
     max-width: 400px;
-    order: 2; /* Resim sağda kalsın */
+    order: 2;
   }
-
   .audio-controls {
-    margin: 0; /* Ortalamayı kaldır */
+    margin: 0;
   }
 }

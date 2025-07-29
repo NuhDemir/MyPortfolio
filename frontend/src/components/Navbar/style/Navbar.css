@@ -5,15 +5,20 @@
   left: 0;
   width: 100%;
   height: var(--navbar-height); /* global.css'den */
-  background-color: var(--color-navbar-bg-container, var(--color-background-page));
+  background-color: var(
+    --color-navbar-bg-container,
+    var(--color-background-page)
+  );
   backdrop-filter: blur(1px);
-  border-bottom: 1px solid var(--color-navbar-border-container, var(--color-navbar-border));
+  border-bottom: 1px solid
+    var(--color-navbar-border-container, var(--color-navbar-border));
   z-index: 9990;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity var(--transition-duration-base) var(--transition-timing-function),
-              transform var(--transition-duration-base) var(--transition-timing-function);
+  transition: opacity var(--transition-duration-base)
+      var(--transition-timing-function),
+    transform var(--transition-duration-base) var(--transition-timing-function);
 }
 
 /* Menü kaybolduğunda */
@@ -80,7 +85,9 @@
 .decorative-dot {
   width: 4px;
   height: 4px;
-  background: var(--color-navbar-text); /* VEYA --color-text-on-secondary gibi */
+  background: var(
+    --color-navbar-text
+  ); /* VEYA --color-text-on-secondary gibi */
   position: absolute;
   border-radius: var(--border-radius-circle);
 }
@@ -96,7 +103,8 @@
   z-index: -1;
   pointer-events: none;
 }
-.navbar-outline img { /* Line.svg */
+.navbar-outline img {
+  /* Line.svg */
   width: 100vw;
   max-width: 2000px;
   display: block;
@@ -105,9 +113,8 @@
 }
 
 .theme-dark .navbar-outline img {
-  filter: invert(1) brightness(0.8); 
+  filter: invert(1) brightness(0.8);
 }
-
 
 .navbar-icon-fixed {
   position: fixed;
@@ -127,9 +134,12 @@
   transition: background-color var(--transition-duration-short);
 }
 .navbar-icon-fixed:hover {
-  background: var(--color-navbar-item-hover-bg); /* Ana hover rengini kullanabilir */
+  background: var(
+    --color-navbar-item-hover-bg
+  ); /* Ana hover rengini kullanabilir */
 }
-.navbar-icon-fixed img { /* hamburger.svg, close.svg */
+.navbar-icon-fixed img {
+  /* hamburger.svg, close.svg */
   width: 24px;
   height: 24px;
   filter: var(--theme-mode-icon-filter); /* Temaya göre SVG rengini ayarlar */
@@ -140,7 +150,8 @@
   top: calc(var(--navbar-height) + var(--spacing-xs));
   right: var(--spacing-md);
   background-color: var(--color-navbar-mobile-menu-bg, var(--color-navbar-bg));
-  border: 1px solid var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
+  border: 1px solid
+    var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
   border-radius: var(--border-radius-md);
   display: flex;
   flex-direction: column;
@@ -152,7 +163,8 @@
 
 .mobile-menu .nav-item {
   border-right: none;
-  border-bottom: 1px solid var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
+  border-bottom: 1px solid
+    var(--color-navbar-mobile-menu-border, var(--color-navbar-border));
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
   text-align: left;
@@ -194,11 +206,11 @@
 }
 /* MUI ikonları için filter (eğer SVG değil de MUI ikon kullanılıyorsa) */
 .theme-toggle-button svg {
-    filter: var(--theme-mode-icon-filter);
+  filter: var(--theme-mode-icon-filter);
 }
 
-
-@keyframes fadeInMobileMenuNavbar { /* İsim güncellendi */
+@keyframes fadeInMobileMenuNavbar {
+  /* İsim güncellendi */
   from {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);

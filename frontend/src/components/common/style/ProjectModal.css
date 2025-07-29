@@ -1,3 +1,4 @@
+/* Ana Overlay: Arkadaki içeriği karartır ve flulaştırır */
 .project-modal-overlay {
   position: fixed;
   top: 0;
@@ -5,14 +6,14 @@
   width: 100%;
   height: 100%;
   background-color: var(--color-background-overlay);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(5px) grayscale(50%);
+  -webkit-backdrop-filter: blur(5px) grayscale(50%);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10000;
   padding: var(--spacing-md);
-  animation: modalFadeIn 0.3s ease-out forwards;
+  animation: modalFadeIn 0.2s ease-out forwards;
 }
 
 @keyframes modalFadeIn {
@@ -24,73 +25,97 @@
   }
 }
 
+/* Modal Konteyneri: "Retro Pencere" */
 .project-modal-container {
   width: 100%;
   max-width: 900px;
-  max-height: 90vh;
+  height: 90%;
+  max-height: 650px;
   background-color: var(--color-background-paper);
   border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-lg);
-  box-shadow: 10px 10px 0px 0px var(--color-text-primary);
+  /* Alt ve sağ gölge ile 3D efekti */
+  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
   display: flex;
   flex-direction: column;
-  animation: modalSlideIn 0.4s ease-out forwards;
-  transform: translateY(20px);
+  animation: modalPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  opacity: 0;
 }
 
-@keyframes modalSlideIn {
+@keyframes modalPopIn {
   from {
-    transform: translateY(20px);
+    transform: scale(0.95);
     opacity: 0;
   }
   to {
-    transform: translateY(0);
+    transform: scale(1);
     opacity: 1;
   }
 }
 
+/* Başlık Çubuğu: Klasik pencere başlığı */
 .project-modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-md);
+  padding: var(--spacing-xs) var(--spacing-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary, #fff);
   border-bottom: 2px solid var(--color-text-primary);
   flex-shrink: 0;
+  cursor: grab; /* Taşıma hissi için */
+}
+.theme-dark .project-modal-header {
+  color: var(--color-background-page);
 }
 
 .project-modal-title {
-  font-size: var(--font-size-xl);
+  font-family: var(--font-family-code, monospace);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   margin: 0;
-  color: var(--color-text-primary);
+  text-transform: uppercase;
 }
 
+/* Sahte Pencere Kontrol Butonları */
+.project-modal-window-controls {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+.project-modal-window-controls span {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--color-text-primary);
+  background-color: var(--color-background-paper);
+}
 .project-modal-close-btn {
-  background: transparent;
-  border: none;
-  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: var(--color-error-text, #b00020);
+  border: 2px solid var(--color-text-primary);
+  color: #fff;
   cursor: pointer;
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-circle);
-  transition: all 0.2s ease;
-}
-.project-modal-close-btn:hover {
-  background-color: var(--color-background-paper-transparent);
-  transform: rotate(90deg);
+  margin-left: var(--spacing-sm);
 }
 
+/* Ana İçerik Alanı */
 .project-modal-content {
   display: flex;
   gap: var(--spacing-lg);
   padding: var(--spacing-lg);
   overflow-y: auto;
+  flex-grow: 1;
 }
 
+/* Resim Alanı ve Nostaljik Efektler */
 .project-modal-image-wrapper {
   flex: 1;
   min-width: 300px;
   border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-base);
+  background-color: var(--color-background-page);
+  position: relative;
   overflow: hidden;
 }
 .project-modal-image-wrapper img {
@@ -99,18 +124,54 @@
   object-fit: cover;
   display: block;
 }
+/* Grenli doku efekti */
+.project-modal-image-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,..."); /* SVG grain data URI */
+  opacity: 0.1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+/* Scanline efekti */
+.project-modal-image-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 3px
+  );
+  animation: scanline-jitter 0.1s linear infinite;
+}
 
+/* Detaylar Sütunu */
 .project-modal-details {
   flex: 1.2;
   display: flex;
   flex-direction: column;
 }
 
+/* Açıklama metinleri */
 .project-modal-description h3,
 .project-modal-description h4 {
+  font-family: var(--font-family-code, monospace);
   margin-top: 0;
   margin-bottom: var(--spacing-sm);
   color: var(--color-text-primary);
+  text-transform: uppercase;
+  border-bottom: 2px solid var(--color-border-primary);
+  padding-bottom: var(--spacing-xs);
 }
 .project-modal-description p,
 .project-modal-description li {
@@ -118,36 +179,33 @@
   line-height: var(--line-height-base);
 }
 .project-modal-description ul {
+  list-style: "» "; /* Retro liste stili */
   padding-left: var(--spacing-md);
   margin-top: var(--spacing-xs);
 }
 
+/* Teknolojiler Bölümü */
 .project-modal-tags-section {
   margin-top: var(--spacing-lg);
-}
-.project-modal-tags-section h4 {
-  font-size: var(--font-size-md);
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-text-primary);
 }
 .project-modal-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
 }
 .project-modal-tag {
-  background-color: var(--color-background-page);
-  color: var(--color-text-primary);
+  background-color: transparent;
+  color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
   padding: 4px 10px;
-  border-radius: var(--border-radius-base);
-  border: 1px solid var(--color-text-primary);
+  border: 1px solid var(--color-border-primary);
 }
 
+/* Link Butonları */
 .project-modal-links {
-  margin-top: auto; /* Linkleri en alta iter */
+  margin-top: auto;
   padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-border-primary);
+  border-top: 2px solid var(--color-text-primary);
   display: flex;
   gap: var(--spacing-md);
   flex-wrap: wrap;
@@ -158,19 +216,16 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-sm) var(--spacing-md);
-  background-color: transparent;
+  background-color: var(--color-background-paper);
   color: var(--color-text-primary);
   border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-base);
   text-decoration: none;
   font-weight: var(--font-weight-semibold);
   transition: all 0.2s ease;
-  box-shadow: 3px 3px 0px 0px var(--color-text-primary);
+  box-shadow: 4px 4px 0px 0px var(--color-text-primary);
 }
 .project-modal-link-btn:hover {
-  background-color: var(--color-text-primary);
-  color: var(--color-background-paper);
-  transform: translate(1px, 1px);
+  transform: translate(2px, 2px);
   box-shadow: 2px 2px 0px 0px var(--color-text-primary);
 }
 
@@ -179,10 +234,8 @@
   .project-modal-content {
     flex-direction: column;
   }
-  .project-modal-container {
-    max-height: 85vh;
-  }
-  .project-modal-title {
-    font-size: var(--font-size-lg);
+  .project-modal-image-wrapper {
+    min-height: 200px;
+    flex-shrink: 0;
   }
 }

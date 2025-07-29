@@ -232,6 +232,7 @@ body {
   padding-top: var(--navbar-height); position: relative;
   transition: background-color var(--transition-duration-base) var(--transition-timing-function),
               color var(--transition-duration-base) var(--transition-timing-function);
+              
 }
 a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-duration-short) var(--transition-timing-function); }
 a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
@@ -380,3 +381,4 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   text-align: center;
   animation: fadeInAnimation 0.3s ease-out; /* Hata mesajı için animasyon */
 }
+

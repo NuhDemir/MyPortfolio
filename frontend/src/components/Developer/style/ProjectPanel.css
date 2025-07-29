@@ -1,0 +1,78 @@
+.project-panel {
+  border-bottom: 2px solid var(--color-text-primary);
+  padding: var(--spacing-md);
+  flex-shrink: 0; /* Boyutunun sabit kalmasını sağlar */
+}
+
+.project-panel h3 {
+  font-family: var(--font-family-code);
+  text-transform: uppercase;
+  margin-bottom: var(--spacing-md);
+}
+
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.project-item {
+  padding: var(--spacing-sm);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-base);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.project-item:hover {
+  background-color: var(--color-background-paper-transparent);
+  border-color: var(--color-accent);
+}
+
+.project-item.selected {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+  border-color: var(--color-accent);
+}
+.theme-dark .project-item.selected {
+  color: var(--color-background-page);
+}
+
+.project-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+.project-item-header h4 {
+  font-size: var(--font-size-md);
+  margin: 0;
+}
+.project-item-links a {
+  color: var(--color-text-secondary);
+  margin-left: var(--spacing-sm);
+}
+.project-item-links a:hover {
+  color: var(--color-text-link);
+}
+
+.project-item p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.project-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+.tag {
+  font-size: 0.75rem;
+  background-color: var(--color-secondary);
+  padding: 2px 8px;
+  border-radius: var(--border-radius-pill);
+}
+.theme-dark .tag {
+  background-color: var(--color-border-primary);
+}

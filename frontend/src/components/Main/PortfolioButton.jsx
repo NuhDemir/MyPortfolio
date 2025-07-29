@@ -1,14 +1,13 @@
 import React, { forwardRef } from "react";
 import arrow_rightSvg from "/assets/icons/arrow_right.svg";
-// import vaultSvg from "/icons/icons/vault.svg";
 
-const PortfolioButton = forwardRef((_, ref) => (
+// onClick prop'unu ekliyoruz
+const PortfolioButton = forwardRef(({ onClick }, ref) => (
   <div className="portfolio-button-container">
-    <button ref={ref} className="portfolio-button">
-      See Portfolio
+    <button ref={ref} className="portfolio-button" onClick={onClick}>
+      Keşfet
       <img src={arrow_rightSvg} alt="Arrow Right" className="icon" />
     </button>
-    {/* <img src={vaultSvg} alt="Vault" className="icon" /> */}
   </div>
 ));
 

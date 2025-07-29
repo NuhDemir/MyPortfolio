@@ -1,15 +1,18 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { useGsapAnimation } from "../../hooks/useGsapAnimation.js";
 import Title from "./Title.jsx";
 import Subtitle from "./Subtitle.jsx";
-import AudioControls from "./AudioControls.jsx"; // Güncellenmiş AudioControls
+import AudioControls from "./AudioControls.jsx";
 import PortfolioButton from "./PortfolioButton.jsx";
 import MainImage from "./MainImage.jsx";
+import RoleSelectionModal from "../common/RoleSelectionModal.jsx"; // Modal'ı import ediyoruz
 
 import "./style/Main.css";
 
-// onIsPlayingChange ve onAudioDataChange prop'larını alacak şekilde güncelle
 const Main = ({ onIsPlayingChange, onAudioDataChange }) => {
+  // Modal'ın açık/kapalı durumunu yönetmek için state
+  const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+
   const mainRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
@@ -26,23 +29,38 @@ const Main = ({ onIsPlayingChange, onAudioDataChange }) => {
     imageRef
   );
 
+  // Butona tıklandığında modalı açacak fonksiyon
+  const handleOpenRoleModal = () => {
+    setIsRoleModalOpen(true);
+  };
+
+  // Modal kapandığında state'i güncelleyecek fonksiyon
+  const handleCloseRoleModal = () => {
+    setIsRoleModalOpen(false);
+  };
+
   return (
     <>
       <section ref={mainRef} className="main-container">
         <div className="main-content">
           <Title ref={titleRef} />
           <Subtitle ref={subtitleRef} />
-          {/* AudioControls'e prop'ları ilet */}
           <AudioControls
             ref={audioControlRef}
             onIsPlayingChange={onIsPlayingChange}
             onAudioDataChange={onAudioDataChange}
           />
-          <PortfolioButton ref={buttonRef} />
-          <div className="portfolio-button-splash" />
+          {/* PortfolioButton'a onClick olayını iletiyoruz */}
+          <PortfolioButton ref={buttonRef} onClick={handleOpenRoleModal} />
         </div>
         <MainImage ref={imageRef} />
       </section>
+
+      {/* Modal'ı render ediyoruz ve durumunu state'e bağlıyoruz */}
+      <RoleSelectionModal
+        isOpen={isRoleModalOpen}
+        onClose={handleCloseRoleModal}
+      />
     </>
   );
 };

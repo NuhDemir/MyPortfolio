@@ -90,11 +90,8 @@ const AudioControls = forwardRef(
       do {
         newIndex = Math.floor(Math.random() * songs.length);
       } while (newIndex === currentSongIndex && songs.length > 1);
-
       setCurrentSongIndex(newIndex);
       setCurrentTime(0);
-
-      // Şarkı değişince oynatmayı durdur ve state'i güncelle
       const wasPlaying = isPlaying;
       if (wasPlaying) {
         audioRef.current.pause();
@@ -104,8 +101,6 @@ const AudioControls = forwardRef(
           cancelAnimationFrame(animationFrameRef.current);
         }
       }
-
-      // Eğer çalıyorsa, yeni şarkıyı hemen başlat
       setTimeout(() => {
         if (wasPlaying) {
           togglePlay();
@@ -164,16 +159,26 @@ const AudioControls = forwardRef(
           <div className="song-name">{songs[currentSongIndex].name}</div>
         </div>
         <div className="audio-player">
+          {/* Zaman Göstergesi ve Zaman Çubuğu */}
+          <div className="timeline-container">
+            <div className="time-display">{formatTime(currentTime)}</div>
+            <div className="timeline" onClick={handleTimelineClick}>
+              <div className="progress" ref={progressRef}></div>
+            </div>
+            <div className="time-display">{formatTime(duration)}</div>
+          </div>
+
+          {/* Kontrol Butonları */}
           <div className="controls-wrapper">
+            <button className="control-button" onClick={changeToRandomSong}>
+              <SkipForward size={24} strokeWidth={2} />
+            </button>
             <button className="control-button play-button" onClick={togglePlay}>
               {isPlaying ? (
-                <Pause size={28} strokeWidth={1.5} />
+                <Pause size={28} strokeWidth={2} />
               ) : (
-                <Play size={28} strokeWidth={1.5} />
+                <Play size={28} strokeWidth={2} />
               )}
-            </button>
-            <button className="control-button" onClick={changeToRandomSong}>
-              <SkipForward size={22} strokeWidth={1.5} />
             </button>
             <div className="volume-control">
               <button
@@ -181,9 +186,9 @@ const AudioControls = forwardRef(
                 onClick={toggleMute}
               >
                 {isMuted || volume === 0 ? (
-                  <VolumeX size={20} strokeWidth={1.5} />
+                  <VolumeX size={22} strokeWidth={2} />
                 ) : (
-                  <Volume2 size={20} strokeWidth={1.5} />
+                  <Volume2 size={22} strokeWidth={2} />
                 )}
               </button>
               <input
@@ -196,14 +201,6 @@ const AudioControls = forwardRef(
                 className="volume-slider"
               />
             </div>
-          </div>
-          <div className="timeline" onClick={handleTimelineClick}>
-            <div className="progress-bg"></div>
-            <div className="progress" ref={progressRef}></div>
-          </div>
-          <div className="time">
-            <span>{formatTime(currentTime)}</span>
-            <span>{formatTime(duration)}</span>
           </div>
           <audio
             ref={audioRef}

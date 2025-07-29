@@ -4,7 +4,7 @@ import "./ProjectCard.css";
 import imageSvg from "/assets/icons/img/image.svg";
 
 const ProjectCard = ({ project, onClick }) => {
-  const { title, description, imageUrl, tags } = project;
+  const { title, description, tags } = project;
   const imageSource = imageSvg;
   const primaryTag = tags[0] || "Proje";
 

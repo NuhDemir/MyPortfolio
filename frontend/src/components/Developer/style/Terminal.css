@@ -1,0 +1,125 @@
+/* Ana Pencere Konteyneri */
+.terminal-window {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-background-paper);
+  border: 2px solid var(--color-text-primary);
+  border-radius: var(--border-radius-base);
+  box-shadow: 8px 8px 0px 0px var(--color-text-primary);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Başlık Çubuğu */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--color-secondary);
+  border-bottom: 2px solid var(--color-text-primary);
+  flex-shrink: 0;
+  cursor: grab;
+}
+.theme-dark .terminal-header {
+  background-color: var(--color-background-paper);
+}
+
+.terminal-buttons {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+.term-btn {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--color-text-primary);
+  border-radius: 50%;
+}
+.term-btn.close {
+  background-color: #ff5f57;
+}
+.term-btn.min {
+  background-color: #febb2e;
+}
+.term-btn.max {
+  background-color: #28c840;
+}
+
+.terminal-title {
+  flex-grow: 1;
+  text-align: center;
+  font-family: var(--font-family-code, monospace);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* Terminalin İç Alanı ve Nostaljik Efektler */
+.terminal-body {
+  flex-grow: 1;
+  padding: var(--spacing-sm);
+  background-color: rgba(13, 17, 23, 0.95);
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-body::before {
+  /* CRT Efekti (Kavisli Ekran) */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 120px rgba(0, 0, 0, 0.6) inset;
+  pointer-events: none;
+}
+.terminal-body::after {
+  /* Scanline Efekti */
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  animation: scanline-move 10s linear infinite;
+}
+@keyframes scanline-move {
+  from {
+    background-position-y: 0;
+  }
+  to {
+    background-position-y: 100px;
+  }
+}
+
+/* react-console-emulator için Stiller */
+.react-console-emulator,
+.react-console-emulator > div {
+  background-color: transparent !important;
+  height: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Terminal metinleri için fosfor parlaması */
+.react-console-emulator pre {
+  font-family: var(--font-family-code, monospace) !important;
+  font-size: 0.9rem !important;
+  line-height: 1.5 !important;
+  white-space: pre-wrap !important;
+  word-break: break-all;
+  text-shadow: 0 0 3px var(--color-primary);
+}
+
+.react-console-emulator input {
+  text-shadow: 0 0 3px var(--color-primary);
+}

@@ -1,0 +1,149 @@
+.recruiter-skills-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Filtre Butonları */
+.skills-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.filter-btn {
+  background-color: transparent;
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-pill);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease;
+}
+.filter-btn:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+}
+.filter-btn.active {
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary);
+}
+.theme-dark .filter-btn.active {
+  background-color: var(--color-accent);
+  color: var(--color-background-page);
+  border-color: var(--color-accent);
+}
+
+/* Yetenek Kategorileri */
+.skills-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.skill-category-v2 {
+  background-color: var(--color-background-paper);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--box-shadow-sm);
+  transition: opacity 0.3s ease;
+}
+.theme-dark .skill-category-v2 {
+  background-color: transparent;
+}
+
+.skill-category-v2 h3 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-lg) 0;
+}
+
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.skill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background-color: var(--color-secondary);
+  color: var(--color-text-secondary);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-base);
+  border: 1px solid transparent;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.theme-dark .skill-badge {
+  background-color: var(--color-border-primary);
+}
+
+.skill-badge.selected {
+  background-color: var(--color-accent);
+  color: var(--color-text-on-accent);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+.theme-dark .skill-badge.selected {
+  color: var(--color-background-page);
+}
+
+.skill-icon {
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+.skill-name {
+  font-size: var(--font-size-sm);
+}
+.framer-icon {
+  font-weight: bold;
+} /* Framer Motion ikonu için basit stil */
+
+/* Detay Paneli */
+.skill-detail-panel {
+  background-color: var(--color-secondary);
+  border-radius: var(--border-radius-base);
+  padding: var(--spacing-md);
+  overflow: hidden;
+}
+.theme-dark .skill-detail-panel {
+  background-color: var(--color-background-paper);
+}
+
+.skill-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.related-projects {
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+.related-projects strong {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+}
+.related-project-tag {
+  display: inline-block;
+  background-color: var(--color-background-paper);
+  border: 1px solid var(--color-border-primary);
+  padding: 2px 8px;
+  border-radius: var(--border-radius-pill);
+  margin-left: var(--spacing-xs);
+}
+.theme-dark .related-project-tag {
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+}

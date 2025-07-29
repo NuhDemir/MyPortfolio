@@ -1,0 +1,27 @@
+.code-viewer {
+  background-color: #1e1e1e; /* VS Code Koyu Tema Rengi */
+  border-top: 2px solid var(--color-text-primary);
+  flex-grow: 1; /* Kalan tüm alanı kaplar */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.code-viewer-header {
+  background-color: #333;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-family: var(--font-family-code);
+  color: #ccc;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+/* SyntaxHighlighter'ın sarmalayıcısını esnek yap */
+.code-viewer > pre {
+  margin: 0 !important;
+  padding: var(--spacing-md) !important;
+  flex-grow: 1;
+  overflow: auto !important;
+  font-size: 0.9rem !important;
+  border-radius: 0 !important;
+}
