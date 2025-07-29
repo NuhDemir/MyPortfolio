@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import "./style/SocialLinks.css";
 import SocialLinkSplash from "./SocialLinkSplash";
-import NuhDemirCV from "../../assets/cv/NuhDemirCV.pdf";
+import NuhDemirCV from "../../cv/NuhDemirCV.pdf";
 
 const SocialLinks = () => {
   const [loading, setLoading] = useState(false);

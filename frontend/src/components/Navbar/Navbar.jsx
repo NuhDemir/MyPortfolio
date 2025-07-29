@@ -4,10 +4,10 @@ import { useTheme } from "../../context/ThemeContext";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 // SVG dosyaları
-import iconSvgUrl from "../../assets/icons/navitem/icon.svg";
-import LineSvg from "../../assets/icons/main/Line.svg";
-import hamburgerIcon from "../../assets/icons/navbar/hamburger.svg";
-import closeIcon from "../../assets/icons/navbar/close.svg";
+import iconSvgUrl from "/assets/icons/navitem/icon.svg";
+import LineSvg from "/assets/icons/main/Line.svg";
+import hamburgerIcon from "/assets/icons/navbar/hamburger.svg";
+import closeIcon from "/assets/icons/navbar/close.svg";
 
 // MUI Icons
 import Brightness4Icon from "@mui/icons-material/Brightness4";

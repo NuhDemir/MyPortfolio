@@ -1,6 +1,6 @@
 import React from "react";
 import { FaDribbble, FaInstagram, FaMediumM, FaTwitter } from "react-icons/fa";
-import VectorSvg from "../../assets/icons/footer/Vector.svg";
+import VectorSvg from "/assets/icons/footer/Vector.svg";
 import "./style/Footer.scss"; // Import SCSS file
 
 // Removed companyName prop as the name is fixed in the design

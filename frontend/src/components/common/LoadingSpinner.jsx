@@ -1,6 +1,6 @@
 // frontend/src/components/common/LoadingSpinner.jsx
 import React from "react";
-import "../../assets/css/components.css"; // Genel bileşen stillerini import et
+import "../../style/components.css"; // Genel bileşen stillerini import et
 
 /**
  * Basit bir yükleme animasyonu ve isteğe bağlı mesaj gösterir.

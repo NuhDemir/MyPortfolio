@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import arrow_rightSvg from "../../assets/icons/arrow_right.svg";
+import arrow_rightSvg from "/assets/icons/arrow_right.svg";
 // import vaultSvg from "/icons/icons/vault.svg";
 
 const PortfolioButton = forwardRef((_, ref) => (

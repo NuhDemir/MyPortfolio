@@ -1,6 +1,6 @@
 // frontend/src/components/common/ErrorMessage.jsx
 import React from "react";
-import "../../assets/css/components.css"; // Genel bileşen stillerini import et
+import "../../style/components.css"; // Genel bileşen stillerini import et
 
 /**
  * Standart bir hata mesajı kutusu gösterir.
