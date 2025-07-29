@@ -1,12 +1,11 @@
 import React from "react";
 import "./style/About.css";
-import SmileSvg from "../../../public/icons/about/about_header/smile.svg";
-
+import smileSvg from "../../assets/icons/about/about_header/smile.svg";
 // Header Component
 const Header = () => {
   return (
     <div className=" header ">
-      <img src={SmileSvg} alt="smile" />
+      <img src={smileSvg} alt="smile" />
     </div>
   );
 };
