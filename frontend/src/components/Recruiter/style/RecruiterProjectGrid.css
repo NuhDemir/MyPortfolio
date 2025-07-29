@@ -1,34 +1,108 @@
+.recruiter-projects-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Filtreleme Çipleri */
+.project-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.filter-chip {
+  background-color: transparent;
+  border: 1px solid var(--color-border-primary);
+  color: var(--color-text-secondary);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-pill);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium);
+  transition: all 0.2s ease;
+}
+.filter-chip:hover {
+  background-color: var(--color-secondary);
+  color: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+}
+.filter-chip.active {
+  background-color: var(--color-text-primary);
+  color: var(--color-background-paper);
+  border-color: var(--color-text-primary);
+}
+
+/* Proje Grid'i */
 .recruiter-project-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-lg);
 }
 
-.recruiter-project-card {
-  background-color: var(--color-background-paper);
-  border: 1px solid var(--color-border-primary);
+/* Kart Sarmalayıcısı (Neubrutalism için) */
+.recruiter-project-card-wrapper {
+  position: relative;
   border-radius: var(--border-radius-lg);
-  overflow: hidden;
+  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+  border: 2px solid var(--color-text-primary);
+  transition: all 0.2s ease-out;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  box-shadow: var(--box-shadow-base);
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-.theme-dark .recruiter-project-card {
-  box-shadow: none; /* Koyu temada gölge yerine kenarlık daha iyi durur */
 }
 
+.recruiter-project-card-wrapper:hover {
+  transform: translate(3px, 3px);
+  box-shadow: 3px 3px 0px 0px var(--color-text-primary);
+}
+
+/* Kartın Kendisi */
+.recruiter-project-card {
+  height: 100%;
+  background-color: var(--color-background-paper);
+  border-radius: var(--border-radius-lg); /* Kenarlığı sarmalayıcıya uydur */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Kart Resmi ve Overlay */
 .card-image-container {
+  position: relative;
   aspect-ratio: 16 / 9;
   background-color: var(--color-secondary);
+  overflow: hidden;
 }
 .card-image-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
+}
+.recruiter-project-card-wrapper:hover .card-image-container img {
+  transform: scale(1.05);
 }
 
+.card-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-sm);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.recruiter-project-card-wrapper:hover .card-image-overlay {
+  opacity: 1;
+}
+
+/* Kart İçeriği */
 .card-content {
   padding: var(--spacing-md);
   flex-grow: 1;
@@ -38,12 +112,17 @@
 .card-content h3 {
   font-size: var(--font-size-lg);
   margin-bottom: var(--spacing-sm);
+  color: var(--color-text-primary);
 }
 .card-content p {
   font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   flex-grow: 1;
   margin-bottom: var(--spacing-md);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-tags {
@@ -61,4 +140,12 @@
 }
 .theme-dark .tag {
   background-color: var(--color-border-primary);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .recruiter-project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+  }
 }
