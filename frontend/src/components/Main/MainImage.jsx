@@ -1,5 +1,5 @@
 import React, { forwardRef, useRef } from "react";
-import MainSvg from "/icons/main/main.svg"; // Dosya yolunu kontrol edin
+import MainSvg from "../../../public/icons/main/main.svg"; // Dosya yolunu kontrol edin
 import useMainImageAnimation from "../../hooks/useMainImageAnimation"; // Mevcut animasyon hook'u
 import useHoverQuotes from "../../hooks/useHoverQuotes"; // Hook'u ayrı dosyadan import et
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "./style/About.css";
-import SmileSvg from "/icons/about/about_header/smile.svg";
+import SmileSvg from "../../../public/icons/about/about_header/smile.svg";
 
 // Header Component
 const Header = () => {

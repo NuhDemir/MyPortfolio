@@ -1,8 +1,8 @@
 // src/components/Projects/ProjectCard/ProjectCard.jsx
 import React from "react";
 import "./ProjectCard.css"; // CSS dosyasının adı doğru olmalı, eğer farklıysa düzeltin
-import GoToProjectArrowSvg from "/icons/project/GoToProjectArrow.svg";
-import imageSvg from "/icons/img/image.svg"; // Varsayılan görsel için
+import GoToProjectArrowSvg from "../../../../public/icons/project/GoToProjectArrow.svg";
+import imageSvg from "../../../../public/icons/img/image.svg"; // Varsayılan görsel için
 
 const ProjectCard = ({
   title = "Proje Başlığı",
