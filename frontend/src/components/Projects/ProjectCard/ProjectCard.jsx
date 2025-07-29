@@ -5,7 +5,7 @@ import imageSvg from "/assets/icons/img/image.svg";
 
 const ProjectCard = ({ project, onClick }) => {
   const { title, description, imageUrl, tags } = project;
-  const imageSource = imageUrl || imageSvg;
+  const imageSource = imageSvg;
   const primaryTag = tags[0] || "Proje";
 
   return (

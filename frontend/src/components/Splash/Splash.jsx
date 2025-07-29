@@ -5,14 +5,13 @@ import styles from "./Splash.module.css";
 const Splash = ({ onComplete }) => {
   const splashContainerRef = useRef(null);
   const lettersRef = useRef([]);
-  const particleCanvasRef = useRef(null); // Matrix yerine parçacık canvas'ı
-  const subtitleRef = useRef(null); // Subtitle için ref
-  const loaderBarFillRef = useRef(null); // Yükleme çubuğunun dolan kısmı için ref
-  const loaderContainerRef = useRef(null); // Yükleme çubuğunun tamamı için ref
+  const particleCanvasRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const loaderBarFillRef = useRef(null);
+  const loaderContainerRef = useRef(null);
 
   const letters = "NUH DEMİR".split("");
 
-  // Hook'u yeni referanslarla güncelle
   const { animationComplete } = useGsapSplashAnimation(
     splashContainerRef,
     lettersRef,
@@ -30,10 +29,8 @@ const Splash = ({ onComplete }) => {
         animationComplete ? styles.hide : ""
       }`}
     >
-      {/* Arka plan parçacıkları için Canvas */}
       <canvas ref={particleCanvasRef} className={styles.particleCanvas} />
 
-      {/* Ana içerik ortalanmış bir kutu içinde */}
       <div className={styles.mainContent}>
         <div className={styles.lettersContainer}>
           {letters.map((letter, index) => (
@@ -42,7 +39,6 @@ const Splash = ({ onComplete }) => {
                 ref={(el) => (lettersRef.current[index] = el)}
                 className={styles.splashLetter}
               >
-                {/* Boşluk karakteri için özel render */}
                 {letter === " " ? "\u00A0" : letter}
               </span>
             </div>
@@ -60,7 +56,6 @@ const Splash = ({ onComplete }) => {
         </div>
       </div>
 
-      {/* Stilize edilmiş köşe dekorasyonları */}
       <div className={styles.cornerDecorations}>
         <div className={`${styles.corner} ${styles.cornerTopLeft}`}></div>
         <div className={`${styles.corner} ${styles.cornerTopRight}`}></div>
