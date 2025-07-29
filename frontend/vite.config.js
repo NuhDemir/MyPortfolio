@@ -8,11 +8,7 @@ export default defineConfig({
       include: [/\.svg$/],
     }),
   ],
-  resolve: {
-    alias: {
-      "@assets": "/src/assets", // src/assets için bir alias (opsiyonel)
-    },
-  },
+
   server: {
     proxy: {
       // '/api' ile başlayan tüm istekleri, aşağıdaki hedefe yönlendir.
