@@ -2,7 +2,6 @@ import React from "react";
 import { FaDribbble, FaInstagram, FaMediumM, FaTwitter } from "react-icons/fa";
 
 import "./style/Footer.scss"; // Import SCSS file
-import iconSvg from "../../assets/icons/footer/Vector.svg";
 
 // Removed companyName prop as the name is fixed in the design
 const Footer = () => {
@@ -14,7 +13,7 @@ const Footer = () => {
       <div className="footer-brand-section">
         <a href="/" aria-label={`${companyName} Homepage`}>
           <img
-            src={iconSvg}
+            src="../../assets/icons/footer/Vector.svg"
             alt={`${companyName} Logo`}
             className="footer-logo-svg"
           />
