@@ -5,7 +5,7 @@ import { getProjects } from "../../../services/projectService";
 import LoadingSpinner from "../../common/LoadingSpinner";
 import ErrorMessage from "../../common/ErrorMessage";
 import "./ProjectList.css";
-import MyProjectsSvg from "../../../assets/icons/MyProject.svg";
+import MyProjectsSvg from "../../../assets/icons/project/MyProject.svg";
 import leftArrowIcon from "../../../assets/icons/arrows/left-arrow.svg";
 import rightArrowIcon from "../../../assets/icons/arrows/right-arrow.svg";
 

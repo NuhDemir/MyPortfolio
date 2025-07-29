@@ -1,9 +1,18 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
-  plugins: [react(), svgr()],
+  plugins: [
+    react({
+      // SVG dosyalarını ReactComponent olarak işlemek için
+      include: [/\.svg$/],
+    }),
+  ],
+  resolve: {
+    alias: {
+      "@assets": "/src/assets", // src/assets için bir alias (opsiyonel)
+    },
+  },
   server: {
     proxy: {
       // '/api' ile başlayan tüm istekleri, aşağıdaki hedefe yönlendir.

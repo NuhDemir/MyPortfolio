@@ -3,29 +3,30 @@ import React, { useEffect, useState } from "react";
 import Header from "./Header.jsx";
 import StatCard from "./StatCard.jsx";
 import ServiceCard from "./ServiceCard/ServiceCard.jsx";
-import Modal from "../common/Modal.jsx";
-import useGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
+import Modal from "../common/Modal.jsx"; // Modal'ı import et
+import useGsapAnimations from "../../hooks/useAboutGsapAnimation.js"; // GSAP hook'unu import et
 
-// SVG'leri ReactComponent olarak import et
-import { ReactComponent as ProgrammingLangSvg } from "../../assets/icons/about/programmingLanguage.svg";
-import { ReactComponent as DevToolsTechSvg } from "../../assets/icons/about/DevToolsTech.svg";
-import { ReactComponent as PodcastTalksSvg } from "../../assets/icons/about/PodcastTalks.svg";
-import { ReactComponent as ProjectsWorkSvg } from "../../assets/icons/about/ProjectsWork.svg";
-
+// İkonları ve İçerikleri import et
+import ProgrammingLangSvg from "../../assets/icons/about/programmingLanguage.svg";
+import DevToolsTechSvg from "../../assets/icons/about/DevToolsTech.svg";
+import PodcastTalksSvg from "../../assets/icons/about/PodcastTalks.svg";
+import ProjectsWorkSvg from "../../assets/icons/about/ProjectsWork.svg";
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
 import PodcastTalksContent from "./ServiceCard/ModalContents/PodcastTalksContent.jsx";
 import ProjectsWorkContent from "./ServiceCard/ModalContents/ProjectsWorkContent.jsx";
 
-import "./style/About.css";
+import "./style/About.css"; // Stil dosyasını import et
 
 const GITHUB_USERNAME = "NuhDemir";
 
+// Servis kartı verilerini tanımla
 const services = [
   {
     id: "programming",
     icon: <ProgrammingLangSvg />,
     iconBgColor: "#ffdc58",
+
     title: "Programming Lang",
     description: "Modern dillerle ölçeklenebilir kod yazma.",
     modalContent: <ProgrammingLangContent />,
@@ -34,6 +35,7 @@ const services = [
     id: "devtools",
     icon: <DevToolsTechSvg />,
     iconBgColor: "#9c27b0",
+
     title: "Dev Tools & Tech",
     description: "Verimlilik için en yeni araçları kullanma.",
     modalContent: <DevToolsTechContent />,
@@ -42,6 +44,7 @@ const services = [
     id: "podcast",
     icon: <PodcastTalksSvg />,
     iconBgColor: "#f44336",
+
     title: "Podcast & Talks",
     description: "Bilgi ve teknoloji trendlerini paylaşma.",
     modalContent: <PodcastTalksContent />,
@@ -50,6 +53,7 @@ const services = [
     id: "projects",
     icon: <ProjectsWorkSvg />,
     iconBgColor: "#2196f3",
+
     title: "Projects & Work",
     description: "Kalite odaklı etkili projeler sunma.",
     modalContent: <ProjectsWorkContent />,
@@ -57,17 +61,21 @@ const services = [
 ];
 
 const About = () => {
+  // GSAP hook'undan ref'leri al
   const { statsContainerRef, servicesContainerRef } = useGsapAnimations();
 
+  // GitHub verileri için state
   const [repoCount, setRepoCount] = useState(null);
   const [followers, setFollowers] = useState(null);
 
-  const [activeModalId, setActiveModalId] = useState(null);
+  // Modal durumu için state'ler
+  const [activeModalId, setActiveModalId] = useState(null); // Açık olan modal'ın id'si
   const [currentModalData, setCurrentModalData] = useState({
     title: "",
     content: null,
-  });
+  }); // Modal başlığı ve içeriği
 
+  // GitHub verisini çek
   useEffect(() => {
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
       .then((res) => res.json())
@@ -78,6 +86,7 @@ const About = () => {
       .catch((err) => console.error("GitHub verisi çekilemedi", err));
   }, []);
 
+  // Modal açma fonksiyonu
   const openModal = (serviceId) => {
     const service = services.find((s) => s.id === serviceId);
     if (service) {
@@ -85,44 +94,53 @@ const About = () => {
         title: service.title,
         content: service.modalContent,
       });
-      setActiveModalId(serviceId);
+      setActiveModalId(serviceId); // Modal'ı aç
     }
   };
 
+  // Modal kapatma fonksiyonu
   const closeModal = () => {
-    setActiveModalId(null);
+    setActiveModalId(null); // Modal'ı kapat
+    // İçeriği hemen temizlemeye gerek yok, Modal bileşeni kapanınca kaybolacak
+    // setCurrentModalData({ title: '', content: null });
   };
 
   return (
     <div className="about-container">
+      {/* Başlık */}
       <Header />
 
       <div className="about-grid">
+        {/* İstatistikler */}
         <div className="stats-container" ref={statsContainerRef}>
           <StatCard value={repoCount ?? "..."} label="Repositories" />
           <StatCard value={followers ?? "..."} label="Followers" />
         </div>
 
+        {/* Servis Kartları */}
         <div className="services-section" ref={servicesContainerRef}>
           {services.map((service) => (
             <ServiceCard
               key={service.id}
               icon={service.icon}
               iconBgColor={service.iconBgColor}
+              textColor={service.textColor}
               title={service.title}
               description={service.description}
+              // Tıklanınca o servisin ID'si ile openModal'ı çağır
               onLearnMoreClick={() => openModal(service.id)}
             />
           ))}
         </div>
       </div>
 
+      {/* Modal Bileşeni (Sayfanın sonunda, state'e bağlı) */}
       <Modal
-        isOpen={activeModalId !== null}
+        isOpen={activeModalId !== null} // activeModalId null değilse modal açıktır
         onClose={closeModal}
         title={currentModalData.title}
       >
-        {currentModalData.content}
+        {currentModalData.content} {/* Seçilen içeriği göster */}
       </Modal>
     </div>
   );
