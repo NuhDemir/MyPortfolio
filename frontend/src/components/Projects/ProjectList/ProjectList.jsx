@@ -1,11 +1,12 @@
 import React, { useState, useRef } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
-import ProjectModal from "../../common/ProjectModal"; // Yeni modalı import et
+// Modal import yolunu projenizdeki doğru yola göre güncelleyin
+import ProjectModal from "../../common/ProjectModal";
 import "./ProjectList.css";
 import projectsData from "../../../data/projectData.json";
 
 import MyProjectsSvg from "/assets/icons/project/MyProject.svg";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // lucide-react ikonları
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectList = () => {
   const listContainerRef = useRef(null);

@@ -107,7 +107,7 @@
 
 .project-card-v2-primary-tag {
   position: absolute;
-  bottom: -2px; /* Kartın kenarlığı ile hizalı */
+  bottom: -2px;
   left: 20px;
   background-color: var(--color-accent);
   color: var(--color-text-on-accent, var(--color-text-primary));
@@ -118,6 +118,20 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
 }
+
 .theme-dark .project-card-v2-primary-tag {
   color: var(--color-background-page);
+}
+
+/* === MOBİL UYUMLULUK === */
+@media (max-width: 768px) {
+  .project-card-v2-title {
+    font-size: var(--font-size-md); /* Başlığı biraz küçült */
+  }
+
+  .project-card-v2-description {
+    /* Mobilde 2 satır açıklama yeterli olabilir */
+    -webkit-line-clamp: 2;
+    min-height: calc(var(--line-height-base) * var(--font-size-sm) * 2);
+  }
 }

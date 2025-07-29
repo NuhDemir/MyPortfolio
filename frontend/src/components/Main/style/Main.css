@@ -1,15 +1,15 @@
-/* Ana container ve bölüm stilleri */
+/* === ANA KONTEYNER VE İÇERİK === */
 .main-container {
   width: 100%;
-  height: 100vh; /* Tam ekran yüksekliği kaplaması için */
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* İçeriği dikeyde ortalar */
+  justify-content: center;
   overflow: hidden;
-  z-index: 2; /* Arkaplandaki canvas'ın önünde olması için */
+  z-index: 2;
   box-sizing: border-box;
   position: relative;
-  padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
+  padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 5vw, 60px);
 }
 
 .main-content {
@@ -19,13 +19,13 @@
   position: relative;
 }
 
-/* Başlık stilleri */
+/* === BAŞLIK VE METİNLER === */
 .main-title {
-  font-size: clamp(4.5rem, 10vw, 8rem);
+  font-size: clamp(3.5rem, 10vw, 8rem);
   font-weight: 800;
   color: var(--color-text-primary);
   margin-bottom: 0.5rem;
-  line-height: 0.9;
+  line-height: 0.95;
   word-break: break-word;
   text-transform: uppercase;
 }
@@ -34,13 +34,13 @@
   font-size: clamp(0.9rem, 3vw, 1.5rem);
   background-color: var(--subtitle-bg);
   color: var(--subtitle-text-color);
-  margin-bottom: clamp(1rem, 4vw, 2rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
   padding: 0.5rem 1rem;
   text-transform: uppercase;
   display: inline-block;
 }
 
-/* Portfolio butonu stilleri */
+/* === PORTFOLYO BUTONU === */
 .portfolio-button-container {
   display: inline-block;
   position: relative;
@@ -75,7 +75,7 @@
   height: auto;
 }
 
-/* Ana resim stilleri */
+/* === ANA RESİM === */
 .main-image {
   position: absolute;
   top: 50%;
@@ -93,7 +93,7 @@
   object-fit: contain;
 }
 
-/* === AUDIO CONTROLS STİLLERİ (YENİ VE TEMİZ) === */
+/* === SES OYNATICI (AUDIO CONTROLS) === */
 .audio-controls {
   display: flex;
   flex-direction: column;
@@ -239,373 +239,85 @@
   width: 100%;
 }
 
-/* ================================
-   === Desktop 2K Ekranlar (1920px ve altı) ===
-   ========================================== */
-@media (max-width: 1920px) {
-  .main-title {
-    font-size: clamp(7rem, 0vw, 10rem);
-  }
+/* ======================================= */
+/* === DUYARLILIK (RESPONSIVE) STİLLERİ === */
+/* ======================================= */
 
+/* TABLET VE KÜÇÜK LAPTOPLAR (992px ve altı) */
+@media (max-width: 992px) {
   .main-container {
-    padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
-    justify-content: center;
+    align-items: center; /* İçeriği yatayda ortala */
+    text-align: center; /* Metinleri ortala */
   }
 
+  /* Ana resmi gizleyerek içeriğe daha fazla yer aç */
   .main-image {
-    max-width: 60%;
-    right: 5%;
-  }
-}
-
-/* ========================================
-     === Büyük Ekranlar (1600px ve altı) ===
-     ======================================== */
-@media (max-width: 1600px) {
-  .main-container {
-    padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
-    justify-content: center;
+    display: none;
   }
 
-  .main-image {
-    max-width: 40%;
-    right: 5%;
-  }
-  .audio-controls {
+  .main-content {
     max-width: 90%;
   }
-}
 
-/* ==========================================
-     === Standart Laptoplar (1400px ve altı) ===
-     ========================================== */
-@media (max-width: 1400px) {
-  .main-content {
-    max-width: 900px;
-  }
-  .main-title {
-    font-size: clamp(9rem, 8vw, 8rem);
-  }
-  .main-subtitle {
-    font-size: clamp(2rem, 3vw, 1.5rem);
-  }
-  .main-container {
-    padding: clamp(2rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
-    justify-content: center;
-  }
-
-  .main-image {
-    max-width: 40%;
-    right: 0%;
-  }
   .audio-controls {
-    max-width: 80%;
+    margin: 0 auto; /* Ses oynatıcıyı ortala */
+  }
+
+  .portfolio-button-container {
+    margin-bottom: var(--spacing-md);
   }
 }
 
-/* ==============================================
-     === Küçük Laptop / Tablet Yatay (1200px ve altı) ===
-     ============================================== */
-@media (max-width: 1200px) {
-  .main-title {
-    font-size: clamp(7.6rem, 10vw, 1.2rem);
-  }
-
-  .main-subtitle {
-    font-size: clamp(1rem, 3vw, 1.5rem);
-  }
-
-  .main-container {
-    padding: clamp(4rem, 5vw, 2.5rem) clamp(15px, 3vw, 40px);
-    justify-content: center;
-  }
-
-  .main-image {
-    max-width: 55%;
-    right: 0%;
-  }
-  .audio-controls {
-    max-width: 60%;
-  }
-  .main-content {
-    width: 100%;
-    left: 3.5%;
-  }
-}
-
-/* ==================================================
-     === Tabletler (993px ve altı, Bootstrap sm-md) ===
-     ================================================== */
-@media (max-width: 993px) {
-  .main-container {
-    justify-content: center;
-  }
-  .main-title {
-    font-size: clamp(7.5em, 10vw, 1.2rem);
-  }
-  .main-subtitle {
-    font-size: clamp(1rem, 3vw, 1.5rem);
-  }
-  .main-content {
-    width: 100%;
-    left: 3.5%;
-  }
-
-  .main-image {
-    max-width: 50%;
-    right: 0%;
-  }
-}
-
-/* ========================================
-     === Küçük Tabletler (768px ve altı) ===
-     ======================================== */
+/* MOBİL CİHAZLAR (768px ve altı) */
 @media (max-width: 768px) {
-  .audio-controls {
-    max-width: 73.2%;
-  }
-
-  .main-image {
-    max-width: 65%;
-    top: 35%;
-    right: 5%;
-    margin: 2rem auto;
-    display: block;
-    order: 1;
-  }
-
-  .main-image img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-  }
-
   .main-title {
-    font-size: clamp(6rem, 8vw, 6rem);
-  }
-  .main-subtitle {
-    font-size: clamp(0.1rem, 3vw, 1.2rem);
-  }
-}
-
-/* ========================================================
-     === Büyük Telefonlar / Küçük Tabletler (600px ve altı) ===
-     ======================================================== */
-@media (max-width: 600px) {
-  .main-container {
-    padding: 1rem 15px 3.75rem 15px;
-  }
-
-  .main-title {
-    font-size: 5.5rem;
+    font-size: clamp(3rem, 15vw, 4.5rem);
   }
 
   .main-subtitle {
-    font-size: 1.2rem;
-  }
-
-  .portfolio-button {
-    padding: clamp(0.4rem, 2vw, 0.75rem) clamp(0.8rem, 3vw, 1.5rem);
-    font-size: clamp(0.9rem, 2vw, 1.2rem);
-  }
-
-  .main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    margin-bottom: var(--spacing-lg);
   }
 
   .audio-controls {
-    max-width: 80%;
-    padding-bottom: 40px;
-  }
-  .main-image {
-    max-width: 75%;
-    right: 13%;
-    margin: 2rem auto;
-    display: block;
-    order: 1;
+    max-width: 100%; /* Tam genişlik kullan */
   }
 
-  .main-image img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
+  .controls-wrapper {
+    justify-content: center; /* Butonları ortala */
+  }
+
+  /* Çok küçük ekranlarda ses ayar çubuğunu gizle */
+  .volume-control {
+    display: none;
   }
 }
 
-/* ================================================
-     === Küçük Telefonlar (576px ve altı, Bootstrap xs) ===
-     ================================================ */
-@media (max-width: 576px) {
+/* YATAY MOD (LANDSCAPE) */
+@media (max-height: 600px) and (orientation: landscape) and (max-width: 992px) {
   .main-container {
-    padding: 2rem 15px 3.6rem 15px;
-    position: relative;
-    overflow-y: auto;
-  }
-
-  .main-title {
-    font-size: 3.5rem;
-  }
-
-  .main-subtitle {
-    font-size: 1rem;
-  }
-
-  .main-image {
-    max-width: 80%;
-    right: 11%;
-    margin: 2rem auto;
-    display: block;
-    order: 1;
-  }
-
-  .main-image img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    opacity: 70%;
-  }
-
-  .audio-controls {
-    max-width: 70%;
-    flex-wrap: wrap;
-    justify-content: center;
-    padding-bottom: 20px;
-  }
-
-  .main-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .portfolio-button {
-    margin: 0 auto;
-  }
-}
-
-/* =====================================
-     === Dokunmatik Cihazlar için Fix ===
-     ===================================== */
-@media (max-width: 480px) {
-  .main-container {
-    padding: 0.2rem 15px 0.75rem 15px;
-    position: relative;
-    overflow-y: auto;
-  }
-
-  .portfolio-button {
-    padding: 0.5rem 1rem;
-    font-size: 0.9rem;
-  }
-
-  .main-image {
-    max-width: 65%;
-    right: 15%;
-    margin: 2rem auto;
-    display: block;
-    order: 1;
-  }
-
-  .main-image img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    opacity: 70%;
-  }
-
-  .main-content {
-    width: 100%;
-  }
-
-  .main-title {
-    font-size: 4.5rem;
-  }
-  .main-subtitle {
-    font-size: 1rem;
-  }
-}
-
-@media (hover: none) {
-  .portfolio-button:hover {
-    transform: none;
-    box-shadow: none;
-  }
-
-  .play-button:hover,
-  .next-button:hover {
-    transform: none;
-  }
-}
-
-/* ==========================================
-     === Dikey Mod (max yükseklik 0px) ===
-     ========================================== */
-
-/* ========================================
-     === Yatay Mod (max yükseklik 600px) ===
-     ======================================== */
-@media (max-height: 600px) and (orientation: landscape) {
-  .main-container {
-    overflow-y: auto;
-    margin: -60px 0 0 0;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem clamp(15px, 3vw, 30px);
+    justify-content: space-around;
     gap: 2rem;
+    text-align: left; /* Metin hizalamasını sıfırla */
   }
 
   .main-content {
     width: 50%;
-    max-width: 500px;
-    padding-top: 0;
+    max-width: 450px;
   }
 
   .main-image {
-    width: 40%;
-    max-width: 500px;
-    margin: 0;
-    order: 2;
-  }
-}
-
-/* =====================================
-     === Karanlık Mod Desteği (Dark Mode) ===
-     ===================================== */
-@media (prefers-color-scheme: dark) {
-  .portfolio-button {
-    /* Arka plan için farklı renkler burada belirlenebilir */
-  }
-
-  .portfolio-button:hover {
-    background-color: var(--button-bg-hover);
-    color: white;
-    border-color: #2ecc71;
-  }
-}
-
-/* ====================================
-     === Yazdırma Modu (Print Mode) ===
-     ==================================== */
-@media print {
-  .main-title,
-  .main-subtitle,
-  .portfolio-button {
-    opacity: 1 !important;
-    color: #001429 !important;
-  }
-
-  .main-image {
+    display: block; /* Yatay modda resmi tekrar göster */
     position: relative;
-    max-width: 50%;
-    margin: 2rem auto;
+    transform: none;
+    top: auto;
+    right: auto;
+    width: 40%;
+    max-width: 400px;
+    order: 2; /* Resim sağda kalsın */
   }
 
   .audio-controls {
-    display: none;
+    margin: 0; /* Ortalamayı kaldır */
   }
 }

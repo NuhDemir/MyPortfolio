@@ -1,6 +1,7 @@
 .project-list-section {
   padding: var(--spacing-xl) 0;
   position: relative;
+  background-color: var(--color-background-page);
   overflow: hidden;
 }
 
@@ -9,6 +10,7 @@
   margin: 0 auto var(--spacing-lg) auto;
   max-width: 300px;
   height: auto;
+  padding: 0 var(--spacing-md); /* Mobilde kenarlara yapışmasın */
 }
 
 .project-list-wrapper {
@@ -18,12 +20,14 @@
 .project-list-container {
   display: flex;
   flex-wrap: nowrap;
-  align-items: stretch;
+  align-items: stretch; /* Kart yüksekliklerini eşitler */
   width: 100%;
   padding: var(--spacing-xl) var(--spacing-xxl);
-  overflow-x: auto;
+  overflow-x: auto; /* Yatay kaydırmayı sağlar */
   scroll-behavior: smooth;
   gap: var(--spacing-xl);
+
+  /* Kaydırma çubuğunu gizle */
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
@@ -32,7 +36,7 @@
 }
 
 .project-list-container .project-card-v2-wrapper {
-  flex: 0 0 auto;
+  flex: 0 0 auto; /* Kartların boyutunun esnemesini engeller */
   width: 340px;
 }
 
@@ -67,7 +71,9 @@
   right: var(--spacing-lg);
 }
 
-/* Responsive Stiller */
+/* === DUYARLILIK (RESPONSIVE) STİLLERİ === */
+
+/* Küçük Laptoplar */
 @media (max-width: 992px) {
   .project-list-container {
     padding: var(--spacing-xl) var(--spacing-lg);
@@ -84,16 +90,34 @@
   }
 }
 
+/* Tablet ve Mobil Cihazlar */
 @media (max-width: 768px) {
+  .project-list-title-svg {
+    max-width: 250px;
+  }
   .project-list-container {
+    /* Mobilde kenarlarda boşluk bırak ve kart arası mesafeyi azalt */
     padding: var(--spacing-lg) var(--spacing-md);
     gap: var(--spacing-md);
+
+    /* Kaydırmanın en başta ve sonda düzgün görünmesini sağlar */
     scroll-padding-inline: var(--spacing-md);
   }
   .project-list-container .project-card-v2-wrapper {
-    width: 280px;
+    /* Ekranda bir tam kart ve bir sonrakinin bir kısmı görünecek şekilde ayarla */
+    width: 75%;
+    max-width: 300px; /* Çok geniş ekranlarda fazla büyümesin */
   }
+
+  /* Mobilde okları gizle, kullanıcı dokunarak kaydırsın */
   .scroll-button-v2 {
-    display: none; /* Mobilde okları gizle, kullanıcı dokunarak kaydırsın */
+    display: none;
+  }
+}
+
+/* En Küçük Mobil Cihazlar */
+@media (max-width: 480px) {
+  .project-list-container .project-card-v2-wrapper {
+    width: 85%;
   }
 }

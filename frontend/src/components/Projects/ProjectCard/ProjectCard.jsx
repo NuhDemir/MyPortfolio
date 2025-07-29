@@ -6,7 +6,6 @@ import imageSvg from "/assets/icons/img/image.svg";
 const ProjectCard = ({ project, onClick }) => {
   const { title, description, imageUrl, tags } = project;
   const imageSource = imageUrl || imageSvg;
-  // Kartın altındaki renkli şerit için ilk etiketi alıyoruz
   const primaryTag = tags[0] || "Proje";
 
   return (
@@ -21,7 +20,6 @@ const ProjectCard = ({ project, onClick }) => {
         </div>
         <div className="project-card-v2-content">
           <div className="project-card-v2-tags">
-            {/* Sadece ilk 3 etiketi gösterelim */}
             {tags.slice(0, 3).map((tag, index) => (
               <span key={index} className="project-card-v2-tag">
                 {tag}
