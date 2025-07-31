@@ -13,7 +13,9 @@
   border-radius: var(--border-radius-lg);
   overflow: hidden;
   box-shadow: 8px 8px 0px 0px var(--color-text-primary);
-  transition: all var(--transition-duration-short) ease-out;
+  /* Sadece animate edilecek özellikleri belirtmek daha performanslıdır */
+  transition: transform var(--transition-duration-short) ease-out,
+    box-shadow var(--transition-duration-short) ease-out;
 }
 
 .project-card-v2-wrapper:hover .project-card-v2 {
@@ -21,6 +23,7 @@
   box-shadow: 4px 4px 0px 0px var(--color-text-primary);
 }
 
+/* === Resim Alanı ve CRT Efekti === */
 .project-card-v2-image-container {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -28,6 +31,43 @@
   overflow: hidden;
   flex-shrink: 0;
   border-bottom: 2px solid var(--color-text-primary);
+  position: relative; /* CRT efekti için pseudo-elementleri konumlandırmak üzere */
+}
+
+/* CRT Efekti: Tarama Çizgileri (Scanlines) */
+.project-card-v2-image-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  z-index: 2;
+  pointer-events: none; /* Üzerindeki tıklamaları engeller */
+}
+
+/* CRT Efekti: Köşe Karartma (Vignette) */
+.project-card-v2-image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.4) 110%
+  );
+  z-index: 3;
+  pointer-events: none;
 }
 
 .project-card-v2-image {
@@ -35,12 +75,16 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
+  /* CRT Efekti: Resme yeşilimsi, parlak bir ton verir */
+  filter: sepia(0.3) hue-rotate(55deg) saturate(1.2) contrast(1.1);
+  z-index: 1;
 }
 
 .project-card-v2-wrapper:hover .project-card-v2-image {
   transform: scale(1.05);
 }
 
+/* === Kart İçeriği === */
 .project-card-v2-content {
   padding: var(--spacing-md);
   flex-grow: 1;
@@ -80,14 +124,16 @@
   flex-grow: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 3; /* 3 satır ile sınırla */
   overflow: hidden;
   text-overflow: ellipsis;
-  min-height: calc(var(--line-height-base) * var(--font-size-sm) * 3);
+  min-height: calc(
+    var(--line-height-base) * var(--font-size-sm) * 3
+  ); /* 3 satırlık yer ayır */
 }
 
 .project-card-v2-footer {
-  margin-top: auto;
+  margin-top: auto; /* Footer'ı her zaman en alta iter */
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -107,7 +153,7 @@
 
 .project-card-v2-primary-tag {
   position: absolute;
-  bottom: -2px;
+  bottom: -2px; /* Kenarlığın üzerine oturması için */
   left: 20px;
   background-color: var(--color-accent);
   color: var(--color-text-on-accent, var(--color-text-primary));
@@ -123,15 +169,50 @@
   color: var(--color-background-page);
 }
 
-/* === MOBİL UYUMLULUK === */
+/* === DUYARLI TASARIM (RESPONSIVE) === */
+
 @media (max-width: 768px) {
+  /* Tablet ve büyük mobil cihazlar */
+  .project-card-v2 {
+    box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+  }
+
+  .project-card-v2-wrapper:hover .project-card-v2 {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0px 0px var(--color-text-primary);
+  }
+
   .project-card-v2-title {
-    font-size: var(--font-size-md); /* Başlığı biraz küçült */
+    font-size: var(--font-size-md);
   }
 
   .project-card-v2-description {
-    /* Mobilde 2 satır açıklama yeterli olabilir */
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 2; /* Mobilde 2 satır açıklama yeterli */
     min-height: calc(var(--line-height-base) * var(--font-size-sm) * 2);
+  }
+}
+
+@media (max-width: 480px) {
+  /* Küçük mobil cihazlar */
+  .project-card-v2 {
+    box-shadow: 4px 4px 0px 0px var(--color-text-primary);
+  }
+
+  .project-card-v2-wrapper:hover .project-card-v2 {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--color-text-primary);
+  }
+
+  .project-card-v2-content {
+    padding: var(--spacing-sm); /* İç boşluğu azalt */
+  }
+
+  .project-card-v2-tag {
+    font-size: 0.7rem; /* Etiket fontunu biraz küçült */
+  }
+
+  .project-card-v2-primary-tag {
+    left: 12px; /* Etiketi sola biraz daha yaklaştır */
+    padding: 3px 8px;
   }
 }

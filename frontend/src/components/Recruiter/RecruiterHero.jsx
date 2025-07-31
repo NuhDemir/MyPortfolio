@@ -12,7 +12,7 @@ const RecruiterHero = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="hero-avatar">
-        <img src="/images/avatar.png" alt="Nuh Demir" />
+        <img src="/assets/icons/profile.png" alt="Nuh Demir" />
       </div>
       <div className="hero-content">
         <h1>Nuh Demir</h1>

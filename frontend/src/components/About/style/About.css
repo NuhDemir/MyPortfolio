@@ -1,39 +1,40 @@
 /* frontend/src/components/About/style/About.css */
 
-.about-container { /* Bu sınıf App.jsx içindeki <section id="about-section"> üzerinde olmalı */
+.about-container {
+  /* Bu sınıf App.jsx içindeki <section id="about-section"> üzerinde olmalı */
   padding: var(--spacing-xl) var(--container-padding);
 }
 
-.header { /* SmileSvg'yi içeren div için sınıf */
-  padding-bottom: var(--spacing-lg); /* Başlık resminin altındaki boşluk */
+.header {
+  /* SmileSvg'yi içeren div için sınıf */
+  padding-bottom: var(--spacing-lg);
 }
 
-.header img { /* SmileSvg */
-  width: 40%; /* Gerektiği gibi ayarlayın */
-  max-width: 300px; /* Çok büyümesini engelleyin */
+.header img {
+  width: clamp(300px, 70vw, 600px);
   height: auto;
-  display: block; /* Resmin altındaki ekstra boşluğu kaldırın */
-  margin: 0 auto var(--spacing-md) auto; /* Resmi ortalayın */
+  display: block;
+  margin: 0 0 var(--spacing-md) 0; /* Resmi ortalar */
 }
 
 .about-grid {
   display: grid;
-  grid-template-columns: 250px 1fr; /* İstatistik sütun genişliğini gerektiği gibi ayarlayın */
+  grid-template-columns: 250px 1fr;
   border-top: 2px solid var(--color-border-strong);
-  border-bottom: 2px solid var(--color-border-strong); /* Tutarlılık için alt kenarlık ekleyin */
-  background: var( --color-background-paper-transparent);
+  border-bottom: 2px solid var(--color-border-strong);
+  background: var(--color-background-paper-transparent);
 }
 
 .stats-container {
   display: flex;
   flex-direction: column;
   border-right: 2px solid var(--color-border-strong);
-  padding: var(--spacing-lg); /* İstatistikler için iç dolgu */
-  gap: var(--spacing-lg); /* İstatistik kartları arasındaki boşluk */
-  background: var( --color-background-paper-transparent); /* Varsayılan, gerekirse üzerine yazılabilir */
+  padding: var(--spacing-lg);
+  gap: var(--spacing-lg);
+  background: var(--color-background-paper-transparent);
 }
 
-/* Yükleme ve Hata Mesajları için stiller (4. adımdan) */
+/* Yükleme ve Hata Mesajları için stiller */
 .stats-container .loading-message,
 .stats-container .error-message {
   text-align: center;
@@ -43,10 +44,12 @@
 }
 
 .stats-container .error-message {
-  color: var(--color-error, #d32f2f); /* Eğer --color-error yoksa varsayılan kırmızı */
+  color: var(
+    --color-error-text,
+    #d32f2f
+  ); /* Temadan gelen hata rengi veya varsayılan kırmızı */
   font-weight: var(--font-weight-semibold);
 }
-
 
 .stat-card {
   display: flex;
@@ -54,7 +57,7 @@
 }
 
 .stat-value {
-  font-size: var(--font-size-h2); /* Belirgin istatistik değeri */
+  font-size: var(--font-size-h2);
   font-weight: var(--font-weight-bold);
   margin-bottom: var(--spacing-xs);
   color: var(--color-text-primary);
@@ -71,70 +74,64 @@
 
 .services-section {
   display: grid;
-  /* Varsayılan olarak 2 sütunlu, mobil için @media query içinde değiştirilecek */
   grid-template-columns: repeat(2, 1fr);
 }
 
 .service-card {
-  padding: var(--spacing-lg); /* Hizmet kartları için geniş dolgu */
-  /* Varsayılan olarak her karta kenarlık ekleyelim, sonra spesifik durumlarla kaldıralım */
+  padding: var(--spacing-lg);
   border-right: 2px solid var(--color-border-strong);
   border-bottom: 2px solid var(--color-border-strong);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md); /* Kart içindeki öğeler arasındaki boşluk */
+  gap: var(--spacing-md);
   transition: transform var(--transition-duration-short) ease,
-              box-shadow var(--transition-duration-short) ease;
-  background-color: var( --color-background-paper-transparent); /* Varsayılan, gerekirse üzerine yazılabilir */
-  position: relative; /* z-index'in transform ile düzgün çalışması için */
+    box-shadow var(--transition-duration-short) ease;
+  background-color: var(--color-background-paper-transparent);
+  position: relative;
 }
 
 .service-card:hover {
-  transform: translateY(-4px) scale(1.01); /* Hafif yükselme ve ölçeklenme */
-  box-shadow: var(--box-shadow-base); /* Üzerine gelindiğinde temalı gölge */
-  z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde olmasını sağlayın */
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: var(--box-shadow-base);
+  z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde kalır */
 }
 
-/* Masaüstü ve üzeri (2 sütunlu düzen) için kenarlık ayarlamaları */
+/* Masaüstü (2 sütunlu düzen) için kenarlık ayarları */
 @media (min-width: 769px) {
-  /* İkinci sütundaki kartların (çift numaralı) sağ kenarlığı olmamalıdır */
+  /* İkinci sütundaki (çift numaralı) kartların sağ kenarlığını kaldır */
   .services-section .service-card:nth-child(2n) {
     border-right: none;
   }
-
-  /* Son satırdaki kartların (2 sütunlu bir ızgara için en fazla 2 öğe) alt kenarlığı olmamalıdır.
-     Bu, .about-grid'in genel alt kenarlığının son görünür kenarlık olmasını sağlar. */
+  /* Son satırdaki kartların alt kenarlığını kaldır */
   .services-section .service-card:nth-last-child(-n + 2) {
     border-bottom: none;
   }
 }
 
-
 .icon-wrapper {
-  width: 48px; /* Biraz daha büyük ikonlar */
+  width: 48px;
   height: 48px;
   border-radius: var(--border-radius-circle);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform var(--transition-duration-short) ease;
-  /* iconBgColor bir prop olarak geçirilir, bu nedenle bu stil JSX'te kalır */
+  /* iconBgColor, component'ten inline style olarak geldiği için CSS'te yer almaz */
 }
 
 .service-card:hover .icon-wrapper {
-  transform: scale(1.15); /* İkon için daha belirgin üzerine gelme efekti */
+  transform: scale(1.15);
 }
 
-.service-icon { /* icon-wrapper içindeki SVG'ler için */
-  width: 24px; /* Sarmalayıcı içindeki ikon boyutunu ayarlayın */
+.service-icon {
+  width: 24px;
   height: 24px;
-  /* Gerçek SVG dolgusu/konturu temalı olmalı veya currentColor olarak ayarlanmalıdır */
 }
 
 .service-title {
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-on-primary); /* Bunun background-paper ile kontrast oluşturduğundan emin olun */
+  color: var(--color-text-primary);
   line-height: var(--line-height-heading);
 }
 
@@ -142,132 +139,106 @@
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
   line-height: var(--line-height-base);
-  flex-grow: 1; /* Açıklamanın mevcut alanı kaplamasına izin verin */
+  flex-grow: 1; /* Açıklamanın mevcut alanı doldurmasını sağlar */
 }
 
 .learn-more {
   background: transparent;
   border: none;
-  padding: var(--spacing-xs) 0; /* Tıklanabilirlik için biraz dikey dolgu ekleyin */
+  padding: var(--spacing-xs) 0;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
   text-align: left;
   color: var(--color-text-link);
-  display: inline-flex; /* Ok için hizalama ve boşluk sağlar */
+  display: inline-flex;
   align-items: center;
-  align-self: flex-start; /* Esnememesini sağlayın */
+  align-self: flex-start;
   transition: color var(--transition-duration-short) ease,
-              transform var(--transition-duration-short) ease;
+    transform var(--transition-duration-short) ease;
 }
 
 .learn-more:hover {
-  background-color: #ffffff00; /* Bu muhtemelen `background: transparent;` ile aynı etkiyi yapar,
-                                   ya da `var(--color-background-transparent)` gibi bir değişken kullanılabilir.
-                                   Şu anki haliyle bırakıyorum, işlevselse sorun yok. */
-  color: var(--color-text-link-hover); /* Üzerine gelindiğinde renk değişimi */
-  transform: translateX(3px); /* Üzerine gelindiğinde hafif hareket */
+  color: var(--color-text-link-hover);
+  transform: translateX(3px);
 }
 
 .learn-more:after {
   content: "→";
-  opacity: 1; /* Her zaman görünür veya üzerine gelindiğinde kontrol edilir */
   margin-left: var(--spacing-xs);
-  transition: opacity var(--transition-duration-short) ease,
-              transform var(--transition-duration-short) ease; /* Ok üzerindeki potansiyel üzerine gelme efektleri için */
+  transition: transform var(--transition-duration-short) ease;
 }
 
-/* Performans için: tarayıcıya yaklaşan değişiklikler hakkında ipucu verin */
+/* 
+  Performans Optimizasyonu: Tarayıcıya hangi özelliklerin değişeceğini önceden bildirir.
+  Sadece gerçekten animasyona uğrayan elemanlar ve özellikler için kullanılmalıdır.
+*/
 .service-card {
-  will-change: transform, box-shadow; /* .service-card üzerine gelme efekti için eklendi */
+  will-change: transform, box-shadow;
 }
-.stat-value,
-.stat-label,
-.service-title,
-.service-desc,
-.icon-wrapper { /* Orijinal kural; potansiyel JS animasyonları veya daha geniş kapsam varsayılarak korundu */
-  will-change: transform, opacity;
+.icon-wrapper {
+  will-change: transform;
 }
 .learn-more {
-  will-change: color, transform; /* .learn-more üzerine gelme efekti için eklendi */
+  will-change: color, transform;
 }
 
+/* === DUYARLI STİLLER (RESPONSIVE STYLES) === */
 
-/* === Duyarlı Stiller === */
-
-@media (max-width: 1024px) { /* Tablet ve daha küçükleri */
+@media (max-width: 1024px) {
+  /* Tablet ve daha küçükleri */
   .about-grid {
-    grid-template-columns: 200px 1fr; /* Daha küçük istatistik sütunu */
-  }
-  .stats-container {
-    padding: var(--spacing-lg);
-  }
-  .service-card {
-    padding: var(--spacing-lg);
-  }
-  .service-title {
-    font-size: var(--font-size-lg);
+    grid-template-columns: 200px 1fr; /* İstatistikler için daha dar sütun */
   }
 }
 
-@media (max-width: 768px) { /* Mobil yatay ve dikey (tek sütunlu düzen) */
+@media (max-width: 768px) {
+  /* Mobil (tek sütunlu düzen) */
   .about-container {
-    padding: var(--spacing-lg) var(--spacing-md); /* Daha az yatay dolgu */
-  }
-  .header img {
-    width: 50%;
-    max-width: 200px;
+    padding: var(--spacing-lg) var(--spacing-md);
   }
   .about-grid {
-    grid-template-columns: 1fr; /* Tek sütunlu düzen */
+    grid-template-columns: 1fr; /* Izgarayı tek sütuna düşür */
   }
   .stats-container {
-    border-right: none; /* Tek sütunda sağ kenarlık yok */
-    flex-direction: row; /* İstatistikler yan yana */
-    flex-wrap: wrap; /* Çok fazla istatistik varsa kaydırmaya izin ver */
-    justify-content: space-around; /* İstatistikleri dağıt */
+    border-right: none;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
     padding: var(--spacing-md);
     gap: var(--spacing-md);
-    border-bottom: 2px solid var(--color-border-strong); /* İstatistikleri hizmetlerden ayırır */
+    border-bottom: 2px solid var(--color-border-strong); /* İstatistikleri hizmetlerden ayır */
   }
   .stat-card {
     flex-basis: calc(50% - var(--spacing-sm)); /* Satır başına iki istatistik */
-    text-align: center; /* İstatistik metnini ortala */
+    text-align: center;
   }
   .stat-value {
     font-size: var(--font-size-h3);
   }
-
   .services-section {
-    grid-template-columns: 1fr; /* Hizmetler için tek sütun */
+    grid-template-columns: 1fr; /* Hizmetleri tek sütuna düşür */
   }
-
   .services-section .service-card {
-    border-right: none; /* Tek sütunda tüm kartların sağ kenarlığı yok */
-    /* Alt kenarlık varsayılan olarak .service-card'dan gelir, sadece sonuncuyu kaldıracağız */
+    border-right: none; /* Tek sütunda sağ kenarlık olmaz */
   }
-
-  /* Mobil tek sütun düzeninde, sadece en son hizmet kartının alt kenarlığı olmamalıdır.
-     .about-grid'in genel alt kenarlığı son görünür kenarlık olur. */
+  /* Mobil tek sütun düzeninde sadece son kartın alt kenarlığını kaldır */
   .services-section .service-card:last-child {
     border-bottom: none;
   }
 }
 
-@media (max-width: 480px) { /* Küçük mobil */
+@media (max-width: 480px) {
+  /* Küçük mobil cihazlar */
   .about-container {
     padding: var(--spacing-md) var(--spacing-sm);
-  }
-  .header img {
-    width: 60%;
-    max-width: 150px;
   }
   .stats-container {
     padding: var(--spacing-sm);
     gap: var(--spacing-sm);
   }
   .stat-card {
-    flex-basis: 100%; /* Satır başına bir istatistik */
+    flex-basis: 100%; /* Satır başına tek istatistik */
   }
   .stat-value {
     font-size: var(--font-size-xl);
@@ -297,5 +268,3 @@
     font-size: var(--font-size-sm);
   }
 }
-
-/* @supports (-webkit-overflow-scrolling: touch) {} - Bu yorum satırı kaldırılabilir. */

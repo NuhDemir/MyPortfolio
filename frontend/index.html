@@ -1,13 +1,56 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="tr">
   <head>
+    <!-- Temel Karakter Seti ve Görüntü Alanı Ayarları -->
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nuh Demir</title>
+
+    <!-- SEO ve Tarayıcı Görünümü için Meta Etiketleri -->
+    <title>Nuh Demir | Web Geliştirici & Tasarımcı</title>
+    <meta
+      name="description"
+      content="Nuh Demir'in kişisel portfolyo sitesi. Modern web teknolojileri ile geliştirilen projelerimi ve hizmetlerimi keşfedin."
+    />
+    <meta name="theme-color" content="#36B069" />
+    <!-- Sitenizin ana rengiyle değiştirin -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- ==================================================================== -->
+    <!--          PERFORMANS İÇİN KRİTİK KAYNAKLARI ÖNCEDEN YÜKLEME          -->
+    <!-- ==================================================================== -->
+
+    <!-- 1. En Önemli Fontları Önceden Yükle (LCP elemanları için) -->
+    <!-- Not: 'href' yollarının `public/fonts/` klasörünüzdekiyle aynı olduğundan emin olun. -->
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-v21-latin_latin-ext-700.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/space-grotesk-v21-latin_latin-ext-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+
+    <!-- 2. İlk Yüklemede Görünen Kritik SVG'leri Önceden Yükle -->
+    <!-- Not: Sadece "above-the-fold" (ekranın üst kısmında) görünenleri ekleyin. -->
+    <link rel="preload" href="/assets/icons/main/main.svg" as="image" />
+
+    <!-- Diğer kritik SVG'ler varsa (isteğe bağlı): -->
+    <!-- <link rel="preload" href="/assets/icons/project/MyProject.svg" as="image" /> -->
+    <!-- <link rel="preload" href="/assets/icons/about/smile.svg" as="image" /> -->
   </head>
   <body>
+    <!-- React uygulamasının bağlanacağı kök element -->
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+
+    <!-- JavaScript dosyasını 'defer' ile yükleyerek render-bloklamayı önle -->
+    <script type="module" defer src="/src/main.jsx"></script>
   </body>
 </html>

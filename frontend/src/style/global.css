@@ -1,69 +1,194 @@
-/* src/style/global.css */
-@import url("https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Outfit:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap");
+/* ==========================================================================
+   1. FONT TANIMLAMALARI (SELF-HOSTED)
+   ========================================================================== */
+
+/* --- Amatic SC --- */
+@font-face {
+  font-display: swap; /* Metnin anında görünmesini sağlar */
+  font-family: "Amatic SC";
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url("/fonts/amatic-sc-v27-cyrillic_latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Amatic SC";
+  font-style: normal;
+  font-weight: 700; /* Bold */
+  src: url("/fonts/amatic-sc-v27-cyrillic_latin-700.woff2") format("woff2");
+}
+
+/* --- Outfit --- */
+/* Not: Outfit için tüm ağırlıkları ekliyoruz */
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 100;
+  src: url("/fonts/outfit-v14-latin-100.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 200;
+  src: url("/fonts/outfit-v14-latin-200.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/outfit-v14-latin-300.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url("/fonts/outfit-v14-latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/outfit-v14-latin-500.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/outfit-v14-latin-600.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/outfit-v14-latin-700.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/fonts/outfit-v14-latin-800.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Outfit";
+  font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/outfit-v14-latin-900.woff2") format("woff2");
+}
+
+/* --- Space Grotesk --- */
+@font-face {
+  font-display: swap;
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/space-grotesk-v21-latin_latin-ext-300.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 400; /* Regular */
+  src: url("/fonts/space-grotesk-v21-latin_latin-ext-regular.woff2")
+    format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/space-grotesk-v21-latin_latin-ext-500.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/space-grotesk-v21-latin_latin-ext-600.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap;
+  font-family: "Space Grotesk";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/space-grotesk-v21-latin_latin-ext-700.woff2") format("woff2");
+}
+
+/* ==========================================================================
+   2. TEMA DEĞİŞKENLERİ VE RESET STİLLERİ
+   ========================================================================== */
 
 /* === VARSAYILAN (LIGHT) TEMA DEĞİŞKENLERİ === */
 :root {
-  /* === Ana Renkler (Pastel / Yumuşak Tonlar) === */
-  --color-primary: #0cb845;            /* Soluk zeytin yeşili */
-  --color-primary-darker: #678d74;     /* Koyu pastel yeşil */
-  --color-secondary: #dad8c5;          /* Bej / Açık krem */
-  --color-accent: #a3c4a8;             /* Yumuşak açık yeşil */
-  --color-accent-hover: #89ab8e;       /* Hafif koyulaşmış ton */
+  /* === Ana Renkler === */
+  --color-primary: #0cb845;
+  --color-primary-darker: #678d74;
+  --color-secondary: #dad8c5;
+  --color-accent: #a3c4a8;
+  --color-accent-hover: #89ab8e;
 
-  --color-background-page: #36B069;    /* Genel sayfa arka planı */
-  --color-background-paper: #ffffff;   /* Kartlar ve kutular için beyaz */
-  --color-background-paper-transparent: rgba(255, 255, 255, 0.20);
-  --color-background-overlay: rgba(50, 70, 50, 0.05); /* Çok hafif yeşilimsi overlay */
+  /* === Arka Plan Renkleri === */
+  --color-background-page: #36b069;
+  --color-background-paper: #ffffff;
+  --color-background-paper-transparent: rgba(255, 255, 255, 0.2);
+  --color-background-paper-translucent: rgba(255, 255, 255, 0.75);
+  --color-background-overlay: rgba(50, 70, 50, 0.05);
   --color-background-tooltip: #ecebe6;
---color-background-paper-translucent: rgba(255, 255, 255, 0.75);
 
   /* === Metin Renkleri === */
-  --color-text-primary: #2d2d2d;       /* Koyu gri, yumuşak siyah yerine geçer */
-  --color-text-secondary: #4a4a4a;     /* Orta ton gri */
-  --color-text-muted: #6c6c6c;         /* Açık gri */
+  --color-text-primary: #2d2d2d;
+  --color-text-secondary: #4a4a4a;
+  --color-text-muted: #6c6c6c;
   --color-text-on-primary: #ffffff;
   --color-text-on-secondary: #2d2d2d;
   --color-text-on-accent: #2d2d2d;
-  --color-text-link: #6a927a;          /* Hafif yeşilimsi link rengi */
+  --color-text-link: #2d2d2d;
   --color-text-link-hover: #4c745c;
   --color-text-tooltip: #2d2d2d;
 
-  /* === Border Renkleri === */
+  /* === Kenarlık Renkleri === */
   --color-border-primary: #ffffff;
   --color-border-strong: #eaeaea;
   --color-border-input: #1c733a;
   --color-border-input-focus: #74c69d;
-  --color-border-input-focus-shadow: rgb(116, 198, 157)
+  --color-border-input-focus-shadow: rgb(116, 198, 157);
 
   /* === Butonlar === */
-  --color-button-primary-bg: #95bfa32;
+  --color-button-primary-bg: #ccc7a5;
   --color-button-primary-text: #ffffff;
   --color-button-primary-bg-hover: #678d74;
   --color-button-shadow: rgba(0, 0, 0, 0.08);
   --color-button-disabled-text: rgba(0, 0, 0, 0.3);
   --color-button-loader-track: rgba(0, 0, 0, 0.1);
-  --color-success-icon-glow: rgba(116, 198, 157, 0.2);
 
   /* === Navbar === */
-  --color-navbar-bg: #CCC7A5;
+  --color-navbar-bg: #ccc7a5;
   --color-navbar-text: #2d2d2d;
   --color-navbar-border: #2d2d2d;
   --color-navbar-icon-bg: #2d2d2d;
   --color-navbar-item-hover-bg: #d0e0d2;
-  --color-navbar-bg-container:#1c733a1b;
+  --color-navbar-bg-container: #a3c4a81a;
   --color-navbar-border-container: #1c733a46;
   --color-navbar-icon-bg-fixed: #d0d0c0;
   --color-navbar-border-fixed: #000000;
 
   /* === Footer ve Sosyal === */
-  --color-footer-bg: rgba(2, 63, 1, 0.26)#dad8c5;
+  --color-footer-bg: #dad8c5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
   --color-footer-text: #4a4a4a;
   --color-footer-border: #c1c1a5;
   --color-social-links-bg: #247149;
   --color-social-links-text: #ffffff;
   --color-social-links-hover-underline: #678d74;
 
-  /* === Splash === */
+  /* === Diğer Bileşenler === */
   --color-splash-bg: #cce3d1;
   --color-splash-text: #2d2d2d;
   --color-splash-accent: #95bfa3;
@@ -78,17 +203,15 @@
   --color-error-text: #b00020;
   --color-error-border: #e29595;
   --color-error-accent-border: #b00020;
-
   --color-success-bg: #e0f2e9;
   --color-success-text: #2d6a4f;
-
+  --color-success-icon-glow: rgba(116, 198, 157, 0.2);
   --color-spinner-track: rgba(0, 0, 0, 0.05);
   --color-spinner-active: #678d74;
 
   /* === Alt Başlık ve Yorumlar === */
   --subtitle-bg: #f8f8f4;
   --subtitle-text-color: #2d2d2d;
-
   --paper-color: #ffffff;
   --comments-bg: #f7f7f5;
   --comments-text-color: #2d2d2d;
@@ -96,196 +219,293 @@
   --comments-job-title-color: #6c6c6c;
   --comments-shadow: rgba(0, 0, 0, 0.05);
 
-  
-  /* --- Tipografi (Değişiklik yok) --- */
-  --font-family-primary: "Space Grotesk", system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* --- Tipografi Font Aileleri --- */
+  --font-family-primary: "Space Grotesk", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-secondary: "Amatic SC", cursive;
-  --font-family-code: "Space Mono", monospace;
-  --font-size-base: 16px;
-  --font-size-sm: 0.875rem; --font-size-md: 1rem; --font-size-lg: 1.125rem; --font-size-xl: 1.25rem;
-  --font-size-h1: clamp(2.5rem, 6vw, 4rem); --font-size-h2: clamp(2rem, 5vw, 3rem); --font-size-h3: clamp(1.5rem, 4vw, 2.25rem);
-  --font-size-display: clamp(3rem, 8vw, 8rem); --font-size-main-subtitle: clamp(0.9rem, 3vw, 1.5rem);
-  --line-height-base: 1.6; --line-height-heading: 1.2;
-  --font-weight-light: 300; --font-weight-normal: 400; --font-weight-medium: 500; --font-weight-semibold: 600; --font-weight-bold: 700;
+  --font-family-code: "Space Mono", monospace; /* Space Mono için de font eklemeniz gerekebilir */
 
-  /* --- Boşluklandırma (Değişiklik yok) --- */
+  /* --- Boyutlar, Ağırlıklar, Boşluklar... (Değişiklik yok) --- */
+  --font-size-base: 16px;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-h1: clamp(2.5rem, 6vw, 4rem);
+  --font-size-h2: clamp(2rem, 5vw, 3rem);
+  --font-size-h3: clamp(1.5rem, 4vw, 2.25rem);
+  --font-size-display: clamp(3rem, 8vw, 8rem);
+  --font-size-main-subtitle: clamp(0.9rem, 3vw, 1.5rem);
+  --line-height-base: 1.6;
+  --line-height-heading: 1.2;
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
   --spacing-unit: 8px;
-  --spacing-xs: var(--spacing-unit); --spacing-sm: calc(var(--spacing-unit) * 2); --spacing-md: calc(var(--spacing-unit) * 3);
-  --spacing-lg: calc(var(--spacing-unit) * 4); --spacing-xl: calc(var(--spacing-unit) * 6); --spacing-xxl: calc(var(--spacing-unit) * 8);
+  --spacing-xs: var(--spacing-unit);
+  --spacing-sm: calc(var(--spacing-unit) * 2);
+  --spacing-md: calc(var(--spacing-unit) * 3);
+  --spacing-lg: calc(var(--spacing-unit) * 4);
+  --spacing-xl: calc(var(--spacing-unit) * 6);
+  --spacing-xxl: calc(var(--spacing-unit) * 8);
   --container-padding: var(--spacing-lg);
 
-  /* --- Diğer (Değişiklik yok) --- */
   --navbar-height: 60px;
-  --border-radius-sm: 2px; --border-radius-base: 4px; --border-radius-md: 6px; --border-radius-lg: 8px;
-  --border-radius-xl: 12px; --border-radius-pill: 50rem; --border-radius-circle: 50%;
-  --box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05); --box-shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --border-radius-sm: 2px;
+  --border-radius-base: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-xl: 12px;
+  --border-radius-pill: 50rem;
+  --border-radius-circle: 50%;
+  --box-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --box-shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
   --box-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --box-shadow-neubrutalist: 8px 8px 0px var(--color-border-strong);
   --box-shadow-neubrutalist-sm: 5px 5px 0px var(--color-border-strong);
-  --transition-duration-short: 0.15s; --transition-duration-base: 0.3s; --transition-duration-long: 0.5s;
+  --transition-duration-short: 0.15s;
+  --transition-duration-base: 0.3s;
+  --transition-duration-long: 0.5s;
   --transition-timing-function: ease-in-out;
-  --transition-default: all var(--transition-duration-base) var(--transition-timing-function);
+  --transition-default: all var(--transition-duration-base)
+    var(--transition-timing-function);
 }
 
-/* === DARK TEMA DEĞİŞKENLERİ (GitHub Tarzı) === */
+/* === DARK TEMA DEĞİŞKENLERİ === */
 .theme-dark {
-  /* --- Renk Paleti (Dark Tema - GitHub Tarzı) --- */
-  --color-primary: #238636;                     /* GitHub Dark Yeşil */
-  --color-primary-darker: #1a6626;              /* Daha koyu yeşil */
-  --color-secondary: #21262d;                   /* GitHub Dark Gri */
-  --color-accent: #58a6ff;                      /* GitHub Dark Mavi */
-  --color-accent-hover: #79b8ff;                /* Açık mavi hover */
+  /* Renk Paleti */
+  --color-primary: #238636;
+  --color-primary-darker: #1a6626;
+  --color-secondary: #21262d;
+  --color-accent: #58a6ff;
+  --color-accent-hover: #79b8ff;
 
-  --color-background-page: #0d1117;             /* GitHub Dark Ana Arka Plan */
-  --color-background-paper: #161b22;            /* GitHub Dark Kağıt/Kart Arka Planı */
-  --color-background-paper-transparent: rgba(22, 27, 34, 0.95); /* %95 opak paper */
-  --color-background-overlay: rgba(0, 0, 0, 0.8); /* Koyu overlay */
-  --color-background-tooltip: rgba(240, 246, 252, 0.95); /* Açık tooltip arka planı */
---color-background-paper-translucent: rgba(22, 27, 34, 0.75);
+  --color-background-page: #0d1117;
+  --color-background-paper: #161b22;
+  --color-background-paper-transparent: rgba(22, 27, 34, 0.95);
+  --color-background-paper-translucent: rgba(22, 27, 34, 0.75);
+  --color-background-overlay: rgba(0, 0, 0, 0.8);
+  --color-background-tooltip: rgba(240, 246, 252, 0.95);
 
-  --color-text-primary: #f0f6fc;                /* GitHub Dark Beyazımsı Ana Metin */
-  --color-text-secondary: #8b949e;              /* GitHub Dark Gri İkincil Metin */
-  --color-text-muted: #6e7681;                  /* GitHub Dark Soluk Gri */
-  --color-text-on-primary: #ffffff;             /* Yeşil üzerindeki beyaz metin */
-  --color-text-on-secondary: #f0f6fc;           /* Gri üzerindeki açık metin */
-  --color-text-on-accent: #ffffff;              /* Mavi vurgu üzerindeki beyaz metin */
-  --color-text-link: #58a6ff;                   /* GitHub Dark Mavi Linkler */
-  --color-text-link-hover: #79b8ff;             /* Açık mavi link hover */
-  --color-text-tooltip: #0d1117;                /* Koyu tooltip metni */
+  --color-text-primary: #f0f6fc;
+  --color-text-secondary: #8b949e;
+  --color-text-muted: #6e7681;
+  --color-text-on-primary: #ffffff;
+  --color-text-on-secondary: #f0f6fc;
+  --color-text-on-accent: #ffffff;
+  --color-text-link: #58a6ff;
+  --color-text-link-hover: #79b8ff;
+  --color-text-tooltip: #0d1117;
 
-  --color-border-primary: #30363d;              /* GitHub Dark Border */
-  --color-border-strong: #f0f6fc;               /* Açık gri neubrutalism border */
-  --color-border-input: #30363d;                /* Input border */
-  --color-border-input-focus: #58a6ff;          /* Mavi input focus border */
-  --color-border-input-focus-shadow: rgba(88, 166, 255, 0.3); /* Mavi input focus gölgesi */
+  --color-border-primary: #30363d;
+  --color-border-strong: #f0f6fc;
+  --color-border-input: #30363d;
+  --color-border-input-focus: #58a6ff;
+  --color-border-input-focus-shadow: rgba(88, 166, 255, 0.3);
 
-  --color-button-primary-bg: #234286;           /* Yeşil buton arka planı */
-  --color-button-primary-text: #ffffff;         /* Beyaz buton metni */
-  --color-button-primary-bg-hover: rgb(46, 116, 160);     /* Açık yeşil buton hover */
-  --color-button-shadow: #f0f6fc;               /* Açık gri buton gölgesi */
-  --color-button-disabled-text: rgba(255, 255, 255, 0.5); /* Opak beyaz disabled text */
-  --color-button-loader-track: rgba(255, 255, 255, 0.2); /* Opak beyaz loader track */
-  --color-success-icon-glow: rgba(35, 134, 54, 0.4); /* Yeşil glow */
+  --color-button-primary-bg: #234286;
+  --color-button-primary-text: #ffffff;
+  --color-button-primary-bg-hover: rgb(46, 116, 160);
+  --color-button-shadow: #f0f6fc;
+  --color-button-disabled-text: rgba(255, 255, 255, 0.5);
+  --color-button-loader-track: rgba(255, 255, 255, 0.2);
 
-  --color-navbar-bg: #21262d;                   /* GitHub Dark Navbar Arka Planı */
-  --color-navbar-text: #f0f6fc;                 /* Açık gri navbar metni */
-  --color-navbar-border: #30363d;               /* GitHub Dark Navbar Border */
-  --color-navbar-icon-bg: #30363d;              /* Koyu gri ikon arka planı */
-  --color-navbar-item-hover-bg: #30363d;        /* Hover için koyu gri */
-  --color-navbar-bg-container: #0d1117;         /* Navbar container arka planı */
-  --color-navbar-border-container: #30363d;     /* Navbar container border */
+  --color-navbar-bg: #21262d;
+  --color-navbar-text: #f0f6fc;
+  --color-navbar-border: #30363d;
+  --color-navbar-icon-bg: #30363d;
+  --color-navbar-item-hover-bg: #30363d;
+  --color-navbar-bg-container: #0d1117;
+  --color-navbar-border-container: #30363d;
+  --color-navbar-icon-bg-fixed: #161b22;
+  --color-navbar-border-fixed: #30363d;
+  --color-navbar-mobile-menu-bg: #21262d;
+  --color-navbar-mobile-menu-border: #30363d;
 
-  --color-navbar-icon-bg-fixed: #161b22;        /* Fixed navbar için */
-  --color-navbar-border-fixed: #30363d;         /* Fixed navbar border */
+  --color-footer-bg: #161b22;
+  --color-footer-text: #8b949e;
+  --color-footer-border: #30363d;
+  --color-social-links-bg: #30363d;
+  --color-social-links-text: #ffffff;
+  --color-social-links-hover-underline: #58a6ff;
 
-  --color-navbar-mobile-menu-bg: #21262d;       /* Mobile menu arka planı */
-  --color-navbar-mobile-menu-border: #30363d;   /* Mobile menu border */
+  --theme-mode-icon-filter: brightness(0) saturate(100%) invert(84%) sepia(8%)
+    saturate(442%) hue-rotate(170deg) brightness(103%) contrast(92%);
 
-  --theme-mode-icon-filter: brightness(0) saturate(100%) invert(84%) sepia(8%) saturate(442%) hue-rotate(170deg) brightness(103%) contrast(92%);
+  /* ... diğer dark tema renkleri ... */
+  --color-error-bg: rgba(248, 81, 73, 0.15);
+  --color-error-text: #f85149;
+  --color-error-border: rgba(248, 81, 73, 0.4);
+  --color-error-accent-border: #f85149;
+  --color-success-bg: rgba(35, 134, 54, 0.15);
+  --color-success-text: #3fb950;
+  --color-success-icon-glow: rgba(35, 134, 54, 0.4);
 
-  --color-social-links-bg: #30363d;             /* Yeşil sosyal link arka planı */
-  --color-social-links-text: #ffffff;           /* Beyaz sosyal link metni */
-  --color-social-links-hover-underline: #58a6ff; /* Mavi alt çizgi */
-
-  --color-footer-bg: #161b22;                   /* Footer için koyu gri arka plan */
-  --color-footer-text: #8b949e;                 /* Gri footer metni */
-  --color-footer-border: #30363d;               /* Koyu gri footer üst border */
-
-  --color-splash-bg: #0d1117;                   /* Koyu splash arka planı */
-  --color-splash-text: #f0f6fc;                 /* Açık splash metni */
-  --color-splash-accent: #58a6ff;               /* Mavi splash vurgu */
-  --color-splash-grid: rgba(88, 166, 255, 0.1); /* Mavi grid */
-  --color-splash-loader-bar-container-border: #58a6ff;
-  --color-splash-loader-bar-bg: #58a6ff;
-  --color-splash-scanlines-bg-mid: rgba(13, 17, 23, 0.8);
-  --color-splash-scanlines-bg-start: rgba(13, 17, 23, 0);
-
-  --color-error-bg: rgba(248, 81, 73, 0.15);    /* Açık kırmızı arka plan */
-  --color-error-text: #f85149;                  /* GitHub Dark kırmızı */
-  --color-error-border: rgba(248, 81, 73, 0.4); /* Kırmızı border */
-  --color-error-accent-border: #f85149;         /* Belirgin kırmızı */
-
-  --color-success-bg: rgba(35, 134, 54, 0.15);  /* Açık yeşil arka plan */
-  --color-success-text: #3fb950;                /* GitHub Dark yeşil */
-
-  --color-spinner-track: rgba(139, 148, 158, 0.2); /* Spinner arka planı */
-  --color-spinner-active: #58a6ff;              /* Mavi spinner aktif kısmı */
-
-  --subtitle-bg: #21262d;                       /* Koyu gri subtitle arka planı */
-  --subtitle-text-color: #f0f6fc;               /* Açık gri subtitle metni */
-
-  --paper-color: #161b22;                       /* Koyu gri kağıt rengi */
-  --comments-bg: #161b22;                       /* Koyu gri yorum arka planı */
-  --comments-text-color: #f0f6fc;               /* Açık gri yorum metni */
-  --comments-user-text-color: #f0f6fc;          /* Açık gri kullanıcı adı */
-  --comments-job-title-color: #8b949e;          /* Gri iş unvanı */
-  --comments-shadow: rgba(1, 4, 9, 0.8);        /* Koyu gölge */
+  --subtitle-bg: #21262d;
+  --subtitle-text-color: #f0f6fc;
+  --comments-bg: #161b22;
+  --comments-text-color: #f0f6fc;
+  --comments-user-text-color: #f0f6fc;
+  --comments-job-title-color: #8b949e;
+  --comments-shadow: rgba(1, 4, 9, 0.8);
 }
 
-/* === Reset and Base Styles === */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: var(--font-size-base); scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+/* ==========================================================================
+   3. TEMEL RESET VE ELEMENT STİLLERİ
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--font-size-base);
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
-  font-family: var(--font-family-primary); font-weight: var(--font-weight-normal); line-height: var(--line-height-base);
-  color: var(--color-text-primary); background-color: var(--color-background-page);
-  min-height: 100vh; display: block; overflow-x: hidden;
-  padding-top: var(--navbar-height); position: relative;
-  transition: background-color var(--transition-duration-base) var(--transition-timing-function),
-              color var(--transition-duration-base) var(--transition-timing-function);
-              
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-base);
+  color: var(--color-text-primary);
+  background-color: var(--color-background-page);
+  min-height: 100vh;
+  display: block;
+  overflow-x: hidden;
+  padding-top: var(--navbar-height);
+  position: relative;
+  transition: background-color var(--transition-duration-base)
+      var(--transition-timing-function),
+    color var(--transition-duration-base) var(--transition-timing-function);
 }
-a { color: var(--color-text-link); text-decoration: none; transition: color var(--transition-duration-short) var(--transition-timing-function); }
-a:hover { color: var(--color-text-link-hover); text-decoration: underline; }
-h1, h2, h3, h4, h5, h6 { margin-bottom: var(--spacing-sm); font-weight: var(--font-weight-bold); line-height: var(--line-height-heading); color: var(--color-text-primary); }
-h1 { font-size: var(--font-size-h1); } h2 { font-size: var(--font-size-h2); } h3 { font-size: var(--font-size-h3); }
+
+a {
+  color: var(--color-text-link);
+  text-decoration: none;
+  transition: color var(--transition-duration-short)
+    var(--transition-timing-function);
+}
+a:hover {
+  color: var(--color-text-link-hover);
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-heading);
+  color: var(--color-text-primary);
+}
+h1 {
+  font-size: var(--font-size-h1);
+}
+h2 {
+  font-size: var(--font-size-h2);
+}
+h3 {
+  font-size: var(--font-size-h3);
+}
+
 button {
-  font-family: inherit; font-size: var(--font-size-md); padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--border-radius-base); border: 1px solid transparent; cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-base);
+  border: 1px solid transparent;
+  cursor: pointer;
   transition: var(--transition-default);
-  background-color: var(--color-button-primary-bg); color: var(--color-button-primary-text);
+  background-color: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
 }
-button:hover { background-color: var(--color-button-primary-bg-hover); }
-button:focus, button:focus-visible { outline: 2px auto var(--color-accent); outline-offset: 2px; }
+button:hover {
+  background-color: var(--color-button-primary-bg-hover);
+}
+button:focus,
+button:focus-visible {
+  outline: 2px auto var(--color-accent);
+  outline-offset: 2px;
+}
 
 /* --- App Container & Content --- */
-.app-container { opacity: 0; transition: opacity var(--transition-duration-long) ease; }
-.app-container.show { opacity: 1; }
-.content-container { flex: 1; width: 100%; position: relative; }
+.app-container {
+  opacity: 0;
+  transition: opacity var(--transition-duration-long) ease;
+}
+.app-container.show {
+  opacity: 1;
+}
+.content-container {
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
 
 /* --- Mouse Light Effect Overlay --- */
 .mouse-light-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 999;
-  background: radial-gradient( circle 200px at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
-    rgba(88, 166, 255, 0.05), /* GitHub mavi tonu */
-    transparent 75% );
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 999;
+  background: radial-gradient(
+    circle 200px at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    rgba(88, 166, 255, 0.05),
+    transparent 75%
+  );
   opacity: 0;
 }
-
-/* Dark mode için mouse light effect */
 .theme-dark .mouse-light-overlay {
-  background: radial-gradient( circle 200px at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
-    rgba(88, 166, 255, 0.08), /* Koyu mod için biraz daha belirgin */
-    transparent 75% );
+  background: radial-gradient(
+    circle 200px at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
+    rgba(88, 166, 255, 0.08),
+    transparent 75%
+  );
 }
 
-/* Section base styling */
-section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
+/* --- Section Temel Stili --- */
+section {
+  padding: var(--spacing-xl) var(--container-padding);
+  width: 100%;
+}
 
-/* Utility for fade-in animation */
-.fade-in { animation: fadeInAnimation var(--transition-duration-long) ease-in forwards; }
-@keyframes fadeInAnimation { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+/* --- Yardımcı Sınıflar --- */
+.fade-in {
+  animation: fadeInAnimation var(--transition-duration-long) ease-in forwards;
+}
+@keyframes fadeInAnimation {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-
-
-
-/*ADMİN PAGE*/
-
+/* === ADMİN GİRİŞ SAYFASI STİLLERİ === */
 .admin-login-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - var(--navbar-height)); /* Navbar yüksekliğini düşür */
+  min-height: calc(100vh - var(--navbar-height));
   background-color: var(--color-background-page);
   padding: var(--spacing-md);
 }
@@ -294,33 +514,29 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   background-color: var(--color-background-paper);
   padding: var(--spacing-xl);
   border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-base);
   width: 100%;
-  max-width: 400px; /* Maksimum genişlik belirle */
+  max-width: 400px;
   text-align: center;
-  border: 1px solid var(--color-border-strong); /* Neubrutalism tarzı için */
-  box-shadow: var(--box-shadow-neubrutalist); /* Neubrutalism gölge */
-  transition: all var(--transition-duration-base) var(--transition-timing-function);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--box-shadow-neubrutalist);
+  transition: all var(--transition-duration-base)
+    var(--transition-timing-function);
 }
-
 .login-container h2 {
   color: var(--color-text-primary);
   margin-bottom: var(--spacing-lg);
   font-size: var(--font-size-h2);
 }
-
 .form-group {
   margin-bottom: var(--spacing-md);
-  text-align: left; /* Label ve inputları sola hizala */
+  text-align: left;
 }
-
 .form-group label {
   display: block;
   margin-bottom: var(--spacing-xs);
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-medium);
 }
-
 .form-group input[type="text"],
 .form-group input[type="password"] {
   width: 100%;
@@ -330,23 +546,22 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   font-size: var(--font-size-md);
   color: var(--color-text-primary);
   background-color: var(--color-background-paper);
-  transition: all var(--transition-duration-short) var(--transition-timing-function);
+  transition: all var(--transition-duration-short)
+    var(--transition-timing-function);
 }
-
 .form-group input[type="text"]:focus,
 .form-group input[type="password"]:focus {
   outline: none;
   border-color: var(--color-border-input-focus);
   box-shadow: 0 0 0 3px var(--color-border-input-focus-shadow);
 }
-
 .login-container button {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
   margin-top: var(--spacing-md);
   background-color: var(--color-button-primary-bg);
   color: var(--color-button-primary-text);
-  border: 1px solid var(--color-button-primary-bg); /* Butonun kendi renginde border */
+  border: 1px solid var(--color-button-primary-bg);
   border-radius: var(--border-radius-base);
   cursor: pointer;
   font-size: var(--font-size-lg);
@@ -354,14 +569,12 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   transition: var(--transition-default);
   box-shadow: var(--box-shadow-neubrutalist-sm);
 }
-
 .login-container button:hover:not(:disabled) {
   background-color: var(--color-button-primary-bg-hover);
   border-color: var(--color-button-primary-bg-hover);
-  transform: translate(2px, 2px); /* Neubrutalism hover efekti */
+  transform: translate(2px, 2px);
   box-shadow: 3px 3px 0px var(--color-border-strong);
 }
-
 .login-container button:disabled {
   background-color: var(--color-secondary);
   color: var(--color-button-disabled-text);
@@ -369,7 +582,6 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   box-shadow: var(--box-shadow-neubrutalist-sm);
   opacity: 0.7;
 }
-
 .error-message {
   color: var(--color-error-text);
   background-color: var(--color-error-bg);
@@ -379,6 +591,5 @@ section { padding: var(--spacing-xl) var(--container-padding); width: 100%; }
   margin-bottom: var(--spacing-md);
   font-size: var(--font-size-sm);
   text-align: center;
-  animation: fadeInAnimation 0.3s ease-out; /* Hata mesajı için animasyon */
+  animation: fadeInAnimation 0.3s ease-out;
 }
-

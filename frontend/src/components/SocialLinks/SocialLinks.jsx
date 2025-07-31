@@ -3,7 +3,7 @@ import { Github, Youtube, Linkedin, Instagram, FileText } from "lucide-react";
 import { useSound } from "../../hooks/useSound";
 import SocialLinkSplash from "./SocialLinkSplash";
 import "./style/SocialLinks.css";
-import NuhDemirCV from "../../cv/NuhDemirCV.pdf";
+// import NuhDemirCV from "../../cv/NuhDemirCV.pdf"; // <-- BU SATIRI SİLİYORUZ
 
 // Merkezi Konfigürasyon: Linkleri, ikonları ve mesajları tek bir yerden yönet
 const socialLinksConfig = [
@@ -21,9 +21,11 @@ const socialLinksConfig = [
   },
   {
     name: "CV",
-    href: NuhDemirCV,
+    // href'i artık doğrudan vermiyoruz. Tıklandığında yüklenecek.
+    // PDF'in 'src/cv/' klasöründe olduğunu varsayıyoruz.
+    filePath: "../../cv/NuhDemirCV.pdf",
     Icon: FileText,
-    isExternal: false,
+    isDynamic: true, // Dinamik olarak yükleneceğini belirtmek için bir flag
     message: "CV belgesi hazırlanıyor...",
   },
   {
@@ -45,7 +47,6 @@ const SocialLinks = () => {
   const [loadingMessage, setLoadingMessage] = useState("");
   const timeoutRef = useRef(null);
 
-  // Sesleri hook ile tanımla
   const playHoverSound = useSound("/audio/hover-click.mp3", 0.2);
   const playClickSound = useSound("/audio/action-click.mp3", 0.4);
 
@@ -53,23 +54,38 @@ const SocialLinks = () => {
     return () => clearTimeout(timeoutRef.current);
   }, []);
 
-  const handleLinkClick = (e, link) => {
+  const handleLinkClick = async (e, link) => {
+    // Fonksiyonu async yapıyoruz
     e.preventDefault();
-    playClickSound(); // Tıklama sesini çal
+    playClickSound();
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     setLoadingMessage(link.message);
     setLoading(true);
 
-    timeoutRef.current = setTimeout(() => {
-      if (link.isExternal !== false) {
-        window.location.href = link.href;
-      } else {
-        window.open(link.href, "_blank");
-        timeoutRef.current = setTimeout(() => setLoading(false), 1200);
+    // --- YENİ DİNAMİK YÜKLEME MANTIĞI ---
+    if (link.isDynamic) {
+      try {
+        // Dinamik import: Sadece şimdi PDF modülünü yükle
+        const pdfModule = await import(/* @vite-ignore */ link.filePath);
+        const pdfUrl = pdfModule.default; // Vite'in döndürdüğü gerçek URL'yi al
+
+        timeoutRef.current = setTimeout(() => {
+          window.open(pdfUrl, "_blank"); // URL'yi yeni sekmede aç
+          setLoading(false); // Yükleme ekranını hemen kapatabiliriz
+        }, 800);
+      } catch (error) {
+        console.error("PDF yüklenirken hata oluştu:", error);
+        setLoadingMessage("CV yüklenemedi. Lütfen tekrar deneyin.");
+        timeoutRef.current = setTimeout(() => setLoading(false), 2000);
       }
-    }, 800);
+    } else {
+      // Normal linkler için eski mantık devam ediyor
+      timeoutRef.current = setTimeout(() => {
+        window.location.href = link.href;
+      }, 800);
+    }
   };
 
   return (
@@ -79,13 +95,16 @@ const SocialLinks = () => {
           {socialLinksConfig.map((link) => (
             <a
               key={link.name}
-              href={link.href}
+              href={link.href || "#"} // href boş olmasın, dinamik linkler için # koyabiliriz
               className="social-button"
               onMouseEnter={playHoverSound}
               onClick={(e) => handleLinkClick(e, link)}
-              target="_blank"
+              // Dinamik olmayan linkler için target="_blank"
+              target={!link.isDynamic ? "_blank" : undefined}
               rel="noopener noreferrer"
-              aria-label={`${link.name} profilini ziyaret et`}
+              aria-label={`${link.name} ${
+                link.isDynamic ? "belgesini aç" : "profilini ziyaret et"
+              }`}
             >
               <link.Icon className="social-icon" size={20} strokeWidth={2} />
               <span className="social-text">{link.name}</span>
