@@ -1,4 +1,3 @@
-// src/hooks/useGsapAnimation.js
 import { useEffect } from "react";
 import gsap from "gsap";
 
@@ -7,82 +6,83 @@ export const useGsapAnimation = (
   titleRef,
   subtitleRef,
   buttonRef,
-  audioControlRef
+  audioControlRef,
+  imageRef // MainImage için ref'i de ekleyelim
 ) => {
   useEffect(() => {
-    // Make sure all refs are valid
-    if (
-      !mainRef.current ||
-      !titleRef.current ||
-      !subtitleRef.current ||
-      !buttonRef.current ||
-      !audioControlRef.current
-    )
-      return;
+    // Tüm referansların geçerli olduğundan emin ol
+    const refs = [
+      mainRef,
+      titleRef,
+      subtitleRef,
+      buttonRef,
+      audioControlRef,
+      imageRef,
+    ];
+    if (refs.some((ref) => !ref.current)) return;
 
-    // Create a timeline for the animations
-    const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-    // Initial setup - ensure elements are hidden
-    gsap.set(
-      [
-        titleRef.current,
-        subtitleRef.current,
-        buttonRef.current,
-        audioControlRef.current,
-      ],
-      {
-        opacity: 0,
-        y: 20,
-      }
-    );
-
-    // Create the animation sequence
-    tl.to(titleRef.current, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      delay: 0.5,
-    })
-      .to(
-        subtitleRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-        },
-        "-=0.6"
-      )
-      .to(
-        audioControlRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-        },
-        "-=0.4"
-      )
-      .to(
-        buttonRef.current,
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-        },
-        "-=0.4"
-      );
-
-    // Add a subtle animation to the grid background
-    gsap.to(mainRef.current, {
-      backgroundPosition: "40px 40px",
-      duration: 20,
-      repeat: -1,
-      ease: "linear",
+    // --- 1. GİRİŞ ANİMASYONU (Timeline) ---
+    // Bu kısım zaten iyiydi, koruyoruz.
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.out", duration: 0.8 },
     });
 
-    // Clean up the animations when component unmounts
-    return () => {
-      tl.kill();
+    // Animate edilecek elementleri bir dizide toplayalım
+    const animatedElements = [
+      titleRef.current,
+      subtitleRef.current,
+      audioControlRef.current,
+      buttonRef.current,
+      imageRef.current, // Resmi de animasyona dahil edelim
+    ];
+
+    // Animasyon öncesi başlangıç durumlarını ayarla
+    gsap.set(animatedElements, { opacity: 0, y: 30 });
+
+    // Animasyon sekansını oluştur
+    tl.to(animatedElements, {
+      opacity: 1,
+      y: 0,
+      stagger: 0.2, // Elemanların art arda gelmesini sağlar
+      delay: 0.3, // Animasyonun başlaması için hafif bir gecikme
+    });
+
+    // --- 2. PERFORMANSLI PARALLAX ANİMASYONU (Mouse Takibi) ---
+    // Olay dinleyicisi fonksiyonu
+    const handleMouseMove = (e) => {
+      if (!mainRef.current) return;
+
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+
+      // Mouse pozisyonuna göre -20px ile +20px arasında bir hareket hesapla
+      // Bu değerleri değiştirerek efekti artırıp azaltabilirsiniz.
+      const parallaxAmount = 20;
+      const offsetX = (clientX / innerWidth - 0.5) * -parallaxAmount;
+      const offsetY = (clientY / innerHeight - 0.5) * -parallaxAmount;
+
+      // GSAP ile section'ın CSS değişkenlerini yumuşak bir geçişle güncelle
+      gsap.to(mainRef.current, {
+        "--bg-x": `${offsetX}px`,
+        "--bg-y": `${offsetY}px`,
+        duration: 0.8, // Hareketin ne kadar sürede tamamlanacağı
+        ease: "power2.out",
+      });
     };
-  }, [mainRef, titleRef, subtitleRef, buttonRef, audioControlRef]);
+
+    // Olay dinleyicisini window'a ekle
+    window.addEventListener("mousemove", handleMouseMove);
+
+    // --- 3. TEMİZLEME (Cleanup) FONKSİYONU ---
+    // Component unmount olduğunda (sayfadan ayrıldığında) çalışır
+    return () => {
+      // Tüm GSAP animasyonlarını ve zamanlanmış olayları öldür
+      // Bu, hafıza sızıntılarını ve istenmeyen animasyonları önler
+      tl.kill();
+      gsap.killTweensOf(mainRef.current); // mainRef üzerindeki animasyonları da durdur
+
+      // Eklediğimiz olay dinleyicisini kaldır
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [mainRef, titleRef, subtitleRef, buttonRef, audioControlRef, imageRef]); // ref'leri bağımlılık dizisine ekle
 };

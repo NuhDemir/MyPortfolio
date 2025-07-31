@@ -1,7 +1,7 @@
 /* === ANA KONTEYNER VE İÇERİK === */
 .main-container {
   width: 100%;
-  height: 85vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,6 +10,24 @@
   box-sizing: border-box;
   position: relative;
   padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 5vw, 60px);
+}
+
+.main-container::before {
+  content: "";
+  position: absolute;
+  /* Hareket payı için elementi biraz büyütüyoruz */
+  top: -5%;
+  left: -5%;
+  width: 110%;
+  height: 110%;
+  z-index: -1; /* İçeriğin arkasında kalmasını sağlar */
+
+  /* Animasyon için CSS değişkenlerini tanımlıyoruz */
+  /* GSAP bu değişkenleri güncelleyecek */
+  transform: translate(var(--bg-x, 0px), var(--bg-y, 0px));
+
+  /* Tarayıcıya bu özelliğin değişeceğini önceden bildiriyoruz */
+  will-change: transform;
 }
 
 .main-content {
