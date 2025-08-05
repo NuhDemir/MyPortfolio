@@ -77,13 +77,31 @@ const About = () => {
 
   // GitHub verisini çek
   useEffect(() => {
+    const cached = localStorage.getItem("githubStats");
+    const cacheTime = localStorage.getItem("githubStatsTime");
+    const now = Date.now();
+
+    if (cached && cacheTime && now - cacheTime < 1000 * 60 * 5) {
+      const data = JSON.parse(cached);
+      setRepoCount(data.repoCount);
+      setFollowers(data.followers);
+      return;
+    }
+
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
       .then((res) => res.json())
       .then((data) => {
         setRepoCount(data.public_repos);
         setFollowers(data.followers);
-      })
-      .catch((err) => console.error("GitHub verisi çekilemedi", err));
+        localStorage.setItem(
+          "githubStats",
+          JSON.stringify({
+            repoCount: data.public_repos,
+            followers: data.followers,
+          })
+        );
+        localStorage.setItem("githubStatsTime", now);
+      });
   }, []);
 
   // Modal açma fonksiyonu
