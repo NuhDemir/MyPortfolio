@@ -1,145 +1,150 @@
-/* === MESAJ FORMU ANA KONTEYNERİ === */
+/* ==========================================================================
+   MESSAGE FORM STYLES
+   (Global CSS değişkenlerini kullanır)
+   ========================================================================== */
+
+// === CONTAINER ===
 .message-container {
-  margin: var(--spacing-xxl) auto;
+  max-width: 48rem;
+  margin: var(--spacing-xl) auto;
   padding: var(--spacing-xl);
-  border-radius: var(--border-radius-lg);
-  border: 2px solid var(--color-text-primary);
   background: var(--color-background-paper);
-  /* global.css'ten gelen neubrutalist gölge */
-  box-shadow: var(--box-shadow-neubrutalist);
-  max-width: 750px;
-  width: 90%; /* Mobil cihazlarda kenarlarda boşluk bırakır */
+  border-radius: var(--border-radius-lg);
+  border: 2px solid var(--color-navbar-border); // Koyu ve belirgin bir kenarlık için tema değişkeni
+  box-shadow: 8px 8px 0px 0px var(--color-navbar-border); // Gölge için aynı koyu renk
+  position: relative;
+  width: 90%;
+
+  @media (max-width: 768px) {
+    padding: var(--spacing-lg);
+    box-shadow: 5px 5px 0px 0px var(--color-navbar-border);
+  }
 }
 
-/* === FORM BAŞLIĞI === */
+// === HEADER ===
 .message-header {
   text-align: center;
   margin-bottom: var(--spacing-xl);
+
+  h1 {
+    // h1 stilleri global.css'ten geliyor, özel bir değişiklik gerekmiyor.
+    color: var(--color-text-primary);
+  }
+
+  p {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    line-height: var(--line-height-base);
+    max-width: 42rem;
+    margin: 0 auto;
+  }
 }
 
-.message-header h1 {
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-text-primary);
+// === FORM WRAPPER & CLOSE BUTTON ===
+.form-wrapper {
+  position: relative;
 }
 
-.message-header p {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  line-height: var(--line-height-base);
-  max-width: 600px;
-  margin: 0 auto;
+.close-button {
+  position: absolute;
+  top: -14rem;
+  right: -1rem;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-error-text); // Tema hata rengi
+  border: 1px solid var(--color-navbar-border);
+  border-radius: var(--border-radius-base);
+  box-shadow: 2px 2px 0px 0px var(--color-navbar-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-default);
+  z-index: 10;
+
+  &:hover {
+    transform: translate(0.1rem, 0.1rem);
+    box-shadow: 1px 1px 0px 0px var(--color-navbar-border);
+  }
 }
 
-/* === FORMUN KENDİSİ === */
+// === FORM ===
 .message-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
 
+// .form-group sınıfı global.css içinde tanımlı, tekrar tanımlamaya gerek yok.
+// Sadece label, input ve textarea için spesifik stilleri burada eziyoruz/genişletiyoruz.
 .form-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
+  label {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input,
+  textarea {
+    // Temel stiller global.css'ten geliyor, sadece kenarlık gibi özellikleri eziyoruz.
+    border: 2px solid var(--color-border-input);
+    padding: var(--spacing-sm) var(--spacing-md);
+
+    &:focus {
+      border-color: var(--color-border-input-focus);
+      box-shadow: 0 0 0 3px var(--color-border-input-focus-shadow);
+    }
+  }
+
+  textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
 }
 
-.form-group label {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-secondary);
-  font-size: var(--font-size-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-group input,
-.form-group textarea {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 2px solid var(--color-border-input);
-  border-radius: var(--border-radius-base);
-  font-size: var(--font-size-md);
-  font-family: var(--font-family-primary);
-  background-color: var(--color-background-paper);
-  color: var(--color-text-primary);
-  transition: border-color var(--transition-duration-short),
-    box-shadow var(--transition-duration-short);
-}
-
-.form-group input:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: var(--color-border-input-focus);
-  box-shadow: 0 0 0 3px var(--color-border-input-focus-shadow);
-}
-
-.form-group textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-/* === HATA MESAJI === */
-.error-message {
-  color: var(--color-error-text);
-  font-size: var(--font-size-sm);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: var(--color-error-bg);
-  border: 1px solid var(--color-error-border);
-  border-radius: var(--border-radius-base);
-}
-
-/* === GÖNDER BUTONU VE YÜKLEYİCİ === */
+// === GENERIC BUTTON STYLING ===
 .form-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: clamp(1rem, 5vh, 3rem) auto 0 auto;
   gap: var(--spacing-sm);
   background-color: var(--color-button-primary-bg);
   color: var(--color-button-primary-text);
-  border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-base);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-lg);
+  border: 2px solid var(--color-navbar-border); // Buton kenarlığı için koyu renk
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   font-weight: var(--font-weight-semibold);
-  cursor: pointer;
   transition: var(--transition-default);
-  box-shadow: var(--box-shadow-neubrutalist-sm);
+  box-shadow: 4px 4px 0px 0px var(--color-navbar-border);
+
+  // Butonu ortalamak için yardımcı sınıf
+  &.centered {
+    margin: var(--spacing-lg) auto 0;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--color-button-primary-bg-hover);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px 0px var(--color-navbar-border);
+  }
+
+  &:disabled {
+    background-color: var(--color-secondary);
+    color: var(--color-button-disabled-text);
+    cursor: not-allowed;
+    transform: none; // Hareket efektini iptal et
+    opacity: 0.7;
+    box-shadow: 4px 4px 0px 0px var(--color-navbar-border); // Gölge sabit kalsın
+  }
 }
 
-.form-button:hover:not(:disabled) {
-  background-color: var(--color-button-primary-bg-hover);
-  transform: translate(2px, 2px);
-  box-shadow: 3px 3px 0px var(--color-border-strong);
-}
-
-.form-button:active:not(:disabled) {
-  transform: translate(3px, 3px);
-  box-shadow: 2px 2px 0px var(--color-border-strong);
-}
-
-.form-button:disabled {
-  background-color: var(--color-secondary);
-  color: var(--color-button-disabled-text);
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.form-button .arrow {
-  transition: transform var(--transition-duration-short);
-}
-
-.form-button:hover:not(:disabled) .arrow {
-  transform: translateX(4px);
-}
-
+// === LOADER ===
 .loader {
-  width: 20px;
-  height: 20px;
-  border: 3px solid var(--color-button-loader-track);
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 3px solid var(--color-button-primary-text);
+  border-top-color: transparent; // Sadece üst tarafı şeffaf
   border-radius: var(--border-radius-circle);
-  border-top-color: var(--color-button-primary-text);
-  animation: spin 1s ease-in-out infinite;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
@@ -148,64 +153,35 @@
   }
 }
 
-/* === BAŞARI MESAJI EKRANI === */
+// === SUCCESS MESSAGE ===
 .success-message {
   text-align: center;
   padding: var(--spacing-xl) 0;
-}
 
-.success-icon {
-  width: 64px;
-  height: 64px;
-  background-color: var(--color-success-bg);
-  color: var(--color-success-text);
-  border-radius: var(--border-radius-circle);
-  border: 2px solid var(--color-success-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: var(--font-size-h2);
-  margin: 0 auto var(--spacing-lg);
-}
-
-.success-message h2 {
-  font-size: var(--font-size-h3);
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-text-primary);
-}
-
-.success-message p {
-  color: var(--color-text-secondary);
-  margin-bottom: var(--spacing-lg);
-}
-
-/* Başarı ekranındaki buton için .form-button stilini tekrar kullanabiliriz */
-
-/* === DUYARLILIK (RESPONSIVE) STİLLERİ === */
-@media (max-width: 768px) {
-  .message-container {
-    padding: var(--spacing-lg);
-    margin: var(--spacing-xl) auto;
-    box-shadow: var(--box-shadow-neubrutalist-sm);
+  .success-icon {
+    width: 4rem;
+    height: 4rem;
+    background-color: var(--color-success-bg);
+    color: var(--color-success-text);
+    border-radius: var(--border-radius-circle);
+    border: 2px solid currentColor; // Mevcut metin rengini kullan
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-h2);
+    margin: 0 auto var(--spacing-lg);
   }
 
-  .message-header h1 {
-    font-size: var(--font-size-h3);
+  h2 {
+    color: var(--color-text-primary);
   }
 
-  .message-header p {
-    font-size: var(--font-size-md);
-  }
-
-  .form-button {
-    padding: var(--spacing-sm);
-    font-size: var(--font-size-md);
+  p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
   }
 }
 
-@media (max-width: 480px) {
-  .message-container {
-    padding: var(--spacing-md);
-    width: 95%;
-  }
-}
+// === ERROR MESSAGE ===
+// .error-message sınıfı zaten global.css'te tanımlı olduğu için
+// burada tekrar tanımlanmasına gerek yoktur. Direkt olarak JSX içinde kullanılabilir.

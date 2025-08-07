@@ -181,7 +181,7 @@
   --color-navbar-border-fixed: #000000;
 
   /* === Footer ve Sosyal === */
-  --color-footer-bg: #dad8c5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
+  --color-footer-bg: #ccc7a5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
   --color-footer-text: #4a4a4a;
   --color-footer-border: #c1c1a5;
   --color-social-links-bg: #247149;

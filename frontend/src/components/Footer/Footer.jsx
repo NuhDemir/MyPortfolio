@@ -1,7 +1,7 @@
 import React from "react";
 import { FaDribbble, FaInstagram, FaMediumM, FaTwitter } from "react-icons/fa";
 import VectorSvg from "/assets/icons/footer/Vector.svg";
-import "./style/Footer.scss"; // Import SCSS file
+import "./style/Footer.scss";
 
 // Removed companyName prop as the name is fixed in the design
 const Footer = () => {
@@ -53,10 +53,10 @@ const Footer = () => {
                 <FaInstagram />
               </a>
             </li>
-            {/* Twitter / X Icon */}
+
             <li>
               <a
-                href="https://x.com/YzlmKraathanesi" // Keep your link
+                href="https://x.com/YzlmKraathanesi"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit our Twitter profile"
