@@ -1,10 +1,13 @@
-/* frontend/src/components/About/style/About.css */
+/* frontend/src/components/About/style/About.css (Yeniden Düzenlenmiş Hali) */
+
+/* ==========================================================================
+   1. MOBİL ÖNCELİKLİ TEMEL STİLLER (TÜM EKRANLAR İÇİN GEÇERLİ)
+   ========================================================================== */
 
 .about-container {
-  /* Bu sınıf App.jsx içindeki <section id="about-section"> üzerinde olmalı */
-  padding: var(--spacing-xl) var(--container-padding);
+  padding: var(--spacing-lg) var(--spacing-md);
+  /* Mobil için padding ayarlandı */
 }
-
 .header {
   /* SmileSvg'yi içeren div için sınıf */
   padding-bottom: var(--spacing-lg);
@@ -19,7 +22,8 @@
 
 .about-grid {
   display: grid;
-  grid-template-columns: 250px 1fr;
+  /* Mobil için tek sütunlu yapı. Daha büyük ekranlarda değiştirilecek. */
+  grid-template-columns: 1fr;
   border-top: 2px solid var(--color-border-strong);
   border-bottom: 2px solid var(--color-border-strong);
   background: var(--color-background-paper-transparent);
@@ -27,45 +31,31 @@
 
 .stats-container {
   display: flex;
-  flex-direction: column;
-  border-right: 2px solid var(--color-border-strong);
-  padding: var(--spacing-lg);
-  gap: var(--spacing-lg);
-  background: var(--color-background-paper-transparent);
-}
-
-/* Yükleme ve Hata Mesajları için stiller */
-.stats-container .loading-message,
-.stats-container .error-message {
-  text-align: center;
+  flex-direction: row; /* Mobil için yan yana */
+  flex-wrap: wrap;
+  justify-content: space-around;
   padding: var(--spacing-md);
-  color: var(--color-text-secondary);
-  width: 100%;
-}
-
-.stats-container .error-message {
-  color: var(
-    --color-error-text,
-    #d32f2f
-  ); /* Temadan gelen hata rengi veya varsayılan kırmızı */
-  font-weight: var(--font-weight-semibold);
+  gap: var(--spacing-md);
+  /* Mobil düzende servislerden ayırmak için alt kenarlık */
+  border-bottom: 2px solid var(--color-border-strong);
 }
 
 .stat-card {
   display: flex;
   flex-direction: column;
+  text-align: center;
+  flex-basis: calc(50% - var(--spacing-sm)); /* Satır başına iki istatistik */
 }
 
 .stat-value {
-  font-size: var(--font-size-h2);
+  font-size: var(--font-size-h3); /* Mobil için ayarlanmış boyut */
   font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-xs);
   color: var(--color-text-primary);
   line-height: 1.1;
 }
 
 .stat-label {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-sm); /* Mobil için ayarlanmış boyut */
   color: var(--color-text-secondary);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -74,38 +64,26 @@
 
 .services-section {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  /* Mobil için tek sütunlu yapı. Daha büyük ekranlarda değiştirilecek. */
+  grid-template-columns: 1fr;
 }
 
 .service-card {
   padding: var(--spacing-lg);
-  border-right: 2px solid var(--color-border-strong);
+  /* Sadece son eleman hariç hepsine alt kenarlık ekle */
   border-bottom: 2px solid var(--color-border-strong);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
-  transition: transform var(--transition-duration-short) ease,
-    box-shadow var(--transition-duration-short) ease;
   background-color: var(--color-background-paper-transparent);
   position: relative;
+  /* Geçişler sadece performans dostu özelliklere odaklanmalı */
+  transition: background-color var(--transition-duration-short) ease;
 }
 
-.service-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: var(--box-shadow-base);
-  z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde kalır */
-}
-
-/* Masaüstü (2 sütunlu düzen) için kenarlık ayarları */
-@media (min-width: 769px) {
-  /* İkinci sütundaki (çift numaralı) kartların sağ kenarlığını kaldır */
-  .services-section .service-card:nth-child(2n) {
-    border-right: none;
-  }
-  /* Son satırdaki kartların alt kenarlığını kaldır */
-  .services-section .service-card:nth-last-child(-n + 2) {
-    border-bottom: none;
-  }
+/* Tek sütunlu mobil düzende son kartın alt kenarlığını kaldır */
+.service-card:last-child {
+  border-bottom: none;
 }
 
 .icon-wrapper {
@@ -115,12 +93,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform var(--transition-duration-short) ease;
-  /* iconBgColor, component'ten inline style olarak geldiği için CSS'te yer almaz */
-}
-
-.service-card:hover .icon-wrapper {
-  transform: scale(1.15);
+  /* Hover efekti büyük ekranlara taşındığı için transform'u buradan kaldırıyoruz. */
 }
 
 .service-icon {
@@ -154,13 +127,7 @@
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
-  transition: color var(--transition-duration-short) ease,
-    transform var(--transition-duration-short) ease;
-}
-
-.learn-more:hover {
-  color: var(--color-text-link-hover);
-  transform: translateX(3px);
+  transition: color var(--transition-duration-short) ease;
 }
 
 .learn-more:after {
@@ -169,102 +136,99 @@
   transition: transform var(--transition-duration-short) ease;
 }
 
-/* 
-  Performans Optimizasyonu: Tarayıcıya hangi özelliklerin değişeceğini önceden bildirir.
-  Sadece gerçekten animasyona uğrayan elemanlar ve özellikler için kullanılmalıdır.
-*/
-.service-card {
-  will-change: transform, box-shadow;
-}
-.icon-wrapper {
-  will-change: transform;
-}
-.learn-more {
-  will-change: color, transform;
-}
+/* will-change'i sadece hover etkileşimi olan büyük ekranlar için ekleyeceğiz */
 
-/* === DUYARLI STİLLER (RESPONSIVE STYLES) === */
-
-@media (max-width: 1024px) {
-  /* Tablet ve daha küçükleri */
-  .about-grid {
-    grid-template-columns: 200px 1fr; /* İstatistikler için daha dar sütun */
-  }
-}
-
-@media (max-width: 768px) {
-  /* Mobil (tek sütunlu düzen) */
+/* ==========================================================================
+   2. TABLET VE ÜZERİ (min-width: 768px)
+   ========================================================================== */
+@media (min-width: 768px) {
   .about-container {
-    padding: var(--spacing-lg) var(--spacing-md);
+    padding: var(--spacing-xl) var(--container-padding); /* Padding'i eski haline getir */
   }
+
   .about-grid {
-    grid-template-columns: 1fr; /* Izgarayı tek sütuna düşür */
+    /* Izgara yapısını 2 sütunlu hale getir */
+    grid-template-columns: 250px 1fr;
   }
+
   .stats-container {
-    border-right: none;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    padding: var(--spacing-md);
-    gap: var(--spacing-md);
-    border-bottom: 2px solid var(--color-border-strong); /* İstatistikleri hizmetlerden ayır */
+    /* Dikey düzene geri dön */
+    flex-direction: column;
+    padding: var(--spacing-lg);
+    gap: var(--spacing-lg);
+    /* Dikey düzende sağ kenarlık ekle, alt kenarlığı kaldır */
+    border-right: 2px solid var(--color-border-strong);
+    border-bottom: none;
   }
+
   .stat-card {
-    flex-basis: calc(50% - var(--spacing-sm)); /* Satır başına iki istatistik */
-    text-align: center;
+    text-align: left; /* Metni sola hizala */
+    flex-basis: auto; /* flex-basis'i sıfırla */
   }
+
   .stat-value {
-    font-size: var(--font-size-h3);
+    font-size: var(--font-size-h2); /* Yazı boyutunu büyüt */
   }
+
+  .stat-label {
+    font-size: var(--font-size-md); /* Yazı boyutunu büyüt */
+  }
+
   .services-section {
-    grid-template-columns: 1fr; /* Hizmetleri tek sütuna düşür */
+    /* Servisleri 2 sütunlu ızgara yap */
+    grid-template-columns: repeat(2, 1fr);
   }
-  .services-section .service-card {
-    border-right: none; /* Tek sütunda sağ kenarlık olmaz */
+
+  .service-card {
+    border-bottom: 2px solid var(--color-border-strong); /* Tümüne alt kenarlık ekle */
+    border-right: 2px solid var(--color-border-strong); /* Tümüne sağ kenarlık ekle */
   }
-  /* Mobil tek sütun düzeninde sadece son kartın alt kenarlığını kaldır */
-  .services-section .service-card:last-child {
+
+  /* İkinci sütundaki (çift numaralı) kartların sağ kenarlığını kaldır */
+  .services-section .service-card:nth-child(2n) {
+    border-right: none;
+  }
+
+  /* Son iki kartın (son satırın) alt kenarlığını kaldır */
+  .services-section .service-card:nth-last-child(-n + 2) {
     border-bottom: none;
   }
 }
 
-@media (max-width: 480px) {
-  /* Küçük mobil cihazlar */
-  .about-container {
-    padding: var(--spacing-md) var(--spacing-sm);
-  }
-  .stats-container {
-    padding: var(--spacing-sm);
-    gap: var(--spacing-sm);
-  }
-  .stat-card {
-    flex-basis: 100%; /* Satır başına tek istatistik */
-  }
-  .stat-value {
-    font-size: var(--font-size-xl);
-  }
-  .stat-label {
-    font-size: var(--font-size-sm);
-  }
+/* ==========================================================================
+   3. HOVER ETKİLEŞİMLERİ (Sadece mouse kullanabilen cihazlar için)
+   ========================================================================== */
+@media (hover: hover) and (min-width: 768px) {
+  /*
+    Bu blok, sadece mouse imleci olan (dokunmatik olmayan) ve 768px'den geniş
+    ekranlarda çalışır. Bu, mobil performansı ciddi şekilde artırır.
+  */
   .service-card {
-    padding: var(--spacing-md);
-    gap: var(--spacing-sm);
+    /* Performans Optimizasyonu: Tarayıcıya hangi özelliklerin değişeceğini önceden bildirir. */
+    will-change: transform, box-shadow;
   }
+
+  .service-card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--box-shadow-base);
+    z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde kalır */
+  }
+
   .icon-wrapper {
-    width: 40px;
-    height: 40px;
+    will-change: transform;
+    transition: transform var(--transition-duration-short) ease;
   }
-  .service-icon {
-    width: 20px;
-    height: 20px;
+
+  .service-card:hover .icon-wrapper {
+    transform: scale(1.15);
   }
-  .service-title {
-    font-size: var(--font-size-lg);
-  }
-  .service-desc {
-    font-size: var(--font-size-sm);
-  }
+
   .learn-more {
-    font-size: var(--font-size-sm);
+    will-change: color, transform;
+  }
+
+  .learn-more:hover {
+    color: var(--color-text-link-hover);
+    transform: translateX(3px);
   }
 }

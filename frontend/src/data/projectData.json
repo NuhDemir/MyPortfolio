@@ -4,7 +4,7 @@
     "title": "Portfolyo Sitesi (Bu Proje)",
     "description": "React, GSAP ve modern web teknolojileri kullanılarak oluşturulmuş interaktif kişisel portfolyo sitesi.",
     "imageUrl": "/images/project-portfolio.png",
-    "liveUrl": "https://www.nuhdemir.com",
+    "liveUrl": "https://www.nuhdemir.netlify.app",
     "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
     "tags": ["React", "GSAP", "Vite", "CSS Variables", "Responsive"],
     "details": "<h3>Proje Hakkında</h3><p>Bu portfolyo sitesi, modern frontend geliştirme becerilerimi sergilemek amacıyla oluşturulmuştur. Tamamen duyarlı bir tasarıma sahip olup, GSAP (GreenSock Animation Platform) ile zenginleştirilmiş akıcı animasyonlar içerir. Tema değiştirme (Açık/Koyu Mod) özelliği ve interaktif bir ses oynatıcı gibi özellikler barındırır.</p><h4>Kullanılan Teknolojiler:</h4><ul><li><strong>Frontend:</strong> React.js, Vite</li><li><strong>Animasyon:</strong> GSAP</li><li><strong>Stil:</strong> Saf CSS (CSS Değişkenleri ile), SASS</li><li><strong>Diğer:</strong> Axios, React-Router-Dom</li></ul>"
