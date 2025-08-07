@@ -59,12 +59,12 @@ const DefaultExperience = () => {
   return (
     <>
       {!splashComplete && <Splash onComplete={handleSplashComplete} />}
-      <ParticleSystem
+      {/* <ParticleSystem
         audioData={audioData}
         scrollY={scrollY}
         isDarkMode={theme === "dark"}
         isPlaying={isPlaying}
-      />
+      /> */}
       <div className={`app-container ${splashComplete ? "show" : ""}`}>
         <Navbar
           onScrollToAbout={() => scrollToSection(aboutRef)}
