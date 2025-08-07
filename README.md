@@ -1,7 +1,7 @@
 <p align="center">
   <img src="./myportfolio/src/assets/img/project.png" alt="Project Preview" width="600"/>
 </p>
-
+[website]["https://nuhdemir.netlify.app/"]
 # 🌐 Kişisel Portfolyo Web Sitesi
 
 Bu proje, kendi kişisel portfolyo sitemin modern web teknolojileri ile geliştirilmiş bir versiyonudur. Tüm tasarım Figma kullanılarak tarafımdan yapılmış, geliştirme süreci boyunca **React**, **GSAP**, **Axios** gibi kütüphaneler kullanılmıştır. Kod yapısı **frontend design pattern** odaklı olarak modüler ve ölçeklenebilir bir biçimde organize edilmiştir.
