@@ -16,7 +16,6 @@ import DeveloperExperience from "./pages/DeveloperExperience";
 import RecruiterExperience from "./pages/RecruiterExperience";
 
 // Özel Hook'lar ve Context
-import { useDynamicCursor } from "./hooks/useDynamicCursor.js";
 import { ThemeProvider, useTheme } from "./context/ThemeContext";
 import { useUserRole } from "./context/UserRoleContext.jsx";
 
@@ -29,8 +28,6 @@ const DefaultExperience = () => {
   const [scrollY, setScrollY] = useState(0);
   const [audioData, setAudioData] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
-
-  useDynamicCursor();
 
   const aboutRef = useRef(null);
   const projectsRef = useRef(null);
