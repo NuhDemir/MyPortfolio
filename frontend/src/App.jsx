@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, Suspense, lazy } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 
 // Ana Deneyim Bileşenleri
@@ -6,7 +6,6 @@ import { Navbar } from "./components/Navbar/Navbar.jsx";
 import Main from "./components/Main/Main.jsx";
 import About from "./components/About/About.jsx";
 import ProjectList from "./components/Projects/ProjectList/ProjectList.jsx";
-import Comments from "./components/Comments/Comments.jsx";
 import MessageForm from "./components/Message/MessageForm.jsx";
 import Footer from "./components/Footer/Footer.jsx";
 import SocialLinks from "./components/SocialLinks/SocialLinks.jsx";
@@ -21,7 +20,7 @@ import { useUserRole } from "./context/UserRoleContext.jsx";
 
 // Stil Dosyası
 import "./style/global.css";
-
+const Comments = lazy(() => import("./components/Comments/Comments.jsx"));
 // --- 1. VARSAYILAN DENEYİM (Mevcut Siteniz) ---
 const DefaultExperience = () => {
   const { theme } = useTheme();
@@ -66,7 +65,11 @@ const DefaultExperience = () => {
         <ProjectList />
       </section>
       <section id="comments-section">
-        <Comments />
+        <Suspense
+          fallback={<div className="component-loader">Yükleniyor...</div>}
+        >
+          <Comments />
+        </Suspense>
       </section>
       <section id="contact-section" ref={contactRef}>
         <MessageForm />

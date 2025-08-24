@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
-import useGsapAnimations from "../../../hooks/useAboutGsapAnimation";
+import React from "react";
+import { gsap } from "gsap"; // GSAP'ı doğrudan import et
 
+// Artık animasyon hook'una ihtiyacı yok
 const ServiceCard = ({
   icon,
   iconBgColor,
@@ -8,22 +9,13 @@ const ServiceCard = ({
   description,
   onLearnMoreClick,
 }) => {
-  const learnMoreRef = useRef(null);
-  const { animateLearnMoreHover } = useGsapAnimations();
-
-  // Not: Bu JS animasyonu, CSS'teki hover media query'sinden bağımsız çalışır.
-  // Gerekirse bu animasyonu da sadece büyük ekranlarda tetiklemek için bir kontrol eklenebilir.
-  // Ancak mevcut haliyle de bir sorun teşkil etmeyecektir.
-  const handleMouseEnter = () => {
-    if (learnMoreRef.current) {
-      animateLearnMoreHover(learnMoreRef.current, true);
-    }
+  // Hover animasyonunu yöneten fonksiyonlar doğrudan burada
+  const handleMouseEnter = (e) => {
+    gsap.to(e.currentTarget, { x: 5, duration: 0.3, ease: "power2.out" });
   };
 
-  const handleMouseLeave = () => {
-    if (learnMoreRef.current) {
-      animateLearnMoreHover(learnMoreRef.current, false);
-    }
+  const handleMouseLeave = (e) => {
+    gsap.to(e.currentTarget, { x: 0, duration: 0.3, ease: "power2.out" });
   };
 
   return (
@@ -35,7 +27,6 @@ const ServiceCard = ({
       <div className="service-desc">{description}</div>
       <button
         className="learn-more"
-        ref={learnMoreRef}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={onLearnMoreClick}

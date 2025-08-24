@@ -93,16 +93,40 @@
 .main-image {
   position: absolute;
   top: 50%;
-  right: 5%;
+  right: clamp(2%, 5vw, 5%);
   transform: translateY(-50%);
+  width: clamp(500px, 34vw, 650px);
   max-width: 45%;
-  max-height: 90vh;
+  height: auto;
   z-index: 1;
 }
-.main-image img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
+
+.quote-toaster {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%); /* GSAP tarafından değiştirilecek */
+  z-index: 2;
+
+  background-color: var(--color-background-tooltip, #ecebe6);
+  color: var(--color-text-tooltip, #2d2d2d);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-code, monospace);
+  white-space: nowrap;
+  box-shadow: var(--box-shadow-base);
+  pointer-events: none;
+
+  /* GSAP'ın animasyonu için başlangıç durumu */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.theme-dark .quote-toaster {
+  background-color: var(--color-background-paper, #161b22);
+  color: var(--color-text-primary, #f0f6fc);
+  border: 1px solid var(--color-border-primary);
 }
 
 /* === SES OYNATICI (AUDIO CONTROLS) - NOSTALJİK TASARIM === */

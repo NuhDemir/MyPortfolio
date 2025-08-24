@@ -116,8 +116,17 @@
 }
 
 .learn-more {
-  background: transparent;
+  /* Arka planı tamamen şeffaf yap */
+  background-color: transparent;
+
+  /* Kenarlıkları kaldır */
   border: none;
+
+  /* Odaklanma (focus) durumunda tarayıcının eklediği varsayılan dış çizgiyi kaldır */
+  /* Not: Erişilebilirlik için özel bir focus stili eklemek iyi bir pratiktir */
+  outline: none;
+
+  /* Metin ve Konumlandırma Stilleri */
   padding: var(--spacing-xs) 0;
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
@@ -127,16 +136,17 @@
   display: inline-flex;
   align-items: center;
   align-self: flex-start;
-  transition: color var(--transition-duration-short) ease;
-}
 
-.learn-more:after {
-  content: "→";
-  margin-left: var(--spacing-xs);
-  transition: transform var(--transition-duration-short) ease;
+  /* Geçiş Efektleri */
+  /* Renk ve olası arka plan rengi değişiklikleri için yumuşak geçiş */
+  transition: color var(--transition-duration-short) ease,
+    background-color var(--transition-duration-short) ease;
 }
-
-/* will-change'i sadece hover etkileşimi olan büyük ekranlar için ekleyeceğiz */
+.learn-more:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--color-text-link-hover, var(--color-accent));
+  text-underline-offset: 4px; /* Çizgi ile metin arasına boşluk koyar */
+}
 
 /* ==========================================================================
    2. TABLET VE ÜZERİ (min-width: 768px)

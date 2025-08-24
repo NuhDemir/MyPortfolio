@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 // Modal bileşeninin projenizdeki doğru yolunu belirttiğinizden emin olun
 import ProjectModal from "../../common/ProjectModal";
@@ -15,25 +15,28 @@ const ProjectList = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // --- YENİ EKLENEN SES YÖNETİMİ ---
-  // public klasöründeki ses dosyalarına referanslar oluşturuluyor.
-  // useRef, her render'da yeni bir Audio nesnesi oluşturulmasını engeller.
-  const popSoundRef = useRef(new Audio("/audio/hover-click.mp3"));
-  const arcadeSoundRef = useRef(new Audio("/audio/arcade.mp3"));
+  // Ses dosyaları için ref
+  const popSoundRef = useRef(null);
+  const arcadeSoundRef = useRef(null);
+
+  // Sesleri preload et
+  useEffect(() => {
+    popSoundRef.current = new Audio("/audio/hover-click.mp3");
+    arcadeSoundRef.current = new Audio("/audio/arcade.mp3");
+
+    popSoundRef.current.preload = "auto";
+    arcadeSoundRef.current.preload = "auto";
+  }, []);
 
   // Ses çalma işlemini basitleştiren yardımcı fonksiyon
   const playSound = (audioRef) => {
-    // Sesi başa sararak art arda tıklamalarda çalmasını sağlar
+    if (!audioRef.current) return;
     audioRef.current.currentTime = 0;
-    // Sesi çal ve olası tarayıcı politikası hatalarını yakala
-    audioRef.current.play().catch((error) => {
-      console.error("Audio playback failed:", error);
-    });
+    audioRef.current
+      .play()
+      .catch((error) => console.error("Audio playback failed:", error));
   };
 
-  // --- GÜNCELLENEN FONKSİYONLAR ---
-
-  // Bir proje kartına tıklandığında modal'ı açar ve "arcade" sesini çalar
   const handleCardClick = (project) => {
     playSound(arcadeSoundRef); // Arcade sesini çal
     setSelectedProject(project);
@@ -60,6 +63,9 @@ const ProjectList = () => {
     }
   };
 
+  // Project listesi için useMemo — yeniden render’da gereksiz map engellenir
+  const projects = useMemo(() => projectsData, []);
+
   return (
     <>
       <section className="project-list-section" id="projects-section">
@@ -75,16 +81,12 @@ const ProjectList = () => {
             onClick={() => scrollList("left")}
             aria-label="Sola Kaydır"
           >
-            {/* 
-              Not: İkonun etrafındaki fazladan div kaldırıldı. 
-              Doğrudan ikona class vermek daha temiz bir yapıdır.
-            */}
             <ChevronLeft size={28} className="icon" />
           </button>
 
           {/* Proje Kartlarının Bulunduğu Kaydırılabilir Alan */}
           <div className="project-list-container" ref={listContainerRef}>
-            {projectsData.map((project) => (
+            {projects.map((project) => (
               <ProjectCard
                 key={project.id}
                 project={project}

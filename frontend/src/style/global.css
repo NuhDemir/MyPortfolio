@@ -387,6 +387,52 @@ body {
   transition: background-color var(--transition-duration-base)
       var(--transition-timing-function),
     color var(--transition-duration-base) var(--transition-timing-function);
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 2px,
+    transparent 3px
+  );
+  background-size: 100% 8px;
+}
+/* Hafif noise (parazit) efekti */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: url("https://www.transparenttextures.com/patterns/noise.png");
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+  z-index: 1;
+}
+
+/* Hafif titreşim efekti (CRT flicker) */
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0.98;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.02);
+  animation: flicker 0.12s infinite;
+  z-index: 2;
 }
 
 a {

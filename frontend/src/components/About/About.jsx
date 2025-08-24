@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react"; // useRef'i import et
 import Header from "./Header.jsx";
 import StatCard from "./StatCard.jsx";
 import ServiceCard from "./ServiceCard/ServiceCard.jsx";
 import Modal from "../common/Modal.jsx";
-import useGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
+import useAboutGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
 
-// İkonları ve İçerikleri import et
+// SVG'leri URL olarak import et
 import ProgrammingLangSvg from "/assets/icons/about/programmingLanguage.svg";
 import DevToolsTechSvg from "/assets/icons/about/DevToolsTech.svg";
 import PodcastTalksSvg from "/assets/icons/about/PodcastTalks.svg";
@@ -15,7 +15,7 @@ import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangC
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
 import PodcastTalksContent from "./ServiceCard/ModalContents/PodcastTalksContent.jsx";
 import ProjectsWorkContent from "./ServiceCard/ModalContents/ProjectsWorkContent.jsx";
-import "./style/About.css"; // Yeniden düzenlenmiş CSS dosyasını import eder
+import "./style/About.css";
 
 const GITHUB_USERNAME = "NuhDemir";
 
@@ -55,7 +55,14 @@ const services = [
 ];
 
 const About = () => {
-  const { statsContainerRef, servicesContainerRef } = useGsapAnimations();
+  // Referansları burada, ana bileşende oluştur
+  const headerRef = useRef(null);
+  const statsContainerRef = useRef(null);
+  const servicesContainerRef = useRef(null);
+
+  // Hook'u çağır ve oluşturduğun referansları ona gönder
+  useAboutGsapAnimations(headerRef, statsContainerRef, servicesContainerRef);
+
   const [repoCount, setRepoCount] = useState(null);
   const [followers, setFollowers] = useState(null);
   const [activeModalId, setActiveModalId] = useState(null);
@@ -65,30 +72,12 @@ const About = () => {
   });
 
   useEffect(() => {
-    const cached = localStorage.getItem("githubStats");
-    const cacheTime = localStorage.getItem("githubStatsTime");
-    const now = Date.now();
-
-    if (cached && cacheTime && now - cacheTime < 1000 * 60 * 5) {
-      const data = JSON.parse(cached);
-      setRepoCount(data.repoCount);
-      setFollowers(data.followers);
-      return;
-    }
-
+    // GitHub verisi çekme (değişiklik yok)
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
       .then((res) => res.json())
       .then((data) => {
         setRepoCount(data.public_repos);
         setFollowers(data.followers);
-        localStorage.setItem(
-          "githubStats",
-          JSON.stringify({
-            repoCount: data.public_repos,
-            followers: data.followers,
-          })
-        );
-        localStorage.setItem("githubStatsTime", now);
       });
   }, []);
 
@@ -103,13 +92,14 @@ const About = () => {
     }
   };
 
-  const closeModal = () => {
-    setActiveModalId(null);
-  };
+  const closeModal = () => setActiveModalId(null);
 
   return (
     <div className="about-container">
-      <Header />
+      {/* Referansları ilgili DOM elementlerine bağla */}
+      <div ref={headerRef}>
+        <Header />
+      </div>
       <div className="about-grid">
         <div className="stats-container" ref={statsContainerRef}>
           <StatCard value={repoCount ?? "..."} label="Repositories" />

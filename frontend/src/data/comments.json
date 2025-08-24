@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "text": "Kardeşim önce backend başlanır",
+    "username": "İbrahim Erbilen",
+    "jobTitle": "Backend Developer"
+  },
+  {
+    "id": 2,
+    "text": "Soft bir tasarım olacak",
+    "username": "Hamza Doğan",
+    "jobTitle": "Frontend Developer"
+  },
+  {
+    "id": 3,
+    "text": "Biz bir aileyiz",
+    "username": "Nazmi Koçak",
+    "jobTitle": "Backend Developer"
+  },
+  {
+    "id": 4,
+    "text": "Patronumuz ne derse o olacak",
+    "username": "Ferhan Hacısalihoğlu",
+    "jobTitle": "Game Developer"
+  }
+]

@@ -114,6 +114,9 @@
   color: var(--color-text-primary);
   line-height: var(--line-height-heading);
   margin: 0 0 var(--spacing-sm) 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .project-card-v2-description {

@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-// Register the ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
 
 const useAboutGsapAnimations = () => {
@@ -10,14 +9,15 @@ const useAboutGsapAnimations = () => {
   const statsContainerRef = useRef(null);
   const servicesContainerRef = useRef(null);
 
-  // Initialize all animations
   useEffect(() => {
-    // Header animation
+    // Header animation (geliştirilmiş)
     if (headerRef.current) {
       gsap.from(headerRef.current, {
-        y: -50,
+        y: -60,
         opacity: 0,
-        duration: 1,
+        scale: 0.95,
+        filter: "blur(10px)",
+        duration: 1.2,
         ease: "power3.out",
       });
     }
@@ -30,14 +30,16 @@ const useAboutGsapAnimations = () => {
       gsap.fromTo(
         statsSections,
         {
-          x: -50,
+          x: -80,
           opacity: 0,
+          filter: "blur(5px)",
         },
         {
           x: 0,
           opacity: 1,
-          stagger: 0.2,
-          duration: 0.8,
+          filter: "blur(0px)",
+          stagger: 0.25,
+          duration: 1,
           ease: "power2.out",
           scrollTrigger: {
             trigger: statsContainerRef.current,
@@ -46,22 +48,21 @@ const useAboutGsapAnimations = () => {
         }
       );
 
-      // Animate the stat values with a counting effect
+      // Stat sayılar için counting effect
       statsSections.forEach((section) => {
         const statValue = section.querySelector(".stat-value");
         const value = statValue.textContent;
 
-        // Only animate if it's a number
         if (!isNaN(parseInt(value))) {
           gsap.from(statValue, {
             textContent: 0,
-            duration: 2,
+            duration: 2.2,
             ease: "power2.out",
             snap: { textContent: 1 },
             stagger: 1,
             scrollTrigger: {
               trigger: section,
-              start: "top 80%",
+              start: "top 85%",
             },
           });
         }
@@ -76,18 +77,20 @@ const useAboutGsapAnimations = () => {
       gsap.fromTo(
         serviceCards,
         {
-          y: 50,
+          y: 60,
           opacity: 0,
+          rotateX: -10,
         },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.15,
-          duration: 0.7,
-          ease: "back.out(1.2)",
+          rotateX: 0,
+          stagger: 0.18,
+          duration: 0.9,
+          ease: "back.out(1.3)",
           scrollTrigger: {
             trigger: servicesContainerRef.current,
-            start: "top 80%",
+            start: "top 85%",
           },
         }
       );
@@ -101,47 +104,55 @@ const useAboutGsapAnimations = () => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: card,
-            start: "top 85%",
+            start: "top 90%",
           },
         });
 
         tl.fromTo(
           iconWrapper,
-          { scale: 0, opacity: 0 },
-          { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" },
+          { scale: 0, opacity: 0, rotate: -30 },
+          {
+            scale: 1,
+            opacity: 1,
+            rotate: 0,
+            duration: 0.6,
+            ease: "back.out(1.7)",
+          },
           0.2
         )
           .fromTo(
             title,
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5 },
+            { y: 25, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6 },
             0.4
           )
           .fromTo(
             description,
-            { y: 20, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.5 },
+            { y: 25, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6 },
             0.6
           )
           .fromTo(
             learnMore,
-            { y: 10, opacity: 0 },
-            { y: 0, opacity: 1, duration: 0.4 },
+            { y: 12, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.5 },
             0.8
           );
       });
     }
 
-    // Cleanup function
+    // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
     };
   }, []);
 
-  // Function to animate hover effect on learn more links
+  // Hover effect (geliştirilmiş)
   const animateLearnMoreHover = (element, isEntering) => {
     gsap.to(element, {
-      x: isEntering ? 5 : 0,
+      x: isEntering ? 6 : 0,
+      scale: isEntering ? 1.05 : 1,
+      color: isEntering ? "#4ade80" : "#fff",
       duration: 0.3,
       ease: "power2.out",
     });

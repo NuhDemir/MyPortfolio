@@ -120,7 +120,7 @@
     "details": "<h3>Proje Hakkında</h3><p>Bu proje, teknolojinin insan hayatına nasıl dokunabileceğinin somut bir örneğidir. Raspberry Pi tabanlı bu akıllı bileklik, Python ile geliştirilen ses tanıma yazılımı sayesinde korna, yangın alarmı veya bebek ağlaması gibi kritik sesleri algılayarak işitme engelli bireyleri titreşim ve ışıkla uyarır. Sadece bir uyarı sistemi değil, aynı zamanda akıllı bir asistandır.</p><h4>Öne Çıkan Özellikler:</h4><ul><li><strong>IoT ve Donanım Entegrasyonu:</strong> Raspberry Pi üzerinde çalışan, sensörler ve aktüatörlerle donatılmış bir akıllı cihaz.</li><li><strong>Akıllı Ses Tanıma:</strong> Çevresel sesleri gerçek zamanlı olarak tanır ve tehlikeli durumları ayırt eder.</li><li><strong>Çok Yönlü Uyarı Sistemi:</strong> Titreşim, RGB LED ve LCD ekran aracılığıyla kullanıcıyı farklı senaryolara göre bilgilendirir.</li><li><strong>Acil Durum Sistemi:</strong> Nabız sensörü ile anormallik tespiti ve API üzerinden otomatik yardım çağrısı yapabilme yeteneği.</li></ul><h4>Kullanılan Teknolojiler:</h4><ul><li><strong>Programlama Dili:</strong> Python</li><li><strong>Platform:</strong> Raspberry Pi (IoT)</li><li><strong>Kütüphaneler:</strong> SpeechRecognition, RPi.GPIO, Requests</li><li><strong>Donanım:</strong> Mikrofon, Nabız Sensörü, Titreşim Motoru, LCD Ekran</li></ul>"
   },
   {
-    "id": 9,
+    "id": 10,
     "title": "Brick Break - Klasik Java Oyunu",
     "description": "Java ile geliştirilmiş, Swing ve AWT tabanlı klasik bir brick break oyunudur. Farklı zorluk seviyeleri, seviye isimleri ve dinamik top hızları ile modernleştirilmiştir.",
     "imageUrl": "/images/brick-game.png",
