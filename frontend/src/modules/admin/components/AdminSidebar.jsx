@@ -1,13 +1,10 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { logout } from "../services/authService";
 import "../styles/sidebar.css";
 
 const AdminSidebar = () => {
-  const navigate = useNavigate();
-
   const handleLogout = () => {
     logout();
-    navigate("/admin/login", { replace: true });
   };
 
   return (

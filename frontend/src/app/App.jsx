@@ -5,23 +5,23 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
-import { Navbar } from "../components/Navbar/Navbar.jsx";
-import Main from "../components/Main/Main.jsx";
-import About from "../components/About/About.jsx";
-import ProjectList from "../components/Projects/ProjectList/ProjectList.jsx";
-import MessageForm from "../components/Message/MessageForm.jsx";
-import Footer from "../components/Footer/Footer.jsx";
-import SocialLinks from "../components/SocialLinks/SocialLinks.jsx";
-import DeveloperExperience from "../pages/DeveloperExperience.jsx";
-import RecruiterExperience from "../pages/RecruiterExperience.jsx";
-import { useTheme } from "../core/context/ThemeContext.jsx";
-import { useUserRole } from "../core/context/UserRoleContext.jsx";
-import "../style/global.css";
+import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
+import Main from "@modules/main/components/Main/Main.jsx";
+import About from "@modules/about/components/About/About.jsx";
+import ProjectList from "@modules/projects/components/Projects/ProjectList/ProjectList.jsx";
+import MessageForm from "@modules/message/components/Message/MessageForm.jsx";
+import Footer from "@modules/footer/components/Footer/Footer.jsx";
+import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
+import DeveloperExperience from "@modules/developer/pages/DeveloperExperience.jsx";
+import RecruiterExperience from "@modules/recruiter/pages/RecruiterExperience.jsx";
+import { useTheme } from "@core/context/ThemeContext.jsx";
+import { useUserRole } from "@core/context/UserRoleContext.jsx";
+import "@shared/styles/base/global.css";
 
-const Comments = lazy(() => import("../components/Comments/Comments.jsx"));
-const AdminRoutes = lazy(() =>
-  import("../modules/admin/routes/AdminRoutes.jsx")
+const Comments = lazy(() =>
+  import("@modules/comments/components/Comments/Comments.jsx")
 );
+const AdminRoutes = lazy(() => import("@modules/admin/routes/AdminRoutes.jsx"));
 
 const DefaultExperience = () => {
   const { theme } = useTheme();

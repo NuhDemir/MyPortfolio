@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
-import ErrorMessage from "../../../components/common/ErrorMessage";
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
+import LoadingSpinner from "../../../shared/ui/LoadingSpinner.jsx";
 import {
   createProject,
   deleteProject,

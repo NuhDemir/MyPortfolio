@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useTheme } from "../../../core/context/ThemeContext.jsx";
+import { useTheme } from "@core/context/ThemeContext.jsx";
 import { getCurrentUser } from "../services/authService";
 import "../styles/navbar.css";
 

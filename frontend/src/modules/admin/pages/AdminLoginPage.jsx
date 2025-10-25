@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ErrorMessage from "../../../components/common/ErrorMessage";
-import LoadingSpinner from "../../../components/common/LoadingSpinner";
+import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
+import LoadingSpinner from "../../../shared/ui/LoadingSpinner.jsx";
 import { getCurrentUser, login } from "../services/authService";
 import { useAdminGuard } from "../hooks/useAdminGuard";
 
