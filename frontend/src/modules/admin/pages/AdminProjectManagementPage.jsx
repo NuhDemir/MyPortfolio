@@ -1,4 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
+import AddRoundedIcon from "@mui/icons-material/AddRounded";
+import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import LinkRoundedIcon from "@mui/icons-material/LinkRounded";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import {
@@ -150,23 +157,37 @@ const AdminProjectManagementPage = () => {
           }}
           className="admin-add-new-btn"
         >
-          Yeni Proje Ekle
+          <AddRoundedIcon className="btn-icon" fontSize="inherit" />
+          <span>Yeni Proje</span>
         </button>
       )}
       {isFormVisible && (
         <div className="admin-form-container">
           <h2>{editingId ? "Projeyi Düzenle" : "Yeni Proje Oluştur"}</h2>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="title">Başlık</label>
-              <input
-                id="title"
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-              />
+          <form onSubmit={handleSubmit} className="admin-form">
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="title">Başlık</label>
+                <input
+                  id="title"
+                  type="text"
+                  name="title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="tags">Etiketler (virgülle ayırın)</label>
+                <input
+                  id="tags"
+                  type="text"
+                  name="tags"
+                  value={formData.tags}
+                  onChange={handleInputChange}
+                  placeholder="ui, react, performans"
+                />
+              </div>
             </div>
             <div className="form-group">
               <label htmlFor="description">Açıklama</label>
@@ -179,62 +200,67 @@ const AdminProjectManagementPage = () => {
                 required
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="image">
-                Proje Görseli{" "}
-                {editingId ? "(Değiştirmek için yeni dosya seçin)" : ""}
-              </label>
-              <input
-                id="image"
-                type="file"
-                name="image"
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Önizleme"
-                  className="image-preview"
-                />
-              )}
-            </div>
-            <div className="form-group">
-              <label htmlFor="tags">Etiketler (virgülle ayırın)</label>
-              <input
-                id="tags"
-                type="text"
-                name="tags"
-                value={formData.tags}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="githubUrl">GitHub URL</label>
-              <input
-                id="githubUrl"
-                type="url"
-                name="githubUrl"
-                value={formData.githubUrl}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="form-group">
-              <label htmlFor="liveUrl">Canlı URL</label>
-              <input
-                id="liveUrl"
-                type="url"
-                name="liveUrl"
-                value={formData.liveUrl}
-                onChange={handleInputChange}
-              />
+            <div className="form-grid">
+              <div className="form-group form-group--file">
+                <label htmlFor="image">
+                  Proje Görseli{" "}
+                  {editingId ? "(değiştirmek için yeni dosya seçin)" : ""}
+                </label>
+                <div className="form-file-field">
+                  <ImageOutlinedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="image"
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </div>
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Önizleme"
+                    className="image-preview"
+                  />
+                )}
+              </div>
+              <div className="form-group">
+                <label htmlFor="githubUrl">GitHub URL</label>
+                <div className="form-field-with-icon">
+                  <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="githubUrl"
+                    type="url"
+                    name="githubUrl"
+                    value={formData.githubUrl}
+                    onChange={handleInputChange}
+                    placeholder="https://github.com/kullanici/proje"
+                  />
+                </div>
+              </div>
+              <div className="form-group">
+                <label htmlFor="liveUrl">Canlı URL</label>
+                <div className="form-field-with-icon">
+                  <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="liveUrl"
+                    type="url"
+                    name="liveUrl"
+                    value={formData.liveUrl}
+                    onChange={handleInputChange}
+                    placeholder="https://"
+                  />
+                </div>
+              </div>
             </div>
             <div className="form-actions">
-              <button type="submit" disabled={loading}>
-                {loading ? "Kaydediliyor..." : "Kaydet"}
+              <button type="submit" disabled={loading} className="submit-btn">
+                <SaveRoundedIcon className="btn-icon" fontSize="inherit" />
+                <span>{loading ? "Kaydediliyor..." : "Kaydet"}</span>
               </button>
               <button type="button" onClick={resetForm} className="cancel-btn">
-                İptal
+                <CloseRoundedIcon className="btn-icon" fontSize="inherit" />
+                <span>İptal</span>
               </button>
             </div>
           </form>
@@ -273,14 +299,22 @@ const AdminProjectManagementPage = () => {
                           onClick={() => handleEditClick(project)}
                           className="edit-btn"
                         >
-                          Düzenle
+                          <EditRoundedIcon
+                            className="btn-icon"
+                            fontSize="inherit"
+                          />
+                          <span>Düzenle</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleDeleteClick(project._id)}
                           className="delete-btn"
                         >
-                          Sil
+                          <DeleteRoundedIcon
+                            className="btn-icon"
+                            fontSize="inherit"
+                          />
+                          <span>Sil</span>
                         </button>
                       </td>
                     </tr>

@@ -1,6 +1,6 @@
 import express from "express";
-import { validateRequest } from "../../../../shared/interfaces/http/middleware/validation.middleware.js";
-import createProjectUpload from "../../infrastructure/storage/ProjectMediaUpload.js";
+import { validateRequest } from "../../../../../shared/interfaces/http/middleware/validation.middleware.js";
+import createProjectUpload from "../../../infrastructure/storage/ProjectMediaUpload.js";
 import createProjectController from "../controllers/project.controller.js";
 import {
   createProjectSchema,

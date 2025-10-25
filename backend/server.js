@@ -1,14 +1,30 @@
 import path from "path";
+import fs from "fs";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
-import { createHttpApp } from "./src/app/http/app.js";
-import { connectDatabase } from "./src/shared/infrastructure/database/mongoose.js";
-import logger from "./src/shared/infrastructure/logging/logger.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
+const envCandidates = [
+  path.resolve(__dirname, ".env"),
+  path.resolve(__dirname, "..", ".env"),
+];
+
+const envPath = envCandidates.find((candidate) => fs.existsSync(candidate));
+if (envPath) {
+  dotenv.config({ path: envPath });
+} else {
+  dotenv.config();
+}
+
+const [{ createHttpApp }, { connectDatabase }, loggerModule] =
+  await Promise.all([
+    import("./src/app/http/app.js"),
+    import("./src/shared/infrastructure/database/mongoose.js"),
+    import("./src/shared/infrastructure/logging/logger.js"),
+  ]);
+const logger = loggerModule.default;
 
 const startServer = async () => {
   try {

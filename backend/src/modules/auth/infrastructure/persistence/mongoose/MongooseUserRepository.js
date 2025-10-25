@@ -1,5 +1,5 @@
-import { User } from "../../domain/entities/User.js";
-import { UserRepository } from "../../domain/repositories/UserRepository.js";
+import { User } from "../../../domain/entities/User.js";
+import { UserRepository } from "../../../domain/repositories/UserRepository.js";
 import { UserModel } from "./UserModel.js";
 
 export class MongooseUserRepository extends UserRepository {

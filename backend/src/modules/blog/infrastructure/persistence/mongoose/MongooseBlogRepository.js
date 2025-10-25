@@ -1,5 +1,5 @@
-import { Blog } from "../../domain/entities/Blog.js";
-import { BlogRepository } from "../../domain/repositories/BlogRepository.js";
+import { Blog } from "../../../domain/entities/Blog.js";
+import { BlogRepository } from "../../../domain/repositories/BlogRepository.js";
 import { BlogModel } from "./BlogModel.js";
 
 export class MongooseBlogRepository extends BlogRepository {

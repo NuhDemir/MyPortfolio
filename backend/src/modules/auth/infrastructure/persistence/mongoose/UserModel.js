@@ -14,7 +14,10 @@ const userSchema = new mongoose.Schema({
     unique: true,
     trim: true,
     lowercase: true,
-    match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, "Geçerli bir email adresi giriniz"],
+    match: [
+      /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+      "Geçerli bir email adresi giriniz",
+    ],
   },
   password: {
     type: String,
@@ -129,8 +132,6 @@ userSchema.virtual("isLocked").get(function () {
   return !!(this.lockUntil && this.lockUntil > Date.now());
 });
 
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ isActive: 1 });
 userSchema.index({ createdAt: -1 });
@@ -172,6 +173,7 @@ userSchema.methods.resetLoginAttempts = function () {
   });
 };
 
-export const UserModel = mongoose.models.User || mongoose.model("User", userSchema);
+export const UserModel =
+  mongoose.models.User || mongoose.model("User", userSchema);
 
 export default UserModel;

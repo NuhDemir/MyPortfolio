@@ -204,7 +204,6 @@ projectSchema.pre("save", function (next) {
 });
 
 projectSchema.index({ title: "text", description: "text", excerpt: "text" });
-projectSchema.index({ slug: 1 });
 projectSchema.index({ tags: 1 });
 projectSchema.index({ category: 1 });
 projectSchema.index({ status: 1 });

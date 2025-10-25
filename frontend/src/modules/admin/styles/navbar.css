@@ -1,43 +1,177 @@
 .admin-navbar {
-  background-color: var(--admin-navbar-bg);
-  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px var(--admin-navbar-shadow);
-  z-index: 999;
-}
+  gap: clamp(1rem, 4vw, 2rem);
+  min-height: var(--admin-navbar-height, 64px);
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 4vw, 2rem);
+  background: var(--admin-navbar-bg);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--admin-border-color) 70%, transparent);
+  .admin-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: clamp(1.25rem, 2.5vw, 1.85rem)
+      clamp(1.75rem, 3vw, 2.5rem);
+    background: var(--admin-surface);
+    border-bottom: var(--admin-border-width) solid var(--admin-line);
+  }
 
-.admin-page-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: var(--admin-text-color);
-}
+  .admin-navbar__left {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.85rem, 2vw, 1.75rem);
+  }
 
-.admin-navbar-right {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
+  .admin-navbar__menu {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: clamp(2.75rem, 8vw, 3.25rem);
+    height: clamp(2.75rem, 8vw, 3.25rem);
+    border: var(--admin-border-width) solid var(--admin-line);
+    border-radius: 50%;
+    background: var(--admin-surface-alt);
+    color: var(--admin-fg);
+    font-size: 1.65rem;
+    box-shadow: var(--admin-shadow-sm);
+    transition: transform var(--admin-transition),
+      box-shadow var(--admin-transition);
+    cursor: pointer;
+  }
 
-.theme-toggle-btn {
-  background-color: var(--admin-sidebar-bg);
-  color: var(--admin-sidebar-text);
-  border: none;
-  padding: 8px 15px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s ease;
-}
+  .admin-navbar__menu:hover,
+  .admin-navbar__menu:focus-visible {
+    transform: translate(
+      calc(var(--admin-border-width) * -0.5),
+      calc(var(--admin-border-width) * -0.5)
+    );
+    box-shadow: var(--admin-shadow);
+  }
 
-.theme-toggle-btn:hover {
-  background-color: #34495e;
-}
+  .admin-navbar__heading {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
 
-.admin-user-info {
-  display: flex;
-  align-items: center;
-  color: var(--admin-text-color);
-  font-weight: 500;
-}
+  .admin-navbar__eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--admin-muted);
+  }
+
+  .admin-page-title {
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    font-weight: 700;
+    color: var(--admin-fg);
+  }
+
+  .admin-navbar-right {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.85rem, 3vw, 2rem);
+  }
+
+  .theme-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.65rem 1.35rem;
+    border: var(--admin-border-width) solid var(--admin-line);
+    border-radius: 999px;
+    background: var(--admin-surface-alt);
+    color: var(--admin-fg);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    transition: transform var(--admin-transition),
+      box-shadow var(--admin-transition);
+    cursor: pointer;
+  }
+
+  .theme-toggle-btn:hover,
+  .theme-toggle-btn:focus-visible {
+    transform: translate(
+      calc(var(--admin-border-width) * -0.4),
+      calc(var(--admin-border-width) * -0.4)
+    );
+    box-shadow: var(--admin-shadow);
+  }
+
+  .theme-toggle-btn svg {
+    font-size: 1.45rem;
+  }
+
+  .admin-user-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.75rem 1.25rem;
+    border: var(--admin-border-width) solid var(--admin-line);
+    border-radius: calc(var(--admin-radius) * 0.75);
+    background: var(--admin-surface-alt);
+    color: var(--admin-fg);
+    box-shadow: var(--admin-shadow-sm);
+  }
+
+  .admin-navbar__user-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    border: var(--admin-border-width) solid var(--admin-line);
+    background: var(--admin-surface);
+    font-size: 1.4rem;
+  }
+
+  .admin-navbar__user-name {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 1024px) {
+    .admin-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      border-radius: var(--admin-radius);
+      margin-bottom: clamp(1rem, 4vw, 1.5rem);
+      box-shadow: var(--admin-shadow-sm);
+    }
+
+    .admin-navbar__menu {
+      display: inline-flex;
+    }
+
+    .theme-toggle-btn span {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .admin-navbar {
+      padding: clamp(1rem, 5vw, 1.35rem);
+    }
+
+    .admin-navbar__heading {
+      gap: 0.1rem;
+    }
+
+    .admin-navbar-right {
+      gap: 0.75rem;
+    }
+
+    .theme-toggle-btn {
+      padding: 0.6rem 0.9rem;
+    }
+  }

@@ -1,8 +1,11 @@
 import express from "express";
-import { validateRequest } from "../../../../shared/interfaces/http/middleware/validation.middleware.js";
-import createBlogUpload from "../../infrastructure/storage/CloudinaryStorageService.js";
+import { validateRequest } from "../../../../../shared/interfaces/http/middleware/validation.middleware.js";
+import createBlogUpload from "../../../infrastructure/storage/CloudinaryStorageService.js";
 import createBlogController from "../controllers/blog.controller.js";
-import { createBlogSchema, updateBlogSchema } from "../validators/blog.schemas.js";
+import {
+  createBlogSchema,
+  updateBlogSchema,
+} from "../validators/blog.schemas.js";
 
 export const createBlogRouter = ({ middleware, ...dependencies }) => {
   const router = express.Router();

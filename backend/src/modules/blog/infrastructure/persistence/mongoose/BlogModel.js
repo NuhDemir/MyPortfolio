@@ -136,7 +136,12 @@ const blogSchema = new mongoose.Schema({
     },
     metaRobots: {
       type: String,
-      enum: ["index,follow", "noindex,follow", "index,nofollow", "noindex,nofollow"],
+      enum: [
+        "index,follow",
+        "noindex,follow",
+        "index,nofollow",
+        "noindex,nofollow",
+      ],
       default: "index,follow",
     },
   },
@@ -246,7 +251,8 @@ blogSchema.pre("validate", function (next) {
       .replace(/[#*`_~\[\]()]/g, "")
       .replace(/\n+/g, " ")
       .trim();
-    this.excerpt = plainText.substring(0, 200) + (plainText.length > 200 ? "..." : "");
+    this.excerpt =
+      plainText.substring(0, 200) + (plainText.length > 200 ? "..." : "");
   }
 
   if (this.content) {
@@ -260,7 +266,11 @@ blogSchema.pre("validate", function (next) {
 blogSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
 
-  if (this.isModified("status") && this.status === "published" && !this.publishedAt) {
+  if (
+    this.isModified("status") &&
+    this.status === "published" &&
+    !this.publishedAt
+  ) {
     this.publishedAt = new Date();
   }
 
@@ -270,7 +280,6 @@ blogSchema.pre("save", function (next) {
 });
 
 blogSchema.index({ title: "text", content: "text", excerpt: "text" });
-blogSchema.index({ slug: 1 });
 blogSchema.index({ tags: 1 });
 blogSchema.index({ category: 1 });
 blogSchema.index({ author: 1 });
@@ -358,7 +367,9 @@ blogSchema.statics.getPublished = function () {
 };
 
 blogSchema.statics.getFeatured = function () {
-  return this.find({ featured: true, status: "published" }).sort({ publishedAt: -1 });
+  return this.find({ featured: true, status: "published" }).sort({
+    publishedAt: -1,
+  });
 };
 
 blogSchema.statics.getByCategory = function (category) {
@@ -366,7 +377,9 @@ blogSchema.statics.getByCategory = function (category) {
 };
 
 blogSchema.statics.getByTag = function (tag) {
-  return this.find({ tags: tag, status: "published" }).sort({ publishedAt: -1 });
+  return this.find({ tags: tag, status: "published" }).sort({
+    publishedAt: -1,
+  });
 };
 
 blogSchema.statics.getForAdmin = function (page = 1, limit = 10, filters = {}) {
@@ -419,6 +432,7 @@ blogSchema.statics.countForAdmin = function (filters = {}) {
   return this.countDocuments(query);
 };
 
-export const BlogModel = mongoose.models.Blog || mongoose.model("Blog", blogSchema);
+export const BlogModel =
+  mongoose.models.Blog || mongoose.model("Blog", blogSchema);
 
 export default BlogModel;

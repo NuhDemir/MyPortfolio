@@ -1,5 +1,5 @@
-import { Project } from "../../domain/entities/Project.js";
-import { ProjectRepository } from "../../domain/repositories/ProjectRepository.js";
+import { Project } from "../../../domain/entities/Project.js";
+import { ProjectRepository } from "../../../domain/repositories/ProjectRepository.js";
 import { ProjectModel } from "./ProjectModel.js";
 
 export class MongooseProjectRepository extends ProjectRepository {
