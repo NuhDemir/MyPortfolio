@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
-import LoadingSpinner from "../../../shared/ui/LoadingSpinner.jsx";
+import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import { getCurrentUser, login } from "../services/authService";
 import { useAdminGuard } from "../hooks/useAdminGuard";
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
   const { refreshUser } = useAdminGuard();
-  const [username, setUsername] = useState("");
+  const [identity, setIdentity] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,14 +25,14 @@ const AdminLoginPage = () => {
     setLoading(true);
     setError("");
 
-    if (!username || !password) {
-      setError("Kullanıcı adı ve şifre alanları boş bırakılamaz.");
+    if (!identity || !password) {
+      setError("Kimlik (kullanıcı adı veya email) ve şifre gereklidir.");
       setLoading(false);
       return;
     }
 
     try {
-      await login(username, password);
+      await login(identity, password);
       refreshUser();
       window.location.href = "/admin/dashboard";
     } catch (err) {
@@ -49,14 +49,14 @@ const AdminLoginPage = () => {
         {error && <ErrorMessage message={error} />}
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label htmlFor="username">Kullanıcı Adı:</label>
+            <label htmlFor="identity">Kullanıcı Adı veya Email:</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
+              id="identity"
+              value={identity}
+              onChange={(event) => setIdentity(event.target.value)}
               required
-              aria-label="Kullanıcı Adı"
+              aria-label="Kullanıcı Adı veya Email"
               autoComplete="username"
             />
           </div>

@@ -1,4 +1,4 @@
-import axiosClient from "../../../core/http/axiosClient";
+import axiosClient from "@core/http/axiosClient";
 
 export const getBlogs = async () => {
   try {

@@ -1,4 +1,4 @@
-import axiosClient from "../../../core/http/axiosClient";
+import axiosClient from "@core/http/axiosClient";
 
 const handleError = (error, context) => {
   console.error(`Proje ${context} hata detayı:`, error.response || error);
@@ -19,7 +19,9 @@ export const getProjects = async () => {
 
 export const createProject = async (formData) => {
   try {
-    const response = await axiosClient.post("/projects", formData);
+    const response = await axiosClient.post("/projects", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   } catch (error) {
     handleError(error, "oluşturulurken");
@@ -28,7 +30,9 @@ export const createProject = async (formData) => {
 
 export const updateProject = async (id, formData) => {
   try {
-    const response = await axiosClient.put(`/projects/${id}`, formData);
+    const response = await axiosClient.put(`/projects/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
     return response.data;
   } catch (error) {
     handleError(error, "güncellenirken");

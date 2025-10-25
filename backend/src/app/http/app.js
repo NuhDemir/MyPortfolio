@@ -15,8 +15,20 @@ const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:3000",
 ];
 
+const resolveAllowedOrigins = () => {
+  const rawOrigins = process.env.CORS_ALLOWED_ORIGINS;
+  if (!rawOrigins) {
+    return DEFAULT_ALLOWED_ORIGINS;
+  }
+
+  return rawOrigins
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+};
+
 export const createHttpApp = ({
-  allowedOrigins = DEFAULT_ALLOWED_ORIGINS,
+  allowedOrigins = resolveAllowedOrigins(),
   enableStatic = process.env.NODE_ENV === "production",
 } = {}) => {
   const app = express();

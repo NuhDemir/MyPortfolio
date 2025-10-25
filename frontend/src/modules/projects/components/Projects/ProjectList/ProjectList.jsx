@@ -1,8 +1,11 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
+import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
+import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import "./ProjectList.css";
-import projectsData from "@modules/projects/data/projectData.json";
+import fallbackProjects from "@modules/projects/data/projectData.json";
+import { fetchProjects } from "@modules/projects/services/projectService.js";
 
 // İkonlar ve Başlık SVG'si
 import MyProjectsSvg from "/assets/icons/project/MyProject.svg";
@@ -13,6 +16,9 @@ const ProjectList = () => {
   const listContainerRef = useRef(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projects, setProjects] = useState(fallbackProjects);
+  const [loading, setLoading] = useState(false);
+  const [loadError, setLoadError] = useState(null);
 
   // Ses dosyaları için ref
   const popSoundRef = useRef(null);
@@ -25,6 +31,40 @@ const ProjectList = () => {
 
     popSoundRef.current.preload = "auto";
     arcadeSoundRef.current.preload = "auto";
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadProjects = async () => {
+      setLoading(true);
+      setLoadError(null);
+
+      try {
+        const data = await fetchProjects();
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setProjects(data);
+        } else if (isMounted && (!data || data.length === 0)) {
+          setProjects(fallbackProjects);
+        }
+      } catch (error) {
+        console.error("Projeler API'den çekilemedi:", error);
+        if (isMounted) {
+          setLoadError(error);
+          setProjects(fallbackProjects);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadProjects();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Ses çalma işlemini basitleştiren yardımcı fonksiyon
@@ -63,8 +103,6 @@ const ProjectList = () => {
   };
 
   // Project listesi için useMemo — yeniden render’da gereksiz map engellenir
-  const projects = useMemo(() => projectsData, []);
-
   return (
     <>
       <section className="project-list-section" id="projects-section">
@@ -73,6 +111,19 @@ const ProjectList = () => {
           src={MyProjectsSvg}
           alt="Projelerim Başlığı"
         />
+        {loading && (
+          <div className="project-list-loading">
+            <LoadingSpinner message="Projeler yükleniyor..." />
+          </div>
+        )}
+        {loadError && !loading && (
+          <div className="project-list-error">
+            <ErrorMessage
+              error={loadError}
+              title="Projeler yüklenirken sorun oluştu"
+            />
+          </div>
+        )}
         <div className="project-list-wrapper">
           {/* Sola Kaydırma Butonu */}
           <button
@@ -85,13 +136,18 @@ const ProjectList = () => {
 
           {/* Proje Kartlarının Bulunduğu Kaydırılabilir Alan */}
           <div className="project-list-container" ref={listContainerRef}>
-            {projects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                onClick={() => handleCardClick(project)}
-              />
-            ))}
+            {projects.map((project) => {
+              const projectKey =
+                project.id || project._id || project.slug || project.title;
+
+              return (
+                <ProjectCard
+                  key={projectKey}
+                  project={project}
+                  onClick={() => handleCardClick(project)}
+                />
+              );
+            })}
           </div>
 
           {/* Sağa Kaydırma Butonu */}

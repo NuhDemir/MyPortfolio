@@ -11,8 +11,8 @@ const LoadingSpinner = ({
     : "loading-spinner-inline";
 
   return (
-    <div className={containerClass}>
-      <div className={`loading-spinner ${spinnerSizeClass}`} />
+    <div className={containerClass} role="status" aria-live="polite">
+      <div className={`loading-spinner ${spinnerSizeClass}`} aria-hidden="true" />
       {message && <p className="loading-message">{message}</p>}
     </div>
   );

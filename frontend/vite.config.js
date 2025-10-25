@@ -1,9 +1,12 @@
+/* eslint-env node */
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import process from "node:process";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 const rootDir = fileURLToPath(new URL(".", import.meta.url));
+const API_PROXY_TARGET = process.env.VITE_API_PROXY_TARGET ?? "http://localhost:5000";
 
 export default defineConfig({
   plugins: [
@@ -39,7 +42,7 @@ export default defineConfig({
     proxy: {
       // '/api' ile başlayan tüm istekleri, aşağıdaki hedefe yönlendir.
       "/api": {
-        target: "http://localhost:5000", // Backend'in çalıştığı adres.
+        target: API_PROXY_TARGET, // Backend'in çalıştığı adres.
         changeOrigin: true, // Bu, CORS hatalarını önlemek için çok önemlidir.
         secure: false, // Backend'in https kullanmıyorsa.
       },

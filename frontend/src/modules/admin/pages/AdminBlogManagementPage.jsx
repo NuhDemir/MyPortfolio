@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
-import LoadingSpinner from "../../../shared/ui/LoadingSpinner.jsx";
+import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import {
   createBlog,
   deleteBlog,

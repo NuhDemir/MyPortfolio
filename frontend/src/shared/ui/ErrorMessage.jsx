@@ -2,15 +2,47 @@
 import React from "react";
 import "@shared/styles/base/components.css"; // Genel bileşen stillerini import et
 
+const DEFAULT_MESSAGE = "Bir hata oluştu.";
+
+const resolveMessage = ({ message, error }) => {
+  if (message) {
+    return message;
+  }
+
+  if (!error) {
+    return DEFAULT_MESSAGE;
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  if (error?.message) {
+    return error.message;
+  }
+
+  if (error?.response?.data?.message) {
+    return error.response.data.message;
+  }
+
+  if (error?.response?.data?.error) {
+    return error.response.data.error;
+  }
+
+  return DEFAULT_MESSAGE;
+};
+
 /**
  * Standart bir hata mesajı kutusu gösterir.
  * @param {object} props - Bileşen props'ları.
- * @param {string} [props.message="Bir hata oluştu."] - Gösterilecek hata mesajı.
+ * @param {string} [props.message] - Gösterilecek hata mesajı.
+ * @param {Error|object|string} [props.error] - Backend veya JS hata nesnesi.
  * @param {string} [props.title="Hata"] - (İsteğe bağlı) Hata kutusu başlığı.
  */
-const ErrorMessage = ({ message = "Bir hata oluştu.", title }) => {
-  // Mesajın boş olup olmadığını kontrol et, boşsa hiçbir şey gösterme
-  if (!message) {
+const ErrorMessage = ({ message, error, title }) => {
+  const resolvedMessage = resolveMessage({ message, error });
+
+  if (!resolvedMessage) {
     return null;
   }
 
@@ -22,7 +54,7 @@ const ErrorMessage = ({ message = "Bir hata oluştu.", title }) => {
           ⚠️
         </span>{" "}
         {/* Uyarı ikonu */}
-        {message}
+        {resolvedMessage}
       </p>
     </div>
   );

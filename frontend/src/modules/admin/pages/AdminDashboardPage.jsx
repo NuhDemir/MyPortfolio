@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getBlogs } from "../services/blogService";
 import { getProjects } from "../services/projectService";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
-import LoadingSpinner from "../../../shared/ui/LoadingSpinner.jsx";
+import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import "../styles/dashboard.css";
 
 const initialStats = {

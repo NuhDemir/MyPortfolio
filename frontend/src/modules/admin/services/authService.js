@@ -1,14 +1,14 @@
-import axiosClient from "../../../core/http/axiosClient";
+import axiosClient from "@core/http/axiosClient";
 import {
   clearStoredUser,
   readStoredUser,
   writeStoredUser,
-} from "../../../core/auth/userStorage";
+} from "@core/auth/userStorage";
 
-export const login = async (username, password) => {
+export const login = async (identity, password) => {
   try {
     const response = await axiosClient.post("/auth/login", {
-      username,
+      identity,
       password,
     });
 
