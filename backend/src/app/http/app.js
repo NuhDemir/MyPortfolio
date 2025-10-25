@@ -4,7 +4,10 @@ import cors from "cors";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import { fileURLToPath } from "url";
-import { errorMiddleware, notFoundMiddleware } from "../../shared/interfaces/http/middleware/error.middleware.js";
+import {
+  errorMiddleware,
+  notFoundMiddleware,
+} from "../../shared/interfaces/http/middleware/error.middleware.js";
 import { registerRoutes } from "./routes.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -66,7 +69,15 @@ export const createHttpApp = ({
   registerRoutes(app);
 
   if (enableStatic) {
-    const frontendPath = path.resolve(__dirname, "..", "..", "..", "..", "frontend", "dist");
+    const frontendPath = path.resolve(
+      __dirname,
+      "..",
+      "..",
+      "..",
+      "..",
+      "frontend",
+      "dist"
+    );
     app.use(express.static(frontendPath));
     app.get("*", (_req, res) => {
       res.sendFile(path.resolve(frontendPath, "index.html"));

@@ -18,7 +18,10 @@ export const fetchBlogBySlug = async (slug) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      resolveErrorMessage(error, "Blog yazısı detayları yüklenirken hata oluştu.")
+      resolveErrorMessage(
+        error,
+        "Blog yazısı detayları yüklenirken hata oluştu."
+      )
     );
   }
 };

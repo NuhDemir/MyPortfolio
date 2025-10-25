@@ -12,7 +12,10 @@ const LoadingSpinner = ({
 
   return (
     <div className={containerClass} role="status" aria-live="polite">
-      <div className={`loading-spinner ${spinnerSizeClass}`} aria-hidden="true" />
+      <div
+        className={`loading-spinner ${spinnerSizeClass}`}
+        aria-hidden="true"
+      />
       {message && <p className="loading-message">{message}</p>}
     </div>
   );
