@@ -1,0 +1,43 @@
+.admin-navbar {
+  background-color: var(--admin-navbar-bg);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 5px var(--admin-navbar-shadow);
+  z-index: 999;
+}
+
+.admin-page-title {
+  font-size: 22px;
+  font-weight: bold;
+  color: var(--admin-text-color);
+}
+
+.admin-navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-toggle-btn {
+  background-color: var(--admin-sidebar-bg);
+  color: var(--admin-sidebar-text);
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+  background-color: #34495e;
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  color: var(--admin-text-color);
+  font-weight: 500;
+}

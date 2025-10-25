@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./style/Navbar.css";
-import { useTheme } from "../../context/ThemeContext";
+import { useTheme } from "../../core/context/ThemeContext.jsx";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { useSound } from "../../hooks/useSound"; // Ses hook'unu import et
 

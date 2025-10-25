@@ -1,31 +1,32 @@
-import app from "./app.js";
-import dotenv from "dotenv";
-import connectDB from "./config/db.js";
 import path from "path";
+import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import { createHttpApp } from "./src/app/http/app.js";
+import { connectDatabase } from "./src/shared/infrastructure/database/mongoose.js";
+import logger from "./src/shared/infrastructure/logging/logger.js";
 
-// ES Modules için __dirname ve __filename emülasyonu
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
 
-// Veritabanı bağlantısını kur ve durumunu kontrol et
-connectDB()
-  .then(() => {
-    // Veritabanı bağlantısı başarılı olursa sunucuyu başlat
-    const PORT = process.env.PORT || 5000;
+const startServer = async () => {
+  try {
+    await connectDatabase(process.env.MONGO_URI);
 
-    app.listen(PORT, () => {
-      console.log(
-        `Server running on port ${PORT} in ${process.env.NODE_ENV || "development"} mode`
-      );
+    const app = createHttpApp();
+    const port = process.env.PORT || 5000;
+
+    app.listen(port, () => {
+      logger.info("Server started", {
+        port,
+        environment: process.env.NODE_ENV ?? "development",
+      });
     });
-  })
-  .catch((error) => {
-    // Veritabanı bağlantısı başarısız olursa hata mesajını göster ve uygulamayı kapat
-    console.error(
-      `\x1b[31mError:\x1b[0m Could not connect to the database. ${error.message}`
-    );
+  } catch (error) {
+    logger.error("Failed to start server", { message: error.message });
     process.exit(1);
-  });
+  }
+};
+
+startServer();

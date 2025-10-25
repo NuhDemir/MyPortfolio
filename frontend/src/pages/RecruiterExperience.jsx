@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useUserRole } from "../context/UserRoleContext";
+import { useUserRole } from "../core/context/UserRoleContext.jsx";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, User, MessageSquare, ArrowLeft } from "lucide-react";
 

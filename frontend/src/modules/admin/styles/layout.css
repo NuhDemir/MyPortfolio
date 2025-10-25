@@ -1,0 +1,36 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--admin-background);
+  color: var(--admin-text-color);
+}
+
+.admin-main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-content-area {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+:root {
+  --admin-background: #f4f7f6;
+  --admin-text-color: #333;
+  --admin-sidebar-bg: #2c3e50;
+  --admin-sidebar-text: #ecf0f1;
+  --admin-navbar-bg: #ffffff;
+  --admin-navbar-shadow: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-theme {
+  --admin-background: #1a202c;
+  --admin-text-color: #e2e8f0;
+  --admin-sidebar-bg: #1a202c;
+  --admin-sidebar-text: #a0aec0;
+  --admin-navbar-bg: #2d3748;
+  --admin-navbar-shadow: rgba(255, 255, 255, 0.05);
+}

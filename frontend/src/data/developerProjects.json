@@ -1,50 +1,137 @@
 [
   {
     "id": "proj-01",
-    "title": "Portfolyo Sitesi (Bu Proje)",
-    "description": "Kullanıcı rolüne göre dinamik olarak değişen, GSAP ve React tabanlı interaktif portfolyo.",
-    "imageUrl": "/images/project-portfolio.png",
-    "liveUrl": "https://www.nuhdemir.com",
+    "title": "Portfolyo Sitesi",
+    "description": "React, GSAP ve modern web teknolojileri kullanılarak geliştirilmiş interaktif ve responsive kişisel portfolyo sitesi.",
+    "imageUrl": "/images/portfolio.png",
+    "liveUrl": "https://www.nuhdemir.netlify.app",
     "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
-    "tags": ["React", "GSAP", "Context API", "Vite", "Framer Motion"],
+    "tags": [
+      "React",
+      "GSAP",
+      "Vite",
+      "CSS Variables",
+      "Responsive",
+      "Frontend"
+    ],
     "fileName": "useDynamicCursor.js",
-    "language": "javascript",
-    "codeSnippet": "import { useEffect, useRef } from 'react';\nimport { gsap } from 'gsap';\n\nexport const useDynamicCursor = () => {\n  const cursorRef = useRef(null);\n\n  useEffect(() => {\n    if (!cursorRef.current) {\n      cursorRef.current = document.createElement('div');\n      cursorRef.current.className = 'dynamic-cursor';\n      document.body.appendChild(cursorRef.current);\n    }\n\n    const cursor = cursorRef.current;\n    const cursorXQuickTo = gsap.quickTo(cursor, 'x', { duration: 0.5, ease: 'power3' });\n    const cursorYQuickTo = gsap.quickTo(cursor, 'y', { duration: 0.5, ease: 'power3' });\n\n    // ... (daha fazla kod)\n  }, []);\n};"
+    "language": "JavaScript",
+    "codeSnippet": "import { useEffect, useRef } from 'react';\nimport { gsap } from 'gsap';\n\nexport const useDynamicCursor = () => {\n  const cursorRef = useRef(null);\n\n  useEffect(() => {\n    if (!cursorRef.current) {\n      cursorRef.current = document.createElement('div');\n      cursorRef.current.className = 'dynamic-cursor';\n      document.body.appendChild(cursorRef.current);\n    }\n\n    const cursor = cursorRef.current;\n    const cursorXQuickTo = gsap.quickTo(cursor, 'x', { duration: 0.5, ease: 'power3' });\n    const cursorYQuickTo = gsap.quickTo(cursor, 'y', { duration: 0.5, ease: 'power3' });\n\n    // ... daha fazla kod\n  }, []);\n};"
   },
   {
     "id": "proj-02",
-    "title": "E-Ticaret Platformu API",
-    "description": "Node.js, Express ve MongoDB ile oluşturulmuş, JWT ile güvence altına alınmış RESTful API.",
-    "imageUrl": "/images/project-ecommerce.png",
+    "title": "Electron ARP & Network Explorer",
+    "description": "Electron ve React tabanlı masaüstü uygulaması. Yerel ağ keşfi ve ARP tablosu görüntüleme desteği sağlar.",
+    "imageUrl": "/images/arp.png",
     "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir/ecommerce-api",
-    "tags": ["Node.js", "Express", "MongoDB", "JWT", "Mongoose"],
-    "fileName": "authMiddleware.js",
-    "language": "javascript",
-    "codeSnippet": "const jwt = require('jsonwebtoken');\n\nmodule.exports = function (req, res, next) {\n  const token = req.header('x-auth-token');\n  if (!token) {\n    return res.status(401).json({ msg: 'No token, authorization denied' });\n  }\n\n  try {\n    const decoded = jwt.verify(token, process.env.JWT_SECRET);\n    req.user = decoded.user;\n    next();\n  } catch (err) {\n    res.status(401).json({ msg: 'Token is not valid' });\n  }\n};"
+    "githubUrl": "https://github.com/your-username/electron-arp-explorer",
+    "tags": [
+      "Electron",
+      "React",
+      "Node.js",
+      "ARP",
+      "Network Scan",
+      "Vite",
+      "Desktop App"
+    ],
+    "fileName": "arpScanner.js",
+    "language": "JavaScript",
+    "codeSnippet": "const { exec } = require('child_process');\n\nfunction getArpTable(callback) {\n  exec('arp -a', (error, stdout, stderr) => {\n    if (error) {\n      console.error(`exec error: ${error}`);\n      return;\n    }\n    callback(stdout);\n  });\n}\n\ngetArpTable(console.log);"
   },
   {
     "id": "proj-03",
-    "title": "Flutter İşaret Dili Çevirmeni",
-    "description": "Konuşmayı metne ve işaret dili görsellerine çeviren, Flutter ile geliştirilmiş mobil uygulama.",
-    "imageUrl": "/images/project-sign-language.png",
+    "title": "SeeSound - Yapay Zeka Destekli Mobil Uygulama",
+    "description": "İşitme engelli bireylerin çevrelerindeki sesleri algılamalarına ve acil durumlarda iletişim kurmalarına yardımcı olan erişilebilirlik odaklı mobil uygulama.",
+    "imageUrl": "/images/seesound.png",
     "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir/flutter-sign-language",
-    "tags": ["Flutter", "Dart", "Mobil", "SpeechToText"],
+    "githubUrl": "https://github.com/NuhDemir/seesound",
+    "tags": [
+      "Node.js",
+      "Express.js",
+      "Flutter",
+      "SQL Server",
+      "Mobile",
+      "Accessibility",
+      "AI"
+    ],
     "fileName": "translator_screen.dart",
-    "language": "dart",
-    "codeSnippet": "import 'package:flutter/material.dart';\nimport 'package:speech_to_text/speech_to_text.dart' as stt;\n\nclass TranslatorScreen extends StatefulWidget {\n  @override\n  _TranslatorScreenState createState() => _TranslatorScreenState();\n}\n\nclass _TranslatorScreenState extends State<TranslatorScreen> {\n  stt.SpeechToText _speech;\n  bool _isListening = false;\n  String _text = 'Press the button and start speaking';\n\n  @override\n  void initState() {\n    super.initState();\n    _speech = stt.SpeechToText();\n  }\n\n  // ... (daha fazla kod)\n}"
+    "language": "Dart",
+    "codeSnippet": "import 'package:flutter/material.dart';\nimport 'package:speech_to_text/speech_to_text.dart' as stt;\n\nclass TranslatorScreen extends StatefulWidget {\n  @override\n  _TranslatorScreenState createState() => _TranslatorScreenState();\n}\n\nclass _TranslatorScreenState extends State<TranslatorScreen> {\n  stt.SpeechToText _speech;\n  bool _isListening = false;\n  String _text = 'Press the button and start speaking';\n\n  @override\n  void initState() {\n    super.initState();\n    _speech = stt.SpeechToText();\n  }\n\n  // ... daha fazla kod\n}"
   },
   {
     "id": "proj-04",
-    "title": "React Görev Yöneticisi",
-    "description": "React Context API ve Reducer kullanarak oluşturulmuş, sürükle-bırak özellikli görev panosu.",
-    "imageUrl": "/images/project-task-manager.png",
+    "title": "2048 Oyunu ve Geliştirme Rehberi",
+    "description": "JavaScript, HTML ve CSS kullanılarak geliştirilmiş klasik 2048 oyunu. Temel ve ileri seviye geliştirme rehberi içerir.",
+    "imageUrl": "/images/2048.png",
+    "liveUrl": "https://2048-gamex.netlify.app/",
+    "githubUrl": "https://github.com/NuhDemir/2048_Game",
+    "tags": [
+      "JavaScript",
+      "HTML",
+      "CSS",
+      "Game Development",
+      "2048",
+      "Education"
+    ],
+    "fileName": "game.js",
+    "language": "JavaScript",
+    "codeSnippet": "function randomAddItem() {\n  let emptyCells = getEmptyCells();\n  if (emptyCells.length === 0) return;\n  let index = Math.floor(Math.random() * emptyCells.length);\n  let value = Math.random() < 0.9 ? 2 : 4;\n  grid[emptyCells[index]] = value;\n}"
+  },
+  {
+    "id": "proj-05",
+    "title": "Hastane Yönetim Sistemi",
+    "description": "Asp.Net MVC ve SQL Server kullanılarak geliştirilen kapsamlı hastane bilgi sistemi. Hasta kayıt, doktor atamaları ve ilaç yönetimi içerir.",
+    "imageUrl": "/images/project-hospital-management.png",
     "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir",
-    "tags": ["React", "Context API", "Reducer", "Drag&Drop"],
-    "fileName": "TaskContext.js",
-    "language": "jsx",
-    "codeSnippet": "import React, { createContext, useReducer } from 'react';\n\nexport const TaskContext = createContext();\n\nconst taskReducer = (state, action) => {\n  switch (action.type) {\n    case 'ADD_TASK':\n      return [...state, { id: Date.now(), text: action.payload, status: 'todo' }];\n    case 'MOVE_TASK':\n      // Logic to move task between columns\n      return state.map(task => \n        task.id === action.payload.taskId \n        ? { ...task, status: action.payload.newStatus }\n        : task\n      );\n    default:\n      return state;\n  }\n};\n\nexport const TaskProvider = ({ children }) => {\n  const [tasks, dispatch] = useReducer(taskReducer, []);\n  // ... (daha fazla kod)\n};"
+    "githubUrl": "https://github.com/NuhDemir/Hospital_Management_System",
+    "tags": [
+      "ASP.NET MVC",
+      "SQL Server",
+      "Entity Framework",
+      "C#",
+      "Management System",
+      "Healthcare"
+    ],
+    "fileName": "PatientController.cs",
+    "language": "C#",
+    "codeSnippet": "public class PatientController : Controller\n{\n    private HospitalContext db = new HospitalContext();\n\n    public ActionResult Index()\n    {\n        return View(db.Patients.ToList());\n    }\n\n    public ActionResult Details(int id)\n    {\n        var patient = db.Patients.Find(id);\n        if (patient == null)\n        {\n            return HttpNotFound();\n        }\n        return View(patient);\n    }\n}"
+  },
+  {
+    "id": "proj-06",
+    "title": "Çarşı E-Ticaret Sitesi (React Frontend)",
+    "description": "React kullanılarak geliştirilmiş e-ticaret platformu. Kullanıcıların ürünleri görüntülemesini ve sepetlerine eklemesini sağlar.",
+    "imageUrl": "/images/project-carsi-banner.png",
+    "liveUrl": "https://carsi-react.netlify.app/",
+    "githubUrl": "https://github.com/NuhDemir/Carsi_Ecommerce",
+    "tags": [
+      "React",
+      "Redux",
+      "REST API",
+      "CSS Modules",
+      "E-Commerce",
+      "Frontend"
+    ],
+    "fileName": "Cart.js",
+    "language": "JavaScript",
+    "codeSnippet": "import React from 'react';\nimport { useSelector } from 'react-redux';\n\nexport default function Cart() {\n  const cartItems = useSelector((state) => state.cart.items);\n  return (\n    <div>\n      <h2>Sepetim</h2>\n      {cartItems.length === 0 ? (\n        <p>Sepetiniz boş</p>\n      ) : (\n        <ul>\n          {cartItems.map((item, index) => (\n            <li key={index}>{item.name} - {item.quantity}</li>\n          ))}\n        </ul>\n      )}\n    </div>\n  );\n}"
+  },
+  {
+    "id": "proj-07",
+    "title": "Çarşı - MERN Fullstack E-Ticaret",
+    "description": "MongoDB, Express.js, React ve Node.js kullanılarak geliştirilen tam işlevsel fullstack e-ticaret platformu.",
+    "imageUrl": "/images/carsi.png",
+    "liveUrl": null,
+    "githubUrl": "https://github.com/NuhDemir/Carsi_MERN",
+    "tags": [
+      "MongoDB",
+      "Express.js",
+      "React",
+      "Node.js",
+      "Fullstack",
+      "E-Commerce"
+    ],
+    "fileName": "productModel.js",
+    "language": "JavaScript",
+    "codeSnippet": "import mongoose from 'mongoose';\n\nconst productSchema = mongoose.Schema(\n  {\n    name: { type: String, required: true },\n    price: { type: Number, required: true },\n    countInStock: { type: Number, required: true },\n    description: { type: String, required: true },\n    image: { type: String, required: true },\n  },\n  { timestamps: true }\n);\n\nconst Product = mongoose.model('Product', productSchema);\nexport default Product;"
   }
 ]

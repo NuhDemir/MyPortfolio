@@ -1,7 +1,7 @@
 import React, { useRef, useImperativeHandle, forwardRef } from "react";
 import ConsoleEmulator from "react-console-emulator";
-import { useUserRole } from "../../context/UserRoleContext";
-import { useTheme } from "../../context/ThemeContext";
+import { useUserRole } from "../../core/context/UserRoleContext.jsx";
+import { useTheme } from "../../core/context/ThemeContext.jsx";
 import "./style/Terminal.css";
 
 // Bileşeni, bir üst bileşenin bu bileşenin içindeki fonksiyonlara erişebilmesi için
