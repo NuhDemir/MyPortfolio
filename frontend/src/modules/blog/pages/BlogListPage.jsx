@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
-import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import { fetchBlogs } from "@modules/blog/services/blogService.js";
 import "./styles/blog-pages.css";
 
@@ -35,7 +34,6 @@ const formatDate = (value) => {
 const BlogListPage = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("tümü");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -43,24 +41,17 @@ const BlogListPage = () => {
     let isMounted = true;
 
     const loadBlogs = async () => {
-      setLoading(true);
-      setError(null);
+  setLoading(true);
 
       try {
         const data = await fetchBlogs();
-        if (!isMounted) {
-          return;
-        }
+        if (!isMounted) return;
         setBlogs(Array.isArray(data) ? data : []);
-      } catch (err) {
-        if (!isMounted) {
-          return;
-        }
-        setError(err);
+      } catch {
+        // Sessiz fallback: blogService zaten fallback döndürüyor; ekstra işlem yok
+        if (isMounted) setBlogs([]);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -177,12 +168,6 @@ const BlogListPage = () => {
 
         {loading ? (
           <LoadingSpinner message="Blog yazıları yükleniyor..." />
-        ) : error ? (
-          <ErrorMessage
-            title="Blog yazıları getirilemedi"
-            error={error}
-            message="Lütfen kısa bir süre sonra yeniden deneyin."
-          />
         ) : publishedBlogs.length === 0 ? (
           <p className="blog-page__empty">
             Henüz yayınlanmış blog yazısı bulunmuyor. Çok yakında yeni içerikler

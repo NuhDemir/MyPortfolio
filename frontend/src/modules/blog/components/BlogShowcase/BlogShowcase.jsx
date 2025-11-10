@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
-import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import { fetchBlogs } from "@modules/blog/services/blogService.js";
 import "./BlogShowcase.css";
 
@@ -35,26 +34,23 @@ const sortBlogsByDate = (entries) =>
 const BlogShowcase = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
 
     const loadBlogs = async () => {
-      setLoading(true);
-      setError(null);
+  setLoading(true);
 
       try {
         const data = await fetchBlogs();
         if (!isMounted) return;
         setBlogs(Array.isArray(data) ? data : []);
-      } catch (err) {
+      } catch {
         if (!isMounted) return;
-        setError(err);
+        // Sessiz fallback: blogService local fallback döndürebiliyor
+        setBlogs([]);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -74,7 +70,7 @@ const BlogShowcase = () => {
     return sortBlogsByDate(publishedOnly).slice(0, BLOG_LIMIT);
   }, [blogs]);
 
-  if (!loading && !error && visibleBlogs.length === 0) {
+  if (!loading && visibleBlogs.length === 0) {
     return null;
   }
 
@@ -94,14 +90,6 @@ const BlogShowcase = () => {
       {loading ? (
         <div className="blog-showcase__state">
           <LoadingSpinner message="Blog yazıları yükleniyor..." />
-        </div>
-      ) : error ? (
-        <div className="blog-showcase__state">
-          <ErrorMessage
-            title="Blog yazıları getirilemedi"
-            error={error}
-            message="Kısa süre sonra tekrar dener misiniz?"
-          />
         </div>
       ) : (
         <div className="blog-showcase__grid">

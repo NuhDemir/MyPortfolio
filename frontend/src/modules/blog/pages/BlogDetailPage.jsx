@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
-import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import { fetchBlogBySlug } from "@modules/blog/services/blogService.js";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
@@ -99,31 +98,29 @@ const BlogDetailPage = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!slug) {
-      setError(new Error("Blog yazısı bulunamadı."));
+      // Geçersiz slug geldiğinde sessizce null bırak
+      setBlog(null);
       return;
     }
 
     let isMounted = true;
 
     const loadBlog = async () => {
-      setLoading(true);
-      setError(null);
+  setLoading(true);
 
       try {
         const data = await fetchBlogBySlug(slug);
         if (!isMounted) return;
         setBlog(data);
-      } catch (err) {
+      } catch {
         if (!isMounted) return;
-        setError(err);
+        // Sessiz fallback: service local blog döndürebilir veya null gelir
+        setBlog(null);
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        if (isMounted) setLoading(false);
       }
     };
 
@@ -274,17 +271,16 @@ const BlogDetailPage = () => {
     );
   }
 
-  if (error || !blog) {
+  if (!blog) {
     return (
       <>
         <Navbar />
         <main className="blog-page blog-page--detail">
           <div className="blog-page__container">
-            <ErrorMessage
-              title="Blog yazısı bulunamadı"
-              error={error}
-              message="Yazı kaldırılmış olabilir ya da adres hatalı."
-            />
+            <p className="blog-page__empty">
+              Bu yazı bulunamadı veya henüz yayınlanmadı. Ana sayfaya
+              dönmek için aşağıya tıklayın.
+            </p>
             <Link className="blog-back-link" to="/blog">
               ← Blog ana sayfasına dön
             </Link>

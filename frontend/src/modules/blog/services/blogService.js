@@ -1,15 +1,18 @@
 import axiosClient from "@core/http/axiosClient";
+import fallbackBlogs from "@shared/data/blogs.json";
 
-const resolveErrorMessage = (error, fallback) =>
-  error?.response?.data?.message ?? error?.message ?? fallback;
-
+// Geliştirme: backend yoksa sessiz fallback kullan. Prod ortamda gerçek hata atılmasını
+// tercih ederseniz burayı prod flag ile koşullandırabilirsiniz.
 export const fetchBlogs = async () => {
   try {
     const response = await axiosClient.get("/blog");
     const blogs = Array.isArray(response.data) ? response.data : [];
     return blogs.map(transformBlogPayload);
-  } catch (error) {
-    throw new Error(resolveErrorMessage(error, "Blog yazıları yüklenemedi."));
+  } catch {
+    // API yoksa local fallback kullan
+    return Array.isArray(fallbackBlogs)
+      ? fallbackBlogs.map(transformBlogPayload)
+      : [];
   }
 };
 
@@ -17,13 +20,12 @@ export const fetchBlogBySlug = async (slug) => {
   try {
     const response = await axiosClient.get(`/blog/${slug}`);
     return transformBlogPayload(response.data);
-  } catch (error) {
-    throw new Error(
-      resolveErrorMessage(
-        error,
-        "Blog yazısı detayları yüklenirken hata oluştu."
-      )
-    );
+  } catch {
+    // Önce local fallback içinde ara
+    const found = Array.isArray(fallbackBlogs)
+      ? fallbackBlogs.find((b) => b.slug === slug || b.id === slug)
+      : null;
+    return found ? transformBlogPayload(found) : null;
   }
 };
 

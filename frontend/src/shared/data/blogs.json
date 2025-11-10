@@ -1,0 +1,41 @@
+[
+  {
+    "id": "how-i-built-my-portfolio",
+    "slug": "how-i-built-my-portfolio",
+    "title": "Portfolyo Sitesini Nasıl Oluşturdum",
+    "excerpt": "React, Vite ve GSAP kullanarak interaktif bir portfolyo oluşturmamın kısa hikâyesi: ihtiyaç, teknik seçim ve öğrendiklerim.",
+  "content": "<p>Bu yazıda kişisel portfolyo projemin başlangıcından canlıya taşıma sürecine kadar olan kısa hikâyesini paylaşıyorum. Projeyi tasarlarken hedefim, benim çalışmalarımı hızlıca gösterebilen, erişilebilir ve performanslı bir tek sayfa deneyimi oluşturmaktı.</p><p>Teknik olarak React + Vite kombinasyonunu seçtim çünkü hızlı geliştirme döngüleri ve düşük üretim boyutu sağlıyor. Bileşen mimarisini küçük, yeniden kullanılabilir parçalara ayırdım; stilleri CSS değişkenleri ve mantıksal düzenlerle yöneterek tema desteğini kolaylaştırdım.</p><p>Animasyonlar için GSAP kullandım — ince dokunuşlar ve giriş çıkış geçişleri kullanıcı etkileşimini zenginleştiriyor ancak performansı düşürmemek için animasyonları dikkatle kısıtladım ve prefers-reduced-motion desteği ekledim. Son olarak, SEO ve erişilebilirlik kontrolleri yapıldı; görsellerde alternatif metinler, uygun ARIA rolleri ve klavye erişilebilirliği sağlandı.</p>",
+    "tags": ["React", "GSAP", "Vite"],
+    "category": "Frontend",
+    "thumbnail": "/images/portfolio.png",
+    "publishedAt": "2024-06-15T10:00:00.000Z",
+    "readingTime": 4,
+    "featured": true
+  },
+  {
+    "id": "network-explorer-overview",
+    "slug": "network-explorer-overview",
+    "title": "Electron ile Ağ Keşfi: Kısa Bakış",
+    "excerpt": "Electron tabanlı bir ağ keşif aracının amaçları ve temel bileşenlerine dair kısa bir özet.",
+  "content": "<p>Bu gönderide Electron tabanlı ağ keşif aracımın amacını, temel bileşenlerini ve ARP verilerini nasıl topladığımı anlatıyorum. Hedef, yerel ağdaki cihazları hızlıca keşfetmeyi ve geliştiricilere temel ağ bilgilerini görselleştirecek hafif bir araç sağlamaktı.</p><p>Mimari olarak uygulama Electron ile masaüstünde çalışıyor; arayüz React ile oluşturuldu ve arka planda Node.js ile yerel komutlar (ör. arp -a) veya platform API'leri aracılığıyla ağ bilgisi toplanıyor. Toplanan veriler, kullanıcıya temiz bir tabloda sunuluyor ve gerektiğinde CSV olarak dışa aktarılabiliyor.</p><p>Geliştirme sırasında karşılaştığım zorluklar arasında farklı işletim sistemlerinde komut çıktılarının farklı formatlarda olması vardı; bu nedenle normalizasyon katmanı ekledim. Ayrıca güvenlik ve gizlilik sebepleriyle uygulama yalnızca kullanıcı izni ile çalışıyor ve ağ taraması sırasında hassas verileri kayıt etmiyorum.</p>",
+    "tags": ["Electron", "Node.js"],
+    "category": "Araçlar",
+    "thumbnail": "/images/arp.png",
+    "publishedAt": "2024-03-10T09:00:00.000Z",
+    "readingTime": 3,
+    "featured": false
+  },
+  {
+    "id": "accessible-audio-app",
+    "slug": "accessible-audio-app",
+    "title": "Erişilebilir Ses Algılama Uygulaması",
+    "excerpt": "İşitme engelli kullanıcılar için çevredeki önemli sesleri algılayıp bildiren mobil uygulama tasarımımın kısa özeti.",
+  "content": "<p>Bu yazıda, işitme engelli kullanıcıların çevrelerindeki önemli sesleri daha iyi algılayabilmeleri için geliştirdiğim mobil uygulamanın tasarım felsefesini ve teknik yaklaşımını paylaşıyorum. Amaç, düşük gecikmeli ses algılama ile kritik olayları (alarm, düğme sesi, araç kornası vb.) güvenilir biçimde tespit edip kullanıcıyı uygun yollarla uyarmaktı.</p><p>Uygulamanın çekirdeğinde sürekli ses akışı analizi bulunuyor. Yerel cihaz mikrofonundan alınan sinyal, basit frekans/bant analizleri ve makine öğrenimi sınıflandırıcılarıyla ön işlemden geçiyor. Güç tüketimini minimize etmek için işlem yığınını mümkün olduğunca kenarda (on-device) tutmaya çalıştım ve yalnızca gerektiğinde daha ağır modelleri tetikledim.</p><p>UX tarafında bildirimler hem görsel hem titreşimle sunuluyor; ek olarak kullanıcıya hangi ses türlerinin izleneceğini seçme imkânı vererek yanlış pozitifleri azaltmayı hedefledim. Gizlilik hassasiyeti nedeniyle ses verileri sunuculara gönderilmiyor; tüm işleme cihaz içinde gerçekleşiyor ve yalnızca özet ve anonim telemetri opsiyonel olarak kullanıcı izniyle toplanabiliyor.</p>",
+    "tags": ["Accessibility", "Flutter"],
+    "category": "Mobil",
+    "thumbnail": "/images/seesound.png",
+    "publishedAt": "2023-11-05T12:00:00.000Z",
+    "readingTime": 5,
+    "featured": false
+  }
+]
