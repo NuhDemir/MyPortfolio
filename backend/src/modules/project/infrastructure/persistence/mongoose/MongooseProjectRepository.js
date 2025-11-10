@@ -6,6 +6,10 @@ export class MongooseProjectRepository extends ProjectRepository {
   async findAll(filter = {}, options = {}) {
     const query = ProjectModel.find(filter).sort({ createdAt: -1 });
 
+    if (options.limit) {
+      query.limit(options.limit);
+    }
+
     if (options.lean) {
       query.lean();
     }

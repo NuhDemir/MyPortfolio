@@ -203,6 +203,13 @@
   border-bottom: var(--admin-border-width) dashed var(--admin-line);
 }
 
+.dashboard-activity__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
 .dashboard-activity__icon {
   display: inline-flex;
   align-items: center;
@@ -231,6 +238,18 @@
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--admin-muted);
+}
+
+.dashboard-activity__empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.25rem, 3vw, 1.75rem) 0;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--admin-muted);
+  border-bottom: none;
 }
 
 .dashboard-summary li {

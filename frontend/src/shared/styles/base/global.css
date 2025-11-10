@@ -163,7 +163,7 @@
 
   /* === Butonlar === */
   --color-button-primary-bg: #ccc7a5;
-  --color-button-primary-text: #ffffff;
+  --color-button-primary-text: #201f1f;
   --color-button-primary-bg-hover: #678d74;
   --color-button-shadow: rgba(0, 0, 0, 0.08);
   --color-button-disabled-text: rgba(0, 0, 0, 0.3);
@@ -395,6 +395,22 @@ body {
     transparent 3px
   );
   background-size: 100% 8px;
+}
+
+body.admin-theme {
+  padding-top: 0;
+  background-color: var(--admin-bg, var(--color-background-page));
+  background-image: none;
+}
+
+body.admin-theme::before,
+body.admin-theme::after {
+  display: none;
+  content: none;
+}
+
+body.admin-theme.admin-sidebar-open {
+  overflow: hidden;
 }
 /* Hafif noise (parazit) efekti */
 body::before {

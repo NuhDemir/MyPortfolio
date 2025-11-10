@@ -1,26 +1,23 @@
-.project-card-v2-wrapper {
-  position: relative;
-  height: 100%;
-  cursor: pointer;
-}
-
 .project-card-v2 {
   height: 100%;
   display: flex;
   flex-direction: column;
   background-color: var(--color-background-paper);
   border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-lg);
+  border-radius: clamp(18px, 2vw, 28px);
   overflow: hidden;
-  box-shadow: 8px 8px 0px 0px var(--color-text-primary);
-  /* Sadece animate edilecek özellikleri belirtmek daha performanslıdır */
-  transition: transform var(--transition-duration-short) ease-out,
-    box-shadow var(--transition-duration-short) ease-out;
+  box-shadow: 10px 10px 0px 0px var(--color-text-primary);
 }
 
 .project-card-v2-wrapper:hover .project-card-v2 {
   transform: translate(4px, 4px);
   box-shadow: 4px 4px 0px 0px var(--color-text-primary);
+}
+
+.project-card-v2-wrapper:focus-visible .project-card-v2,
+.project-card-v2-wrapper:focus .project-card-v2 {
+  outline: 3px dashed var(--color-border-input-focus);
+  outline-offset: 4px;
 }
 
 /* === Resim Alanı ve CRT Efekti === */
@@ -100,12 +97,18 @@
 }
 
 .project-card-v2-tag {
-  background-color: transparent;
+  background: color-mix(
+    in srgb,
+    var(--color-background-paper-translucent) 70%,
+    transparent
+  );
   color: var(--color-text-secondary);
-  font-size: 0.75rem;
-  padding: 2px 8px;
-  border-radius: var(--border-radius-base);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border-radius: 999px;
   border: 1px solid var(--color-border-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 .project-card-v2-title {
@@ -127,6 +130,7 @@
   flex-grow: 1;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 3;
   -webkit-line-clamp: 3; /* 3 satır ile sınırla */
   overflow: hidden;
   text-overflow: ellipsis;
@@ -141,9 +145,7 @@
   justify-content: flex-end;
   align-items: center;
   gap: var(--spacing-xs);
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
+  margin-top: auto;
 }
 
 .project-card-v2-arrow {
@@ -154,22 +156,30 @@
   transform: translate(4px, -4px);
 }
 
-.project-card-v2-primary-tag {
-  position: absolute;
-  bottom: -2px; /* Kenarlığın üzerine oturması için */
-  left: 20px;
-  background-color: var(--color-accent);
-  color: var(--color-text-on-accent, var(--color-text-primary));
+.project-card-v2-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--border-radius-lg);
   border: 2px solid var(--color-text-primary);
-  border-bottom: none;
-  border-radius: var(--border-radius-base) var(--border-radius-base) 0 0;
-  padding: 4px 12px;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
+  background-color: var(--color-button-primary-bg);
+  color: var(--color-button-primary-text);
+  font-weight: var(--font-weight-semibold);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  box-shadow: 4px 4px 0 0 var(--color-text-primary);
+  transition: transform var(--transition-duration-short) ease-out,
+    box-shadow var(--transition-duration-short) ease-out,
+    background-color var(--transition-duration-short) ease-out;
 }
 
-.theme-dark .project-card-v2-primary-tag {
-  color: var(--color-background-page);
+.project-card-v2-cta:hover,
+.project-card-v2-cta:focus-visible {
+  background-color: var(--color-button-primary-bg-hover);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 0 var(--color-text-primary);
 }
 
 /* === DUYARLI TASARIM (RESPONSIVE) === */
@@ -177,7 +187,7 @@
 @media (max-width: 768px) {
   /* Tablet ve büyük mobil cihazlar */
   .project-card-v2 {
-    box-shadow: 6px 6px 0px 0px var(--color-text-primary);
+    box-shadow: 7px 7px 0px 0px var(--color-text-primary);
   }
 
   .project-card-v2-wrapper:hover .project-card-v2 {
@@ -191,7 +201,13 @@
 
   .project-card-v2-description {
     -webkit-line-clamp: 2; /* Mobilde 2 satır açıklama yeterli */
+    line-clamp: 2;
     min-height: calc(var(--line-height-base) * var(--font-size-sm) * 2);
+  }
+
+  .project-card-v2-cta {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -214,8 +230,8 @@
     font-size: 0.7rem; /* Etiket fontunu biraz küçült */
   }
 
-  .project-card-v2-primary-tag {
-    left: 12px; /* Etiketi sola biraz daha yaklaştır */
-    padding: 3px 8px;
+  .project-card-v2-cta {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.85rem;
   }
 }

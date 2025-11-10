@@ -1,14 +1,15 @@
 import axiosClient from "@core/http/axiosClient";
 
+const resolveErrorMessage = (error, fallback) =>
+  error?.response?.data?.message ?? error?.message ?? fallback;
+
 export const getBlogs = async () => {
   try {
     const response = await axiosClient.get("/blog");
     return response.data;
   } catch (error) {
-    throw (
-      error.response?.data?.message ||
-      error.message ||
-      "Blog yazıları getirilirken hata oluştu."
+    throw new Error(
+      resolveErrorMessage(error, "Blog yazıları getirilirken hata oluştu.")
     );
   }
 };
@@ -18,10 +19,11 @@ export const getBlogBySlug = async (slug) => {
     const response = await axiosClient.get(`/blog/${slug}`);
     return response.data;
   } catch (error) {
-    throw (
-      error.response?.data?.message ||
-      error.message ||
-      "Blog yazısı detayları getirilirken hata oluştu."
+    throw new Error(
+      resolveErrorMessage(
+        error,
+        "Blog yazısı detayları getirilirken hata oluştu."
+      )
     );
   }
 };
@@ -49,10 +51,8 @@ export const createBlog = async (blogData) => {
     });
     return response.data;
   } catch (error) {
-    throw (
-      error.response?.data?.message ||
-      error.message ||
-      "Blog yazısı oluşturulurken hata oluştu."
+    throw new Error(
+      resolveErrorMessage(error, "Blog yazısı oluşturulurken hata oluştu.")
     );
   }
 };
@@ -80,10 +80,8 @@ export const updateBlog = async (id, updateData) => {
     });
     return response.data;
   } catch (error) {
-    throw (
-      error.response?.data?.message ||
-      error.message ||
-      "Blog yazısı güncellenirken hata oluştu."
+    throw new Error(
+      resolveErrorMessage(error, "Blog yazısı güncellenirken hata oluştu.")
     );
   }
 };
@@ -93,10 +91,8 @@ export const deleteBlog = async (id) => {
     const response = await axiosClient.delete(`/blog/${id}`);
     return response.data;
   } catch (error) {
-    throw (
-      error.response?.data?.message ||
-      error.message ||
-      "Blog yazısı silinirken hata oluştu."
+    throw new Error(
+      resolveErrorMessage(error, "Blog yazısı silinirken hata oluştu.")
     );
   }
 };

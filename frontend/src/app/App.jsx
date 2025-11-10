@@ -9,6 +9,7 @@ import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Main from "@modules/main/components/Main/Main.jsx";
 import About from "@modules/about/components/About/About.jsx";
 import ProjectList from "@modules/projects/components/Projects/ProjectList/ProjectList.jsx";
+import BlogShowcase from "@modules/blog/components/BlogShowcase/BlogShowcase.jsx";
 import MessageForm from "@modules/message/components/Message/MessageForm.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
@@ -22,6 +23,10 @@ const Comments = lazy(() =>
   import("@modules/comments/components/Comments/Comments.jsx")
 );
 const AdminRoutes = lazy(() => import("@modules/admin/routes/AdminRoutes.jsx"));
+const BlogListPage = lazy(() => import("@modules/blog/pages/BlogListPage.jsx"));
+const BlogDetailPage = lazy(() =>
+  import("@modules/blog/pages/BlogDetailPage.jsx")
+);
 
 const DefaultExperience = () => {
   const { theme } = useTheme();
@@ -31,6 +36,7 @@ const DefaultExperience = () => {
 
   const aboutRef = useRef(null);
   const projectsRef = useRef(null);
+  const blogRef = useRef(null);
   const contactRef = useRef(null);
 
   const scrollToSection = (ref) => {
@@ -62,6 +68,9 @@ const DefaultExperience = () => {
       </section>
       <section id="projects-section" ref={projectsRef}>
         <ProjectList />
+      </section>
+      <section id="blog-section" ref={blogRef}>
+        <BlogShowcase />
       </section>
       <section id="comments-section">
         <Suspense
@@ -109,6 +118,26 @@ const App = () => (
         }
       />
       <Route path="/" element={<AppContent />} />
+      <Route
+        path="/blog"
+        element={
+          <Suspense
+            fallback={<div className="component-loader">Yükleniyor...</div>}
+          >
+            <BlogListPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/blog/:slug"
+        element={
+          <Suspense
+            fallback={<div className="component-loader">Yükleniyor...</div>}
+          >
+            <BlogDetailPage />
+          </Suspense>
+        }
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </Router>

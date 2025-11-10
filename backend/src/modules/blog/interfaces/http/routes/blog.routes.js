@@ -12,8 +12,8 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
   const controller = createBlogController(dependencies);
   const upload = createBlogUpload();
 
-  router.get("/", middleware.protect, controller.list);
-  router.get("/:slug", middleware.protect, controller.get);
+  router.get("/", controller.list);
+  router.get("/:slug", controller.get);
 
   router.post(
     "/",

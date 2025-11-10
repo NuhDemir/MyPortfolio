@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
 import AdminSidebar from "./AdminSidebar";
 import "../styles/layout.css";
@@ -14,6 +14,33 @@ const AdminLayout = () => {
   const handleCloseSidebar = () => {
     setSidebarOpen(false);
   };
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    const { body } = document;
+    body.classList.add("admin-theme");
+
+    return () => {
+      body.classList.remove("admin-theme");
+      body.classList.remove("admin-sidebar-open");
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof document === "undefined") {
+      return undefined;
+    }
+
+    const { body } = document;
+    body.classList.toggle("admin-sidebar-open", isSidebarOpen);
+
+    return () => {
+      body.classList.remove("admin-sidebar-open");
+    };
+  }, [isSidebarOpen]);
 
   return (
     <div className={`admin-layout${isSidebarOpen ? " sidebar-open" : ""}`}>

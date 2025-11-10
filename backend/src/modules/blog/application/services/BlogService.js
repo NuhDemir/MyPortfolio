@@ -6,6 +6,26 @@ export class BlogService {
     this.blogRepository = blogRepository;
   }
 
+  async ensureUniqueSlug(rawSlug, excludeId = null) {
+    if (!rawSlug) {
+      return generateSlug(
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`
+      );
+    }
+
+    const baseSlug = generateSlug(rawSlug);
+    let candidate = baseSlug;
+    let attempt = 1;
+    const filter = excludeId ? { _id: { $ne: excludeId } } : {};
+
+    while (await this.blogRepository.findBySlug(candidate, filter)) {
+      candidate = generateSlug(`${baseSlug}-${attempt}`);
+      attempt += 1;
+    }
+
+    return candidate;
+  }
+
   async listBlogs({ isAdmin = false } = {}) {
     const filter = isAdmin ? {} : { status: "published" };
     const blogs = await this.blogRepository.findAll(filter);
@@ -18,7 +38,19 @@ export class BlogService {
 
   async getBlogBySlug(slug, { isAdmin = false } = {}) {
     const filter = isAdmin ? {} : { status: "published" };
-    const blog = await this.blogRepository.findBySlug(slug, filter);
+    let blog = await this.blogRepository.findBySlug(slug, filter);
+
+    if (
+      !blog &&
+      slug &&
+      typeof slug === "string" &&
+      /^[0-9a-fA-F]{24}$/.test(slug)
+    ) {
+      const fallback = await this.blogRepository.findById(slug);
+      if (fallback && (isAdmin || fallback.status === "published")) {
+        blog = fallback;
+      }
+    }
 
     if (!blog) {
       throw new Error("Blog yazısı bulunamadı veya yayınlanmadı.");
@@ -35,7 +67,6 @@ export class BlogService {
   async createBlog(data) {
     const payload = {
       ...data,
-      slug: data.slug ?? generateSlug(data.title),
       tags: Array.isArray(data.tags)
         ? data.tags
         : (data.tags ?? "")
@@ -43,6 +74,16 @@ export class BlogService {
             .map((tag) => tag.trim())
             .filter(Boolean),
     };
+
+    if (payload.isPublished !== undefined) {
+      payload.isPublished = Boolean(payload.isPublished);
+    }
+
+    if (!payload.status) {
+      payload.status = payload.isPublished ? "published" : "draft";
+    }
+
+    payload.slug = await this.ensureUniqueSlug(data.slug ?? data.title);
 
     const created = await this.blogRepository.create(payload);
     return {
@@ -55,7 +96,11 @@ export class BlogService {
     const payload = { ...data };
 
     if (payload.title && !payload.slug) {
-      payload.slug = generateSlug(payload.title);
+      payload.slug = payload.title;
+    }
+
+    if (payload.slug) {
+      payload.slug = await this.ensureUniqueSlug(payload.slug, id);
     }
 
     if (payload.tags && typeof payload.tags === "string") {
@@ -90,6 +135,7 @@ export class BlogService {
   }
 }
 
-export const createBlogService = ({ blogRepository }) => new BlogService({ blogRepository });
+export const createBlogService = ({ blogRepository }) =>
+  new BlogService({ blogRepository });
 
 export default BlogService;

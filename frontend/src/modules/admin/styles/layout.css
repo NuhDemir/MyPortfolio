@@ -5,6 +5,9 @@
   --admin-fg: #111111;
   --admin-muted: #4a4a4a;
   --admin-line: #0a0a0a;
+  --admin-border-color: var(--admin-line);
+  --admin-sidebar-bg: #ffffff;
+  --admin-sidebar-text: #111111;
   --admin-border-width: 3px;
   --admin-shadow-distance: clamp(0.75rem, 2vw, 1.4rem);
   --admin-shadow-color: rgba(10, 10, 10, 0.82);
@@ -24,12 +27,16 @@
   --admin-fg: #f5f5f5;
   --admin-muted: #b0b0b0;
   --admin-line: #f5f5f5;
+  --admin-border-color: var(--admin-line);
+  --admin-sidebar-bg: #101010;
+  --admin-sidebar-text: #f5f5f5;
   --admin-shadow-color: rgba(245, 245, 245, 0.35);
 }
 
 .admin-layout {
   position: relative;
   min-height: 100dvh;
+  width: 100%;
   background: var(--admin-bg);
   color: var(--admin-fg);
   display: grid;
@@ -124,6 +131,12 @@
 
   .admin-layout.sidebar-open .admin-sidebar-overlay {
     display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    gap: clamp(0.75rem, 5vw, 1.5rem);
   }
 }
 

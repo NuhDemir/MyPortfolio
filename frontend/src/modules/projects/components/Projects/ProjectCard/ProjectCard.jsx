@@ -10,19 +10,32 @@ const ProjectCard = React.memo(({ project, onClick }) => {
   // Eğer imageUrl varsa onu kullan, yoksa varsayılan svg
   const imageSource = imageUrl || imageSvg;
 
-  // İlk tag veya "Proje"
-  const primaryTag = tags[0] || "Proje";
-
   // İlk 3 tag'ı useMemo ile optimize et
   const displayTags = useMemo(() => tags.slice(0, 3), [tags]);
+
+  const handleActivate = () => onClick(project);
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleActivate();
+    }
+  };
+
+  const handleCtaClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleActivate();
+  };
 
   return (
     <div
       className="project-card-v2-wrapper"
-      onClick={() => onClick(project)}
+      onClick={handleActivate}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && onClick(project)} // klavye erişilebilirliği
+      onKeyDown={handleKeyDown} // klavye erişilebilirliği
+      aria-label={`${title} projesinin detaylarını aç`}
     >
       <div className="project-card-v2">
         <div className="project-card-v2-image-container">
@@ -48,13 +61,16 @@ const ProjectCard = React.memo(({ project, onClick }) => {
           </div>
           <h3 className="project-card-v2-title">{title}</h3>
           <p className="project-card-v2-description">{description}</p>
-          <div className="project-card-v2-footer">
+          <button
+            type="button"
+            className="project-card-v2-cta"
+            onClick={handleCtaClick}
+          >
             <span>Detayları Gör</span>
-            <ArrowUpRight size={20} className="project-card-v2-arrow" />
-          </div>
+            <ArrowUpRight size={18} className="project-card-v2-arrow" />
+          </button>
         </div>
       </div>
-      <div className="project-card-v2-primary-tag">{primaryTag}</div>
     </div>
   );
 });

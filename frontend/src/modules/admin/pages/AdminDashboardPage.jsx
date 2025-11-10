@@ -7,9 +7,91 @@ import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
-import { getBlogs } from "../services/blogService";
-import { getProjects } from "../services/projectService";
+import { getDashboardSnapshot } from "../services/dashboardService";
 import "../styles/dashboard.css";
+
+const RELATIVE_TIME_FORMATTER = new Intl.RelativeTimeFormat("tr-TR", {
+  numeric: "auto",
+});
+
+const RELATIVE_TIME_DIVISIONS = [
+  { amount: 60, unit: "second" },
+  { amount: 60, unit: "minute" },
+  { amount: 24, unit: "hour" },
+  { amount: 7, unit: "day" },
+  { amount: 4.34524, unit: "week" },
+  { amount: 12, unit: "month" },
+  { amount: Number.POSITIVE_INFINITY, unit: "year" },
+];
+
+const formatRelativeTime = (isoString) => {
+  if (!isoString) {
+    return "";
+  }
+
+  const target = new Date(isoString);
+
+  if (Number.isNaN(target.getTime())) {
+    return "";
+  }
+
+  let duration = (target.getTime() - Date.now()) / 1000;
+
+  for (const division of RELATIVE_TIME_DIVISIONS) {
+    if (Math.abs(duration) < division.amount) {
+      return RELATIVE_TIME_FORMATTER.format(
+        Math.round(duration),
+        division.unit
+      );
+    }
+    duration /= division.amount;
+  }
+
+  return target.toLocaleDateString("tr-TR", { dateStyle: "medium" });
+};
+
+const getActivityIcon = (type) => {
+  switch (type) {
+    case "project":
+      return <WorkspacesRoundedIcon fontSize="inherit" />;
+    case "blog":
+      return <ArticleRoundedIcon fontSize="inherit" />;
+    case "message":
+      return <ChatBubbleOutlineRoundedIcon fontSize="inherit" />;
+    default:
+      return <TimelineRoundedIcon fontSize="inherit" />;
+  }
+};
+
+const getActivityHeadline = (item) => {
+  if (!item) {
+    return "Yeni aktivite";
+  }
+
+  if (item.headline) {
+    return item.headline;
+  }
+
+  if (item.type === "project") {
+    return item.action === "updated"
+      ? "Proje güncellendi"
+      : "Yeni proje yayımlandı";
+  }
+
+  if (item.type === "blog") {
+    return item.action === "updated"
+      ? "Blog yazısı güncellendi"
+      : "Yeni blog yazısı yayınlandı";
+  }
+
+  if (item.type === "message") {
+    return item.action === "updated"
+      ? "Mesaj güncellendi"
+      : "Yeni mesaj alındı";
+  }
+
+  return "Yeni aktivite";
+};
 
 const initialStats = {
   projectCount: 0,
@@ -19,6 +101,7 @@ const initialStats = {
 
 const AdminDashboardPage = () => {
   const [stats, setStats] = useState(initialStats);
+  const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -27,21 +110,22 @@ const AdminDashboardPage = () => {
       try {
         setLoading(true);
         setError(null);
-
-        const [projects, blogs] = await Promise.all([
-          getProjects(),
-          getBlogs(),
-        ]);
+        const data = await getDashboardSnapshot();
 
         setStats({
-          projectCount: projects.length,
-          blogCount: blogs.length,
-          messageCount: 0,
+          projectCount: Number(data?.stats?.projects) || 0,
+          blogCount: Number(data?.stats?.blogs) || 0,
+          messageCount: Number(data?.stats?.messages) || 0,
         });
+
+        setActivity(Array.isArray(data?.activity) ? data.activity : []);
       } catch (err) {
-        setError(
-          err.message || "Dashboard verileri yüklenirken bir hata oluştu."
-        );
+        const message =
+          err instanceof Error
+            ? err.message
+            : String(err ?? "Dashboard verileri yüklenirken bir hata oluştu.");
+        setError(message);
+        setActivity([]);
       } finally {
         setLoading(false);
       }
@@ -49,33 +133,6 @@ const AdminDashboardPage = () => {
 
     fetchDashboardData();
   }, []);
-
-  const activityFeed = useMemo(
-    () => [
-      {
-        id: 1,
-        icon: <WorkspacesRoundedIcon fontSize="inherit" />,
-        title: "Yeni proje yayımlandı",
-        meta: "E-ticaret Sitesi",
-        time: "Az önce",
-      },
-      {
-        id: 2,
-        icon: <ArticleRoundedIcon fontSize="inherit" />,
-        title: "Blog yazısı güncellendi",
-        meta: "React Performans İpuçları",
-        time: "1 saat önce",
-      },
-      {
-        id: 3,
-        icon: <ChatBubbleOutlineRoundedIcon fontSize="inherit" />,
-        title: "Yeni mesaj alındı",
-        meta: "Kariyer fırsatı",
-        time: "Bugün",
-      },
-    ],
-    []
-  );
 
   const summaryLines = useMemo(
     () => [
@@ -186,18 +243,50 @@ const AdminDashboardPage = () => {
             <h2>Son işlemler</h2>
           </div>
           <ul className="dashboard-activity">
-            {activityFeed.map(({ id, icon, title, meta, time }) => (
-              <li key={id}>
-                <span className="dashboard-activity__icon" aria-hidden="true">
-                  {icon}
-                </span>
-                <div className="dashboard-activity__body">
-                  <p className="dashboard-activity__title">{title}</p>
-                  <p className="dashboard-activity__meta">{meta}</p>
-                </div>
-                <time className="dashboard-activity__time">{time}</time>
+            {activity.length > 0 ? (
+              activity.map((item) => {
+                const icon = getActivityIcon(item.type);
+                const occurredAt =
+                  item.occurredAt ?? item.updatedAt ?? item.createdAt ?? null;
+                const relativeTime = formatRelativeTime(occurredAt);
+                const fallbackDate = occurredAt
+                  ? new Date(occurredAt).toLocaleString("tr-TR", {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                    })
+                  : "-";
+                const metaText = String(
+                  item.resourceTitle ?? item.meta ?? item.title ?? "-"
+                );
+
+                return (
+                  <li key={item.id}>
+                    <span
+                      className="dashboard-activity__icon"
+                      aria-hidden="true"
+                    >
+                      {icon}
+                    </span>
+                    <div className="dashboard-activity__body">
+                      <p className="dashboard-activity__title">
+                        {getActivityHeadline(item)}
+                      </p>
+                      <p className="dashboard-activity__meta">{metaText}</p>
+                    </div>
+                    <time
+                      className="dashboard-activity__time"
+                      dateTime={occurredAt ?? ""}
+                    >
+                      {relativeTime || fallbackDate}
+                    </time>
+                  </li>
+                );
+              })
+            ) : (
+              <li className="dashboard-activity__empty">
+                <span>Henüz aktivite yok</span>
               </li>
-            ))}
+            )}
           </ul>
         </div>
         <div className="dashboard-section dashboard-section--outline">

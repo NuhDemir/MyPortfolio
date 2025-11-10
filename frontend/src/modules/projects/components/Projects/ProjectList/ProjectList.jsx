@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
-import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import "./ProjectList.css";
 import fallbackProjects from "@modules/projects/data/projectData.json";
 import { fetchProjects } from "@modules/projects/services/projectService.js";
@@ -18,7 +17,6 @@ const ProjectList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(fallbackProjects);
   const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState(null);
 
   // Ses dosyaları için ref
   const popSoundRef = useRef(null);
@@ -38,7 +36,7 @@ const ProjectList = () => {
 
     const loadProjects = async () => {
       setLoading(true);
-      setLoadError(null);
+      // don't track loadError to avoid showing errors when backend is offline
 
       try {
         const data = await fetchProjects();
@@ -47,10 +45,9 @@ const ProjectList = () => {
         } else if (isMounted && (!data || data.length === 0)) {
           setProjects(fallbackProjects);
         }
-      } catch (error) {
-        console.error("Projeler API'den çekilemedi:", error);
+      } catch {
+        // Sessiz hata: backend kapalıysa fallback verisini kullan
         if (isMounted) {
-          setLoadError(error);
           setProjects(fallbackProjects);
         }
       } finally {
@@ -116,14 +113,7 @@ const ProjectList = () => {
             <LoadingSpinner message="Projeler yükleniyor..." />
           </div>
         )}
-        {loadError && !loading && (
-          <div className="project-list-error">
-            <ErrorMessage
-              error={loadError}
-              title="Projeler yüklenirken sorun oluştu"
-            />
-          </div>
-        )}
+        {/* Eğer backend yoksa sessizce fallback gösteriyoruz; hata UI'sı yok */}
         <div className="project-list-wrapper">
           {/* Sola Kaydırma Butonu */}
           <button

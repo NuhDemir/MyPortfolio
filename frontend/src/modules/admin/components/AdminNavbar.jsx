@@ -45,12 +45,6 @@ const AdminNavbar = ({ onToggleSidebar }) => {
           )}
           <span>{theme === "light" ? "Koyu Moda" : "Açık Moda"}</span>
         </button>
-        <div className="admin-user-info" role="status" aria-live="polite">
-          <span className="admin-navbar__user-icon" aria-hidden="true">
-            <PersonRoundedIcon fontSize="inherit" />
-          </span>
-          <span className="admin-navbar__user-name">{userName ?? "Admin"}</span>
-        </div>
       </div>
     </nav>
   );

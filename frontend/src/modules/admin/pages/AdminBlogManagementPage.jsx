@@ -104,9 +104,17 @@ const AdminBlogManagementPage = () => {
     setError(null);
   };
 
+  const resolveBlogId = (blog) => blog?.id ?? blog?._id ?? "";
+
   const handleEditClick = (blog) => {
+    const blogId = resolveBlogId(blog);
+    if (!blogId) {
+      setError("Seçili blog yazısının kimliği bulunamadı.");
+      return;
+    }
+
     resetForm();
-    setEditingId(blog._id);
+    setEditingId(blogId);
     setFormData({
       title: blog.title || "",
       content: blog.content || "",
@@ -124,6 +132,10 @@ const AdminBlogManagementPage = () => {
     if (
       !window.confirm("Bu blog yazısını silmek istediğinizden emin misiniz?")
     ) {
+      return;
+    }
+    if (!id) {
+      setError("Silinecek blog yazısının kimliği bulunamadı.");
       return;
     }
     setLoading(true);
@@ -155,6 +167,14 @@ const AdminBlogManagementPage = () => {
       tags: toTagsArray(formData.tags),
       isPublished: formData.isPublished,
     };
+
+    if (!submission.category || !categories.includes(submission.category)) {
+      delete submission.category;
+    }
+
+    if (!Array.isArray(submission.tags) || submission.tags.length === 0) {
+      delete submission.tags;
+    }
 
     if (thumbnailFile) {
       submission.thumbnail = thumbnailFile;
@@ -331,48 +351,51 @@ const AdminBlogManagementPage = () => {
               </thead>
               <tbody>
                 {blogs.length > 0 ? (
-                  blogs.map((blog) => (
-                    <tr key={blog._id}>
-                      <td>
-                        {resolveThumbnailUrl(blog) ? (
-                          <img
-                            src={resolveThumbnailUrl(blog)}
-                            alt={blog.title}
-                            className="list-thumbnail"
-                          />
-                        ) : (
-                          "-"
-                        )}
-                      </td>
-                      <td>{blog.title}</td>
-                      <td>{blog.category || "-"}</td>
-                      <td>{blog.isPublished ? "Yayında" : "Taslak"}</td>
-                      <td className="action-buttons">
-                        <button
-                          type="button"
-                          onClick={() => handleEditClick(blog)}
-                          className="edit-btn"
-                        >
-                          <EditRoundedIcon
-                            className="btn-icon"
-                            fontSize="inherit"
-                          />
-                          <span>Düzenle</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteClick(blog._id)}
-                          className="delete-btn"
-                        >
-                          <DeleteRoundedIcon
-                            className="btn-icon"
-                            fontSize="inherit"
-                          />
-                          <span>Sil</span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                  blogs.map((blog, index) => {
+                    const blogId = resolveBlogId(blog);
+                    return (
+                      <tr key={blogId || `blog-${index}`}>
+                        <td>
+                          {resolveThumbnailUrl(blog) ? (
+                            <img
+                              src={resolveThumbnailUrl(blog)}
+                              alt={blog.title}
+                              className="list-thumbnail"
+                            />
+                          ) : (
+                            "-"
+                          )}
+                        </td>
+                        <td>{blog.title}</td>
+                        <td>{blog.category || "-"}</td>
+                        <td>{blog.isPublished ? "Yayında" : "Taslak"}</td>
+                        <td className="action-buttons">
+                          <button
+                            type="button"
+                            onClick={() => handleEditClick(blog)}
+                            className="edit-btn"
+                          >
+                            <EditRoundedIcon
+                              className="btn-icon"
+                              fontSize="inherit"
+                            />
+                            <span>Düzenle</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteClick(blogId)}
+                            className="delete-btn"
+                          >
+                            <DeleteRoundedIcon
+                              className="btn-icon"
+                              fontSize="inherit"
+                            />
+                            <span>Sil</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="5">Gösterilecek blog yazısı bulunamadı.</td>

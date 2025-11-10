@@ -21,7 +21,7 @@
   {
     "id": "proj-02",
     "title": "Electron ARP & Network Explorer",
-    "description": "Electron ve React tabanlı masaüstü uygulaması. Yerel ağ keşfi ve ARP tablosu görüntüleme desteği sağlar.",
+    "description": "Yerel ağ tarama ve ARP tablosunu görselleştiren, Electron + React ile geliştirilmiş masaüstü ağ keşif aracı.",
     "imageUrl": "/images/arp.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/your-username/electron-arp-explorer",
@@ -41,7 +41,7 @@
   {
     "id": "proj-03",
     "title": "SeeSound - Yapay Zeka Destekli Mobil Uygulama",
-    "description": "İşitme engelli bireylerin çevrelerindeki sesleri algılamalarına ve acil durumlarda iletişim kurmalarına yardımcı olan erişilebilirlik odaklı mobil uygulama.",
+    "description": "İşitme engelli kullanıcılar için çevre seslerini algılayıp bildiren ve acil durum iletişimini kolaylaştıran erişilebilir mobil uygulama.",
     "imageUrl": "/images/seesound.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/seesound",
@@ -61,7 +61,7 @@
   {
     "id": "proj-04",
     "title": "2048 Oyunu ve Geliştirme Rehberi",
-    "description": "JavaScript, HTML ve CSS kullanılarak geliştirilmiş klasik 2048 oyunu. Temel ve ileri seviye geliştirme rehberi içerir.",
+    "description": "Vanilla JavaScript ile geliştirilmiş klasik 2048 oyunu ve oyun geliştiriciler için adım adım rehber.",
     "imageUrl": "/images/2048.png",
     "liveUrl": "https://2048-gamex.netlify.app/",
     "githubUrl": "https://github.com/NuhDemir/2048_Game",
@@ -80,7 +80,7 @@
   {
     "id": "proj-05",
     "title": "Hastane Yönetim Sistemi",
-    "description": "Asp.Net MVC ve SQL Server kullanılarak geliştirilen kapsamlı hastane bilgi sistemi. Hasta kayıt, doktor atamaları ve ilaç yönetimi içerir.",
+    "description": "ASP.NET MVC ve SQL Server ile geliştirilmiş, hasta kayıt, doktor atama ve ilaç yönetimi modülleri içeren hastane yönetim sistemi.",
     "imageUrl": "/images/project-hospital-management.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/Hospital_Management_System",
@@ -99,7 +99,7 @@
   {
     "id": "proj-06",
     "title": "Çarşı E-Ticaret Sitesi (React Frontend)",
-    "description": "React kullanılarak geliştirilmiş e-ticaret platformu. Kullanıcıların ürünleri görüntülemesini ve sepetlerine eklemesini sağlar.",
+    "description": "React tabanlı, ürün listeleme ve sepet işlemleri sunan kullanıcı odaklı e-ticaret ön yüzü.",
     "imageUrl": "/images/project-carsi-banner.png",
     "liveUrl": "https://carsi-react.netlify.app/",
     "githubUrl": "https://github.com/NuhDemir/Carsi_Ecommerce",
@@ -118,7 +118,7 @@
   {
     "id": "proj-07",
     "title": "Çarşı - MERN Fullstack E-Ticaret",
-    "description": "MongoDB, Express.js, React ve Node.js kullanılarak geliştirilen tam işlevsel fullstack e-ticaret platformu.",
+    "description": "MERN yığını ile inşa edilmiş, ürün yönetimi ve sipariş akışı gibi tam özellikli e-ticaret platformu.",
     "imageUrl": "/images/carsi.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/Carsi_MERN",

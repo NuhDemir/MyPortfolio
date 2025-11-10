@@ -78,23 +78,37 @@ const AdminProjectManagementPage = () => {
     setError(null);
   };
 
+  const resolveProjectId = (project) => project?.id ?? project?._id ?? "";
+
   const handleEditClick = (project) => {
+    const projectId = resolveProjectId(project);
+    if (!projectId) {
+      setError("Seçili proje kimliği alınamadı.");
+      return;
+    }
+
     resetForm();
-    setEditingId(project._id);
+    setEditingId(projectId);
     setFormData({
-      title: project.title,
-      description: project.description,
-      githubUrl: project.githubUrl || "",
-      liveUrl: project.liveUrl || "",
-      tags: project.tags.join(", "),
+      title: project.title ?? "",
+      description: project.description ?? "",
+      githubUrl: project.githubUrl ?? "",
+      liveUrl: project.liveUrl ?? "",
+      tags: Array.isArray(project.tags)
+        ? project.tags.join(", ")
+        : project.tags ?? "",
     });
-    setImagePreview(project.imageUrl);
+    setImagePreview(project.imageUrl ?? null);
     setIsFormVisible(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleDeleteClick = async (id) => {
     if (!window.confirm("Bu projeyi silmek istediğinizden emin misiniz?")) {
+      return;
+    }
+    if (!id) {
+      setError("Silinecek projenin kimliği bulunamadı.");
       return;
     }
     setLoading(true);
@@ -283,42 +297,45 @@ const AdminProjectManagementPage = () => {
               </thead>
               <tbody>
                 {projects.length > 0 ? (
-                  projects.map((project) => (
-                    <tr key={project._id}>
-                      <td>
-                        <img
-                          src={project.imageUrl}
-                          alt={project.title}
-                          className="list-thumbnail"
-                        />
-                      </td>
-                      <td>{project.title}</td>
-                      <td className="action-buttons">
-                        <button
-                          type="button"
-                          onClick={() => handleEditClick(project)}
-                          className="edit-btn"
-                        >
-                          <EditRoundedIcon
-                            className="btn-icon"
-                            fontSize="inherit"
+                  projects.map((project, index) => {
+                    const projectId = resolveProjectId(project);
+                    return (
+                      <tr key={projectId || `project-${index}`}>
+                        <td>
+                          <img
+                            src={project.imageUrl}
+                            alt={project.title}
+                            className="list-thumbnail"
                           />
-                          <span>Düzenle</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteClick(project._id)}
-                          className="delete-btn"
-                        >
-                          <DeleteRoundedIcon
-                            className="btn-icon"
-                            fontSize="inherit"
-                          />
-                          <span>Sil</span>
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                        </td>
+                        <td>{project.title}</td>
+                        <td className="action-buttons">
+                          <button
+                            type="button"
+                            onClick={() => handleEditClick(project)}
+                            className="edit-btn"
+                          >
+                            <EditRoundedIcon
+                              className="btn-icon"
+                              fontSize="inherit"
+                            />
+                            <span>Düzenle</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteClick(projectId)}
+                            className="delete-btn"
+                          >
+                            <DeleteRoundedIcon
+                              className="btn-icon"
+                              fontSize="inherit"
+                            />
+                            <span>Sil</span>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
                 ) : (
                   <tr>
                     <td colSpan="3">Gösterilecek proje bulunamadı.</td>
