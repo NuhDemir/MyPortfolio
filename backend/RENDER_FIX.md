@@ -24,9 +24,11 @@ Artık backend **HEM** `MONGO_URI` **HEM** `MONGODB_URI` kabul ediyor! 🎉
 Render Dashboard → Your Service → Environment:
 
 **SİLİN:**
+
 - ❌ `MONGODB_URI`
 
 **EKLEYİN:**
+
 - ✅ `MONGO_URI` = `mongodb+srv://nuhdemirdev:KW2q6z7KtvMMEUcj@cluster0.nckrcqg.mongodb.net/portfolio?retryWrites=true&w=majority`
 
 ⚠️ **ÖNEMLİ:** Connection string'in sonuna **`/portfolio`** ekleyin (database adı)
@@ -58,6 +60,7 @@ FRONTEND_URL=https://nuhdemir.dev
 ### 3. Manual Deploy
 
 Render Dashboard'da:
+
 - "Manual Deploy" → "Clear build cache & deploy"
 
 ---
@@ -75,6 +78,7 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
 **Örnek çıktı:**
+
 ```
 f4a8b2c9d3e7f1a5b8c2d6e9f3a7b1c5d8e2f6a9c3d7e1f5a9b3c7d1e5f9a3b7
 ```
@@ -82,6 +86,7 @@ f4a8b2c9d3e7f1a5b8c2d6e9f3a7b1c5d8e2f6a9c3d7e1f5a9b3c7d1e5f9a3b7
 Bu değerleri `JWT_SECRET` ve `JWT_REFRESH_SECRET` için kullanın.
 
 **Veya online:**
+
 - https://randomkeygen.com/ → "CodeIgniter Encryption Keys"
 
 ---
@@ -124,6 +129,7 @@ curl https://your-backend-url.onrender.com/api/health
 ```
 
 **Beklenen yanıt:**
+
 ```json
 {
   "status": "ok",
@@ -136,6 +142,7 @@ curl https://your-backend-url.onrender.com/api/health
 ### 3. MongoDB Connection Test
 
 Logs'da şunu arayın:
+
 ```
 info: Connected to MongoDB successfully
 ```
@@ -145,6 +152,7 @@ info: Connected to MongoDB successfully
 ## 🔄 Kod Güncellemeleri (Yapıldı ✅)
 
 ### server.js
+
 ```javascript
 // Artık hem MONGO_URI hem MONGODB_URI destekleniyor
 const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
@@ -152,6 +160,7 @@ await connectDatabase(mongoUri);
 ```
 
 ### scripts/createAdminUser.js
+
 ```javascript
 // Her iki environment variable da destekleniyor
 const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
@@ -159,9 +168,10 @@ await mongoose.connect(mongoUri);
 ```
 
 ### render.yaml
+
 ```yaml
 envVars:
-  - key: MONGO_URI  # MONGODB_URI yerine MONGO_URI
+  - key: MONGO_URI # MONGODB_URI yerine MONGO_URI
     sync: false
 ```
 
@@ -172,11 +182,13 @@ envVars:
 ### "Mongo connection string is required"
 
 **Kontrol edin:**
+
 1. Render'da environment variable adı **tam olarak** `MONGO_URI` mi?
 2. Connection string kopyalanırken boşluk/enter kalmış olabilir
 3. MongoDB Atlas'ta user aktif mi?
 
 **Çözüm:**
+
 ```bash
 # Render Dashboard → Environment
 # MONGO_URI değerini silin ve yeniden yapıştırın
@@ -188,6 +200,7 @@ envVars:
 **Sebep:** MongoDB şifresi yanlış veya database user pasif
 
 **Çözüm:**
+
 1. MongoDB Atlas → Database Access
 2. User'ı kontrol edin
 3. Şifreyi sıfırlayın
@@ -199,6 +212,7 @@ envVars:
 **Sebep:** IP whitelist sorunu
 
 **Çözüm:**
+
 1. MongoDB Atlas → Network Access
 2. "Add IP Address"
 3. "Allow Access from Anywhere" → `0.0.0.0/0`
@@ -227,12 +241,12 @@ info: Server started { port: 10000, environment: 'production' }
 
 ## 🎯 Özet
 
-| Sorun | Çözüm |
-|-------|-------|
-| ❌ `MONGODB_URI` kullanılmış | ✅ `MONGO_URI` kullan |
-| ❌ Database name eksik | ✅ `/portfolio` ekle |
-| ❌ Zayıf JWT secrets | ✅ Güçlü şifreler üret |
-| ❌ CORS hatası olabilir | ✅ `CORS_ALLOWED_ORIGINS` ekle |
+| Sorun                        | Çözüm                          |
+| ---------------------------- | ------------------------------ |
+| ❌ `MONGODB_URI` kullanılmış | ✅ `MONGO_URI` kullan          |
+| ❌ Database name eksik       | ✅ `/portfolio` ekle           |
+| ❌ Zayıf JWT secrets         | ✅ Güçlü şifreler üret         |
+| ❌ CORS hatası olabilir      | ✅ `CORS_ALLOWED_ORIGINS` ekle |
 
 ---
 

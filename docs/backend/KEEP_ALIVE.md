@@ -109,6 +109,7 @@ useBackendKeepAlive({
 - Downtime takibi
 
 **Ayar:**
+
 - URL: `https://your-backend.onrender.com/api/health`
 - Interval: 5 minutes
 - Alert: Email
@@ -116,6 +117,7 @@ useBackendKeepAlive({
 ### 2. Cron Job (Render Ayarı)
 
 Render Dashboard → Cron Jobs → Add Cron Job
+
 - Schedule: `*/10 * * * *` (Her 10 dakika)
 - Command: `curl https://your-backend.onrender.com/api/health`
 
@@ -125,7 +127,7 @@ Render Dashboard → Cron Jobs → Add Cron Job
 name: Keep Backend Alive
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Her 10 dakika
+    - cron: "*/10 * * * *" # Her 10 dakika
 jobs:
   ping:
     runs-on: ubuntu-latest
@@ -136,12 +138,12 @@ jobs:
 
 ## ✅ Avantajlar
 
-| Yöntem | Avantaj | Dezavantaj |
-|--------|---------|------------|
-| **Frontend Hook** | ✅ Kullanıcı sitedeyken otomatik <br> ✅ Ekstra servis gerekmez | ⚠️ Kullanıcı sitede değilse çalışmaz |
-| **UptimeRobot** | ✅ 7/24 aktif <br> ✅ Monitoring dahil | ⚠️ Harici bağımlılık |
-| **Cron Job** | ✅ Render içinde <br> ✅ Garantili | ⚠️ Render Pro gerektirebilir |
-| **GitHub Actions** | ✅ Ücretsiz <br> ✅ Kontrol edebilirsiniz | ⚠️ GitHub bağımlılığı |
+| Yöntem             | Avantaj                                                         | Dezavantaj                           |
+| ------------------ | --------------------------------------------------------------- | ------------------------------------ |
+| **Frontend Hook**  | ✅ Kullanıcı sitedeyken otomatik <br> ✅ Ekstra servis gerekmez | ⚠️ Kullanıcı sitede değilse çalışmaz |
+| **UptimeRobot**    | ✅ 7/24 aktif <br> ✅ Monitoring dahil                          | ⚠️ Harici bağımlılık                 |
+| **Cron Job**       | ✅ Render içinde <br> ✅ Garantili                              | ⚠️ Render Pro gerektirebilir         |
+| **GitHub Actions** | ✅ Ücretsiz <br> ✅ Kontrol edebilirsiniz                       | ⚠️ GitHub bağımlılığı                |
 
 ## 💡 Öneri
 
@@ -151,6 +153,7 @@ jobs:
 2. **UptimeRobot** (opsiyonel) - 7/24 monitoring + ping
 
 Bu kombinasyonla:
+
 - Kullanıcılar sitedeyken otomatik ping
 - Gece/az kullanımlı saatlerde UptimeRobot ping
 - %99.9 uptime garantisi
@@ -218,6 +221,7 @@ curl https://your-backend.onrender.com/api/health
 ### "Origin not allowed by CORS"
 
 Backend `.env`:
+
 ```env
 CORS_ALLOWED_ORIGINS=https://nuhdemir.dev,http://localhost:5173
 ```

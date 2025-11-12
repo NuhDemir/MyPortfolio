@@ -1,12 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
 /**
  * Backend Keep-Alive Hook
- * 
+ *
  * Render.com ücretsiz planında backend 15 dakika inaktiflikten sonra
  * uyku moduna girer. Bu hook her 10 dakikada bir backend'e ping atarak
  * sunucunun uyanık kalmasını sağlar.
- * 
+ *
  * @param {Object} options - Yapılandırma seçenekleri
  * @param {string} options.apiUrl - Backend API URL'i
  * @param {number} options.intervalMinutes - Ping aralığı (dakika, varsayılan: 10)
@@ -29,24 +29,24 @@ export const useBackendKeepAlive = ({
     const pingBackend = async () => {
       try {
         const response = await fetch(`${apiUrl}/health`, {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
         });
 
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ Backend ping successful:', {
+          console.log("✅ Backend ping successful:", {
             status: data.status,
             timestamp: data.timestamp,
             uptime: `${Math.floor(data.uptime / 60)} minutes`,
           });
         } else {
-          console.warn('⚠️ Backend ping failed:', response.status);
+          console.warn("⚠️ Backend ping failed:", response.status);
         }
       } catch (error) {
-        console.error('❌ Backend ping error:', error.message);
+        console.error("❌ Backend ping error:", error.message);
       }
     };
 
@@ -57,13 +57,15 @@ export const useBackendKeepAlive = ({
     const intervalMs = intervalMinutes * 60 * 1000;
     intervalRef.current = setInterval(pingBackend, intervalMs);
 
-    console.log(`🔄 Backend keep-alive started: Ping every ${intervalMinutes} minutes`);
+    console.log(
+      `🔄 Backend keep-alive started: Ping every ${intervalMinutes} minutes`
+    );
 
     // Cleanup
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        console.log('🛑 Backend keep-alive stopped');
+        console.log("🛑 Backend keep-alive stopped");
       }
     };
   }, [apiUrl, intervalMinutes, enabled]);
