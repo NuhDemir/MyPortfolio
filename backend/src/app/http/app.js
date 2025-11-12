@@ -79,7 +79,13 @@ export const createHttpApp = ({
       "dist"
     );
     app.use(express.static(frontendPath));
-    app.get("*", (_req, res) => {
+
+    // Catch-all route for frontend SPA routing
+    app.use((req, res, next) => {
+      // Skip if it's an API route
+      if (req.path.startsWith("/api")) {
+        return next();
+      }
       res.sendFile(path.resolve(frontendPath, "index.html"));
     });
   } else {
