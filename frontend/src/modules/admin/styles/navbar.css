@@ -161,3 +161,10 @@
     padding: 0.6rem 0.9rem;
   }
 }
+
+/* Mobile - Hide navbar completely */
+@media (max-width: 768px) {
+  .admin-navbar {
+    display: none;
+  }
+}

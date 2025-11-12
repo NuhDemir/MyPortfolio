@@ -138,10 +138,16 @@
   .admin-layout {
     gap: clamp(0.75rem, 5vw, 1.5rem);
   }
+
+  /* Add padding to content area for bottom navigation */
+  .admin-content-area {
+    padding-bottom: 5rem;
+  }
 }
 
 @media (max-width: 640px) {
   .admin-content-area {
     padding: clamp(1.25rem, 6vw, 1.75rem);
+    padding-bottom: 5rem;
   }
 }

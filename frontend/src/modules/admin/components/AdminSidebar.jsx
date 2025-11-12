@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
+import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -26,6 +27,12 @@ const NAV_LINKS = [
     label: "Blog",
     description: "Yayın akışı",
     icon: <ArticleRoundedIcon fontSize="inherit" />,
+  },
+  {
+    to: "/admin/comments",
+    label: "Yorumlar",
+    description: "Yorum yönetimi",
+    icon: <CommentRoundedIcon fontSize="inherit" />,
   },
 ];
 

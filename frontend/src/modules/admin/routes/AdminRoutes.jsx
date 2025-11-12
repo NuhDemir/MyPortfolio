@@ -13,6 +13,9 @@ const AdminProjectManagementPage = lazy(() =>
 const AdminBlogManagementPage = lazy(() =>
   import("../pages/AdminBlogManagementPage.jsx")
 );
+const AdminCommentManagementPage = lazy(() =>
+  import("../pages/AdminCommentManagementPage.jsx")
+);
 
 const AdminRoutes = () => (
   <Routes>
@@ -28,6 +31,7 @@ const AdminRoutes = () => (
         <Route path="dashboard" element={<AdminDashboardPage />} />
         <Route path="projects" element={<AdminProjectManagementPage />} />
         <Route path="blog" element={<AdminBlogManagementPage />} />
+        <Route path="comments" element={<AdminCommentManagementPage />} />
         <Route path="*" element={<Navigate to="dashboard" replace />} />
       </Route>
     </Route>

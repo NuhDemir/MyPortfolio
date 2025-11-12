@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
 import AdminSidebar from "./AdminSidebar";
+import AdminBottomNav from "./AdminBottomNav";
 import "../styles/layout.css";
 
 const AdminLayout = () => {
@@ -51,6 +52,7 @@ const AdminLayout = () => {
           <Outlet />
         </div>
       </div>
+      <AdminBottomNav />
       {isSidebarOpen ? (
         <button
           type="button"

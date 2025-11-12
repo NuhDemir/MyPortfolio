@@ -187,6 +187,7 @@
     transform: translateX(-110%);
     transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
     padding: clamp(1rem, 3vw, 1.5rem);
+    top: 0;
   }
 
   .admin-sidebar.is-open {
@@ -213,6 +214,13 @@
     font-size: 1.5rem;
     box-shadow: var(--admin-shadow-sm);
     cursor: pointer;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    /* Ensure sidebar starts from top on mobile when navbar is hidden */
+    top: 0;
   }
 }
 

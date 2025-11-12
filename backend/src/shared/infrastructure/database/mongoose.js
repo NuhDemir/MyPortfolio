@@ -7,7 +7,11 @@ export const connectDatabase = async (connectionString) => {
   }
 
   try {
-    const connection = await mongoose.connect(connectionString);
+    const connection = await mongoose.connect(connectionString, {
+      serverSelectionTimeoutMS: 10000, // 10 seconds timeout
+      socketTimeoutMS: 45000, // 45 seconds socket timeout
+      family: 4, // Use IPv4, skip trying IPv6
+    });
     logger.info("MongoDB connected", {
       host: connection.connection.host,
       name: connection.connection.name,

@@ -3,11 +3,15 @@ import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineRounded";
+import CommentIcon from "@mui/icons-material/Comment";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import { getDashboardSnapshot } from "../services/dashboardService";
+import { commentService } from "../services/commentService";
 import "../styles/dashboard.css";
 
 const RELATIVE_TIME_FORMATTER = new Intl.RelativeTimeFormat("tr-TR", {
@@ -97,28 +101,44 @@ const initialStats = {
   projectCount: 0,
   blogCount: 0,
   messageCount: 0,
+  commentCount: 0,
+  pendingCommentCount: 0,
 };
+
+const ITEMS_PER_PAGE = 4;
 
 const AdminDashboardPage = () => {
   const [stats, setStats] = useState(initialStats);
   const [activity, setActivity] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getDashboardSnapshot();
+
+        // Fetch dashboard data and comment stats in parallel
+        const [dashboardData, commentStats] = await Promise.all([
+          getDashboardSnapshot(),
+          commentService
+            .getStats()
+            .catch(() => ({ data: { total: 0, pending: 0 } })),
+        ]);
 
         setStats({
-          projectCount: Number(data?.stats?.projects) || 0,
-          blogCount: Number(data?.stats?.blogs) || 0,
-          messageCount: Number(data?.stats?.messages) || 0,
+          projectCount: Number(dashboardData?.stats?.projects) || 0,
+          blogCount: Number(dashboardData?.stats?.blogs) || 0,
+          messageCount: Number(dashboardData?.stats?.messages) || 0,
+          commentCount: Number(commentStats?.data?.total) || 0,
+          pendingCommentCount: Number(commentStats?.data?.pending) || 0,
         });
 
-        setActivity(Array.isArray(data?.activity) ? data.activity : []);
+        setActivity(
+          Array.isArray(dashboardData?.activity) ? dashboardData.activity : []
+        );
       } catch (err) {
         const message =
           err instanceof Error
@@ -152,8 +172,29 @@ const AdminDashboardPage = () => {
         value: stats.messageCount,
       },
     ],
-    [stats.blogCount, stats.messageCount, stats.projectCount]
+    [
+      stats.blogCount,
+      stats.messageCount,
+      stats.projectCount,
+      stats.commentCount,
+    ]
   );
+
+  // Pagination for activity
+  const totalPages = Math.ceil(activity.length / ITEMS_PER_PAGE);
+  const paginatedActivity = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return activity.slice(startIndex, endIndex);
+  }, [activity, currentPage]);
+
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(1, prev - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(totalPages, prev + 1));
+  };
 
   const today = useMemo(
     () => new Date().toLocaleDateString("tr-TR", { dateStyle: "long" }),
@@ -203,7 +244,7 @@ const AdminDashboardPage = () => {
             <TimelineRoundedIcon fontSize="inherit" aria-hidden="true" />
             <span>
               Anlık görünüm: {stats.projectCount + stats.blogCount} içerik,{" "}
-              {stats.messageCount} mesaj
+              {stats.messageCount} mesaj, {stats.commentCount} yorum
             </span>
           </div>
         </div>
@@ -234,6 +275,16 @@ const AdminDashboardPage = () => {
           <span className="dashboard-card__value">{stats.messageCount}</span>
           <span className="dashboard-card__note">Gelen kutusu</span>
         </article>
+        <article className="dashboard-card">
+          <span className="dashboard-card__icon" aria-hidden="true">
+            <CommentIcon fontSize="inherit" />
+          </span>
+          <span className="dashboard-card__title">Yorumlar</span>
+          <span className="dashboard-card__value">{stats.commentCount}</span>
+          <span className="dashboard-card__note">
+            {stats.pendingCommentCount} beklemede
+          </span>
+        </article>
       </section>
 
       <section className="dashboard-grid">
@@ -241,10 +292,15 @@ const AdminDashboardPage = () => {
           <div className="dashboard-section__header">
             <SpaceDashboardRoundedIcon fontSize="inherit" aria-hidden="true" />
             <h2>Son işlemler</h2>
+            {activity.length > ITEMS_PER_PAGE && (
+              <span className="dashboard-section__count">
+                {activity.length} işlem
+              </span>
+            )}
           </div>
           <ul className="dashboard-activity">
-            {activity.length > 0 ? (
-              activity.map((item) => {
+            {paginatedActivity.length > 0 ? (
+              paginatedActivity.map((item) => {
                 const icon = getActivityIcon(item.type);
                 const occurredAt =
                   item.occurredAt ?? item.updatedAt ?? item.createdAt ?? null;
@@ -288,6 +344,31 @@ const AdminDashboardPage = () => {
               </li>
             )}
           </ul>
+
+          {/* Pagination Controls */}
+          {activity.length > ITEMS_PER_PAGE && (
+            <div className="dashboard-pagination">
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className="dashboard-pagination__btn"
+                aria-label="Önceki sayfa"
+              >
+                <NavigateBeforeIcon fontSize="inherit" />
+              </button>
+              <span className="dashboard-pagination__info">
+                {currentPage} / {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="dashboard-pagination__btn"
+                aria-label="Sonraki sayfa"
+              >
+                <NavigateNextIcon fontSize="inherit" />
+              </button>
+            </div>
+          )}
         </div>
         <div className="dashboard-section dashboard-section--outline">
           <div className="dashboard-section__header">

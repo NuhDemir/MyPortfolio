@@ -5,6 +5,7 @@ import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import { fetchBlogBySlug } from "@modules/blog/services/blogService.js";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
+import CommentSection from "@modules/blog/components/CommentSection.jsx";
 import "./styles/blog-pages.css";
 
 const stripHtml = (value = "") => value.replace(/<[^>]*>/g, " ").trim();
@@ -356,6 +357,18 @@ const BlogDetailPage = () => {
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
           </section>
+
+          {/* Comment Section - Support both ObjectId and slug */}
+          {(() => {
+            const blogId = blog?._id || blog?.id;
+
+            if (!blogId) {
+              return null;
+            }
+
+            // Always show CommentSection - backend now supports both ObjectId and slug
+            return <CommentSection blogId={blogId} />;
+          })()}
 
           <section
             className="blog-detail__meta"
