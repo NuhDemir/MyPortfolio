@@ -13,6 +13,7 @@ import BlogShowcase from "@modules/blog/components/BlogShowcase/BlogShowcase.jsx
 import MessageForm from "@modules/message/components/Message/MessageForm.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
+import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import DeveloperExperience from "@modules/developer/pages/DeveloperExperience.jsx";
 import RecruiterExperience from "@modules/recruiter/pages/RecruiterExperience.jsx";
 import { useTheme } from "@core/context/ThemeContext.jsx";
@@ -64,6 +65,7 @@ const DefaultExperience = () => {
         />
       </div>
       <SocialLinks />
+      <ScrollToTop />
       <section id="about-section" ref={aboutRef}>
         <About />
       </section>
@@ -107,8 +109,9 @@ const AppContent = () => {
 
 const App = () => {
   // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
-  
+  const API_BASE_URL =
+    import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
+
   useBackendKeepAlive({
     apiUrl: API_BASE_URL,
     intervalMinutes: 10, // Her 10 dakikada bir ping at

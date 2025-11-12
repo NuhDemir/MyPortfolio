@@ -2,8 +2,25 @@
   position: relative;
   min-height: 100vh;
   padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.75rem, 4vw, 3.75rem);
-  background: var(--color-background-overlay);
+  background: #ffffff; /* Light mode: white background */
   isolation: isolate;
+}
+
+.theme-dark .blog-page {
+  background: var(--color-background-page); /* Dark mode: keep original */
+}
+
+/* Blog sayfalarında navbar arkaplan renkleri */
+.blog-page {
+  --color-navbar-bg-container: var(--color-secondary);
+}
+
+.blog-page .navbar-background-container {
+  background-color: var(--color-secondary) !important;
+}
+
+.theme-dark .blog-page .navbar-background-container {
+  background-color: var(--color-secondary) !important;
 }
 
 .theme-dark .blog-page.blog-page--detail {

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
+import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import { fetchBlogBySlug } from "@modules/blog/services/blogService.js";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
@@ -293,7 +294,13 @@ const BlogDetailPage = () => {
 
   return (
     <>
+      <style>{`
+        body:has(.blog-page) .navbar-background-container {
+          background-color: var(--color-secondary) !important;
+        }
+      `}</style>
       <Navbar />
+      <ScrollToTop />
       <main className="blog-page blog-page--detail">
         <div className="blog-page__container">
           <header className="blog-page__hero blog-page__hero--detail">
