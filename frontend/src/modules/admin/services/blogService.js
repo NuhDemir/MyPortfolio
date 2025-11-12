@@ -30,6 +30,13 @@ export const getBlogBySlug = async (slug) => {
 
 export const createBlog = async (blogData) => {
   try {
+    // If thumbnailUrl is provided (JSON upload), send as JSON
+    if (blogData.thumbnailUrl && !blogData.thumbnail) {
+      const response = await axiosClient.post("/blog", blogData);
+      return response.data;
+    }
+
+    // Otherwise use FormData for file upload
     const formData = new FormData();
 
     Object.entries(blogData).forEach(([key, value]) => {

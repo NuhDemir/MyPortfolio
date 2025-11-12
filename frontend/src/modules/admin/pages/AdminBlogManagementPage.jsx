@@ -5,8 +5,11 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import UploadFileRoundedIcon from "@mui/icons-material/UploadFileRounded";
+import CodeRoundedIcon from "@mui/icons-material/CodeRounded";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
+import Pagination from "@shared/ui/Pagination.jsx";
 import {
   createBlog,
   deleteBlog,
@@ -48,6 +51,11 @@ const AdminBlogManagementPage = () => {
   const [formData, setFormData] = useState(initialFormState);
   const [thumbnailFile, setThumbnailFile] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [isJsonModalOpen, setIsJsonModalOpen] = useState(false);
+  const [jsonInput, setJsonInput] = useState("");
+  const [isTemplateModalOpen, setIsTemplateModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   const cleanupThumbnailPreview = useCallback(() => {
     if (thumbnailPreview && thumbnailPreview.startsWith("blob:")) {
@@ -195,22 +203,83 @@ const AdminBlogManagementPage = () => {
     }
   };
 
+  const handleJsonSubmit = async () => {
+    try {
+      setError(null);
+      const parsedData = JSON.parse(jsonInput);
+
+      // Validate JSON structure
+      if (!parsedData.title || !parsedData.content) {
+        setError("JSON'da en az 'title' ve 'content' alanları gereklidir.");
+        return;
+      }
+
+      setLoading(true);
+
+      const submission = {
+        title: parsedData.title,
+        content: parsedData.content,
+        category: parsedData.category || "",
+        tags: Array.isArray(parsedData.tags) ? parsedData.tags : [],
+        isPublished: Boolean(parsedData.isPublished),
+      };
+
+      // Handle thumbnail URL if provided
+      if (parsedData.thumbnailUrl) {
+        submission.thumbnailUrl = parsedData.thumbnailUrl;
+      }
+
+      await createBlog(submission);
+      setIsJsonModalOpen(false);
+      setJsonInput("");
+      await fetchBlogs();
+    } catch (err) {
+      if (err instanceof SyntaxError) {
+        setError("Geçersiz JSON formatı. Lütfen formatı kontrol edin.");
+      } else {
+        setError(err.message || "JSON yüklenirken bir hata oluştu.");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const jsonTemplate = {
+    title: "Blog Başlığı",
+    content:
+      "# Markdown formatında blog içeriği\\n\\nBuraya içeriğinizi yazın...",
+    category: "teknoloji",
+    tags: ["javascript", "react", "web"],
+    thumbnailUrl: "https://example.com/image.jpg",
+    isPublished: false,
+  };
+
   return (
     <div className="admin-management-page">
       <h1>Blog Yönetimi</h1>
       {error && <ErrorMessage message={error} />}
       {!isFormVisible && (
-        <button
-          type="button"
-          onClick={() => {
-            resetForm();
-            setIsFormVisible(true);
-          }}
-          className="admin-add-new-btn"
-        >
-          <AddRoundedIcon className="btn-icon" fontSize="inherit" />
-          <span>Yeni Blog Yazısı</span>
-        </button>
+        <div className="admin-action-buttons">
+          <button
+            type="button"
+            onClick={() => {
+              resetForm();
+              setIsFormVisible(true);
+            }}
+            className="admin-add-new-btn"
+          >
+            <AddRoundedIcon className="btn-icon" fontSize="inherit" />
+            <span>Yeni Blog Yazısı</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsJsonModalOpen(true)}
+            className="admin-json-btn"
+          >
+            <UploadFileRoundedIcon className="btn-icon" fontSize="inherit" />
+            <span>JSON ile Yükle</span>
+          </button>
+        </div>
       )}
 
       {isFormVisible && (
@@ -338,74 +407,238 @@ const AdminBlogManagementPage = () => {
           <LoadingSpinner message="Blog yazıları yükleniyor..." />
         ) : null}
         {!loading && !error && (
-          <div className="table-responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th>Kapak</th>
-                  <th>Başlık</th>
-                  <th>Kategori</th>
-                  <th>Durum</th>
-                  <th>İşlemler</th>
-                </tr>
-              </thead>
-              <tbody>
-                {blogs.length > 0 ? (
-                  blogs.map((blog, index) => {
-                    const blogId = resolveBlogId(blog);
-                    return (
-                      <tr key={blogId || `blog-${index}`}>
-                        <td>
-                          {resolveThumbnailUrl(blog) ? (
-                            <img
-                              src={resolveThumbnailUrl(blog)}
-                              alt={blog.title}
-                              className="list-thumbnail"
-                            />
-                          ) : (
-                            "-"
-                          )}
-                        </td>
-                        <td>{blog.title}</td>
-                        <td>{blog.category || "-"}</td>
-                        <td>{blog.isPublished ? "Yayında" : "Taslak"}</td>
-                        <td className="action-buttons">
-                          <button
-                            type="button"
-                            onClick={() => handleEditClick(blog)}
-                            className="edit-btn"
-                          >
-                            <EditRoundedIcon
-                              className="btn-icon"
-                              fontSize="inherit"
-                            />
-                            <span>Düzenle</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleDeleteClick(blogId)}
-                            className="delete-btn"
-                          >
-                            <DeleteRoundedIcon
-                              className="btn-icon"
-                              fontSize="inherit"
-                            />
-                            <span>Sil</span>
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })
-                ) : (
+          <>
+            <div className="table-responsive">
+              <table>
+                <thead>
                   <tr>
-                    <td colSpan="5">Gösterilecek blog yazısı bulunamadı.</td>
+                    <th>Kapak</th>
+                    <th>Başlık</th>
+                    <th>Kategori</th>
+                    <th>Durum</th>
+                    <th>İşlemler</th>
                   </tr>
-                )}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {blogs.length > 0 ? (
+                    blogs
+                      .slice(
+                        (currentPage - 1) * itemsPerPage,
+                        currentPage * itemsPerPage
+                      )
+                      .map((blog, index) => {
+                        const blogId = resolveBlogId(blog);
+                        return (
+                          <tr key={blogId || `blog-${index}`}>
+                            <td>
+                              {resolveThumbnailUrl(blog) ? (
+                                <img
+                                  src={resolveThumbnailUrl(blog)}
+                                  alt={blog.title}
+                                  className="list-thumbnail"
+                                />
+                              ) : (
+                                "-"
+                              )}
+                            </td>
+                            <td>{blog.title}</td>
+                            <td>{blog.category || "-"}</td>
+                            <td>{blog.isPublished ? "Yayında" : "Taslak"}</td>
+                            <td className="action-buttons">
+                              <button
+                                type="button"
+                                onClick={() => handleEditClick(blog)}
+                                className="edit-btn"
+                              >
+                                <EditRoundedIcon
+                                  className="btn-icon"
+                                  fontSize="inherit"
+                                />
+                                <span>Düzenle</span>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteClick(blogId)}
+                                className="delete-btn"
+                              >
+                                <DeleteRoundedIcon
+                                  className="btn-icon"
+                                  fontSize="inherit"
+                                />
+                                <span>Sil</span>
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                  ) : (
+                    <tr>
+                      <td colSpan="5">Gösterilecek blog yazısı bulunamadı.</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+            {blogs.length > 0 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={Math.ceil(blogs.length / itemsPerPage)}
+                itemsPerPage={itemsPerPage}
+                totalItems={blogs.length}
+                onPageChange={setCurrentPage}
+                onItemsPerPageChange={(newItemsPerPage) => {
+                  setItemsPerPage(newItemsPerPage);
+                  setCurrentPage(1);
+                }}
+              />
+            )}
+          </>
         )}
       </div>
+
+      {/* JSON Upload Modal */}
+      {isJsonModalOpen && (
+        <div
+          className="json-modal-overlay"
+          onClick={() => setIsJsonModalOpen(false)}
+        >
+          <div className="json-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="json-modal-header">
+              <h2>JSON ile Blog Yükle</h2>
+              <button
+                type="button"
+                onClick={() => setIsTemplateModalOpen(true)}
+                className="template-btn"
+              >
+                <CodeRoundedIcon className="btn-icon" fontSize="inherit" />
+                <span>JSON Şablonunu Gör</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsJsonModalOpen(false)}
+                className="modal-close-btn"
+              >
+                <CloseRoundedIcon fontSize="inherit" />
+              </button>
+            </div>
+            <div className="json-modal-body">
+              <textarea
+                value={jsonInput}
+                onChange={(e) => setJsonInput(e.target.value)}
+                placeholder="JSON verilerini buraya yapıştırın..."
+                rows={15}
+                className="json-textarea"
+              />
+            </div>
+            <div className="json-modal-footer">
+              <button
+                type="button"
+                onClick={handleJsonSubmit}
+                disabled={loading || !jsonInput.trim()}
+                className="submit-btn"
+              >
+                <UploadFileRoundedIcon
+                  className="btn-icon"
+                  fontSize="inherit"
+                />
+                <span>{loading ? "Yükleniyor..." : "JSON'u Yükle"}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsJsonModalOpen(false);
+                  setJsonInput("");
+                }}
+                className="cancel-btn"
+              >
+                <CloseRoundedIcon className="btn-icon" fontSize="inherit" />
+                <span>İptal</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* JSON Template Modal */}
+      {isTemplateModalOpen && (
+        <div
+          className="json-modal-overlay"
+          onClick={() => setIsTemplateModalOpen(false)}
+        >
+          <div
+            className="json-modal template-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="json-modal-header">
+              <h2>JSON Şablonu</h2>
+              <button
+                type="button"
+                onClick={() => setIsTemplateModalOpen(false)}
+                className="modal-close-btn"
+              >
+                <CloseRoundedIcon fontSize="inherit" />
+              </button>
+            </div>
+            <div className="json-modal-body">
+              <p className="template-description">
+                Blog yazısı eklemek için aşağıdaki JSON formatını kullanın:
+              </p>
+              <pre className="json-template-code">
+                <code>{JSON.stringify(jsonTemplate, null, 2)}</code>
+              </pre>
+              <div className="template-info">
+                <h3>Alan Açıklamaları:</h3>
+                <ul>
+                  <li>
+                    <strong>title</strong>: Blog başlığı (zorunlu)
+                  </li>
+                  <li>
+                    <strong>content</strong>: Blog içeriği - Markdown formatında
+                    (zorunlu)
+                  </li>
+                  <li>
+                    <strong>category</strong>: Kategori (opsiyonel) - örn:
+                    geliştirme, teknoloji, tasarım
+                  </li>
+                  <li>
+                    <strong>tags</strong>: Etiketler dizisi (opsiyonel)
+                  </li>
+                  <li>
+                    <strong>thumbnailUrl</strong>: Kapak görseli URL'i
+                    (opsiyonel)
+                  </li>
+                  <li>
+                    <strong>isPublished</strong>: Yayın durumu - true veya false
+                    (opsiyonel, varsayılan: false)
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="json-modal-footer">
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    JSON.stringify(jsonTemplate, null, 2)
+                  );
+                  alert("Şablon panoya kopyalandı!");
+                }}
+                className="submit-btn"
+              >
+                Şablonu Kopyala
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsTemplateModalOpen(false)}
+                className="cancel-btn"
+              >
+                <CloseRoundedIcon className="btn-icon" fontSize="inherit" />
+                <span>Kapat</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

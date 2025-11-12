@@ -33,8 +33,14 @@ export const createBlogController = (dependencies) => {
     const payload = {
       ...req.body,
       author: req.user.id,
-      thumbnail: req.file?.path,
     };
+
+    // Handle file upload or URL
+    if (req.file?.path) {
+      payload.thumbnail = req.file.path;
+    } else if (req.body.thumbnailUrl) {
+      payload.thumbnail = req.body.thumbnailUrl;
+    }
 
     const blog = await createBlogUseCase(payload, dependencies);
     res.status(201).json(blog);

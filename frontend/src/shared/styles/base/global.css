@@ -272,6 +272,22 @@
   --transition-timing-function: ease-in-out;
   --transition-default: all var(--transition-duration-base)
     var(--transition-timing-function);
+
+  /* === Admin Panel Variables (Light Mode) === */
+  --admin-bg: #f5f5f0;
+  --admin-surface: #ffffff;
+  --admin-surface-alt: #fafaf8;
+  --admin-text: #2d2d2d;
+  --admin-text-secondary: #4a4a4a;
+  --admin-text-muted: #6c6c6c;
+  --admin-line: #e0e0d8;
+  --admin-accent: #0cb845;
+  --admin-border-width: 2px;
+  --admin-radius: 0.5rem;
+  --admin-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+  --admin-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  --admin-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
+  --admin-transition: 0.2s ease;
 }
 
 /* === DARK TEMA DEĞİŞKENLERİ === */
@@ -351,6 +367,22 @@
   --comments-user-text-color: #f0f6fc;
   --comments-job-title-color: #8b949e;
   --comments-shadow: rgba(1, 4, 9, 0.8);
+
+  /* === Admin Panel Variables (Dark Mode) === */
+  --admin-bg: #0d1117;
+  --admin-surface: #161b22;
+  --admin-surface-alt: #21262d;
+  --admin-text: #f0f6fc;
+  --admin-text-secondary: #c9d1d9;
+  --admin-text-muted: #8b949e;
+  --admin-line: #30363d;
+  --admin-accent: #58a6ff;
+  --admin-border-width: 2px;
+  --admin-radius: 0.5rem;
+  --admin-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --admin-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  --admin-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.5);
+  --admin-transition: 0.2s ease;
 }
 
 /* ==========================================================================
