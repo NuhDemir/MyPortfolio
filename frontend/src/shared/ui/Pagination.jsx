@@ -81,10 +81,10 @@ const Pagination = ({
               onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
               className="pagination-select"
             >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={20}>20</option>
-              <option value={50}>50</option>
+              <option value={4}>4</option>
+              <option value={8}>8</option>
+              <option value={12}>12</option>
+              <option value={24}>24</option>
             </select>
           </div>
         )}
