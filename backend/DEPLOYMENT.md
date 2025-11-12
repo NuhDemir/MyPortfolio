@@ -61,7 +61,7 @@
 ```env
 NODE_ENV=production
 PORT=10000
-MONGODB_URI=mongodb+srv://portfolioadmin:YOURPASSWORD@myportfolio.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://portfolioadmin:YOURPASSWORD@myportfolio.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
 JWT_SECRET=super-secret-jwt-key-change-this-in-production-min-32-chars
 JWT_REFRESH_SECRET=super-secret-refresh-token-key-min-32-chars
 JWT_EXPIRES_IN=24h

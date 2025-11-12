@@ -44,7 +44,7 @@ mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites
 
 ```env
 # Database
-MONGODB_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
 
 # JWT - ⚠️ ÖNEMLİ: Production'da MUTLAKA değiştirin!
 JWT_SECRET=BURAYA-EN-AZ-32-KARAKTER-GUCLU-RASTGELE-ANAHTAR-YAZIN

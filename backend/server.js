@@ -28,7 +28,9 @@ const logger = loggerModule.default;
 
 const startServer = async () => {
   try {
-    await connectDatabase(process.env.MONGO_URI);
+    // Support both MONGO_URI and MONGODB_URI for flexibility
+    const mongoUri = process.env.MONGO_URI || process.env.MONGODB_URI;
+    await connectDatabase(mongoUri);
 
     const app = createHttpApp();
     const port = process.env.PORT || 5000;

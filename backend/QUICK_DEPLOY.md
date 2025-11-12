@@ -40,7 +40,7 @@ Backend'inizi GitHub Student Pack ile ücretsiz deploy etmek için **3 kolay se�
    ```env
    NODE_ENV=production
    PORT=10000
-   MONGODB_URI=mongodb+srv://...
+   MONGO_URI=mongodb+srv://...
    JWT_SECRET=en-az-32-karakter-guclu-rastgele-anahtar
    JWT_REFRESH_SECRET=en-az-32-karakter-guclu-rastgele-anahtar
    JWT_EXPIRES_IN=24h
