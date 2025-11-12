@@ -10,6 +10,16 @@ const modules = {
 };
 
 export const registerRoutes = (app) => {
+  // Health check endpoint for deployment monitoring
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({
+      status: "ok",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      environment: process.env.NODE_ENV || "development",
+    });
+  });
+
   modules.blog = initBlogModule({ authModule: modules.auth });
   modules.project = initProjectModule({ authModule: modules.auth });
   const adminDashboardRouter = createAdminDashboardRouter({

@@ -109,7 +109,7 @@ const BlogDetailPage = () => {
     let isMounted = true;
 
     const loadBlog = async () => {
-  setLoading(true);
+      setLoading(true);
 
       try {
         const data = await fetchBlogBySlug(slug);
@@ -278,8 +278,8 @@ const BlogDetailPage = () => {
         <main className="blog-page blog-page--detail">
           <div className="blog-page__container">
             <p className="blog-page__empty">
-              Bu yazı bulunamadı veya henüz yayınlanmadı. Ana sayfaya
-              dönmek için aşağıya tıklayın.
+              Bu yazı bulunamadı veya henüz yayınlanmadı. Ana sayfaya dönmek
+              için aşağıya tıklayın.
             </p>
             <Link className="blog-back-link" to="/blog">
               ← Blog ana sayfasına dön

@@ -17,6 +17,7 @@ import DeveloperExperience from "@modules/developer/pages/DeveloperExperience.js
 import RecruiterExperience from "@modules/recruiter/pages/RecruiterExperience.jsx";
 import { useTheme } from "@core/context/ThemeContext.jsx";
 import { useUserRole } from "@core/context/UserRoleContext.jsx";
+import { useBackendKeepAlive } from "@shared/hooks/useBackendKeepAlive.js";
 import "@shared/styles/base/global.css";
 
 const Comments = lazy(() =>
@@ -104,43 +105,54 @@ const AppContent = () => {
   return <DefaultExperience />;
 };
 
-const App = () => (
-  <Router>
-    <Routes>
-      <Route
-        path="/admin/*"
-        element={
-          <Suspense
-            fallback={<div className="component-loader">Yükleniyor...</div>}
-          >
-            <AdminRoutes />
-          </Suspense>
-        }
-      />
-      <Route path="/" element={<AppContent />} />
-      <Route
-        path="/blog"
-        element={
-          <Suspense
-            fallback={<div className="component-loader">Yükleniyor...</div>}
-          >
-            <BlogListPage />
-          </Suspense>
-        }
-      />
-      <Route
-        path="/blog/:slug"
-        element={
-          <Suspense
-            fallback={<div className="component-loader">Yükleniyor...</div>}
-          >
-            <BlogDetailPage />
-          </Suspense>
-        }
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
-  </Router>
-);
+const App = () => {
+  // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
+  
+  useBackendKeepAlive({
+    apiUrl: API_BASE_URL,
+    intervalMinutes: 10, // Her 10 dakikada bir ping at
+    enabled: true, // Production'da aktif, gerekirse import.meta.env.PROD ile kontrol edilebilir
+  });
+
+  return (
+    <Router>
+      <Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <AdminRoutes />
+            </Suspense>
+          }
+        />
+        <Route path="/" element={<AppContent />} />
+        <Route
+          path="/blog"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <BlogListPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/blog/:slug"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <BlogDetailPage />
+            </Suspense>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;

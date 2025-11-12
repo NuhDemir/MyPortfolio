@@ -41,7 +41,7 @@ const BlogListPage = () => {
     let isMounted = true;
 
     const loadBlogs = async () => {
-  setLoading(true);
+      setLoading(true);
 
       try {
         const data = await fetchBlogs();
