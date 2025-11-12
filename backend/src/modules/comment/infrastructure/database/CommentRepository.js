@@ -42,8 +42,10 @@ class CommentRepository {
             // Determine which model to populate from
             const Model =
               comment.resourceType === "Blog"
-                ? (await import("../../../blog/domain/Blog.js")).default
-                : (await import("../../../project/domain/Project.js")).default;
+                ? (await import("../../../blog/domain/entities/Blog.js"))
+                    .default
+                : (await import("../../../project/domain/entities/Project.js"))
+                    .default;
 
             const populatedResource = await Model.findById(comment.resourceId)
               .select("title slug")

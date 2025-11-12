@@ -20,6 +20,7 @@ import { useTheme } from "@core/context/ThemeContext.jsx";
 import { useUserRole } from "@core/context/UserRoleContext.jsx";
 import { useBackendKeepAlive } from "@shared/hooks/useBackendKeepAlive.js";
 import "@shared/styles/base/global.css";
+import "@shared/styles/base/components.css";
 
 const Comments = lazy(() =>
   import("@modules/comments/components/Comments/Comments.jsx")

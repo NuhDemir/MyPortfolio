@@ -1,4 +1,15 @@
 import { useState, useEffect } from "react";
+import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import AddCommentIcon from "@mui/icons-material/AddComment";
+import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
+import PersonIcon from "@mui/icons-material/Person";
+import EmailIcon from "@mui/icons-material/Email";
+import LanguageIcon from "@mui/icons-material/Language";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import ReplyIcon from "@mui/icons-material/Reply";
+import CloudOffIcon from "@mui/icons-material/CloudOff";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { commentService } from "../services/commentService";
 import "./CommentSection.css";
 
@@ -144,6 +155,7 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
       <div key={comment._id} className="comment-item">
         <div className="comment-item__header">
           <div className="comment-item__author">
+            <PersonIcon className="comment-item__author-icon" />
             <strong>{comment.author?.name || "Anonim"}</strong>
             {comment.author?.website && (
               <a
@@ -152,7 +164,8 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
                 rel="noopener noreferrer"
                 className="comment-item__website"
               >
-                🔗 Website
+                <LanguageIcon className="comment-item__website-icon" />
+                Website
               </a>
             )}
           </div>
@@ -167,12 +180,14 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
               className="comment-item__edited"
               title={`Düzenlendi: ${formatDate(comment.editedAt)}`}
             >
+              <EditNoteIcon className="comment-item__edited-icon" />
               (düzenlendi)
             </span>
           )}
         </div>
         {comment.replies && comment.replies.length > 0 && (
           <div className="comment-replies">
+            <ReplyIcon className="comment-replies__icon" />
             {renderComments(comment.replies)}
           </div>
         )}
@@ -183,7 +198,10 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
   return (
     <section className="comment-section">
       <div className="comment-section__header">
-        <h2>Yorumlar</h2>
+        <h2>
+          <ChatBubbleOutlineIcon className="comment-section__header-icon" />
+          Yorumlar
+        </h2>
         <span className="comment-section__count">
           {comments.length} {comments.length === 1 ? "Yorum" : "Yorum"}
         </span>
@@ -191,45 +209,58 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
 
       {/* Backend offline message */}
       {!backendAvailable && (
-        <div
-          style={{
-            padding: "1.5rem",
-            background: "var(--color-surface, #f5f5f5)",
-            border: "2px solid var(--color-line, #e0e0e0)",
-            borderRadius: "12px",
-            marginBottom: "1.5rem",
-            textAlign: "center",
-          }}
-        >
-          <p style={{ margin: "0 0 0.5rem 0", fontSize: "1rem", opacity: 0.8 }}>
-            🔌 Backend sunucusuna bağlanılamıyor
-          </p>
-          <small style={{ opacity: 0.6, fontSize: "0.875rem" }}>
-            Yorum sistemi şu anda kullanılamıyor. Lütfen daha sonra tekrar
-            deneyin.
-          </small>
+        <div className="comment-section__offline">
+          <CloudOffIcon className="comment-section__offline-icon" />
+          <div>
+            <p className="comment-section__offline-title">
+              Backend sunucusuna bağlanılamıyor
+            </p>
+            <small className="comment-section__offline-text">
+              Yorum sistemi şu anda kullanılamıyor. Lütfen daha sonra tekrar
+              deneyin.
+            </small>
+          </div>
         </div>
       )}
 
       {formSuccess && (
-        <div className="comment-form__success">{formSuccess}</div>
+        <div className="comment-form__success">
+          <CheckCircleIcon className="comment-form__success-icon" />
+          {formSuccess}
+        </div>
       )}
 
       {!showForm ? (
         <button
-          className="comment-section__add-btn"
+          className="btn btn--primary btn--lg comment-section__add-btn"
           onClick={() => setShowForm(true)}
           disabled={!backendAvailable}
-          style={
-            !backendAvailable ? { opacity: 0.5, cursor: "not-allowed" } : {}
-          }
         >
-          <span className="comment-section__add-icon">-</span>
+          <AddCommentIcon className="btn__icon comment-section__add-icon" />
           Hadi sen de bir yorum bırak!
         </button>
       ) : (
         <div className="comment-form-container">
-          <h3>Yorum Yaz</h3>
+          <div className="comment-form__header">
+            <h3>Yorum Yaz</h3>
+            <button
+              type="button"
+              className="comment-form__close"
+              onClick={() => {
+                setShowForm(false);
+                setFormError("");
+                setFormData({
+                  name: "",
+                  email: "",
+                  website: "",
+                  content: "",
+                });
+              }}
+              aria-label="Formu kapat"
+            >
+              <CloseIcon />
+            </button>
+          </div>
           <form onSubmit={handleSubmit} className="comment-form">
             {formError && (
               <div className="comment-form__error">{formError}</div>
@@ -238,6 +269,7 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
             <div className="comment-form__grid">
               <div className="comment-form__group">
                 <label htmlFor="name">
+                  <PersonIcon className="comment-form__label-icon" />
                   Adınız <span className="required">*</span>
                 </label>
                 <input
@@ -254,6 +286,7 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
 
               <div className="comment-form__group">
                 <label htmlFor="email">
+                  <EmailIcon className="comment-form__label-icon" />
                   E-posta <span className="required">*</span>
                 </label>
                 <input
@@ -269,7 +302,10 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
               </div>
 
               <div className="comment-form__group comment-form__group--full">
-                <label htmlFor="website">Website (Opsiyonel)</label>
+                <label htmlFor="website">
+                  <LanguageIcon className="comment-form__label-icon" />
+                  Website (Opsiyonel)
+                </label>
                 <input
                   type="url"
                   id="website"
@@ -284,6 +320,7 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
 
             <div className="comment-form__group">
               <label htmlFor="content">
+                <EditNoteIcon className="comment-form__label-icon" />
                 Yorumunuz <span className="required">*</span>
               </label>
               <textarea
@@ -304,7 +341,7 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
             <div className="comment-form__actions">
               <button
                 type="button"
-                className="comment-form__cancel"
+                className="btn btn--secondary btn--mobile-full"
                 onClick={() => {
                   setShowForm(false);
                   setFormError("");
@@ -316,13 +353,15 @@ function CommentSection({ resourceType = "Blog", resourceId, blogId }) {
                   });
                 }}
               >
+                <CloseIcon className="btn__icon comment-form__btn-icon" />
                 İptal
               </button>
               <button
                 type="submit"
-                className="comment-form__submit"
+                className="btn btn--primary btn--mobile-full"
                 disabled={submitting}
               >
+                <SendIcon className="btn__icon comment-form__btn-icon" />
                 {submitting ? "Gönderiliyor..." : "Yorumu Gönder"}
               </button>
             </div>
