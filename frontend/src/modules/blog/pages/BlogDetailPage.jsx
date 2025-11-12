@@ -215,10 +215,18 @@ const BlogDetailPage = () => {
       stats.push({ label: "Görüntülenme", value: formatNumber(blog.views) });
     }
     if (blog.likes !== undefined && blog.likes !== null) {
-      stats.push({ label: "Beğeni", value: formatNumber(blog.likes) });
+      stats.push({
+        label: "Beğeni",
+        value: "Yakında",
+        isComingSoon: true,
+      });
     }
     if (blog.shares !== undefined && blog.shares !== null) {
-      stats.push({ label: "Paylaşım", value: formatNumber(blog.shares) });
+      stats.push({
+        label: "Paylaşım",
+        value: "Yakında",
+        isComingSoon: true,
+      });
     }
     return stats;
   }, [blog]);
@@ -327,7 +335,14 @@ const BlogDetailPage = () => {
               aria-label="Etkileşim istatistikleri"
             >
               {metaStats.map((item) => (
-                <div key={item.label} className="blog-detail__stats-item">
+                <div
+                  key={item.label}
+                  className={`blog-detail__stats-item ${
+                    item.isComingSoon
+                      ? "blog-detail__stats-item--coming-soon"
+                      : ""
+                  }`}
+                >
                   <span>{item.label}</span>
                   <strong>{item.value}</strong>
                 </div>
