@@ -113,10 +113,22 @@ const App = () => {
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
 
+  // Production'da veya geliştirme ortamında backend keep-alive aktif
+  const isBackendKeepAliveEnabled =
+    import.meta.env.PROD ||
+    import.meta.env.VITE_API_BASE_URL?.includes("onrender.com");
+
   useBackendKeepAlive({
     apiUrl: API_BASE_URL,
-    intervalMinutes: 10, // Her 10 dakikada bir ping at
-    enabled: true, // Production'da aktif, gerekirse import.meta.env.PROD ile kontrol edilebilir
+    intervalMinutes: 10, // Her 10 dakikada bir ping at (Render 15 dk sonra uyuyor)
+    enabled: isBackendKeepAliveEnabled,
+  });
+
+  console.log("🔧 App Config:", {
+    apiBaseUrl: API_BASE_URL,
+    keepAliveEnabled: isBackendKeepAliveEnabled,
+    environment: import.meta.env.MODE,
+    isProduction: import.meta.env.PROD,
   });
 
   return (
