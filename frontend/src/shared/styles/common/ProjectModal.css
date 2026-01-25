@@ -162,6 +162,29 @@
   flex-direction: column;
 }
 
+/* Meta chips (category/status/featured) */
+.project-modal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.project-modal-meta-chip {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-family-code, monospace);
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border: 2px solid var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.project-modal-meta-chip[data-variant="featured"] {
+  background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+}
+
 /* Açıklama metinleri */
 .project-modal-description h3,
 .project-modal-description h4 {

@@ -40,6 +40,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
     return null;
   }
 
+  const tags = Array.isArray(project.tags) ? project.tags : [];
+  const hasDetailsHtml =
+    typeof project.details === "string" && project.details.trim().length > 0;
+  const descriptionText =
+    typeof project.description === "string" ? project.description.trim() : "";
+
   return (
     // 1. Overlay: Tüm ekranı kaplayan yarı saydam arka plan.
     // Tıklandığında `onClose` fonksiyonunu tetikler.
@@ -71,22 +77,54 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
         <div className="project-modal-content">
           {/* Sol Sütun: Proje Görseli */}
           <div className="project-modal-image-wrapper">
-            <img src={project.imageUrl} alt={`${project.title} görseli`} />
+            <img
+              src={project.imageUrl}
+              alt={`${project.title} görseli`}
+              loading="lazy"
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
+            />
           </div>
 
           {/* Sağ Sütun: Proje Detayları */}
           <div className="project-modal-details">
+            {/* Meta bilgiler (category/status/featured) */}
+            <div className="project-modal-meta" aria-label="Proje bilgileri">
+              {project.category && (
+                <span className="project-modal-meta-chip">
+                  Kategori: {project.category}
+                </span>
+              )}
+              {project.status && (
+                <span className="project-modal-meta-chip">
+                  Durum: {project.status}
+                </span>
+              )}
+              {project.featured === true && (
+                <span
+                  className="project-modal-meta-chip"
+                  data-variant="featured"
+                >
+                  Featured
+                </span>
+              )}
+            </div>
+
             {/* Proje hakkında detaylı bilgi (HTML olarak render edilir) */}
-            <div
-              className="project-modal-description"
-              dangerouslySetInnerHTML={{ __html: project.details }}
-            />
+            <div className="project-modal-description">
+              {hasDetailsHtml ? (
+                <div dangerouslySetInnerHTML={{ __html: project.details }} />
+              ) : (
+                <p>{descriptionText}</p>
+              )}
+            </div>
 
             {/* Kullanılan Teknolojiler */}
             <div className="project-modal-tags-section">
               <h4>Teknolojiler</h4>
               <div className="project-modal-tags">
-                {project.tags.map((tag, index) => (
+                {tags.map((tag, index) => (
                   <span key={index} className="project-modal-tag">
                     {tag}
                   </span>
