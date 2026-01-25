@@ -26,7 +26,8 @@
   color: var(--admin-fg);
   font-size: 1.65rem;
   box-shadow: var(--admin-shadow-sm);
-  transition: transform var(--admin-transition),
+  transition:
+    transform var(--admin-transition),
     box-shadow var(--admin-transition);
   cursor: pointer;
 }
@@ -78,7 +79,8 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  transition: transform var(--admin-transition),
+  transition:
+    transform var(--admin-transition),
     box-shadow var(--admin-transition);
   cursor: pointer;
 }
@@ -162,9 +164,13 @@
   }
 }
 
-/* Mobile - Hide navbar completely */
 @media (max-width: 768px) {
   .admin-navbar {
+    display: flex;
+    padding: clamp(0.9rem, 4vw, 1.2rem);
+  }
+
+  .admin-user-info {
     display: none;
   }
 }

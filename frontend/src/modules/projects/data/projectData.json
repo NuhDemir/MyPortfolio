@@ -1,345 +1,153 @@
 [
   {
-    "id": "project-001",
-    "slug": "portfolio-site",
-    "isFeatured": true,
-    "metadata": {
-      "title": "Portfolyo Sitesi (Bu Proje)",
-      "tagline": "React, GSAP ve modern web teknolojileri kullanılarak oluşturulmuş interaktif kişisel portfolyo sitesi.",
-      "createdAt": "2026-01-20",
-      "role": "Frontend Developer & UI Engineer",
-      "platform": "Web",
-      "status": "Live"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/portfolio.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["React", "Vite"] },
-      { "category": "Motion", "items": ["GSAP"] },
-      { "category": "UI", "items": ["CSS Variables", "Responsive"] }
-    ],
-    "links": {
-      "liveDemo": "https://www.nuhdemir.netlify.app",
-      "github": "https://github.com/NuhDemir/MyPortfolio",
-      "figma": null
-    },
-    "caseStudy": {
-      "problem": {
-        "title": "Kişisel marka ve sunum ihtiyacı",
-        "description": "Projelerimi, deneyimlerimi ve tasarım yaklaşımımı tek bir yerde, hızlı ve etkileyici şekilde sergileyecek bir ürün sayfasına ihtiyacım vardı."
+    "type": "projects",
+    "exportedAt": "2026-01-25T19:05:33.164Z",
+    "count": 2,
+    "items": [
+      {
+        "id": "69763c3503bf4cf18f0035cb",
+        "externalId": "project-001",
+        "title": "Mavi - Öğrenci Asistanı - AI Destekli",
+        "slug": "mavi-ogrenci-asistani",
+        "description": "Eğitim ve Gamification İçin Modüler API Altyapısı",
+        "excerpt": "Eğitim ve Gamification İçin Modüler API Altyapısı",
+        "imageUrl": "https://res.cloudinary.com/dagw7kde0/image/upload/v1769356374/portfolio/projects/Gemini_Generated_Image_nl50m9nl50m9nl50%20%281%29.png-1769356373836.jpg",
+        "metadata": {
+          "title": "Mavi - Öğrenci Asistanı - AI Destekli",
+          "tagline": "Eğitim ve Gamification İçin Modüler API Altyapısı",
+          "createdAt": "2025-11-21T00:00:00.000Z",
+          "role": "Backend Architect & Full Stack Developer",
+          "platform": "Web API (NestJS, REST)",
+          "status": "Active"
+        },
+        "visuals": {
+          "thumbnailUrl": "https://res.cloudinary.com/dagw7kde0/image/upload/v1769356374/portfolio/projects/Gemini_Generated_Image_nl50m9nl50m9nl50%20%281%29.png-1769356373836.jpg"
+        },
+        "techStack": [
+          {
+            "category": "Core",
+            "items": ["NestJS", "TypeScript"],
+            "_id": "69763c3503bf4cf18f0035cc"
+          },
+          {
+            "category": "Database",
+            "items": ["Prisma ORM", "PostgreSQL"],
+            "_id": "69763c3503bf4cf18f0035cd"
+          },
+          {
+            "category": "DevOps",
+            "items": ["Docker", "Docker Compose"],
+            "_id": "69763c3503bf4cf18f0035ce"
+          }
+        ],
+        "links": {
+          "github": "https://github.com/NuhDemir/doxa-backend"
+        },
+        "caseStudy": {
+          "problem": {
+            "title": "Ölçeklenebilir Eğitim Platformu Eksikliği",
+            "description": "Birçok eğitim platformu, modülerlik ve oyunlaştırma desteği sunmuyor. Kullanıcı yönetimi, sınav, bildirim ve içerik yönetimi gibi temel ihtiyaçlar için ayrı ayrı servisler kullanmak zorunda kalınıyor."
+          },
+          "solution": {
+            "title": "Modüler ve Genişletilebilir Backend",
+            "description": "NestJS ile modüler bir mimari kurdum. Kullanıcı, sınav, bildirim, içerik ve gamification modülleriyle, farklı eğitim uygulamalarına kolayca entegre edilebilen bir API altyapısı geliştirdim. Prisma ile veri bütünlüğü ve kolay migration sağladım."
+          },
+          "challenges": [
+            {
+              "title": "Çoklu Modül Bağımlılık Yönetimi",
+              "description": "Birden fazla modülün (ör. gamification, notification, exam) birbirine bağımlı çalışmasını sağlarken, kod tekrarını ve döngüsel bağımlılıkları önlemek için dependency injection ve interface tabanlı servis mimarisi kurdum.",
+              "_id": "69763c3503bf4cf18f0035cf"
+            },
+            {
+              "title": "Gerçek Zamanlı Bildirimler",
+              "description": "Bildirim modülünde, zamanlanmış görevler ve anlık bildirimler için scheduler ve event-driven yapı kurdum. Performans ve ölçeklenebilirlik için asenkron iş akışları tasarladım.",
+              "_id": "69763c3503bf4cf18f0035d0"
+            }
+          ],
+          "metrics": [
+            {
+              "label": "API Response Süresi",
+              "value": "120ms (ortalama)",
+              "_id": "69763c3503bf4cf18f0035d1"
+            },
+            {
+              "label": "Modül Sayısı",
+              "value": "10+",
+              "_id": "69763c3503bf4cf18f0035d2"
+            }
+          ],
+          "highlightCode": {
+            "language": "typescript",
+            "fileName": "src/modules/notification/scheduler.service.ts",
+            "codeSnippet": "// Zamanlanmış bildirim gönderimi\n@Injectable()\nexport class SchedulerService {\n  constructor(private notificationService: NotificationService) {}\n\n  @Cron('0 8 * * *')\n  async sendDailyNotifications() {\n    const users = await this.notificationService.getUsersForDailyNotification();\n    for (const user of users) {\n      await this.notificationService.sendNotification(user.id, 'Günlük hatırlatma!');\n    }\n  }\n}"
+          }
+        },
+        "galleryImages": [],
+        "githubUrl": "https://github.com/NuhDemir/doxa-backend",
+        "tags": [],
+        "category": "web",
+        "technologies": [],
+        "featured": false,
+        "isFeatured": false,
+        "status": "active",
+        "priority": 5,
+        "difficulty": "intermediate",
+        "views": 0,
+        "likes": 0,
+        "shares": 0,
+        "seo": {
+          "keywords": []
+        },
+        "client": {},
+        "metrics": {
+          "contributors": 1
+        },
+        "createdAt": "2026-01-25T15:52:21.203Z",
+        "updatedAt": "2026-01-25T15:52:56.409Z"
       },
-      "solution": {
-        "title": "Neubrutal + performans odaklı SPA",
-        "description": "Vite + React ile performanslı bir SPA kurup, GSAP ile mikro etkileşimler ekledim. Tema yönetimi, içerik fallback’leri ve modüler UI bileşenleriyle genişleyebilir bir yapı oluşturdum."
-      },
-      "challenges": [
-        {
-          "title": "Animasyon + performans dengesi",
-          "description": "GSAP animasyonlarının UX’i güçlendirirken TTI/LCP metriklerini bozmasını engellemek için lazy load, ölçülü animasyon ve görsel optimizasyonları uyguladım."
-        }
-      ],
-      "metrics": [
-        { "label": "Sayfa ilk yük", "value": "< 1.5s" },
-        { "label": "Etkileşim", "value": "Smooth" }
-      ],
-      "highlightCode": {
-        "language": "jsx",
-        "fileName": "ProjectDetailsPage.jsx",
-        "codeSnippet": "// örnek: sticky context bar + reveal + lightbox yapı taşları"
+      {
+        "id": "6976221b60bfb8fcec17383b",
+        "title": "Digital Obesity: Dijital Farkındalık Projesi",
+        "slug": "digital-obesity-dijital-farkindalik-projesi",
+        "description": "Modern çağın sorunu olan aşırı bilgi yüklemesine (enformasyon obezitesi) dikkat çeken interaktif bir web deneyimi. Neu Brutalism estetiği ve React mimarisi kullanılarak, kullanıcıya dijital tüketim alışkanlıklarını sorgulatmak amacıyla geliştirilmiştir.",
+        "excerpt": "Modern çağın sorunu olan aşırı bilgi yüklemesine (enformasyon obezitesi) dikkat çeken interaktif bir web deneyimi. Neu Brutalism estetiği ve React mim...",
+        "imageUrl": "https://res.cloudinary.com/dagw7kde0/image/upload/v1769349699/portfolio/projects/digital%20obesity.png-1769349698480.jpg",
+        "metadata": {
+          "title": "Digital Obesity: Dijital Farkındalık Projesi"
+        },
+        "visuals": {
+          "thumbnailUrl": "https://res.cloudinary.com/dagw7kde0/image/upload/v1769349699/portfolio/projects/digital%20obesity.png-1769349698480.jpg"
+        },
+        "techStack": [],
+        "links": {
+          "liveDemo": "https://digital-obesity.netlify.app/",
+          "github": "https://github.com/NuhDemir/digital-obesity-analytics/tree/main/src/pages"
+        },
+        "caseStudy": null,
+        "galleryImages": [],
+        "githubUrl": "https://github.com/NuhDemir/digital-obesity-analytics/tree/main/src/pages",
+        "liveUrl": "https://digital-obesity.netlify.app/",
+        "tags": ["react", "ui", "frontend", "digital-health"],
+        "category": "web",
+        "technologies": [],
+        "featured": true,
+        "isFeatured": false,
+        "status": "active",
+        "priority": 5,
+        "difficulty": "intermediate",
+        "views": 0,
+        "likes": 0,
+        "shares": 0,
+        "seo": {
+          "keywords": []
+        },
+        "client": {},
+        "metrics": {
+          "contributors": 1
+        },
+        "createdAt": "2026-01-25T14:00:59.102Z",
+        "updatedAt": "2026-01-25T14:01:40.600Z"
       }
-    },
-    "tags": ["React", "GSAP", "Vite", "CSS Variables", "Responsive"]
-  },
-  {
-    "id": "project-002",
-    "slug": "electron-arp-network-explorer",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Electron ARP & Network Explorer",
-      "tagline": "Electron ve React ile geliştirilen, ARP tablosu görüntüleme ve yerel ağ keşfi yapan masaüstü uygulaması.",
-      "createdAt": null,
-      "role": "Desktop App Developer",
-      "platform": "Desktop (Windows/macOS/Linux)",
-      "status": "Development"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/arp.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["Electron", "React", "Vite"] },
-      { "category": "Backend", "items": ["Node.js"] },
-      { "category": "Networking", "items": ["ARP", "Network Scan"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/your-username/electron-arp-explorer",
-      "figma": null
-    },
-    "tags": ["Electron", "React", "Node.js", "ARP", "Network Scan", "Vite"]
-  },
-  {
-    "id": "project-003",
-    "slug": "seesound-ai-hearing-assist",
-    "isFeatured": false,
-    "metadata": {
-      "title": "SeeSound - İşitme Engelliler için Yapay Zeka Destekli Mobil Uygulama",
-      "tagline": "İşitme engelli bireylerin çevresel sesleri algılamasına ve acil durumlarda iletişim kurmasına yardımcı olan mobil uygulama.",
-      "createdAt": null,
-      "role": "Full Stack Developer",
-      "platform": "Mobile (iOS/Android)",
-      "status": "Development"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/seesound.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Mobile", "items": ["Flutter"] },
-      { "category": "Backend", "items": ["Node.js", "Express.js"] },
-      { "category": "Database", "items": ["SQL Server"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/NuhDemir/seesound",
-      "figma": null
-    },
-    "tags": [
-      "Node.js",
-      "Express.js",
-      "Flutter",
-      "SQL Server",
-      "Mobil",
-      "Erişilebilirlik"
     ]
-  },
-  {
-    "id": "project-004",
-    "slug": "2048-game-guide",
-    "isFeatured": false,
-    "metadata": {
-      "title": "2048 Oyunu ve Geliştirme Rehberi",
-      "tagline": "Klasik 2048 oyunu + geliştirme önerileri: JavaScript, HTML, CSS odaklı kapsamlı rehber.",
-      "createdAt": null,
-      "role": "Frontend Developer",
-      "platform": "Web",
-      "status": "Live"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/2048.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["JavaScript", "HTML", "CSS"] },
-      { "category": "Domain", "items": ["Game Dev", "Education"] }
-    ],
-    "links": {
-      "liveDemo": "https://2048-gamex.netlify.app/",
-      "github": "https://github.com/NuhDemir/2048_Game?tab=readme-ov-file",
-      "figma": null
-    },
-    "tags": ["JavaScript", "HTML", "CSS", "Oyun Geliştirme", "2048", "Eğitim"]
-  },
-  {
-    "id": "project-005",
-    "slug": "aspnet-mvc-hospital-management",
-    "isFeatured": false,
-    "metadata": {
-      "title": "ASP.NET MVC Hastane Yönetim Sistemi",
-      "tagline": "ASP.NET MVC 5 ile rol tabanlı, tam kapsamlı hastane operasyon yönetim uygulaması.",
-      "createdAt": null,
-      "role": "Full Stack Developer",
-      "platform": "Web",
-      "status": "Legacy"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/project-hospital-management.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["ASP.NET MVC", "C#"] },
-      { "category": "Data", "items": ["Entity Framework"] },
-      { "category": "Domain", "items": ["CRUD", "Role-Based Access"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/NuhDemir/aspnet-mvc-hospital-management",
-      "figma": null
-    },
-    "tags": [
-      "ASP.NET MVC",
-      "C#",
-      "Entity Framework",
-      "Hastane Yönetimi",
-      "CRUD",
-      "Role-Based Access"
-    ]
-  },
-  {
-    "id": "project-006",
-    "slug": "carsi-ecommerce-react",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Çarşı - Modern E-Ticaret Platformu",
-      "tagline": "Vite + React ile geliştirilmiş, modern ve duyarlı e-ticaret web uygulaması.",
-      "createdAt": null,
-      "role": "Frontend Developer",
-      "platform": "Web",
-      "status": "Live"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/project-carsi-banner.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["React", "Vite"] },
-      { "category": "UI", "items": ["Tailwind CSS", "Responsive"] },
-      { "category": "App", "items": ["SPA"] }
-    ],
-    "links": {
-      "liveDemo": "https://carsi-e-commerce.netlify.app/",
-      "github": "https://github.com/Nuhdemir/carsi-e-commerce",
-      "figma": null
-    },
-    "tags": ["React", "Vite", "Tailwind CSS", "E-Ticaret", "Responsive", "SPA"]
-  },
-  {
-    "id": "project-007",
-    "slug": "carsi-mern",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Çarşı - Modern E-Commerce Platform",
-      "tagline": "Geleneksel Türk pazarlarından ilham alan, MERN mimarisi ile geliştirilmiş modern e-ticaret platformu.",
-      "createdAt": null,
-      "role": "Full Stack Developer",
-      "platform": "Web",
-      "status": "Live"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/carsi.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Frontend", "items": ["React", "Vite", "Chakra UI"] },
-      { "category": "Backend", "items": ["Node.js", "Express"] },
-      { "category": "Database", "items": ["MongoDB"] }
-    ],
-    "links": {
-      "liveDemo": "https://carsi.onrender.com/",
-      "github": "https://github.com/NuhDemir/carsi",
-      "figma": null
-    },
-    "tags": [
-      "React",
-      "Node.js",
-      "MongoDB",
-      "Express",
-      "Vite",
-      "Chakra UI",
-      "MERN",
-      "E-Commerce"
-    ]
-  },
-  {
-    "id": "project-008",
-    "slug": "naber-realtime-chat",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Naber - Gerçek Zamanlı Sohbet Uygulaması",
-      "tagline": "Socket.IO ile gerçek zamanlı mesajlaşma; JWT ile güvenli kimlik doğrulama ve modern UI.",
-      "createdAt": null,
-      "role": "Full Stack Developer",
-      "platform": "Web",
-      "status": "Development"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/naber-chat-app.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Frontend", "items": ["React"] },
-      { "category": "Realtime", "items": ["Socket.IO"] },
-      { "category": "Backend", "items": ["Node.js", "Express.js", "MongoDB"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/NuhDemir/Naber-Realtime-Chat-App",
-      "figma": null
-    },
-    "tags": ["React", "Node.js", "Socket.IO", "MongoDB", "Express.js", "JWT"]
-  },
-  {
-    "id": "project-009",
-    "slug": "smart-bracelet-hearing-impaired",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Akıllı Bileklik - İşitme Engelliler İçin",
-      "tagline": "Raspberry Pi + Python ile çevresel sesleri algılayıp titreşim/ışık ile uyaran akıllı bileklik sistemi.",
-      "createdAt": null,
-      "role": "IoT Developer",
-      "platform": "IoT (Raspberry Pi)",
-      "status": "Development"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/smart-bracelet.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["Python", "Raspberry Pi"] },
-      { "category": "IoT", "items": ["GPIO", "Sensors"] },
-      { "category": "Domain", "items": ["Speech Recognition"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/NuhDemir/smart-bracelet-for-hearing-impaired-people",
-      "figma": null
-    },
-    "tags": [
-      "Python",
-      "Raspberry Pi",
-      "IoT",
-      "Ses Tanıma",
-      "Acil Durum Sistemi",
-      "Donanım Entegrasyonu"
-    ]
-  },
-  {
-    "id": "project-010",
-    "slug": "brick-break-java",
-    "isFeatured": false,
-    "metadata": {
-      "title": "Brick Break - Klasik Java Oyunu",
-      "tagline": "Swing/AWT tabanlı klasik brick-break oyunu; zorluk seviyeleri ve dinamik top hızları ile modernleştirildi.",
-      "createdAt": null,
-      "role": "Software Developer",
-      "platform": "Desktop",
-      "status": "Development"
-    },
-    "visuals": {
-      "thumbnailUrl": "/images/brick-game.png",
-      "heroVideoUrl": null,
-      "primaryColor": "#111111"
-    },
-    "techStack": [
-      { "category": "Core", "items": ["Java", "Swing", "AWT"] },
-      { "category": "Domain", "items": ["Game Dev", "Desktop App"] }
-    ],
-    "links": {
-      "liveDemo": null,
-      "github": "https://github.com/NuhDemir/Brick_Game",
-      "figma": null
-    },
-    "tags": ["Java", "Swing", "AWT", "Oyun Geliştirme", "Desktop App"]
   }
 ]

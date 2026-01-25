@@ -13,6 +13,12 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
   const upload = createBlogUpload();
 
   router.get("/", controller.list);
+  router.get(
+    "/export/json",
+    middleware.protect,
+    middleware.authorizeAdmin,
+    controller.exportJson,
+  );
   router.get("/:slug", controller.get);
 
   router.post(
@@ -21,7 +27,7 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
     middleware.authorizeAdmin,
     upload.single("thumbnail"),
     validateRequest(createBlogSchema),
-    controller.create
+    controller.create,
   );
 
   router.put(
@@ -30,14 +36,14 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
     middleware.authorizeAdmin,
     upload.single("thumbnail"),
     validateRequest(updateBlogSchema),
-    controller.update
+    controller.update,
   );
 
   router.delete(
     "/:id",
     middleware.protect,
     middleware.authorizeAdmin,
-    controller.remove
+    controller.remove,
   );
 
   return router;

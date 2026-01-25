@@ -13,6 +13,12 @@ export const createProjectRouter = ({ middleware, ...dependencies }) => {
   const upload = createProjectUpload();
 
   router.get("/", controller.list);
+  router.get(
+    "/export/json",
+    middleware.protect,
+    middleware.authorizeAdmin,
+    controller.exportJson,
+  );
   router.get("/:id", controller.get);
 
   router.post(

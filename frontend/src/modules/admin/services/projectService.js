@@ -57,3 +57,13 @@ export const deleteProject = async (id) => {
     handleError(error, "silinirken");
   }
 };
+
+export const exportProjectsJson = async () => {
+  try {
+    return await axiosClient.get("/projects/export/json", {
+      responseType: "blob",
+    });
+  } catch (error) {
+    handleError(error, "JSON dışa aktarılırken");
+  }
+};

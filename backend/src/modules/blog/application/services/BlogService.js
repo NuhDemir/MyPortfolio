@@ -9,7 +9,7 @@ export class BlogService {
   async ensureUniqueSlug(rawSlug, excludeId = null) {
     if (!rawSlug) {
       return generateSlug(
-        `${Date.now()}-${Math.random().toString(16).slice(2)}`
+        `${Date.now()}-${Math.random().toString(16).slice(2)}`,
       );
     }
 
@@ -34,6 +34,21 @@ export class BlogService {
       ...blog,
       content: convertMarkdownToHtml(blog.content),
     }));
+  }
+
+  async exportBlogsForJson() {
+    const blogs = await this.blogRepository.findAll({});
+
+    return blogs.map((blog) => {
+      const contentMarkdown = blog.content;
+      const contentHtml = convertMarkdownToHtml(contentMarkdown);
+
+      return {
+        ...blog,
+        content: contentMarkdown,
+        contentHtml,
+      };
+    });
   }
 
   async getBlogBySlug(slug, { isAdmin = false } = {}) {

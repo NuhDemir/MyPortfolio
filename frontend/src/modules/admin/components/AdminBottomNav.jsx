@@ -1,34 +1,8 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
-import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
-import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { logout } from "../services/authService";
+import { ADMIN_NAV_LINKS } from "../utils/adminNav";
 import "../styles/bottomnav.css";
-
-const BOTTOM_NAV_LINKS = [
-  {
-    to: "/admin/dashboard",
-    label: "Dashboard",
-    icon: <SpaceDashboardRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/projects",
-    label: "Projeler",
-    icon: <WorkspacesRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/blog",
-    label: "Blog",
-    icon: <ArticleRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/comments",
-    label: "Yorumlar",
-    icon: <CommentRoundedIcon fontSize="inherit" />,
-  },
-];
 
 const AdminBottomNav = () => {
   const navigate = useNavigate();
@@ -42,7 +16,7 @@ const AdminBottomNav = () => {
     <nav className="admin-bottom-nav" aria-label="Mobil navigasyon">
       <div className="admin-bottom-nav__container">
         {/* Navigation Links */}
-        {BOTTOM_NAV_LINKS.map(({ to, label, icon }) => (
+        {ADMIN_NAV_LINKS.map(({ to, label, Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -51,7 +25,7 @@ const AdminBottomNav = () => {
             }
           >
             <span className="admin-bottom-nav__icon" aria-hidden="true">
-              {icon}
+              {Icon ? <Icon fontSize="inherit" /> : null}
             </span>
             <span className="admin-bottom-nav__label">{label}</span>
           </NavLink>

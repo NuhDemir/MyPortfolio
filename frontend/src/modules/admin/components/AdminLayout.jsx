@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import AdminNavbar from "./AdminNavbar";
 import AdminSidebar from "./AdminSidebar";
 import AdminBottomNav from "./AdminBottomNav";
+import { addAdminToastListener } from "../utils/adminToast";
 import "../styles/layout.css";
 
 const AdminLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [toast, setToast] = useState(null);
+  const sidebarId = "admin-sidebar";
 
   const handleToggleSidebar = () => {
     setSidebarOpen((prev) => !prev);
@@ -15,6 +18,56 @@ const AdminLayout = () => {
   const handleCloseSidebar = () => {
     setSidebarOpen(false);
   };
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const onKeyDown = (event) => {
+      if (!isSidebarOpen) {
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        handleCloseSidebar();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isSidebarOpen]);
+
+  useEffect(() => {
+    let timeoutId;
+
+    const unsubscribe = addAdminToastListener((detail) => {
+      const nextToast = {
+        id: Date.now(),
+        message: detail?.message || "",
+        type: detail?.type || "info",
+        durationMs: detail?.durationMs ?? 2600,
+      };
+
+      setToast(nextToast);
+
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(() => {
+        setToast(null);
+      }, nextToast.durationMs);
+    });
+
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      unsubscribe?.();
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof document === "undefined") {
@@ -45,9 +98,17 @@ const AdminLayout = () => {
 
   return (
     <div className={`admin-layout${isSidebarOpen ? " sidebar-open" : ""}`}>
-      <AdminSidebar isOpen={isSidebarOpen} onClose={handleCloseSidebar} />
+      <AdminSidebar
+        id={sidebarId}
+        isOpen={isSidebarOpen}
+        onClose={handleCloseSidebar}
+      />
       <div className="admin-main-content">
-        <AdminNavbar onToggleSidebar={handleToggleSidebar} />
+        <AdminNavbar
+          onToggleSidebar={handleToggleSidebar}
+          isSidebarOpen={isSidebarOpen}
+          sidebarId={sidebarId}
+        />
         <div className="admin-content-area">
           <Outlet />
         </div>
@@ -60,6 +121,24 @@ const AdminLayout = () => {
           aria-label="Menüyü kapat"
           onClick={handleCloseSidebar}
         />
+      ) : null}
+
+      {toast ? (
+        <div
+          className={`admin-toast admin-toast--${toast.type}`}
+          role="status"
+          aria-live="polite"
+        >
+          <span className="admin-toast__message">{toast.message}</span>
+          <button
+            type="button"
+            className="admin-toast__close"
+            aria-label="Bildirimi kapat"
+            onClick={() => setToast(null)}
+          >
+            ×
+          </button>
+        </div>
       ) : null}
     </div>
   );

@@ -63,7 +63,7 @@ describe("BlogService", () => {
       blogRepository.findBySlug.mockResolvedValue(null);
 
       await expect(
-        blogService.getBlogBySlug("test", { isAdmin: false })
+        blogService.getBlogBySlug("test", { isAdmin: false }),
       ).rejects.toThrow("Blog yazısı bulunamadı veya yayınlanmadı.");
     });
   });
@@ -104,7 +104,7 @@ describe("BlogService", () => {
 
       expect(blogRepository.updateById).toHaveBeenCalledWith(
         "1",
-        expect.any(Object)
+        expect.any(Object),
       );
       const expected = convertMarkdownToHtml("Content").trim();
       expect(blog.content.trim()).toBe(expected);
@@ -115,7 +115,7 @@ describe("BlogService", () => {
       blogRepository.updateById.mockResolvedValue(null);
 
       await expect(blogService.updateBlog("1", {})).rejects.toThrow(
-        "Blog yazısı bulunamadı."
+        "Blog yazısı bulunamadı.",
       );
     });
   });
@@ -136,7 +136,25 @@ describe("BlogService", () => {
       blogRepository.deleteById.mockResolvedValue(null);
 
       await expect(blogService.deleteBlog("1")).rejects.toThrow(
-        "Blog yazısı bulunamadı."
+        "Blog yazısı bulunamadı.",
+      );
+    });
+  });
+
+  describe("exportBlogsForJson", () => {
+    it("should export all blogs with markdown and html", async () => {
+      const { blogService, blogRepository } = createDependencies();
+      blogRepository.findAll.mockResolvedValue([
+        { id: "1", title: "Test", content: "# Hello" },
+      ]);
+
+      const exported = await blogService.exportBlogsForJson();
+
+      expect(blogRepository.findAll).toHaveBeenCalledWith({});
+      expect(exported).toHaveLength(1);
+      expect(exported[0].content).toBe("# Hello");
+      expect(exported[0].contentHtml.trim()).toBe(
+        convertMarkdownToHtml("# Hello").trim(),
       );
     });
   });

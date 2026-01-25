@@ -4,6 +4,7 @@ import getProjectUseCase from "../../../application/use-cases/getProject.use-cas
 import createProjectUseCase from "../../../application/use-cases/createProject.use-case.js";
 import updateProjectUseCase from "../../../application/use-cases/updateProject.use-case.js";
 import deleteProjectUseCase from "../../../application/use-cases/deleteProject.use-case.js";
+import exportProjectsJsonUseCase from "../../../application/use-cases/exportProjectsJson.use-case.js";
 
 export const createProjectController = (dependencies) => {
   const list = asyncHandler(async (req, res) => {
@@ -103,12 +104,24 @@ export const createProjectController = (dependencies) => {
     res.json(result);
   });
 
+  const exportJson = asyncHandler(async (_req, res) => {
+    const payload = await exportProjectsJsonUseCase(dependencies);
+
+    const safeTimestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `projects-export-${safeTimestamp}.json`;
+
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.status(200).send(JSON.stringify(payload, null, 2));
+  });
+
   return {
     list,
     get,
     create,
     update,
     remove,
+    exportJson,
   };
 };
 

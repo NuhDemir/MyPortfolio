@@ -4,6 +4,7 @@ import getBlogUseCase from "../../../application/use-cases/getBlog.use-case.js";
 import createBlogUseCase from "../../../application/use-cases/createBlog.use-case.js";
 import updateBlogUseCase from "../../../application/use-cases/updateBlog.use-case.js";
 import deleteBlogUseCase from "../../../application/use-cases/deleteBlog.use-case.js";
+import exportBlogsJsonUseCase from "../../../application/use-cases/exportBlogsJson.use-case.js";
 
 export const createBlogController = (dependencies) => {
   const list = asyncHandler(async (req, res) => {
@@ -11,7 +12,7 @@ export const createBlogController = (dependencies) => {
       {
         isAdmin: req.user?.role === "admin",
       },
-      dependencies
+      dependencies,
     );
 
     res.json(blogs);
@@ -23,7 +24,7 @@ export const createBlogController = (dependencies) => {
         slug: req.params.slug,
         isAdmin: req.user?.role === "admin",
       },
-      dependencies
+      dependencies,
     );
 
     res.json(blog);
@@ -64,12 +65,24 @@ export const createBlogController = (dependencies) => {
     res.json(result);
   });
 
+  const exportJson = asyncHandler(async (_req, res) => {
+    const payload = await exportBlogsJsonUseCase(dependencies);
+
+    const safeTimestamp = new Date().toISOString().replace(/[:.]/g, "-");
+    const filename = `blogs-export-${safeTimestamp}.json`;
+
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+    res.status(200).send(JSON.stringify(payload, null, 2));
+  });
+
   return {
     list,
     get,
     create,
     update,
     remove,
+    exportJson,
   };
 };
 

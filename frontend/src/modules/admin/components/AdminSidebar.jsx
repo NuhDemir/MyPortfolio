@@ -1,49 +1,23 @@
 import { NavLink } from "react-router-dom";
-import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
-import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
-import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
-import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BoltRoundedIcon from "@mui/icons-material/BoltRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { logout } from "../services/authService";
+import { ADMIN_NAV_LINKS } from "../utils/adminNav";
 import "../styles/sidebar.css";
 
-const NAV_LINKS = [
-  {
-    to: "/admin/dashboard",
-    label: "Dashboard",
-    description: "Anlık görünüm",
-    icon: <SpaceDashboardRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/projects",
-    label: "Projeler",
-    description: "Portföy içerikleri",
-    icon: <WorkspacesRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/blog",
-    label: "Blog",
-    description: "Yayın akışı",
-    icon: <ArticleRoundedIcon fontSize="inherit" />,
-  },
-  {
-    to: "/admin/comments",
-    label: "Yorumlar",
-    description: "Yorum yönetimi",
-    icon: <CommentRoundedIcon fontSize="inherit" />,
-  },
-];
-
-const AdminSidebar = ({ isOpen, onClose }) => {
+const AdminSidebar = ({ id, isOpen, onClose }) => {
   const handleLogout = () => {
     logout();
     onClose?.();
   };
 
   return (
-    <aside className={`admin-sidebar${isOpen ? " is-open" : ""}`}>
+    <aside
+      id={id}
+      className={`admin-sidebar${isOpen ? " is-open" : ""}`}
+      aria-label="Admin menü"
+    >
       <div className="admin-sidebar__inner">
         <div className="admin-sidebar__brand">
           <span className="admin-sidebar__brand-icon" aria-hidden="true">
@@ -54,8 +28,8 @@ const AdminSidebar = ({ isOpen, onClose }) => {
             <small>MyPortfolio Admin</small>
           </div>
         </div>
-        <nav className="admin-sidebar__nav" aria-label="Admin menü">
-          {NAV_LINKS.map(({ to, label, description, icon }) => (
+        <nav className="admin-sidebar__nav" aria-label="Admin sayfaları">
+          {ADMIN_NAV_LINKS.map(({ to, label, description, Icon }) => (
             <NavLink
               key={to}
               to={to}
@@ -65,7 +39,7 @@ const AdminSidebar = ({ isOpen, onClose }) => {
               onClick={onClose}
             >
               <span className="admin-sidebar__icon" aria-hidden="true">
-                {icon}
+                {Icon ? <Icon fontSize="inherit" /> : null}
               </span>
               <span className="admin-sidebar__label">
                 <span className="admin-sidebar__label-primary">{label}</span>

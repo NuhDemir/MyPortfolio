@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
@@ -6,6 +7,7 @@ import ChatBubbleOutlineRoundedIcon from "@mui/icons-material/ChatBubbleOutlineR
 import CommentIcon from "@mui/icons-material/Comment";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
@@ -45,7 +47,7 @@ const formatRelativeTime = (isoString) => {
     if (Math.abs(duration) < division.amount) {
       return RELATIVE_TIME_FORMATTER.format(
         Math.round(duration),
-        division.unit
+        division.unit,
       );
     }
     duration /= division.amount;
@@ -97,6 +99,23 @@ const getActivityHeadline = (item) => {
   return "Yeni aktivite";
 };
 
+const getActivityHref = (item) => {
+  if (!item) {
+    return null;
+  }
+
+  switch (item.type) {
+    case "project":
+      return "/admin/projects";
+    case "blog":
+      return "/admin/blog";
+    case "message":
+      return null;
+    default:
+      return null;
+  }
+};
+
 const initialStats = {
   projectCount: 0,
   blogCount: 0,
@@ -137,7 +156,7 @@ const AdminDashboardPage = () => {
         });
 
         setActivity(
-          Array.isArray(dashboardData?.activity) ? dashboardData.activity : []
+          Array.isArray(dashboardData?.activity) ? dashboardData.activity : [],
         );
       } catch (err) {
         const message =
@@ -167,18 +186,54 @@ const AdminDashboardPage = () => {
         value: stats.blogCount,
       },
       {
+        id: "comments",
+        label: "Toplam yorum",
+        value: stats.commentCount,
+      },
+      {
+        id: "pendingComments",
+        label: "Bekleyen yorum",
+        value: stats.pendingCommentCount,
+      },
+      {
         id: "messages",
-        label: "Yanıt bekleyen mesaj",
+        label: "Mesaj (yakında)",
         value: stats.messageCount,
       },
     ],
     [
       stats.blogCount,
-      stats.messageCount,
-      stats.projectCount,
       stats.commentCount,
-    ]
+      stats.messageCount,
+      stats.pendingCommentCount,
+      stats.projectCount,
+    ],
   );
+
+  const distributionItems = useMemo(() => {
+    const items = [
+      { id: "projects", label: "Projeler", value: stats.projectCount },
+      { id: "blogs", label: "Blog", value: stats.blogCount },
+      { id: "comments", label: "Yorum", value: stats.commentCount },
+      {
+        id: "pendingComments",
+        label: "Bekleyen yorum",
+        value: stats.pendingCommentCount,
+        tone: "warning",
+      },
+    ];
+
+    const maxValue = Math.max(1, ...items.map((item) => item.value));
+    return items.map((item) => ({
+      ...item,
+      percent: Math.round((item.value / maxValue) * 100),
+    }));
+  }, [
+    stats.blogCount,
+    stats.commentCount,
+    stats.pendingCommentCount,
+    stats.projectCount,
+  ]);
 
   // Pagination for activity
   const totalPages = Math.ceil(activity.length / ITEMS_PER_PAGE);
@@ -198,7 +253,7 @@ const AdminDashboardPage = () => {
 
   const today = useMemo(
     () => new Date().toLocaleDateString("tr-TR", { dateStyle: "long" }),
-    []
+    [],
   );
 
   if (loading) {
@@ -229,6 +284,32 @@ const AdminDashboardPage = () => {
             Portföyünü besleyen içerik, proje ve mesajların tek noktadan
             yönetimi. Tüm metrikler siyah-beyaz minimal bir panelde seninle.
           </p>
+
+          <div
+            className="dashboard-hero__actions"
+            aria-label="Hızlı aksiyonlar"
+          >
+            <Link className="dashboard-action" to="/admin/projects">
+              <WorkspacesRoundedIcon fontSize="inherit" aria-hidden="true" />
+              Projeler
+            </Link>
+            <Link className="dashboard-action" to="/admin/blog">
+              <ArticleRoundedIcon fontSize="inherit" aria-hidden="true" />
+              Blog
+            </Link>
+            <Link className="dashboard-action" to="/admin/comments">
+              <CommentIcon fontSize="inherit" aria-hidden="true" />
+              Yorumlar
+              {stats.pendingCommentCount > 0 ? (
+                <span
+                  className="dashboard-action__badge"
+                  aria-label="Bekleyen yorum"
+                >
+                  {stats.pendingCommentCount}
+                </span>
+              ) : null}
+            </Link>
+          </div>
         </div>
         <div className="dashboard-hero__meta">
           <div className="dashboard-badges">
@@ -239,6 +320,12 @@ const AdminDashboardPage = () => {
             <span className="dashboard-badge dashboard-badge--muted">
               {today}
             </span>
+            {stats.pendingCommentCount > 0 ? (
+              <span className="dashboard-badge dashboard-badge--warning">
+                <CommentIcon fontSize="inherit" aria-hidden="true" />
+                {stats.pendingCommentCount} yorum beklemede
+              </span>
+            ) : null}
           </div>
           <div className="dashboard-hero__meta-text">
             <TimelineRoundedIcon fontSize="inherit" aria-hidden="true" />
@@ -251,31 +338,54 @@ const AdminDashboardPage = () => {
       </section>
 
       <section className="dashboard-cards">
-        <article className="dashboard-card">
+        <Link
+          className="dashboard-card dashboard-card--link"
+          to="/admin/projects"
+          aria-label="Projeleri yönet"
+        >
           <span className="dashboard-card__icon" aria-hidden="true">
             <WorkspacesRoundedIcon fontSize="inherit" />
           </span>
           <span className="dashboard-card__title">Projeler</span>
           <span className="dashboard-card__value">{stats.projectCount}</span>
           <span className="dashboard-card__note">Portföyde yayınlanan</span>
-        </article>
-        <article className="dashboard-card">
+          <span className="dashboard-card__cta" aria-hidden="true">
+            Yönet <ChevronRightRoundedIcon fontSize="inherit" />
+          </span>
+        </Link>
+        <Link
+          className="dashboard-card dashboard-card--link"
+          to="/admin/blog"
+          aria-label="Blog yazılarını yönet"
+        >
           <span className="dashboard-card__icon" aria-hidden="true">
             <ArticleRoundedIcon fontSize="inherit" />
           </span>
           <span className="dashboard-card__title">Blog Yazıları</span>
           <span className="dashboard-card__value">{stats.blogCount}</span>
           <span className="dashboard-card__note">Editoryal içerik</span>
-        </article>
-        <article className="dashboard-card">
+          <span className="dashboard-card__cta" aria-hidden="true">
+            Yönet <ChevronRightRoundedIcon fontSize="inherit" />
+          </span>
+        </Link>
+        <div
+          className="dashboard-card dashboard-card--disabled"
+          aria-disabled="true"
+        >
           <span className="dashboard-card__icon" aria-hidden="true">
             <ChatBubbleOutlineRoundedIcon fontSize="inherit" />
           </span>
           <span className="dashboard-card__title">Mesajlar</span>
           <span className="dashboard-card__value">{stats.messageCount}</span>
-          <span className="dashboard-card__note">Gelen kutusu</span>
-        </article>
-        <article className="dashboard-card">
+          <span className="dashboard-card__note">Yakında</span>
+        </div>
+        <Link
+          className={`dashboard-card dashboard-card--link${
+            stats.pendingCommentCount > 0 ? " dashboard-card--attention" : ""
+          }`}
+          to="/admin/comments"
+          aria-label="Yorumları yönet"
+        >
           <span className="dashboard-card__icon" aria-hidden="true">
             <CommentIcon fontSize="inherit" />
           </span>
@@ -284,7 +394,10 @@ const AdminDashboardPage = () => {
           <span className="dashboard-card__note">
             {stats.pendingCommentCount} beklemede
           </span>
-        </article>
+          <span className="dashboard-card__cta" aria-hidden="true">
+            Yönet <ChevronRightRoundedIcon fontSize="inherit" />
+          </span>
+        </Link>
       </section>
 
       <section className="dashboard-grid">
@@ -312,29 +425,37 @@ const AdminDashboardPage = () => {
                     })
                   : "-";
                 const metaText = String(
-                  item.resourceTitle ?? item.meta ?? item.title ?? "-"
+                  item.resourceTitle ?? item.meta ?? item.title ?? "-",
                 );
+
+                const href = getActivityHref(item);
+                const RowComponent = href ? Link : "div";
+                const rowProps = href
+                  ? { to: href, className: "dashboard-activity__row" }
+                  : { className: "dashboard-activity__row" };
 
                 return (
                   <li key={item.id}>
-                    <span
-                      className="dashboard-activity__icon"
-                      aria-hidden="true"
-                    >
-                      {icon}
-                    </span>
-                    <div className="dashboard-activity__body">
-                      <p className="dashboard-activity__title">
-                        {getActivityHeadline(item)}
-                      </p>
-                      <p className="dashboard-activity__meta">{metaText}</p>
-                    </div>
-                    <time
-                      className="dashboard-activity__time"
-                      dateTime={occurredAt ?? ""}
-                    >
-                      {relativeTime || fallbackDate}
-                    </time>
+                    <RowComponent {...rowProps}>
+                      <span
+                        className="dashboard-activity__icon"
+                        aria-hidden="true"
+                      >
+                        {icon}
+                      </span>
+                      <div className="dashboard-activity__body">
+                        <p className="dashboard-activity__title">
+                          {getActivityHeadline(item)}
+                        </p>
+                        <p className="dashboard-activity__meta">{metaText}</p>
+                      </div>
+                      <time
+                        className="dashboard-activity__time"
+                        dateTime={occurredAt ?? ""}
+                      >
+                        {relativeTime || fallbackDate}
+                      </time>
+                    </RowComponent>
                   </li>
                 );
               })
@@ -375,6 +496,38 @@ const AdminDashboardPage = () => {
             <TimelineRoundedIcon fontSize="inherit" aria-hidden="true" />
             <h2>Öne çıkan sayılar</h2>
           </div>
+
+          <div className="dashboard-chart" aria-label="İçerik dağılımı grafiği">
+            <div className="dashboard-chart__header">
+              <span className="dashboard-chart__title">İçerik dağılımı</span>
+              <span className="dashboard-chart__hint">Oransal</span>
+            </div>
+            <ul className="dashboard-bars" aria-label="İçerik dağılımı">
+              {distributionItems.map(({ id, label, value, percent, tone }) => (
+                <li key={id} className="dashboard-bar">
+                  <div className="dashboard-bar__meta">
+                    <span className="dashboard-bar__label">{label}</span>
+                    <span className="dashboard-bar__value">{value}</span>
+                  </div>
+                  <div
+                    className={
+                      tone === "warning"
+                        ? "dashboard-bar__track dashboard-bar__track--warning"
+                        : "dashboard-bar__track"
+                    }
+                    role="img"
+                    aria-label={`${label}: ${value}`}
+                  >
+                    <span
+                      className="dashboard-bar__fill"
+                      style={{ width: `${percent}%` }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <ul className="dashboard-summary">
             {summaryLines.map(({ id, label, value }) => (
               <li key={id}>

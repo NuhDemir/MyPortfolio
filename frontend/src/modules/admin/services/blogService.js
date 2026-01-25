@@ -9,7 +9,7 @@ export const getBlogs = async () => {
     return response.data;
   } catch (error) {
     throw new Error(
-      resolveErrorMessage(error, "Blog yazıları getirilirken hata oluştu.")
+      resolveErrorMessage(error, "Blog yazıları getirilirken hata oluştu."),
     );
   }
 };
@@ -22,8 +22,8 @@ export const getBlogBySlug = async (slug) => {
     throw new Error(
       resolveErrorMessage(
         error,
-        "Blog yazısı detayları getirilirken hata oluştu."
-      )
+        "Blog yazısı detayları getirilirken hata oluştu.",
+      ),
     );
   }
 };
@@ -59,7 +59,7 @@ export const createBlog = async (blogData) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      resolveErrorMessage(error, "Blog yazısı oluşturulurken hata oluştu.")
+      resolveErrorMessage(error, "Blog yazısı oluşturulurken hata oluştu."),
     );
   }
 };
@@ -88,7 +88,7 @@ export const updateBlog = async (id, updateData) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      resolveErrorMessage(error, "Blog yazısı güncellenirken hata oluştu.")
+      resolveErrorMessage(error, "Blog yazısı güncellenirken hata oluştu."),
     );
   }
 };
@@ -99,7 +99,19 @@ export const deleteBlog = async (id) => {
     return response.data;
   } catch (error) {
     throw new Error(
-      resolveErrorMessage(error, "Blog yazısı silinirken hata oluştu.")
+      resolveErrorMessage(error, "Blog yazısı silinirken hata oluştu."),
+    );
+  }
+};
+
+export const exportBlogsJson = async () => {
+  try {
+    return await axiosClient.get("/blog/export/json", {
+      responseType: "blob",
+    });
+  } catch (error) {
+    throw new Error(
+      resolveErrorMessage(error, "Blog JSON dışa aktarılırken hata oluştu."),
     );
   }
 };

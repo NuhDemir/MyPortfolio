@@ -104,16 +104,6 @@
   .admin-bottom-nav {
     display: block;
   }
-
-  /* Hide navbar on mobile */
-  .admin-navbar {
-    display: none;
-  }
-
-  /* Adjust sidebar for mobile */
-  .admin-sidebar {
-    top: 0;
-  }
 }
 
 /* Small mobile devices */

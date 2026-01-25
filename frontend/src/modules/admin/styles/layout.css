@@ -43,8 +43,11 @@
   grid-template-columns: minmax(240px, 320px) minmax(0, 1fr);
   gap: var(--admin-gap);
   padding: clamp(1.25rem, 4vw, 2.5rem);
-  transition: background var(--admin-transition), color var(--admin-transition);
-  background-image: repeating-linear-gradient(
+  transition:
+    background var(--admin-transition),
+    color var(--admin-transition);
+  background-image:
+    repeating-linear-gradient(
       45deg,
       rgba(0, 0, 0, 0.035) 0,
       rgba(0, 0, 0, 0.035) 1px,
@@ -55,7 +58,8 @@
 }
 
 .theme-dark .admin-layout {
-  background-image: repeating-linear-gradient(
+  background-image:
+    repeating-linear-gradient(
       45deg,
       rgba(255, 255, 255, 0.08) 0,
       rgba(255, 255, 255, 0.08) 1px,
@@ -86,17 +90,15 @@
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 2.5vw, 2.5rem);
-  background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.65) 0%,
-      transparent 40%
-    ),
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.65) 0%, transparent 40%),
     var(--admin-surface);
   color: inherit;
 }
 
 .theme-dark .admin-content-area {
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 45%),
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, transparent 45%),
     var(--admin-surface);
 }
 
@@ -111,6 +113,60 @@
   margin: 0;
   z-index: 30;
   cursor: pointer;
+}
+
+.admin-toast {
+  position: fixed;
+  right: clamp(1rem, 4vw, 2rem);
+  bottom: clamp(1rem, 4vw, 2rem);
+  z-index: 950;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border: var(--admin-border-width) solid var(--admin-line);
+  border-radius: calc(var(--admin-radius) * 0.75);
+  background: var(--admin-surface);
+  color: var(--admin-fg);
+  box-shadow: var(--admin-shadow);
+  max-width: min(520px, calc(100vw - 2rem));
+}
+
+.admin-toast--success {
+  background: color-mix(in srgb, #4caf50 18%, var(--admin-surface));
+}
+
+.admin-toast--error {
+  background: color-mix(in srgb, #f44336 14%, var(--admin-surface));
+}
+
+.admin-toast__message {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.admin-toast__close {
+  border: var(--admin-border-width) solid var(--admin-line);
+  background: var(--admin-surface-alt);
+  color: inherit;
+  border-radius: 0.85rem;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  cursor: pointer;
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.admin-toast__close:hover,
+.admin-toast__close:focus-visible {
+  transform: translate(
+    calc(var(--admin-border-width) * -0.25),
+    calc(var(--admin-border-width) * -0.25)
+  );
+  box-shadow: var(--admin-shadow);
 }
 
 @media (max-width: 1200px) {
