@@ -34,7 +34,7 @@ describe("ProjectService", () => {
 
       expect(projectRepository.findAll).toHaveBeenCalledWith(
         { status: "active" },
-        { lean: false }
+        { lean: false },
       );
       expect(projects).toHaveLength(1);
       expect(projects[0].tags).toEqual(["react", "node"]);
@@ -57,7 +57,7 @@ describe("ProjectService", () => {
       projectRepository.findById.mockResolvedValue(null);
 
       await expect(projectService.getProjectById("1")).rejects.toThrow(
-        "Proje bulunamadı."
+        "Proje bulunamadı.",
       );
     });
   });
@@ -83,7 +83,60 @@ describe("ProjectService", () => {
           title: "Test Proje",
           slug: "test-proje",
           tags: ["react"],
-        })
+        }),
+      );
+    });
+
+    it("should accept V2 payload and map to legacy fields", async () => {
+      const { projectService, projectRepository } = createDependencies();
+      projectRepository.create.mockResolvedValue({
+        id: "mongo-id",
+        externalId: "project-001",
+        title: "Mülakat Asistanı",
+        slug: "mulakat-asistani",
+        imageUrl: "/assets/projects/interview-app/thumb.webp",
+        isFeatured: true,
+        featured: true,
+        metadata: {
+          title: "Mülakat Asistanı",
+          tagline: "Yazılım Adayları İçin AI Destekli Mülakat Simülasyonu",
+        },
+        visuals: {
+          thumbnailUrl: "/assets/projects/interview-app/thumb.webp",
+        },
+      });
+
+      await projectService.createProject({
+        id: "project-001",
+        isFeatured: true,
+        metadata: {
+          title: "Mülakat Asistanı",
+          tagline: "Yazılım Adayları İçin AI Destekli Mülakat Simülasyonu",
+          createdAt: new Date("2026-01-20"),
+        },
+        visuals: {
+          thumbnailUrl: "/assets/projects/interview-app/thumb.webp",
+          heroVideoUrl: "/assets/projects/interview-app/demo-reel.mp4",
+          primaryColor: "#2A2A2A",
+        },
+      });
+
+      expect(projectRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          externalId: "project-001",
+          title: "Mülakat Asistanı",
+          slug: "mulakat-asistani",
+          imageUrl: "/assets/projects/interview-app/thumb.webp",
+          featured: true,
+          isFeatured: true,
+          metadata: expect.objectContaining({
+            title: "Mülakat Asistanı",
+            tagline: "Yazılım Adayları İçin AI Destekli Mülakat Simülasyonu",
+          }),
+          visuals: expect.objectContaining({
+            thumbnailUrl: "/assets/projects/interview-app/thumb.webp",
+          }),
+        }),
       );
     });
 
@@ -91,7 +144,7 @@ describe("ProjectService", () => {
       const { projectService } = createDependencies();
 
       await expect(projectService.createProject({})).rejects.toThrow(
-        "Proje başlığı zorunludur."
+        "Proje başlığı zorunludur.",
       );
     });
   });
@@ -117,7 +170,7 @@ describe("ProjectService", () => {
           title: "Yeni Başlık",
           slug: "yeni-baslik",
           tags: ["react"],
-        })
+        }),
       );
       expect(project.slug).toBe("yeni-baslik");
     });
@@ -127,7 +180,7 @@ describe("ProjectService", () => {
       projectRepository.updateById.mockResolvedValue(null);
 
       await expect(projectService.updateProject("1", {})).rejects.toThrow(
-        "Güncellenecek proje bulunamadı."
+        "Güncellenecek proje bulunamadı.",
       );
     });
   });
@@ -150,7 +203,7 @@ describe("ProjectService", () => {
       projectRepository.deleteById.mockResolvedValue(null);
 
       await expect(projectService.deleteProject("1")).rejects.toThrow(
-        "Silinecek proje bulunamadı."
+        "Silinecek proje bulunamadı.",
       );
     });
   });

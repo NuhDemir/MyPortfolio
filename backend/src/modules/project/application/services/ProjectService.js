@@ -24,13 +24,151 @@ const pickDefined = (payload) =>
 const normalizeProjectResponse = (project) => {
   if (!project) return null;
 
+  const title = project.title ?? project.metadata?.title;
+  const description =
+    project.description ??
+    project.metadata?.tagline ??
+    project.caseStudy?.problem?.description;
+  const imageUrl = project.imageUrl ?? project.visuals?.thumbnailUrl;
+  const isFeatured =
+    project.isFeatured !== undefined ? project.isFeatured : project.featured;
+
+  const links = {
+    ...(project.links ?? {}),
+    liveDemo: project.links?.liveDemo ?? project.liveUrl ?? undefined,
+    github: project.links?.github ?? project.githubUrl ?? undefined,
+  };
+
   return {
     ...project,
+    title,
+    description,
+    imageUrl,
     tags: normalizeTags(project.tags),
     technologies: Array.isArray(project.technologies)
       ? project.technologies
       : [],
+    techStack: Array.isArray(project.techStack) ? project.techStack : [],
+    metadata: project.metadata ?? (title ? { title } : null),
+    visuals: project.visuals ?? (imageUrl ? { thumbnailUrl: imageUrl } : null),
+    links: Object.keys(links).length > 0 ? links : null,
+    caseStudy: project.caseStudy ?? null,
+    isFeatured,
+    featured:
+      project.featured !== undefined ? project.featured : Boolean(isFeatured),
+    githubUrl: project.githubUrl ?? links.github,
+    liveUrl: project.liveUrl ?? links.liveDemo,
   };
+};
+
+const pickProjectTitle = (data) => data?.title ?? data?.metadata?.title;
+const pickProjectTagline = (data) => data?.metadata?.tagline;
+const pickProjectThumbnailUrl = (data) =>
+  data?.visuals?.thumbnailUrl ?? data?.imageUrl;
+
+const normalizeProjectLinks = (data) => {
+  const base =
+    typeof data?.links === "object" && data.links !== null ? data.links : {};
+  return {
+    ...base,
+    liveDemo: base.liveDemo ?? data?.liveUrl ?? undefined,
+    github: base.github ?? data?.githubUrl ?? undefined,
+    figma: base.figma ?? undefined,
+  };
+};
+
+const normalizeProjectCreatePayload = (data) => {
+  const title = pickProjectTitle(data);
+  const tagline = pickProjectTagline(data);
+  const thumbnailUrl = pickProjectThumbnailUrl(data);
+  const isFeatured =
+    data?.isFeatured !== undefined ? data.isFeatured : data?.featured;
+
+  return {
+    ...data,
+    externalId: data?.externalId ?? data?.id,
+    title,
+    description:
+      data?.description ??
+      tagline ??
+      data?.caseStudy?.problem?.description ??
+      "",
+    slug: data?.slug ?? (title ? generateSlug(title) : undefined),
+    imageUrl: thumbnailUrl,
+    visuals: {
+      ...(data?.visuals ?? {}),
+      thumbnailUrl,
+    },
+    metadata: {
+      ...(data?.metadata ?? {}),
+      title,
+      tagline,
+    },
+    links: normalizeProjectLinks(data),
+    tags: normalizeTags(data?.tags),
+    featured: Boolean(isFeatured),
+    isFeatured: Boolean(isFeatured),
+  };
+};
+
+const normalizeProjectUpdatePayload = (data) => {
+  const title = pickProjectTitle(data);
+  const tagline = pickProjectTagline(data);
+  const thumbnailUrl = pickProjectThumbnailUrl(data);
+  const hasFeatured =
+    data?.isFeatured !== undefined || data?.featured !== undefined;
+  const isFeatured =
+    data?.isFeatured !== undefined ? data.isFeatured : data?.featured;
+
+  const payload = pickDefined({
+    ...data,
+    externalId: data?.externalId ?? data?.id,
+    title,
+    description: data?.description ?? (tagline ? tagline : undefined),
+    imageUrl: thumbnailUrl,
+    tags: data?.tags !== undefined ? normalizeTags(data.tags) : undefined,
+    featured: hasFeatured ? Boolean(isFeatured) : undefined,
+    isFeatured: hasFeatured ? Boolean(isFeatured) : undefined,
+    githubUrl: data?.githubUrl,
+    liveUrl: data?.liveUrl,
+    metadata:
+      data?.metadata !== undefined ||
+      title !== undefined ||
+      tagline !== undefined
+        ? {
+            ...(data?.metadata ?? {}),
+            ...(title !== undefined ? { title } : {}),
+            ...(tagline !== undefined ? { tagline } : {}),
+          }
+        : undefined,
+    visuals:
+      data?.visuals !== undefined || thumbnailUrl !== undefined
+        ? {
+            ...(data?.visuals ?? {}),
+            ...(thumbnailUrl !== undefined ? { thumbnailUrl } : {}),
+          }
+        : undefined,
+    links:
+      data?.links !== undefined ||
+      data?.githubUrl !== undefined ||
+      data?.liveUrl !== undefined
+        ? {
+            ...(typeof data?.links === "object" && data.links !== null
+              ? data.links
+              : {}),
+            ...(data?.githubUrl !== undefined
+              ? { github: data.githubUrl }
+              : {}),
+            ...(data?.liveUrl !== undefined ? { liveDemo: data.liveUrl } : {}),
+          }
+        : undefined,
+  });
+
+  if (payload.title && !payload.slug) {
+    payload.slug = generateSlug(payload.title);
+  }
+
+  return payload;
 };
 
 export class ProjectService {
@@ -46,7 +184,18 @@ export class ProjectService {
     }
 
     if (filters.featured !== undefined) {
-      query.featured = filters.featured;
+      if (filters.featured === true) {
+        query.$or = [{ featured: true }, { isFeatured: true }];
+      } else {
+        query.$and = [
+          {
+            $or: [{ featured: false }, { featured: { $exists: false } }],
+          },
+          {
+            $or: [{ isFeatured: false }, { isFeatured: { $exists: false } }],
+          },
+        ];
+      }
     }
 
     const projects = await this.projectRepository.findAll(query, {
@@ -77,29 +226,20 @@ export class ProjectService {
   }
 
   async createProject(data) {
-    if (!data?.title) {
+    const title = pickProjectTitle(data);
+
+    if (!title) {
       throw new Error("Proje başlığı zorunludur.");
     }
 
-    const payload = {
-      ...data,
-      slug: data.slug ?? generateSlug(data.title),
-      tags: normalizeTags(data.tags),
-    };
+    const payload = normalizeProjectCreatePayload(data);
 
     const created = await this.projectRepository.create(payload);
     return normalizeProjectResponse(created);
   }
 
   async updateProject(id, data) {
-    const payload = pickDefined({
-      ...data,
-      tags: data.tags !== undefined ? normalizeTags(data.tags) : undefined,
-    });
-
-    if (payload.title && !payload.slug) {
-      payload.slug = generateSlug(payload.title);
-    }
+    const payload = normalizeProjectUpdatePayload(data);
 
     const updated = await this.projectRepository.updateById(id, payload);
 

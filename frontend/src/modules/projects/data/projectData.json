@@ -1,31 +1,114 @@
 [
   {
-    "id": 1,
-    "title": "Portfolyo Sitesi (Bu Proje)",
-    "description": "React, GSAP ve modern web teknolojileri kullanılarak oluşturulmuş interaktif kişisel portfolyo sitesi.",
-    "imageUrl": "/images/portfolio.png",
-    "liveUrl": "https://www.nuhdemir.netlify.app",
-    "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
-    "tags": ["React", "GSAP", "Vite", "CSS Variables", "Responsive"],
-    "details": "<h3>Proje Hakkında</h3><p>Bu portfolyo sitesi, modern frontend geliştirme becerilerimi sergilemek amacıyla oluşturulmuştur. Tamamen duyarlı bir tasarıma sahip olup, GSAP (GreenSock Animation Platform) ile zenginleştirilmiş akıcı animasyonlar içerir. Tema değiştirme (Açık/Koyu Mod) özelliği ve interaktif bir ses oynatıcı gibi özellikler barındırır.</p><h4>Kullanılan Teknolojiler:</h4><ul><li><strong>Frontend:</strong> React.js, Vite</li><li><strong>Animasyon:</strong> GSAP</li><li><strong>Stil:</strong> Saf CSS (CSS Değişkenleri ile), SASS</li><li><strong>Diğer:</strong> Axios, React-Router-Dom</li></ul>"
+    "id": "project-001",
+    "slug": "portfolio-site",
+    "isFeatured": true,
+    "metadata": {
+      "title": "Portfolyo Sitesi (Bu Proje)",
+      "tagline": "React, GSAP ve modern web teknolojileri kullanılarak oluşturulmuş interaktif kişisel portfolyo sitesi.",
+      "createdAt": "2026-01-20",
+      "role": "Frontend Developer & UI Engineer",
+      "platform": "Web",
+      "status": "Live"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/portfolio.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["React", "Vite"] },
+      { "category": "Motion", "items": ["GSAP"] },
+      { "category": "UI", "items": ["CSS Variables", "Responsive"] }
+    ],
+    "links": {
+      "liveDemo": "https://www.nuhdemir.netlify.app",
+      "github": "https://github.com/NuhDemir/MyPortfolio",
+      "figma": null
+    },
+    "caseStudy": {
+      "problem": {
+        "title": "Kişisel marka ve sunum ihtiyacı",
+        "description": "Projelerimi, deneyimlerimi ve tasarım yaklaşımımı tek bir yerde, hızlı ve etkileyici şekilde sergileyecek bir ürün sayfasına ihtiyacım vardı."
+      },
+      "solution": {
+        "title": "Neubrutal + performans odaklı SPA",
+        "description": "Vite + React ile performanslı bir SPA kurup, GSAP ile mikro etkileşimler ekledim. Tema yönetimi, içerik fallback’leri ve modüler UI bileşenleriyle genişleyebilir bir yapı oluşturdum."
+      },
+      "challenges": [
+        {
+          "title": "Animasyon + performans dengesi",
+          "description": "GSAP animasyonlarının UX’i güçlendirirken TTI/LCP metriklerini bozmasını engellemek için lazy load, ölçülü animasyon ve görsel optimizasyonları uyguladım."
+        }
+      ],
+      "metrics": [
+        { "label": "Sayfa ilk yük", "value": "< 1.5s" },
+        { "label": "Etkileşim", "value": "Smooth" }
+      ],
+      "highlightCode": {
+        "language": "jsx",
+        "fileName": "ProjectDetailsPage.jsx",
+        "codeSnippet": "// örnek: sticky context bar + reveal + lightbox yapı taşları"
+      }
+    },
+    "tags": ["React", "GSAP", "Vite", "CSS Variables", "Responsive"]
   },
   {
-    "id": 2,
-    "title": "Electron ARP & Network Explorer",
-    "description": "Electron ve React kullanarak geliştirilen, yerel ağınızı keşfetmenize ve işletim sisteminizin ARP tablosunu görüntülemenize olanak sağlayan masaüstü uygulaması.",
-    "imageUrl": "/images/arp.png",
-    "liveUrl": null,
-    "githubUrl": "https://github.com/your-username/electron-arp-explorer",
-    "tags": ["Electron", "React", "Node.js", "ARP", "Network Scan", "Vite"],
-    "details": "<h3>Proje Hakkında</h3><p>Bu çapraz platform masaüstü uygulaması, Electron ve React (Vite) kullanılarak geliştirilmiştir. İşletim sisteminizin ARP (Address Resolution Protocol) tablosunu görüntülemenin yanı sıra, yerel ağdaki cihazları aktif olarak taramanızı sağlar.</p><h4>Özellikler:</h4><ul><li>İşletim sisteminin ARP tablosunu çekme ve görüntüleme (IP Adresi, MAC Adresi, Tür)</li><li>Windows, macOS ve Linux uyumluluğu</li><li>Kullanıcı tanımlı IP aralığında ağ taraması (Ping Sweep)</li><li>Canlı tarama ilerlemesi ve log güncellemeleri</li><li>CSV formatında ARP tablosu dışa aktarımı</li><li>Modern, koyu temalı, responsive React arayüzü</li></ul><h4>Kullanılan Teknolojiler:</h4><ul><li>Electron: Native masaüstü uygulama çatısı</li><li>React: Modern kullanıcı arayüzü</li><li>Vite: Hızlı frontend build aracı</li><li>Node.js: Arka planda sistem komutlarını çalıştırmak için</li><li>ping modülü: Ağ cihazlarını kontrol etmek için</li></ul>"
+    "id": "project-002",
+    "slug": "electron-arp-network-explorer",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Electron ARP & Network Explorer",
+      "tagline": "Electron ve React ile geliştirilen, ARP tablosu görüntüleme ve yerel ağ keşfi yapan masaüstü uygulaması.",
+      "createdAt": null,
+      "role": "Desktop App Developer",
+      "platform": "Desktop (Windows/macOS/Linux)",
+      "status": "Development"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/arp.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["Electron", "React", "Vite"] },
+      { "category": "Backend", "items": ["Node.js"] },
+      { "category": "Networking", "items": ["ARP", "Network Scan"] }
+    ],
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/your-username/electron-arp-explorer",
+      "figma": null
+    },
+    "tags": ["Electron", "React", "Node.js", "ARP", "Network Scan", "Vite"]
   },
   {
-    "id": 3,
-    "title": "SeeSound - İşitme Engelliler için Yapay Zeka Destekli Mobil Uygulama",
-    "description": "İşitme engelli bireylerin çevrelerindeki sesleri algılamalarına ve acil durumlarda iletişim kurmalarına yardımcı olan mobil uygulama.",
-    "imageUrl": "/images/seesound.png",
-    "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir/seesound",
+    "id": "project-003",
+    "slug": "seesound-ai-hearing-assist",
+    "isFeatured": false,
+    "metadata": {
+      "title": "SeeSound - İşitme Engelliler için Yapay Zeka Destekli Mobil Uygulama",
+      "tagline": "İşitme engelli bireylerin çevresel sesleri algılamasına ve acil durumlarda iletişim kurmasına yardımcı olan mobil uygulama.",
+      "createdAt": null,
+      "role": "Full Stack Developer",
+      "platform": "Mobile (iOS/Android)",
+      "status": "Development"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/seesound.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Mobile", "items": ["Flutter"] },
+      { "category": "Backend", "items": ["Node.js", "Express.js"] },
+      { "category": "Database", "items": ["SQL Server"] }
+    ],
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/NuhDemir/seesound",
+      "figma": null
+    },
     "tags": [
       "Node.js",
       "Express.js",
@@ -33,26 +116,63 @@
       "SQL Server",
       "Mobil",
       "Erişilebilirlik"
+    ]
+  },
+  {
+    "id": "project-004",
+    "slug": "2048-game-guide",
+    "isFeatured": false,
+    "metadata": {
+      "title": "2048 Oyunu ve Geliştirme Rehberi",
+      "tagline": "Klasik 2048 oyunu + geliştirme önerileri: JavaScript, HTML, CSS odaklı kapsamlı rehber.",
+      "createdAt": null,
+      "role": "Frontend Developer",
+      "platform": "Web",
+      "status": "Live"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/2048.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["JavaScript", "HTML", "CSS"] },
+      { "category": "Domain", "items": ["Game Dev", "Education"] }
     ],
-    "details": "<h3>Proje Hakkında</h3><p>SeeSound, işitme engelli bireylerin çevrelerindeki sesleri algılamalarına ve acil durumlarda iletişim kurmalarına olanak sağlayan, Node.js tabanlı backend ve Flutter ile geliştirilmiş mobil uygulamadan oluşan kapsamlı bir projedir.</p><h4>Proje Yapısı:</h4><ul><li><strong>Backend:</strong> Node.js, Express.js, Microsoft SQL Server</li><li><strong>Frontend:</strong> Flutter (Dart)</li></ul><h4>Özellikler:</h4><ul><li>RESTful API ile veritabanı işlemleri</li><li>JWT tabanlı güvenli kimlik doğrulama</li><li>Ses algılama ve konuşma tanıma işlevleri</li><li>Acil durum kişileri yönetimi ve iletişim</li><li>Kullanıcı ayarları ve metin şablonları</li></ul><h4>Kullanılan Teknolojiler:</h4><ul><li>Backend: Node.js, Express.js, mssql, JWT, bcrypt, helmet, cors</li><li>Frontend: Flutter, Riverpod, Dio, flutter_tts, speech_to_text, GoRouter</li></ul><h4>Kurulum ve Çalıştırma:</h4><p><em>Backend</em>: Node.js ortamında çalışır, MS SQL Server ile bağlantı sağlar. <br><em>Frontend</em>: Flutter SDK gerektirir, mobil cihazlarda veya emülatörlerde çalıştırılır.</p><h4>API Endpoint'leri:</h4><p>/api/auth, /api/users, /api/emergency, /api/settings ve daha fazlası.</p><h4>Katkıda Bulunma:</h4><p>Fork, feature branch, commit ve pull request yöntemi ile katkı sağlanabilir.</p><h4>Lisans:</h4><p>MIT Lisansı altında lisanslanmıştır.</p><p><em>Geliştirici: Nuh Demir</em></p>"
+    "links": {
+      "liveDemo": "https://2048-gamex.netlify.app/",
+      "github": "https://github.com/NuhDemir/2048_Game?tab=readme-ov-file",
+      "figma": null
+    },
+    "tags": ["JavaScript", "HTML", "CSS", "Oyun Geliştirme", "2048", "Eğitim"]
   },
   {
-    "id": 4,
-    "title": "2048 Oyunu ve Geliştirme Rehberi",
-    "description": "JavaScript, HTML ve CSS kullanılarak geliştirilmiş klasik 2048 oyununa yönelik temel ve ileri seviye geliştirme önerileri içeren kapsamlı rehber.",
-    "imageUrl": "/images/2048.png",
-    "liveUrl": "https://2048-gamex.netlify.app/",
-    "githubUrl": "https://github.com/NuhDemir/2048_Game?tab=readme-ov-file",
-    "tags": ["JavaScript", "HTML", "CSS", "Oyun Geliştirme", "2048", "Eğitim"],
-    "details": "<h3>Proje Hakkında</h3><p>Bu proje, JavaScript, HTML ve CSS kullanılarak geliştirilmiş klasik 2048 oyununu temel alır ve oyuncu deneyimini artırmak için çeşitli geliştirme stratejileri sunar.</p><h4>Temel Mekanikler ve İyileştirme Önerileri</h4><ul><li><strong>Sağlam Temel:</strong> Hücre yönetimi, skor tutma ve temel hareket mantığı düzgün kurulmuştur.</li><li><strong>Kazanma Koşulu:</strong> <code>winning()</code> fonksiyonu 2048 taşını yakaladığında durumu algılar ve UI güncellenir.</li><li><strong>Kaybetme Koşulu:</strong> <code>checkfailure()</code> fonksiyonu oyun bittiğinde devreye girer. Daha sezgisel hale getirmek için potansiyel hamleler sonrası analiz eklenebilir.</li><li><strong>Rastgele Taş Ekleme:</strong> <code>randomAddItem()</code> fonksiyonu yeni taşlar ekler. 2 ve 4 taşlarının olasılıklarını değiştirmek oyuna stratejik derinlik katabilir.</li></ul><h4>Ek Özellikler ve Dikkat Edilmesi Gerekenler</h4><ul><li><strong>Görsel Tasarım:</strong> Animasyonlar ve ses efektleri ile kullanıcı deneyimi geliştirilebilir. React veya vanilla JS ile modern arayüz oluşturulabilir.</li><li><strong>Zorluk Seviyeleri:</strong> Başlangıç taş değerleri, ızgara boyutları veya farklı kazanma koşulları eklenebilir.</li><li><strong>Geri Alma Fonksiyonu:</strong> Oyuncuların yaptıkları hamleyi geri alabilmesi için yığın (stack) yapısı kullanılabilir.</li><li><strong>Yüksek Skor Takibi:</strong> localStorage'dan veritabanına veya bulut depolamaya taşınabilir.</li><li><strong>Özelleştirme:</strong> Arkaplan, taş renkleri gibi görsel ayarlar oyunculara sunulabilir.</li></ul><h4>Diğer Hususlar</h4><ul><li><strong>Mobil Optimizasyon:</strong> Dokunmatik ekranlar için UI uyarlanmalı.</li><li><strong>Performans:</strong> Büyük ızgara ve fazla taşlarda performans optimizasyonu yapılmalı.</li><li><strong>Sosyal Özellikler:</strong> Liderlik tabloları ve sosyal paylaşım seçenekleri eklenebilir.</li></ul><h4>Sonuç</h4><p>Bu rehber, 2048 oyununun hem teknik hem kullanıcı deneyimi açıdan iyileştirilmesi için kapsamlı öneriler sunmaktadır. Oyuncular için eğlenceli ve bağımlılık yapıcı bir deneyim hedeflenmelidir.</p>"
-  },
-  {
-    "id": 5,
-    "title": "ASP.NET MVC Hastane Yönetim Sistemi",
-    "description": "ASP.NET MVC 5 kullanılarak geliştirilmiş, yönetici, doktor, personel ve hastalar için farklı rollerde kapsamlı işlevler sunan hastane operasyon yönetim uygulaması.",
-    "imageUrl": "/images/project-hospital-management.png",
-    "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir/aspnet-mvc-hospital-management",
+    "id": "project-005",
+    "slug": "aspnet-mvc-hospital-management",
+    "isFeatured": false,
+    "metadata": {
+      "title": "ASP.NET MVC Hastane Yönetim Sistemi",
+      "tagline": "ASP.NET MVC 5 ile rol tabanlı, tam kapsamlı hastane operasyon yönetim uygulaması.",
+      "createdAt": null,
+      "role": "Full Stack Developer",
+      "platform": "Web",
+      "status": "Legacy"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/project-hospital-management.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["ASP.NET MVC", "C#"] },
+      { "category": "Data", "items": ["Entity Framework"] },
+      { "category": "Domain", "items": ["CRUD", "Role-Based Access"] }
+    ],
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/NuhDemir/aspnet-mvc-hospital-management",
+      "figma": null
+    },
     "tags": [
       "ASP.NET MVC",
       "C#",
@@ -60,26 +180,64 @@
       "Hastane Yönetimi",
       "CRUD",
       "Role-Based Access"
+    ]
+  },
+  {
+    "id": "project-006",
+    "slug": "carsi-ecommerce-react",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Çarşı - Modern E-Ticaret Platformu",
+      "tagline": "Vite + React ile geliştirilmiş, modern ve duyarlı e-ticaret web uygulaması.",
+      "createdAt": null,
+      "role": "Frontend Developer",
+      "platform": "Web",
+      "status": "Live"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/project-carsi-banner.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["React", "Vite"] },
+      { "category": "UI", "items": ["Tailwind CSS", "Responsive"] },
+      { "category": "App", "items": ["SPA"] }
     ],
-    "details": "<h3>Proje Hakkında</h3><p>Bu proje, hastane operasyonlarını etkin şekilde yönetmek için geliştirilmiş kapsamlı bir web uygulamasıdır. Rol tabanlı erişim kontrolleriyle yönetici, doktor, personel ve hasta panelleri ayrı ayrı tasarlanmıştır.</p><h4>Temel Özellikler</h4><ul><li><strong>Rol Tabanlı Yetkilendirme:</strong> Yönetici, Doktor, Personel ve Hasta panelleri.</li><li><strong>Yönetim Modülleri:</strong> Doktor, Hasta, Personel, İlaç, Yorum ve Mesaj yönetimi CRUD işlemleri.</li><li><strong>Tıbbi İşlemler:</strong> Online randevu, muayene sonuçları (kan, idrar, radyoloji), dinamik reçete oluşturma ve görüntüleme.</li><li><strong>Kullanıcı Arayüzü:</strong> Razor View Engine kullanılarak geliştirilmiş, PagedList ile sayfalama, gelişmiş arama ve filtreleme özellikleri.</li></ul><h4>Proje Yapısı</h4><pre><code>/\n├── Controllers/        # İş mantığı ve kullanıcı istekleri\n├── Models/             # Veritabanı modelleri ve ViewModel'lar\n└── Views/              # Razor sayfaları ve layout'lar\n</code></pre><h4>Modeller</h4><ul><li>Admin, Doktor, Personel, Hasta: Kullanıcı rolleri ve detayları</li><li>Medicine, Kan, Idrar, Radyoloji: İlgili tıbbi bilgiler</li><li>Recete, Message, Yorum: Reçete ve iletişim yönetimi</li><li>DatabaseContext.cs: Entity Framework veritabanı yönetimi</li></ul><h4>Denetleyiciler</h4><ul><li>LoginController: Authentication işlemleri</li><li>AdminController: Yönetici paneli ve CRUD</li><li>RandevuController: Randevu işlemleri</li><li>DoktorController, HastaController, PersonelController, MedicineController: Modül işlemleri</li><li>MuayeneController, PersonelIslemController: Tıbbi veri yönetimi</li></ul><h4>Çalıştırma</h4><ol><li>Projeyi klonlayın ve Visual Studio'da açın.</li><li>NuGet paketlerini geri yükleyin.</li><li>Web.config dosyasındaki connectionString'i kendi SQL Server yapılandırmanıza göre güncelleyin.</li><li>Package Manager Console’da <code>Update-Database</code> komutunu çalıştırarak veritabanını oluşturun.</li><li>Projeyi IIS Express ile başlatın.</li></ol><h4>Kullanılan Teknolojiler</h4><ul><li>C# ve ASP.NET MVC 5</li><li>Entity Framework Code-First</li><li>HTML, CSS, JavaScript, Razor View Engine</li><li>PagedList.Mvc (Sayfalama için)</li><li>Forms Authentication (Kimlik Doğrulama)</li></ul>"
+    "links": {
+      "liveDemo": "https://carsi-e-commerce.netlify.app/",
+      "github": "https://github.com/Nuhdemir/carsi-e-commerce",
+      "figma": null
+    },
+    "tags": ["React", "Vite", "Tailwind CSS", "E-Ticaret", "Responsive", "SPA"]
   },
   {
-    "id": 6,
-    "title": "Çarşı - Modern E-Ticaret Platformu",
-    "description": "Vite + React kullanılarak geliştirilmiş, modern, hızlı ve tamamen duyarlı bir e-ticaret web uygulaması. Kullanıcıların ürünleri kolayca keşfedip filtreleyebileceği, şık bir arayüzle alışveriş yapabileceği platform.",
-    "imageUrl": "/images/project-carsi-banner.png",
-    "liveUrl": "https://carsi-e-commerce.netlify.app/",
-    "githubUrl": "https://github.com/Nuhdemir/carsi-e-commerce",
-    "tags": ["React", "Vite", "Tailwind CSS", "E-Ticaret", "Responsive", "SPA"],
-    "details": "<h3>Proje Hakkında</h3><p>Çarşı, modern web teknolojileri kullanılarak geliştirilmiş, kullanıcı dostu, hızlı ve duyarlı bir e-ticaret platformudur. React ile komponent tabanlı mimari, Vite ile optimize edilmiş build süreci sayesinde performans odaklıdır.</p><h4>Özellikler</h4><ul><li>Hızlı ve Modern geliştirme deneyimi (Vite)</li><li>Yeniden kullanılabilir UI bileşenleri (React)</li><li>Mobil ve masaüstü uyumlu, tamamen responsive tasarım (Tailwind CSS)</li><li>React Router DOM ile SPA yönlendirme</li><li>Dinamik kategori sayfaları (ürünleri kategoriye göre listeleme)</li><li>Ürün değerlendirme sistemi (yıldız ile rating)</li><li>Blog ve iletişim sayfaları</li></ul><h4>Proje Yapısı</h4><pre><code>frontend/\n├── public/               # Statik dosyalar\n├── src/\n│   ├── assets/           # Resimler, logolar\n│   ├── components/       # React bileşenleri\n│   ├── data/             # JSON veri dosyaları\n│   ├── pages/            # Sayfa bileşenleri\n│   ├── routers/          # React Router konfigürasyonu\n│   ├── App.css           # Global CSS\n│   ├── App.jsx           # Ana uygulama bileşeni\n│   ├── index.css         # Temel CSS ve Tailwind\n│   └── main.jsx          # React DOM render noktası\n├── .gitignore\n├── index.html            # Ana HTML\n├── netlify.toml          # Netlify ayarları\n├── package.json          # Bağımlılıklar ve scriptler\n└── vite.config.js        # Vite konfigürasyonu\n</code></pre><h4>Yayınlama (Deployment)</h4><p>Netlify üzerinden otomatik deploy yapılandırılmıştır. <code>netlify.toml</code> dosyası SPA 404 yönlendirme sorunlarını çözer.</p><ul><li>Base directory: <code>frontend</code></li><li>Build command: <code>npm run build</code></li><li>Publish directory: <code>frontend/dist</code></li></ul><h4>İletişim</h4><p><strong>Nuh Demir</strong></p><ul><li>GitHub: <a href=\"https://github.com/nuhdemir\">@nuhdemir</a></li><li>LinkedIn: <a href=\"https://linkedin.com/in/nuhdemir\">in/nuhdemir</a></li><li>Twitter (X): <a href=\"https://x.com/nuhdemir\">@nuhdemir</a></li><li>E-posta: nuhdemir.dev@gmail.com</li></ul><h4>Lisans</h4><p>Bu proje <a href=\"https://opensource.org/licenses/MIT\">MIT Lisansı</a> ile lisanslanmıştır.</p>"
-  },
-  {
-    "id": 7,
-    "title": "Çarşı - Modern E-Commerce Platform",
-    "description": "Geleneksel Türk pazarlarının toplulukçu ruhundan esinlenen, MERN mimarisi ile geliştirilmiş modern ve hızlı bir e-ticaret platformu.",
-    "imageUrl": "/images/carsi.png",
-    "liveUrl": "https://carsi.onrender.com/",
-    "githubUrl": "https://github.com/NuhDemir/carsi",
+    "id": "project-007",
+    "slug": "carsi-mern",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Çarşı - Modern E-Commerce Platform",
+      "tagline": "Geleneksel Türk pazarlarından ilham alan, MERN mimarisi ile geliştirilmiş modern e-ticaret platformu.",
+      "createdAt": null,
+      "role": "Full Stack Developer",
+      "platform": "Web",
+      "status": "Live"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/carsi.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Frontend", "items": ["React", "Vite", "Chakra UI"] },
+      { "category": "Backend", "items": ["Node.js", "Express"] },
+      { "category": "Database", "items": ["MongoDB"] }
+    ],
+    "links": {
+      "liveDemo": "https://carsi.onrender.com/",
+      "github": "https://github.com/NuhDemir/carsi",
+      "figma": null
+    },
     "tags": [
       "React",
       "Node.js",
@@ -89,26 +247,64 @@
       "Chakra UI",
       "MERN",
       "E-Commerce"
+    ]
+  },
+  {
+    "id": "project-008",
+    "slug": "naber-realtime-chat",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Naber - Gerçek Zamanlı Sohbet Uygulaması",
+      "tagline": "Socket.IO ile gerçek zamanlı mesajlaşma; JWT ile güvenli kimlik doğrulama ve modern UI.",
+      "createdAt": null,
+      "role": "Full Stack Developer",
+      "platform": "Web",
+      "status": "Development"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/naber-chat-app.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Frontend", "items": ["React"] },
+      { "category": "Realtime", "items": ["Socket.IO"] },
+      { "category": "Backend", "items": ["Node.js", "Express.js", "MongoDB"] }
     ],
-    "details": "<h3>🇹🇷 Proje Hakkında</h3><p>Çarşı, geleneksel Türk pazarlarının toplulukçu ruhundan esinlenen, modern ve hızlı bir e-ticaret platformudur. MERN (MongoDB, Express, React, Node.js) mimarisi ile geliştirilmiş, kullanıcı dostu ve duyarlı bir yapıya sahiptir.</p><h4>🚀 Özellikler</h4><ul><li>⚡ Hızlı SPA deneyimi (Vite + React + Router)</li><li>💅 Responsive ve erişilebilir arayüz (Chakra UI)</li><li>🛒 Ürünler için tam CRUD desteği</li><li>🗂️ Dinamik kategoriler</li><li>🔍 Gerçek zamanlı arama & filtreleme</li><li>🌙 Işık & karanlık mod</li><li>📦 State yönetimi (Context API + Reducer)</li><li>🧱 Üretime hazır backend (statik frontend servisi)</li></ul><h4>🧰 Kullanılan Teknolojiler</h4><h5>Frontend:</h5><ul><li>React</li><li>Vite</li><li>Chakra UI</li><li>React Router</li><li>Framer Motion</li></ul><h5>Backend:</h5><ul><li>Node.js</li><li>Express.js</li><li>MongoDB + Mongoose</li><li>CORS</li><li>dotenv</li></ul><h4>⚙️ Kurulum</h4><h5>Gereksinimler:</h5><ul><li>Node.js (18+)</li><li>npm</li><li>MongoDB (lokal ya da Atlas)</li></ul><h5>Kurulum Adımları:</h5><pre><code>git clone https://github.com/kullanici-adiniz/carsi.git\ncd carsi\n.env dosyası oluşturun ve aşağıdakileri ekleyin:\nNODE_ENV=development\nPORT=5000\nMONGO_URI=your_mongodb_connection_string\nnpm install\nnpm install --prefix frontend\n\n# Geliştirme Modu\n# İki terminal açarak ayrı ayrı çalıştırın\nnpm run dev           # Backend için http://localhost:5000\nnpm run dev --prefix frontend   # Frontend için http://localhost:5173\n\n# Üretim Modu\nnpm run build         # Frontend build\nnpm start             # Backend başlatma\n# http://localhost:5000 adresinden erişim</code></pre><h3>🇬🇧 About The Project</h3><p>Çarşı is a modern e-commerce platform inspired by traditional Turkish bazaars. It’s a full-stack MERN application built for speed, responsiveness, and ease of use.</p><h4>🚀 Features</h4><ul><li>⚡ Fast SPA (Vite + React + Router)</li><li>💅 Responsive UI (Chakra UI)</li><li>🛒 Full CRUD for products</li><li>🗂️ Dynamic categories</li><li>🔍 Real-time search & filtering</li><li>🌙 Light & dark theme toggle</li><li>📦 State management with Context API + Reducer</li><li>🧱 Production-ready backend (serves frontend)</li></ul><h4>🧰 Tech Stack</h4><h5>Frontend:</h5><ul><li>React</li><li>Vite</li><li>Chakra UI</li><li>React Router</li><li>Framer Motion</li></ul><h5>Backend:</h5><ul><li>Node.js</li><li>Express.js</li><li>MongoDB + Mongoose</li><li>CORS</li><li>dotenv</li></ul><h4>⚙️ Getting Started</h4><h5>Prerequisites:</h5><ul><li>Node.js (18+)</li><li>npm</li><li>MongoDB (local or Atlas)</li></ul><h5>Installation Steps:</h5><pre><code>git clone https://github.com/your-username/carsi.git\ncd carsi\nCreate a .env file with:\nNODE_ENV=development\nPORT=5000\nMONGO_URI=your_mongodb_connection_string\nnpm install\nnpm install --prefix frontend\n\n# Run development servers\nnpm run dev           # Backend at http://localhost:5000\nnpm run dev --prefix frontend   # Frontend at http://localhost:5173\n\n# Production\nnpm run build         # Build frontend\nnpm start             # Start backend\n# Access via http://localhost:5000</code></pre><h4>📄 License</h4><p>This project is licensed under the MIT License.</p>"
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/NuhDemir/Naber-Realtime-Chat-App",
+      "figma": null
+    },
+    "tags": ["React", "Node.js", "Socket.IO", "MongoDB", "Express.js", "JWT"]
   },
   {
-    "id": 8,
-    "title": "Naber - Gerçek Zamanlı Sohbet Uygulaması",
-    "description": "Naber, modern web teknolojileri ile geliştirilmiş, gerçek zamanlı iletişim sağlayan, tam donanımlı bir sohbet uygulamasıdır. Kullanıcı dostu arayüzü, tema seçenekleri ve güvenli yapısıyla WhatsApp benzeri bir deneyim sunar.",
-    "imageUrl": "/images/naber-chat-app.png",
-    "liveUrl": null,
-    "githubUrl": "https://github.com/NuhDemir/Naber-Realtime-Chat-App",
-    "tags": ["React", "Node.js", "Socket.IO", "MongoDB", "Express.js", "JWT"],
-    "details": "<h3>Proje 8 Detayları</h3><p>Naber, gerçek zamanlı sohbet ve kullanıcı yönetimini modern teknolojilerle sunan tam donanımlı bir platformdur. Socket.IO ile anlık mesajlaşma, JWT tabanlı güvenli kimlik doğrulama, online durum takibi ve 30'dan fazla tema seçeneğiyle kullanıcı dostu bir deneyim sağlar.</p><p>Frontend React, Tailwind CSS ve Framer Motion ile geliştirildi; backend ise Node.js, Express ve MongoDB üzerine kurulu modüler yapıya sahiptir.</p>"
-  },
-  {
-    "id": 9,
-    "title": "Akıllı Bileklik - İşitme Engelliler İçin",
-    "description": "İşitme engelli bireylerin günlük yaşamda karşılaştıkları zorlukları teknoloji yardımıyla aşmalarına yardımcı olmak amacıyla geliştirilmiş, Raspberry Pi tabanlı akıllı bileklik ve yazılım sistemi.",
-    "imageUrl": "/images/smart-bracelet.png",
-    "liveUrl": "null",
-    "githubUrl": "https://github.com/NuhDemir/smart-bracelet-for-hearing-impaired-people",
+    "id": "project-009",
+    "slug": "smart-bracelet-hearing-impaired",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Akıllı Bileklik - İşitme Engelliler İçin",
+      "tagline": "Raspberry Pi + Python ile çevresel sesleri algılayıp titreşim/ışık ile uyaran akıllı bileklik sistemi.",
+      "createdAt": null,
+      "role": "IoT Developer",
+      "platform": "IoT (Raspberry Pi)",
+      "status": "Development"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/smart-bracelet.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["Python", "Raspberry Pi"] },
+      { "category": "IoT", "items": ["GPIO", "Sensors"] },
+      { "category": "Domain", "items": ["Speech Recognition"] }
+    ],
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/NuhDemir/smart-bracelet-for-hearing-impaired-people",
+      "figma": null
+    },
     "tags": [
       "Python",
       "Raspberry Pi",
@@ -116,17 +312,34 @@
       "Ses Tanıma",
       "Acil Durum Sistemi",
       "Donanım Entegrasyonu"
-    ],
-    "details": "<h3>Proje Hakkında</h3><p>Bu proje, teknolojinin insan hayatına nasıl dokunabileceğinin somut bir örneğidir. Raspberry Pi tabanlı bu akıllı bileklik, Python ile geliştirilen ses tanıma yazılımı sayesinde korna, yangın alarmı veya bebek ağlaması gibi kritik sesleri algılayarak işitme engelli bireyleri titreşim ve ışıkla uyarır. Sadece bir uyarı sistemi değil, aynı zamanda akıllı bir asistandır.</p><h4>Öne Çıkan Özellikler:</h4><ul><li><strong>IoT ve Donanım Entegrasyonu:</strong> Raspberry Pi üzerinde çalışan, sensörler ve aktüatörlerle donatılmış bir akıllı cihaz.</li><li><strong>Akıllı Ses Tanıma:</strong> Çevresel sesleri gerçek zamanlı olarak tanır ve tehlikeli durumları ayırt eder.</li><li><strong>Çok Yönlü Uyarı Sistemi:</strong> Titreşim, RGB LED ve LCD ekran aracılığıyla kullanıcıyı farklı senaryolara göre bilgilendirir.</li><li><strong>Acil Durum Sistemi:</strong> Nabız sensörü ile anormallik tespiti ve API üzerinden otomatik yardım çağrısı yapabilme yeteneği.</li></ul><h4>Kullanılan Teknolojiler:</h4><ul><li><strong>Programlama Dili:</strong> Python</li><li><strong>Platform:</strong> Raspberry Pi (IoT)</li><li><strong>Kütüphaneler:</strong> SpeechRecognition, RPi.GPIO, Requests</li><li><strong>Donanım:</strong> Mikrofon, Nabız Sensörü, Titreşim Motoru, LCD Ekran</li></ul>"
+    ]
   },
   {
-    "id": 10,
-    "title": "Brick Break - Klasik Java Oyunu",
-    "description": "Java ile geliştirilmiş, Swing ve AWT tabanlı klasik bir brick break oyunudur. Farklı zorluk seviyeleri, seviye isimleri ve dinamik top hızları ile modernleştirilmiştir.",
-    "imageUrl": "/images/brick-game.png",
-    "liveUrl": "",
-    "githubUrl": "https://github.com/NuhDemir/Brick_Game",
-    "tags": ["Java", "Swing", "AWT", "Oyun Geliştirme", "Desktop App"],
-    "details": "<h3>Proje Hakkında (Türkçe)</h3><p>Brick Break, Java ile geliştirilmiş klasik bir tuğla kırma oyunudur. Modern bir kullanıcı arayüzü, farklı zorluk seviyeleri ve özgün seviye isimleri ile yeniden tasarlanmıştır.</p><h4>Özellikler</h4><ul><li>Dinamik zorluk seviyeleri (Kolay, Orta, Zor)</li><li>Dante'nin 'İlahi Komedya'sından ilham alınan seviye isimleri</li><li>Topun hızının çarpma durumlarına göre değişmesi</li><li>Seviye geçtikçe topun küçülmesi ve raketin genişlemesi</li><li>Final seviyesinde topun raketi vurmadan oyunu bitirmesi</li></ul><h4>Kullanılan Teknolojiler</h4><ul><li>Java</li><li>Swing</li><li>AWT</li></ul><h4>Ekranlar</h4><ul><li><strong>Ana Menü:</strong> Oyuna başlama, ayarları yapma ve seviye seçimi seçenekleri</li><li><strong>Seçenekler Menüsü:</strong> Ses, zorluk seviyesi gibi ayarları değiştirme imkanı</li><li><strong>Seviye Seçimi Menüsü:</strong> Farklı seviyeler arasından seçim yapma</li><li><strong>Oyun Ekranı:</strong> Top, raket ve tuğlaların bulunduğu ana oyun sahnesi</li></ul><h4>Kurulum</h4><pre><code>git clone https://github.com/kullanici-adiniz/brick-break.git\ncd brick-break\njavac Main.java\njava Main</code></pre><h4>Lisans</h4><p>MIT Lisansı ile lisanslanmıştır.</p>"
+    "id": "project-010",
+    "slug": "brick-break-java",
+    "isFeatured": false,
+    "metadata": {
+      "title": "Brick Break - Klasik Java Oyunu",
+      "tagline": "Swing/AWT tabanlı klasik brick-break oyunu; zorluk seviyeleri ve dinamik top hızları ile modernleştirildi.",
+      "createdAt": null,
+      "role": "Software Developer",
+      "platform": "Desktop",
+      "status": "Development"
+    },
+    "visuals": {
+      "thumbnailUrl": "/images/brick-game.png",
+      "heroVideoUrl": null,
+      "primaryColor": "#111111"
+    },
+    "techStack": [
+      { "category": "Core", "items": ["Java", "Swing", "AWT"] },
+      { "category": "Domain", "items": ["Game Dev", "Desktop App"] }
+    ],
+    "links": {
+      "liveDemo": null,
+      "github": "https://github.com/NuhDemir/Brick_Game",
+      "figma": null
+    },
+    "tags": ["Java", "Swing", "AWT", "Oyun Geliştirme", "Desktop App"]
   }
 ]

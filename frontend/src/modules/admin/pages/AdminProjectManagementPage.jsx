@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AddRoundedIcon from "@mui/icons-material/AddRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -19,11 +19,25 @@ import {
 import "../styles/management.css";
 
 const initialFormState = {
-  title: "",
-  description: "",
-  githubUrl: "",
-  liveUrl: "",
+  id: "",
+  slug: "",
+  isFeatured: false,
+  metadataTitle: "",
+  metadataTagline: "",
+  metadataCreatedAt: "",
+  metadataRole: "",
+  metadataPlatform: "",
+  metadataStatus: "",
+  visualsThumbnailUrl: "",
+  visualsHeroVideoUrl: "",
+  visualsPrimaryColor: "#111111",
+  linksLiveDemo: "",
+  linksGithub: "",
+  linksFigma: "",
+  techStackJson: "",
+  caseStudyJson: "",
   tags: "",
+  category: "",
 };
 
 const AdminProjectManagementPage = () => {
@@ -56,8 +70,11 @@ const AdminProjectManagementPage = () => {
   }, [fetchProjects]);
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = event.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
   };
 
   const handleFileChange = (event) => {
@@ -85,6 +102,12 @@ const AdminProjectManagementPage = () => {
 
   const resolveProjectId = (project) => project?.id ?? project?._id ?? "";
 
+  const getDisplayTitle = (project) =>
+    project?.metadata?.title ?? project?.title ?? "";
+
+  const getDisplayThumbnail = (project) =>
+    project?.visuals?.thumbnailUrl ?? project?.imageUrl ?? null;
+
   const handleEditClick = (project) => {
     const projectId = resolveProjectId(project);
     if (!projectId) {
@@ -94,16 +117,53 @@ const AdminProjectManagementPage = () => {
 
     resetForm();
     setEditingId(projectId);
+
+    const metadata =
+      project?.metadata && typeof project.metadata === "object"
+        ? project.metadata
+        : {};
+    const visuals =
+      project?.visuals && typeof project.visuals === "object"
+        ? project.visuals
+        : {};
+    const links =
+      project?.links && typeof project.links === "object" ? project.links : {};
+
+    const createdAtRaw = metadata?.createdAt;
+    const createdAt = createdAtRaw ? String(createdAtRaw).slice(0, 10) : "";
+
+    const techStackText = project?.techStack
+      ? JSON.stringify(project.techStack, null, 2)
+      : "";
+    const caseStudyText = project?.caseStudy
+      ? JSON.stringify(project.caseStudy, null, 2)
+      : "";
+
     setFormData({
-      title: project.title ?? "",
-      description: project.description ?? "",
-      githubUrl: project.githubUrl ?? "",
-      liveUrl: project.liveUrl ?? "",
+      id: project?.id ?? "",
+      slug: project?.slug ?? "",
+      isFeatured: Boolean(project?.isFeatured ?? project?.featured ?? false),
+      metadataTitle: metadata?.title ?? project.title ?? "",
+      metadataTagline: metadata?.tagline ?? project.description ?? "",
+      metadataCreatedAt: createdAt,
+      metadataRole: metadata?.role ?? "",
+      metadataPlatform: metadata?.platform ?? "",
+      metadataStatus: metadata?.status ?? "",
+      visualsThumbnailUrl: visuals?.thumbnailUrl ?? project.imageUrl ?? "",
+      visualsHeroVideoUrl: visuals?.heroVideoUrl ?? "",
+      visualsPrimaryColor: visuals?.primaryColor ?? "#111111",
+      linksLiveDemo: links?.liveDemo ?? project.liveUrl ?? "",
+      linksGithub: links?.github ?? project.githubUrl ?? "",
+      linksFigma: links?.figma ?? "",
+      techStackJson: techStackText,
+      caseStudyJson: caseStudyText,
       tags: Array.isArray(project.tags)
         ? project.tags.join(", ")
         : (project.tags ?? ""),
+      category: project?.category ?? "",
     });
-    setImagePreview(project.imageUrl ?? null);
+
+    setImagePreview(getDisplayThumbnail(project));
     setIsFormVisible(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -130,30 +190,145 @@ const AdminProjectManagementPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!editingId && !imageFile) {
+    const title = String(formData.metadataTitle ?? "").trim();
+    const tagline = String(formData.metadataTagline ?? "").trim();
+
+    if (!title || !tagline) {
+      setError("metadata.title ve metadata.tagline zorunludur.");
+      return;
+    }
+
+    const thumbnailUrl = String(formData.visualsThumbnailUrl ?? "").trim();
+    const heroVideoUrl = String(formData.visualsHeroVideoUrl ?? "").trim();
+    const primaryColor = String(formData.visualsPrimaryColor ?? "").trim();
+
+    if (!editingId && !imageFile && !thumbnailUrl) {
       setError(
-        "Yeni proje oluşturmak için bir resim dosyası seçmek zorunludur.",
+        "Yeni proje oluşturmak için görsel zorunludur: bir dosya yükleyin veya visuals.thumbnailUrl girin.",
       );
       return;
     }
 
-    setLoading(true);
-    setError(null);
-    const dataToSubmit = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      dataToSubmit.append(key, value);
-    });
-
-    if (imageFile) {
-      dataToSubmit.append("image", imageFile);
+    if (!thumbnailUrl && (heroVideoUrl || primaryColor) && !imageFile) {
+      setError(
+        "Hero video / primary color girmek için visuals.thumbnailUrl da sağlamalısınız.",
+      );
+      return;
     }
 
-    try {
-      if (editingId) {
-        await updateProject(editingId, dataToSubmit);
-      } else {
-        await createProject(dataToSubmit);
+    const parseOptionalJson = (value, label) => {
+      const raw = String(value ?? "").trim();
+      if (!raw) return undefined;
+      try {
+        return JSON.parse(raw);
+      } catch {
+        throw new Error(`${label} alanı geçerli bir JSON olmalı.`);
       }
+    };
+
+    let techStack;
+    let caseStudy;
+    try {
+      techStack = parseOptionalJson(formData.techStackJson, "techStack");
+      caseStudy = parseOptionalJson(formData.caseStudyJson, "caseStudy");
+    } catch (parseError) {
+      setError(parseError.message);
+      return;
+    }
+
+    if (techStack !== undefined && !Array.isArray(techStack)) {
+      setError("techStack bir JSON array olmalıdır.");
+      return;
+    }
+
+    if (
+      caseStudy !== undefined &&
+      (typeof caseStudy !== "object" || !caseStudy)
+    ) {
+      setError("caseStudy bir JSON object olmalıdır.");
+      return;
+    }
+
+    const metadata = {
+      title,
+      tagline,
+      ...(formData.metadataCreatedAt
+        ? { createdAt: formData.metadataCreatedAt }
+        : {}),
+      ...(formData.metadataRole ? { role: formData.metadataRole } : {}),
+      ...(formData.metadataPlatform
+        ? { platform: formData.metadataPlatform }
+        : {}),
+      ...(formData.metadataStatus ? { status: formData.metadataStatus } : {}),
+    };
+
+    const visuals =
+      thumbnailUrl || imageFile
+        ? {
+            thumbnailUrl: thumbnailUrl || "__upload__",
+            ...(heroVideoUrl ? { heroVideoUrl } : {}),
+            ...(primaryColor ? { primaryColor } : {}),
+          }
+        : undefined;
+
+    const links = {
+      ...(formData.linksLiveDemo ? { liveDemo: formData.linksLiveDemo } : {}),
+      ...(formData.linksGithub ? { github: formData.linksGithub } : {}),
+      ...(formData.linksFigma ? { figma: formData.linksFigma } : {}),
+    };
+
+    const tagsValue = normalizeTags(formData.tags);
+
+    const submission = {
+      ...(formData.id ? { id: formData.id } : {}),
+      ...(formData.slug ? { slug: formData.slug } : {}),
+      ...(formData.isFeatured ? { isFeatured: true } : {}),
+      metadata,
+      ...(visuals ? { visuals } : {}),
+      ...(Object.keys(links).length > 0 ? { links } : {}),
+      ...(techStack !== undefined ? { techStack } : {}),
+      ...(caseStudy !== undefined ? { caseStudy } : {}),
+      ...(tagsValue.length > 0 ? { tags: tagsValue } : {}),
+      ...(formData.category ? { category: formData.category } : {}),
+    };
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (imageFile) {
+        const dataToSubmit = new FormData();
+        dataToSubmit.append("metadata", JSON.stringify(metadata));
+        if (visuals) dataToSubmit.append("visuals", JSON.stringify(visuals));
+        if (Object.keys(links).length > 0)
+          dataToSubmit.append("links", JSON.stringify(links));
+        if (techStack !== undefined)
+          dataToSubmit.append("techStack", JSON.stringify(techStack));
+        if (caseStudy !== undefined)
+          dataToSubmit.append("caseStudy", JSON.stringify(caseStudy));
+
+        if (formData.id) dataToSubmit.append("id", formData.id);
+        if (formData.slug) dataToSubmit.append("slug", formData.slug);
+        dataToSubmit.append("isFeatured", String(Boolean(formData.isFeatured)));
+        if (formData.category)
+          dataToSubmit.append("category", formData.category);
+        if (formData.tags) dataToSubmit.append("tags", formData.tags);
+
+        dataToSubmit.append("image", imageFile);
+
+        if (editingId) {
+          await updateProject(editingId, dataToSubmit);
+        } else {
+          await createProject(dataToSubmit);
+        }
+      } else {
+        if (editingId) {
+          await updateProject(editingId, submission);
+        } else {
+          await createProject(submission);
+        }
+      }
+
       resetForm();
       await fetchProjects();
     } catch (err) {
@@ -197,6 +372,84 @@ const AdminProjectManagementPage = () => {
 
   const normalizeProjectJson = (input) => {
     const project = input && typeof input === "object" ? input : {};
+
+    const isV2Payload =
+      Boolean(project?.metadata) ||
+      Boolean(project?.visuals) ||
+      Boolean(project?.techStack) ||
+      Boolean(project?.links) ||
+      Boolean(project?.caseStudy) ||
+      project?.isFeatured !== undefined;
+
+    if (isV2Payload) {
+      const title =
+        project?.metadata?.title ?? project.title ?? project.name ?? "";
+      const tagline =
+        project?.metadata?.tagline ??
+        project.description ??
+        project.summary ??
+        "";
+
+      const thumbnailUrl =
+        project?.visuals?.thumbnailUrl ??
+        project.imageUrl ??
+        project.image ??
+        project.thumbnailUrl ??
+        "";
+
+      const submission = {
+        id: project.id,
+        slug: project.slug,
+        isFeatured: project.isFeatured ?? project.featured,
+        metadata: {
+          ...(project.metadata && typeof project.metadata === "object"
+            ? project.metadata
+            : {}),
+          title,
+          tagline,
+        },
+        visuals: {
+          ...(project.visuals && typeof project.visuals === "object"
+            ? project.visuals
+            : {}),
+          thumbnailUrl,
+        },
+        links: {
+          ...(project.links && typeof project.links === "object"
+            ? project.links
+            : {}),
+          github:
+            project?.links?.github ?? project.githubUrl ?? project.github ?? "",
+          liveDemo:
+            project?.links?.liveDemo ?? project.liveUrl ?? project.url ?? "",
+          figma: project?.links?.figma ?? project.figmaUrl ?? "",
+        },
+        techStack: project.techStack,
+        caseStudy: project.caseStudy,
+      };
+
+      // tags/category/status gibi legacy alanları da opsiyonel olarak taşı
+      const tags = normalizeTags(project.tags);
+      if (tags.length > 0) submission.tags = tags;
+      if (project.category) submission.category = project.category;
+      if (project.status) submission.status = project.status;
+
+      Object.keys(submission.links).forEach((key) => {
+        if (!submission.links[key]) delete submission.links[key];
+      });
+
+      if (submission.visuals) {
+        Object.keys(submission.visuals).forEach((key) => {
+          if (!submission.visuals[key]) delete submission.visuals[key];
+        });
+      }
+
+      Object.keys(submission).forEach((key) => {
+        if (submission[key] === undefined) delete submission[key];
+      });
+
+      return submission;
+    }
 
     const submission = {
       title: project.title ?? project.name ?? "",
@@ -271,16 +524,23 @@ const AdminProjectManagementPage = () => {
       for (let index = 0; index < items.length; index += 1) {
         const submission = normalizeProjectJson(items[index]);
 
-        if (!submission.title || !submission.description) {
+        const resolvedTitle =
+          submission?.metadata?.title ?? submission?.title ?? "";
+        const resolvedDescription =
+          submission?.metadata?.tagline ?? submission?.description ?? "";
+        const resolvedImageUrl =
+          submission?.visuals?.thumbnailUrl ?? submission?.imageUrl ?? "";
+
+        if (!resolvedTitle || !resolvedDescription) {
           setError(
-            `JSON'daki proje #${index + 1} için en az 'title' ve 'description' alanları gereklidir.`,
+            `JSON'daki proje #${index + 1} için en az 'title' ve 'description' (veya V2 için 'metadata.title' + 'metadata.tagline') alanları gereklidir.`,
           );
           return;
         }
 
-        if (!submission.imageUrl) {
+        if (!resolvedImageUrl) {
           setError(
-            `JSON'daki proje #${index + 1} için 'imageUrl' alanı zorunludur.`,
+            `JSON'daki proje #${index + 1} için görsel URL zorunludur: 'imageUrl' (legacy) veya 'visuals.thumbnailUrl' (V2).`,
           );
           return;
         }
@@ -305,19 +565,76 @@ const AdminProjectManagementPage = () => {
     }
   };
 
-  const jsonTemplate = [
-    {
-      title: "Proje Başlığı",
-      description: "Projeyi 2-3 cümle ile özetleyin...",
-      imageUrl: "https://example.com/project-cover.jpg",
-      githubUrl: "https://github.com/kullanici/proje",
-      liveUrl: "https://example.com",
-      tags: ["react", "api", "ui"],
-      category: "web",
-      featured: false,
-      status: "active",
-    },
-  ];
+  const uiJsonTemplate = useMemo(
+    () => [
+      {
+        id: "project-digital-obesity",
+        slug: "digital-obesity",
+        isFeatured: true,
+        metadata: {
+          title: "Digital Obesity",
+          tagline:
+            "Modern Çağın Sorunu: Dijital Obezite ve Bilgi Yükü Farkındalığı",
+          createdAt: "2024-11-10",
+          role: "Frontend Developer & UI Designer",
+          platform: "Web Application",
+          status: "Live",
+        },
+        visuals: {
+          thumbnailUrl: "/assets/projects/digital-obesity/thumb.webp",
+          heroVideoUrl: "/assets/projects/digital-obesity/preview.mp4",
+          primaryColor: "#0cb845",
+        },
+        techStack: [
+          { category: "Core", items: ["React", "Vite", "TypeScript"] },
+          {
+            category: "Styling & UI",
+            items: ["SCSS Modules", "Neu Brutalism", "Framer Motion"],
+          },
+          {
+            category: "Performance",
+            items: ["Lighthouse Optimization", "Code Splitting"],
+          },
+        ],
+        links: {
+          liveDemo: "https://digital-obesity.netlify.app/",
+          github: "https://github.com/kullaniciadi/digital-obesity",
+          figma: "https://figma.com/file/digital-obesity-design",
+        },
+        caseStudy: {
+          problem: {
+            title: "Sonsuz Akış ve Dikkat Dağınıklığı",
+            description:
+              "Kullanıcılar modern web'de 'Infinite Scroll' ve bildirim yağmuru altında eziliyor. Standart arayüzler, kullanıcıyı sürekli tüketime teşvik ederek bilişsel yorgunluğa (dijital obeziteye) sebep oluyor.",
+          },
+          solution: {
+            title: "Rahatsız Edici Sadelik: Neu Brutalism",
+            description:
+              "Kullanıcıyı yavaşlatmak ve düşündürmek için 'Anti-UX' prensiplerinden beslenen, yüksek kontrastlı ve ham (raw) bir arayüz tasarlandı. Görsel gürültü, bilinçli bir tasarım tercihi olarak kullanıldı.",
+          },
+          challenges: [
+            {
+              title: "Kaotik Tasarımda Performans Koruması",
+              description:
+                "Neu Brutalism tarzı yoğun gölgeler, borderlar ve üst üste binen elementler içerir. Bu 'kaosun' DOM boyutunu şişirmemesi ve render performansını (FPS) düşürmemesi için CSS 'will-change' optimizasyonları ve sanallaştırılmış listeler (virtualization) kullanıldı.",
+            },
+          ],
+          metrics: [
+            { label: "Lighthouse Performans", value: "98/100" },
+            { label: "Ort. Sitede Kalma", value: "3.5 dk" },
+            { label: "Bounce Rate", value: "%12 Düşüş" },
+          ],
+          highlightCode: {
+            language: "typescript",
+            fileName: "useGlitchEffect.ts",
+            codeSnippet:
+              "export const useGlitchEffect = (intensity: number) => {\n  const [offset, setOffset] = useState({ x: 0, y: 0 });\n\n  useEffect(() => {\n    if (intensity === 0) return;\n    const interval = setInterval(() => {\n      setOffset({\n        x: (Math.random() - 0.5) * intensity,\n        y: (Math.random() - 0.5) * intensity\n      });\n    }, 50);\n    return () => clearInterval(interval);\n  }, [intensity]);\n\n  return offset;\n};",
+          },
+        },
+      },
+    ],
+    [],
+  );
 
   return (
     <div className="admin-management-page">
@@ -352,16 +669,149 @@ const AdminProjectManagementPage = () => {
           <form onSubmit={handleSubmit} className="admin-form">
             <div className="form-grid">
               <div className="form-group">
-                <label htmlFor="title">Başlık</label>
+                <label htmlFor="metadataTitle">Başlık (metadata.title)</label>
                 <input
-                  id="title"
+                  id="metadataTitle"
                   type="text"
-                  name="title"
-                  value={formData.title}
+                  name="metadataTitle"
+                  value={formData.metadataTitle}
                   onChange={handleInputChange}
                   required
                 />
               </div>
+              <div className="form-group">
+                <label htmlFor="slug">Slug</label>
+                <input
+                  id="slug"
+                  type="text"
+                  name="slug"
+                  value={formData.slug}
+                  onChange={handleInputChange}
+                  placeholder="digital-obesity"
+                />
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="metadataTagline">
+                  Tagline (metadata.tagline)
+                </label>
+                <input
+                  id="metadataTagline"
+                  type="text"
+                  name="metadataTagline"
+                  value={formData.metadataTagline}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="category">Kategori (opsiyonel)</label>
+                <input
+                  id="category"
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  placeholder="web / mobile / desktop ..."
+                />
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="metadataCreatedAt">
+                  Oluşturma tarihi (metadata.createdAt)
+                </label>
+                <input
+                  id="metadataCreatedAt"
+                  type="date"
+                  name="metadataCreatedAt"
+                  value={formData.metadataCreatedAt}
+                  onChange={handleInputChange}
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="metadataStatus">Durum (metadata.status)</label>
+                <input
+                  id="metadataStatus"
+                  type="text"
+                  name="metadataStatus"
+                  value={formData.metadataStatus}
+                  onChange={handleInputChange}
+                  placeholder="Live / Development / Beta / Legacy"
+                />
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="metadataRole">Rol (metadata.role)</label>
+                <input
+                  id="metadataRole"
+                  type="text"
+                  name="metadataRole"
+                  value={formData.metadataRole}
+                  onChange={handleInputChange}
+                  placeholder="Frontend Developer & UI Designer"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="metadataPlatform">
+                  Platform (metadata.platform)
+                </label>
+                <input
+                  id="metadataPlatform"
+                  type="text"
+                  name="metadataPlatform"
+                  value={formData.metadataPlatform}
+                  onChange={handleInputChange}
+                  placeholder="Web Application"
+                />
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="id">ID (opsiyonel)</label>
+                <input
+                  id="id"
+                  type="text"
+                  name="id"
+                  value={formData.id}
+                  onChange={handleInputChange}
+                  placeholder="project-digital-obesity"
+                />
+              </div>
+
+              <div
+                className="form-group"
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  alignItems: "center",
+                }}
+              >
+                <label
+                  className="projects-filter-toggle"
+                  style={{ marginTop: "1.6rem" }}
+                >
+                  <input
+                    type="checkbox"
+                    name="isFeatured"
+                    checked={formData.isFeatured}
+                    onChange={handleInputChange}
+                  />
+                  <span>Featured (isFeatured)</span>
+                </label>
+              </div>
+            </div>
+
+            <div className="form-grid">
               <div className="form-group">
                 <label htmlFor="tags">Etiketler (virgülle ayırın)</label>
                 <input
@@ -374,22 +824,12 @@ const AdminProjectManagementPage = () => {
                 />
               </div>
             </div>
-            <div className="form-group">
-              <label htmlFor="description">Açıklama</label>
-              <textarea
-                id="description"
-                name="description"
-                rows="4"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
+
             <div className="form-grid">
               <div className="form-group form-group--file">
                 <label htmlFor="image">
-                  Proje Görseli{" "}
-                  {editingId ? "(değiştirmek için yeni dosya seçin)" : ""}
+                  Proje görseli dosyası (opsiyonel)
+                  {editingId ? " (değiştirmek için yeni dosya seçin)" : ""}
                 </label>
                 <div className="form-file-field">
                   <ImageOutlinedIcon className="btn-icon" fontSize="inherit" />
@@ -410,34 +850,128 @@ const AdminProjectManagementPage = () => {
                 )}
               </div>
               <div className="form-group">
-                <label htmlFor="githubUrl">GitHub URL</label>
+                <label htmlFor="visualsThumbnailUrl">
+                  Thumbnail URL (visuals.thumbnailUrl)
+                </label>
                 <div className="form-field-with-icon">
                   <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
                   <input
-                    id="githubUrl"
-                    type="url"
-                    name="githubUrl"
-                    value={formData.githubUrl}
+                    id="visualsThumbnailUrl"
+                    type="text"
+                    name="visualsThumbnailUrl"
+                    value={formData.visualsThumbnailUrl}
                     onChange={handleInputChange}
-                    placeholder="https://github.com/kullanici/proje"
+                    placeholder="/assets/projects/... veya https://..."
                   />
                 </div>
               </div>
               <div className="form-group">
-                <label htmlFor="liveUrl">Canlı URL</label>
+                <label htmlFor="visualsHeroVideoUrl">
+                  Hero Video URL (visuals.heroVideoUrl)
+                </label>
                 <div className="form-field-with-icon">
                   <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
                   <input
-                    id="liveUrl"
-                    type="url"
-                    name="liveUrl"
-                    value={formData.liveUrl}
+                    id="visualsHeroVideoUrl"
+                    type="text"
+                    name="visualsHeroVideoUrl"
+                    value={formData.visualsHeroVideoUrl}
                     onChange={handleInputChange}
-                    placeholder="https://"
+                    placeholder="/assets/projects/.../preview.mp4"
                   />
                 </div>
               </div>
             </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="visualsPrimaryColor">
+                  Primary Color (visuals.primaryColor)
+                </label>
+                <input
+                  id="visualsPrimaryColor"
+                  type="text"
+                  name="visualsPrimaryColor"
+                  value={formData.visualsPrimaryColor}
+                  onChange={handleInputChange}
+                  placeholder="#0cb845"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="linksLiveDemo">
+                  Live Demo (links.liveDemo)
+                </label>
+                <div className="form-field-with-icon">
+                  <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="linksLiveDemo"
+                    type="url"
+                    name="linksLiveDemo"
+                    value={formData.linksLiveDemo}
+                    onChange={handleInputChange}
+                    placeholder="https://..."
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="linksGithub">GitHub (links.github)</label>
+                <div className="form-field-with-icon">
+                  <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="linksGithub"
+                    type="url"
+                    name="linksGithub"
+                    value={formData.linksGithub}
+                    onChange={handleInputChange}
+                    placeholder="https://github.com/..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-grid">
+              <div className="form-group">
+                <label htmlFor="linksFigma">Figma (links.figma)</label>
+                <div className="form-field-with-icon">
+                  <LinkRoundedIcon className="btn-icon" fontSize="inherit" />
+                  <input
+                    id="linksFigma"
+                    type="url"
+                    name="linksFigma"
+                    value={formData.linksFigma}
+                    onChange={handleInputChange}
+                    placeholder="https://figma.com/..."
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="techStackJson">techStack (JSON array)</label>
+              <textarea
+                id="techStackJson"
+                name="techStackJson"
+                rows="6"
+                value={formData.techStackJson}
+                onChange={handleInputChange}
+                placeholder='[{ "category": "Core", "items": ["React", "Vite"] }]'
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="caseStudyJson">caseStudy (JSON object)</label>
+              <textarea
+                id="caseStudyJson"
+                name="caseStudyJson"
+                rows="10"
+                value={formData.caseStudyJson}
+                onChange={handleInputChange}
+                placeholder='{"problem": {"title": "...", "description": "..."}}'
+              />
+            </div>
+
             <div className="form-actions">
               <button type="submit" disabled={loading} className="submit-btn">
                 <SaveRoundedIcon className="btn-icon" fontSize="inherit" />
@@ -470,16 +1004,18 @@ const AdminProjectManagementPage = () => {
                 {projects.length > 0 ? (
                   projects.map((project, index) => {
                     const projectId = resolveProjectId(project);
+                    const displayTitle = getDisplayTitle(project);
+                    const displayThumb = getDisplayThumbnail(project);
                     return (
                       <tr key={projectId || `project-${index}`}>
                         <td>
                           <img
-                            src={project.imageUrl}
-                            alt={project.title}
+                            src={displayThumb || ""}
+                            alt={displayTitle}
                             className="list-thumbnail"
                           />
                         </td>
-                        <td>{project.title}</td>
+                        <td>{displayTitle}</td>
                         <td className="action-buttons">
                           <button
                             type="button"
@@ -620,40 +1156,41 @@ const AdminProjectManagementPage = () => {
                 veya dizi gönderebilirsiniz.
               </p>
               <pre className="json-template-code">
-                <code>{JSON.stringify(jsonTemplate, null, 2)}</code>
+                <code>{JSON.stringify(uiJsonTemplate, null, 2)}</code>
               </pre>
               <div className="template-info">
                 <h3>Alan Açıklamaları:</h3>
                 <ul>
                   <li>
-                    <strong>title</strong>: Proje başlığı (zorunlu)
+                    <strong>metadata.title</strong>: Proje başlığı (zorunlu)
                   </li>
                   <li>
-                    <strong>description</strong>: Proje açıklaması (zorunlu)
+                    <strong>metadata.tagline</strong>: Kısa açıklama (zorunlu)
                   </li>
                   <li>
-                    <strong>imageUrl</strong>: Proje görseli URL'i (zorunlu)
+                    <strong>visuals.thumbnailUrl</strong>: Kapak görseli URL’i
+                    (zorunlu)
                   </li>
                   <li>
-                    <strong>githubUrl</strong>: GitHub URL (opsiyonel)
+                    <strong>links.github</strong>: GitHub URL (opsiyonel)
                   </li>
                   <li>
-                    <strong>liveUrl</strong>: Canlı URL (opsiyonel)
+                    <strong>links.liveDemo</strong>: Canlı URL (opsiyonel)
                   </li>
                   <li>
-                    <strong>tags</strong>: Etiket dizisi veya virgüllü string
+                    <strong>techStack</strong>: Kategori + item listeleri
                     (opsiyonel)
                   </li>
                   <li>
-                    <strong>category</strong>:
-                    web/mobile/desktop/api/library/other (opsiyonel)
+                    <strong>caseStudy</strong>:
+                    problem/solution/metrics/highlightCode (opsiyonel)
                   </li>
                   <li>
-                    <strong>featured</strong>: true/false (opsiyonel)
+                    <strong>isFeatured</strong>: true/false (opsiyonel)
                   </li>
                   <li>
-                    <strong>status</strong>: active/archived/draft/maintenance
-                    (opsiyonel)
+                    <strong>metadata.status</strong>:
+                    Live/Development/Beta/Legacy (opsiyonel)
                   </li>
                 </ul>
               </div>
@@ -663,7 +1200,7 @@ const AdminProjectManagementPage = () => {
                 type="button"
                 onClick={() => {
                   navigator.clipboard.writeText(
-                    JSON.stringify(jsonTemplate, null, 2),
+                    JSON.stringify(uiJsonTemplate, null, 2),
                   );
                   alert("Şablon panoya kopyalandı!");
                 }}

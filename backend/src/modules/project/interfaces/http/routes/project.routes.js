@@ -3,8 +3,8 @@ import { validateRequest } from "../../../../../shared/interfaces/http/middlewar
 import createProjectUpload from "../../../infrastructure/storage/ProjectMediaUpload.js";
 import createProjectController from "../controllers/project.controller.js";
 import {
-  createProjectSchema,
-  updateProjectSchema,
+  createProjectSchemaAny,
+  updateProjectSchemaAny,
 } from "../validators/project.schemas.js";
 
 export const createProjectRouter = ({ middleware, ...dependencies }) => {
@@ -20,8 +20,8 @@ export const createProjectRouter = ({ middleware, ...dependencies }) => {
     middleware.protect,
     middleware.authorizeAdmin,
     upload.single("image"),
-    validateRequest(createProjectSchema),
-    controller.create
+    validateRequest(createProjectSchemaAny),
+    controller.create,
   );
 
   router.put(
@@ -29,15 +29,15 @@ export const createProjectRouter = ({ middleware, ...dependencies }) => {
     middleware.protect,
     middleware.authorizeAdmin,
     upload.single("image"),
-    validateRequest(updateProjectSchema),
-    controller.update
+    validateRequest(updateProjectSchemaAny),
+    controller.update,
   );
 
   router.delete(
     "/:id",
     middleware.protect,
     middleware.authorizeAdmin,
-    controller.remove
+    controller.remove,
   );
 
   return router;

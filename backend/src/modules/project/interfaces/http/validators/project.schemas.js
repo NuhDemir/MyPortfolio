@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+const jsonPreprocess = (value) => {
+  if (typeof value !== "string") return value;
+  try {
+    return JSON.parse(value);
+  } catch {
+    return value;
+  }
+};
+
+const jsonObject = (schema) => z.preprocess(jsonPreprocess, schema);
+const jsonArray = (schema) => z.preprocess(jsonPreprocess, schema);
+
 const tagsSchema = z
   .union([
     z.string().transform((value) =>
@@ -19,7 +31,80 @@ const technologySchema = z.object({
     .optional(),
 });
 
-const baseProjectSchema = {
+const techStackSchema = z.object({
+  category: z.string().min(1),
+  items: z.array(z.string().min(1)).min(1),
+});
+
+const projectLinksSchema = z
+  .object({
+    liveDemo: z
+      .string()
+      .url()
+      .optional()
+      .or(z.literal(""))
+      .nullable()
+      .optional(),
+    github: z.string().url().optional().or(z.literal("")).nullable().optional(),
+    figma: z.string().url().optional().or(z.literal("")).nullable().optional(),
+  })
+  .partial();
+
+const caseStudySchema = z
+  .object({
+    problem: z
+      .object({
+        title: z.string().min(1),
+        description: z.string().min(1),
+      })
+      .partial()
+      .optional(),
+    solution: z
+      .object({
+        title: z.string().min(1),
+        description: z.string().min(1),
+      })
+      .partial()
+      .optional(),
+    challenges: z
+      .array(
+        z
+          .object({
+            title: z.string().min(1),
+            description: z.string().min(1),
+          })
+          .partial(),
+      )
+      .optional(),
+    metrics: z
+      .array(
+        z
+          .object({
+            label: z.string().min(1),
+            value: z.string().min(1),
+          })
+          .partial(),
+      )
+      .optional(),
+    highlightCode: z
+      .object({
+        language: z.string().min(1).optional(),
+        fileName: z.string().min(1).optional(),
+        codeSnippet: z.string().min(1).optional(),
+        gistUrl: z
+          .string()
+          .url()
+          .optional()
+          .or(z.literal(""))
+          .nullable()
+          .optional(),
+      })
+      .partial()
+      .optional(),
+  })
+  .partial();
+
+const legacyBaseProjectSchema = {
   title: z.string().min(1, { message: "Başlık alanı boş bırakılamaz." }),
   description: z
     .string()
@@ -89,17 +174,71 @@ const baseProjectSchema = {
     .optional(),
 };
 
+const newProjectSchema = z
+  .object({
+    id: z.string().min(1).optional(),
+    slug: z.string().min(1).optional(),
+    isFeatured: z.coerce.boolean().optional(),
+    metadata: jsonObject(
+      z
+        .object({
+          title: z.string().min(1),
+          tagline: z.string().min(1),
+          createdAt: z.coerce.date().optional(),
+          role: z.string().min(1).optional(),
+          platform: z.string().min(1).optional(),
+          status: z.string().min(1).optional(),
+        })
+        .passthrough(),
+    ),
+    visuals: jsonObject(
+      z
+        .object({
+          thumbnailUrl: z.string().min(1),
+          heroVideoUrl: z.string().min(1).optional(),
+          primaryColor: z.string().min(1).optional(),
+        })
+        .passthrough(),
+    ),
+    techStack: jsonArray(z.array(techStackSchema)).optional(),
+    links: jsonObject(projectLinksSchema).optional(),
+    caseStudy: jsonObject(caseStudySchema).optional(),
+    tags: tagsSchema,
+    category: z
+      .enum(["web", "mobile", "desktop", "api", "library", "other"])
+      .optional(),
+  })
+  .passthrough();
+
 export const createProjectSchema = z.object({
-  ...baseProjectSchema,
+  ...legacyBaseProjectSchema,
 });
 
+export const createProjectSchemaV2 = newProjectSchema;
+
+export const createProjectSchemaAny = z.union([
+  createProjectSchema,
+  createProjectSchemaV2,
+]);
+
 export const updateProjectSchema = z.object({
-  ...baseProjectSchema,
-  title: baseProjectSchema.title.optional(),
-  description: baseProjectSchema.description.optional(),
+  ...legacyBaseProjectSchema,
+  title: legacyBaseProjectSchema.title.optional(),
+  description: legacyBaseProjectSchema.description.optional(),
 });
+
+export const updateProjectSchemaV2 = newProjectSchema.partial();
+
+export const updateProjectSchemaAny = z.union([
+  updateProjectSchema,
+  updateProjectSchemaV2,
+]);
 
 export default {
   createProjectSchema,
+  createProjectSchemaV2,
+  createProjectSchemaAny,
   updateProjectSchema,
+  updateProjectSchemaV2,
+  updateProjectSchemaAny,
 };

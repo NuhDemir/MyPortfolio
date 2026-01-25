@@ -22,13 +22,19 @@ import { useBackendKeepAlive } from "@shared/hooks/useBackendKeepAlive.js";
 import "@shared/styles/base/global.css";
 import "@shared/styles/base/components.css";
 
-const Comments = lazy(() =>
-  import("@modules/comments/components/Comments/Comments.jsx")
+const Comments = lazy(
+  () => import("@modules/comments/components/Comments/Comments.jsx"),
 );
 const AdminRoutes = lazy(() => import("@modules/admin/routes/AdminRoutes.jsx"));
 const BlogListPage = lazy(() => import("@modules/blog/pages/BlogListPage.jsx"));
-const BlogDetailPage = lazy(() =>
-  import("@modules/blog/pages/BlogDetailPage.jsx")
+const BlogDetailPage = lazy(
+  () => import("@modules/blog/pages/BlogDetailPage.jsx"),
+);
+const ProjectsPage = lazy(
+  () => import("@modules/projects/pages/ProjectsPage.jsx"),
+);
+const ProjectDetailsPage = lazy(
+  () => import("@modules/projects/pages/ProjectDetailsPage.jsx"),
 );
 
 const DefaultExperience = () => {
@@ -162,6 +168,26 @@ const App = () => {
               fallback={<div className="component-loader">Yükleniyor...</div>}
             >
               <BlogDetailPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/projects"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <ProjectsPage />
+            </Suspense>
+          }
+        />
+        <Route
+          path="/projects/:slugOrId"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <ProjectDetailsPage />
             </Suspense>
           }
         />

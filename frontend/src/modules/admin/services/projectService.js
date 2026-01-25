@@ -35,9 +35,14 @@ export const createProject = async (formData) => {
 
 export const updateProject = async (id, formData) => {
   try {
-    const response = await axiosClient.put(`/projects/${id}`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const isFormData =
+      typeof FormData !== "undefined" && formData instanceof FormData;
+
+    const response = isFormData
+      ? await axiosClient.put(`/projects/${id}`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+      : await axiosClient.put(`/projects/${id}`, formData);
     return response.data;
   } catch (error) {
     handleError(error, "güncellenirken");

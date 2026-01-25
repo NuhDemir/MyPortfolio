@@ -2,7 +2,7 @@
   {
     "id": "proj-01",
     "title": "Portfolyo Sitesi",
-    "description": "React, GSAP ve modern web teknolojileri kullanılarak geliştirilmiş interaktif ve responsive kişisel portfolyo sitesi.",
+    "description": "React, NodeJs ve modern web teknolojileri kullanılarak geliştirilmiş interaktif ve responsive kişisel portfolyo sitesi.",
     "imageUrl": "/images/portfolio.png",
     "liveUrl": "https://www.nuhdemir.netlify.app",
     "githubUrl": "https://github.com/NuhDemir/MyPortfolio",

@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema({
+  externalId: {
+    type: String,
+    trim: true,
+    unique: true,
+    sparse: true,
+  },
   title: {
     type: String,
     required: true,
@@ -25,6 +31,136 @@ const projectSchema = new mongoose.Schema({
   imageUrl: {
     type: String,
     required: true,
+  },
+
+  metadata: {
+    title: {
+      type: String,
+      trim: true,
+    },
+    tagline: {
+      type: String,
+      trim: true,
+    },
+    createdAt: {
+      type: Date,
+    },
+    role: {
+      type: String,
+      trim: true,
+    },
+    platform: {
+      type: String,
+      trim: true,
+    },
+    status: {
+      type: String,
+      trim: true,
+    },
+  },
+
+  visuals: {
+    thumbnailUrl: {
+      type: String,
+    },
+    heroVideoUrl: {
+      type: String,
+    },
+    primaryColor: {
+      type: String,
+      trim: true,
+    },
+  },
+
+  techStack: [
+    {
+      category: {
+        type: String,
+        trim: true,
+      },
+      items: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+    },
+  ],
+
+  links: {
+    liveDemo: {
+      type: String,
+      trim: true,
+    },
+    github: {
+      type: String,
+      trim: true,
+    },
+    figma: {
+      type: String,
+      trim: true,
+    },
+  },
+
+  caseStudy: {
+    problem: {
+      title: {
+        type: String,
+        trim: true,
+      },
+      description: {
+        type: String,
+      },
+    },
+    solution: {
+      title: {
+        type: String,
+        trim: true,
+      },
+      description: {
+        type: String,
+      },
+    },
+    challenges: [
+      {
+        title: {
+          type: String,
+          trim: true,
+        },
+        description: {
+          type: String,
+        },
+      },
+    ],
+    metrics: [
+      {
+        label: {
+          type: String,
+          trim: true,
+        },
+        value: {
+          type: String,
+          trim: true,
+        },
+      },
+    ],
+    highlightCode: {
+      language: {
+        type: String,
+        trim: true,
+      },
+      fileName: {
+        type: String,
+        trim: true,
+      },
+      codeSnippet: {
+        type: String,
+      },
+      gistUrl: {
+        type: String,
+        trim: true,
+      },
+    },
   },
   galleryImages: [
     {
@@ -75,6 +211,11 @@ const projectSchema = new mongoose.Schema({
     },
   ],
   featured: {
+    type: Boolean,
+    default: false,
+  },
+
+  isFeatured: {
     type: Boolean,
     default: false,
   },
@@ -177,6 +318,26 @@ const projectSchema = new mongoose.Schema({
 });
 
 projectSchema.pre("validate", function (next) {
+  if (!this.title && this.metadata?.title) {
+    this.title = this.metadata.title;
+  }
+
+  if (!this.description && this.metadata?.tagline) {
+    this.description = this.metadata.tagline;
+  }
+
+  if (!this.imageUrl && this.visuals?.thumbnailUrl) {
+    this.imageUrl = this.visuals.thumbnailUrl;
+  }
+
+  if (this.isFeatured !== undefined && this.featured === undefined) {
+    this.featured = this.isFeatured;
+  }
+
+  if (this.featured !== undefined && this.isFeatured === undefined) {
+    this.isFeatured = this.featured;
+  }
+
   if (this.title && !this.slug) {
     this.slug = this.title
       .toString()
@@ -208,6 +369,7 @@ projectSchema.index({ tags: 1 });
 projectSchema.index({ category: 1 });
 projectSchema.index({ status: 1 });
 projectSchema.index({ featured: 1 });
+projectSchema.index({ isFeatured: 1 });
 projectSchema.index({ createdAt: -1 });
 projectSchema.index({ views: -1 });
 projectSchema.index({ likes: -1 });

@@ -5,7 +5,10 @@ import imageSvg from "/assets/icons/img/image.svg";
 
 // React.memo ile gereksiz re-render engelleniyor
 const ProjectCard = React.memo(({ project, onClick }) => {
-  const { title, description, tags = [], imageUrl } = project;
+  const title = project?.metadata?.title || project?.title || "";
+  const description = project?.metadata?.tagline || project?.description || "";
+  const tags = Array.isArray(project?.tags) ? project.tags : [];
+  const imageUrl = project?.visuals?.thumbnailUrl || project?.imageUrl || "";
 
   // Eğer imageUrl varsa onu kullan, yoksa varsayılan svg
   const imageSource = imageUrl || imageSvg;
@@ -35,7 +38,7 @@ const ProjectCard = React.memo(({ project, onClick }) => {
       role="button"
       tabIndex={0}
       onKeyDown={handleKeyDown} // klavye erişilebilirliği
-      aria-label={`${title} projesinin detaylarını aç`}
+      aria-label={`${title || "Seçili proje"} projesinin detaylarını aç`}
     >
       <div className="project-card-v2">
         <div className="project-card-v2-image-container">

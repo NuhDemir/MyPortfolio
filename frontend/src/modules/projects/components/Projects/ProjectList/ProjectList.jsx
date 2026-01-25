@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
 import "./ProjectList.css";
@@ -10,6 +11,8 @@ import MyProjectsSvg from "/assets/icons/project/MyProject.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectList = () => {
+  const navigate = useNavigate();
+
   // --- MEVCUT HOOK'LAR ---
   const listContainerRef = useRef(null);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -119,6 +122,15 @@ const ProjectList = () => {
           src={MyProjectsSvg}
           alt="Projelerim Başlığı"
         />
+        <div className="project-list-actions">
+          <button
+            type="button"
+            className="project-list-all-btn"
+            onClick={() => navigate("/projects")}
+          >
+            Tüm projeler
+          </button>
+        </div>
         <div className="project-list-status" aria-live="polite">
           <span className="project-list-chip" data-state={dataSource}>
             {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}

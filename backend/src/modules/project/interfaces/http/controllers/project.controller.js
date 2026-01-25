@@ -34,20 +34,41 @@ export const createProjectController = (dependencies) => {
   });
 
   const create = asyncHandler(async (req, res) => {
-    const resolvedImageUrl = req.file?.path ?? req.body?.imageUrl;
+    const payload = {
+      ...req.body,
+      tags: req.body.tags,
+    };
+
+    if (req.file?.path) {
+      payload.imageUrl = req.file.path;
+      payload.visuals = {
+        ...(payload.visuals ?? {}),
+        thumbnailUrl: req.file.path,
+      };
+    } else {
+      const thumbnailUrl =
+        payload?.visuals?.thumbnailUrl ??
+        payload?.imageUrl ??
+        payload?.imageUrl;
+
+      if (thumbnailUrl) {
+        payload.imageUrl = payload.imageUrl ?? thumbnailUrl;
+        payload.visuals = {
+          ...(payload.visuals ?? {}),
+          thumbnailUrl: payload.visuals?.thumbnailUrl ?? thumbnailUrl,
+        };
+      }
+    }
+
+    const resolvedImageUrl =
+      payload?.visuals?.thumbnailUrl ?? payload?.imageUrl;
 
     if (!resolvedImageUrl) {
       res.status(400);
       throw new Error(
-        "Proje görseli zorunludur. Bir dosya yükleyin veya imageUrl alanı sağlayın.",
+        "Proje görseli zorunludur. Bir dosya yükleyin veya visuals.thumbnailUrl/imageUrl alanı sağlayın.",
       );
     }
-
-    const payload = {
-      ...req.body,
-      imageUrl: resolvedImageUrl,
-      tags: req.body.tags,
-    };
 
     const project = await createProjectUseCase(payload, dependencies);
     res.status(201).json(project);
@@ -61,6 +82,12 @@ export const createProjectController = (dependencies) => {
 
     if (req.file) {
       payload.imageUrl = req.file.path;
+      payload.visuals = {
+        ...(payload.visuals ?? {}),
+        thumbnailUrl: req.file.path,
+      };
+    } else if (payload?.visuals?.thumbnailUrl && !payload.imageUrl) {
+      payload.imageUrl = payload.visuals.thumbnailUrl;
     }
 
     const project = await updateProjectUseCase(
