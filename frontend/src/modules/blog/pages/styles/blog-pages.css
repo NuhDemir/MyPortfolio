@@ -122,6 +122,57 @@
   font-size: 1.08rem;
 }
 
+.blog-page__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  background: var(--color-background-paper);
+  border: 2px dashed
+    color-mix(in srgb, var(--color-border-primary) 55%, transparent);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+  width: fit-content;
+}
+
+.blog-page__status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 2px solid var(--color-border-primary);
+  background: rgba(0, 0, 0, 0.04);
+  color: var(--color-text-primary);
+  letter-spacing: 0.01em;
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+}
+
+.blog-page__status-chip[data-state="live"] {
+  background: linear-gradient(
+    135deg,
+    rgba(77, 208, 140, 0.2),
+    rgba(0, 166, 125, 0.12)
+  );
+  border-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+}
+
+.blog-page__status-chip[data-state="fallback"] {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 193, 7, 0.2),
+    rgba(255, 167, 38, 0.14)
+  );
+  border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+}
+
+.blog-page__status-text {
+  font-size: 0.95rem;
+  color: var(--color-text-secondary);
+}
+
 .blog-tag-cloud {
   display: flex;
   flex-wrap: wrap;

@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
-import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import "./ProjectList.css";
 import fallbackProjects from "@modules/projects/data/projectData.json";
 import { fetchProjects } from "@modules/projects/services/projectService.js";
@@ -16,7 +15,8 @@ const ProjectList = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(fallbackProjects);
-  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [dataSource, setDataSource] = useState("fallback");
 
   // Ses dosyaları için ref
   const popSoundRef = useRef(null);
@@ -33,34 +33,45 @@ const ProjectList = () => {
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const loadProjects = async () => {
-      setLoading(true);
-      // don't track loadError to avoid showing errors when backend is offline
+      setRefreshing(true);
 
       try {
-        const data = await fetchProjects();
-        if (isMounted && Array.isArray(data) && data.length > 0) {
-          setProjects(data);
-        } else if (isMounted && (!data || data.length === 0)) {
-          setProjects(fallbackProjects);
-        }
+        const data = await fetchProjects({ signal: controller.signal });
+        if (!isMounted) return;
+        const nextProjects =
+          Array.isArray(data) && data.length > 0 ? data : fallbackProjects;
+        setProjects(nextProjects);
+        setDataSource(
+          Array.isArray(data) && data.length > 0 ? "live" : "fallback",
+        );
       } catch {
-        // Sessiz hata: backend kapalıysa fallback verisini kullan
-        if (isMounted) {
-          setProjects(fallbackProjects);
-        }
+        if (!isMounted) return;
+        setProjects(fallbackProjects);
+        setDataSource("fallback");
       } finally {
         if (isMounted) {
-          setLoading(false);
+          setRefreshing(false);
         }
       }
     };
 
     loadProjects();
 
+    const intervalId = window.setInterval(
+      () => {
+        if (!isMounted) return;
+        loadProjects();
+      },
+      5 * 60 * 1000,
+    );
+
     return () => {
       isMounted = false;
+      controller.abort();
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -108,11 +119,12 @@ const ProjectList = () => {
           src={MyProjectsSvg}
           alt="Projelerim Başlığı"
         />
-        {loading && (
-          <div className="project-list-loading">
-            <LoadingSpinner message="Projeler yükleniyor..." />
-          </div>
-        )}
+        <div className="project-list-status" aria-live="polite">
+          <span className="project-list-chip" data-state={dataSource}>
+            {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}
+            {refreshing ? " • Güncelleniyor" : ""}
+          </span>
+        </div>
         {/* Eğer backend yoksa sessizce fallback gösteriyoruz; hata UI'sı yok */}
         <div className="project-list-wrapper">
           {/* Sola Kaydırma Butonu */}

@@ -15,7 +15,7 @@ export const createProjectController = (dependencies) => {
             ? req.query.featured === "true"
             : undefined,
       },
-      dependencies
+      dependencies,
     );
 
     res.json(projects);
@@ -27,21 +27,25 @@ export const createProjectController = (dependencies) => {
 
     const project = await getProjectUseCase(
       isMongoId.test(identifier) ? { id: identifier } : { slug: identifier },
-      dependencies
+      dependencies,
     );
 
     res.json(project);
   });
 
   const create = asyncHandler(async (req, res) => {
-    if (!req.file) {
+    const resolvedImageUrl = req.file?.path ?? req.body?.imageUrl;
+
+    if (!resolvedImageUrl) {
       res.status(400);
-      throw new Error("Proje görseli zorunludur.");
+      throw new Error(
+        "Proje görseli zorunludur. Bir dosya yükleyin veya imageUrl alanı sağlayın.",
+      );
     }
 
     const payload = {
       ...req.body,
-      imageUrl: req.file.path,
+      imageUrl: resolvedImageUrl,
       tags: req.body.tags,
     };
 
@@ -62,7 +66,7 @@ export const createProjectController = (dependencies) => {
     const project = await updateProjectUseCase(
       req.params.id,
       payload,
-      dependencies
+      dependencies,
     );
     res.json(project);
   });

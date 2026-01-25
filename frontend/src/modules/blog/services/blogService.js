@@ -1,27 +1,37 @@
 import axiosClient from "@core/http/axiosClient";
 import fallbackBlogs from "@shared/data/blogs.json";
 
-// Geliştirme: backend yoksa sessiz fallback kullan. Prod ortamda gerçek hata atılmasını
-// tercih ederseniz burayı prod flag ile koşullandırabilirsiniz.
-export const fetchBlogs = async () => {
+const REQUEST_TIMEOUT_MS = 2800;
+
+// Backend uykudayken kullanıcıyı bekletmemek için kısa timeout + lokal fallback.
+// Opsiyonel signal desteği ile istek iptal edilebilir.
+export const fetchBlogs = async (options = {}) => {
+  const { signal } = options;
+
   try {
-    const response = await axiosClient.get("/blog");
+    const response = await axiosClient.get("/blog", {
+      timeout: REQUEST_TIMEOUT_MS,
+      signal,
+    });
     const blogs = Array.isArray(response.data) ? response.data : [];
     return blogs.map(transformBlogPayload);
   } catch {
-    // API yoksa local fallback kullan
     return Array.isArray(fallbackBlogs)
       ? fallbackBlogs.map(transformBlogPayload)
       : [];
   }
 };
 
-export const fetchBlogBySlug = async (slug) => {
+export const fetchBlogBySlug = async (slug, options = {}) => {
+  const { signal } = options;
+
   try {
-    const response = await axiosClient.get(`/blog/${slug}`);
+    const response = await axiosClient.get(`/blog/${slug}`, {
+      timeout: REQUEST_TIMEOUT_MS,
+      signal,
+    });
     return transformBlogPayload(response.data);
   } catch {
-    // Önce local fallback içinde ara
     const found = Array.isArray(fallbackBlogs)
       ? fallbackBlogs.find((b) => b.slug === slug || b.id === slug)
       : null;

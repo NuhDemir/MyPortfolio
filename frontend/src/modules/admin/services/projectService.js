@@ -19,9 +19,14 @@ export const getProjects = async () => {
 
 export const createProject = async (formData) => {
   try {
-    const response = await axiosClient.post("/projects", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
+    const isFormData =
+      typeof FormData !== "undefined" && formData instanceof FormData;
+
+    const response = isFormData
+      ? await axiosClient.post("/projects", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+      : await axiosClient.post("/projects", formData);
     return response.data;
   } catch (error) {
     handleError(error, "oluşturulurken");

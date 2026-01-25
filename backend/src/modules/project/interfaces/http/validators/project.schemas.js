@@ -6,7 +6,7 @@ const tagsSchema = z
       value
         .split(",")
         .map((tag) => tag.trim())
-        .filter(Boolean)
+        .filter(Boolean),
     ),
     z.array(z.string()),
   ])
@@ -24,6 +24,7 @@ const baseProjectSchema = {
   description: z
     .string()
     .min(1, { message: "Açıklama alanı boş bırakılamaz." }),
+  imageUrl: z.string().min(1).optional(),
   githubUrl: z
     .string()
     .url({ message: "Lütfen geçerli bir GitHub URL'si girin." })

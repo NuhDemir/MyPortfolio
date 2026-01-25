@@ -1,25 +1,36 @@
 import axiosClient from "@core/http/axiosClient";
+import fallbackProjects from "@modules/projects/data/projectData.json";
 
-export const fetchProjects = async () => {
+const REQUEST_TIMEOUT_MS = 2800;
+
+export const fetchProjects = async (options = {}) => {
+  const { signal } = options;
+
   try {
-    const response = await axiosClient.get("/projects");
+    const response = await axiosClient.get("/projects", {
+      timeout: REQUEST_TIMEOUT_MS,
+      signal,
+    });
     return Array.isArray(response.data) ? response.data : [];
   } catch {
-    // Backend development mode: sessizce fallback sağla (404/404 gibi hatalarda)
-    // Böylece frontend'de hata mesajı gözükmez. Geliştirme sırasında backend
-    // kapalıysa boş dizi döndürülür ve UI yedek veriyi kullanır.
-    return [];
+    return Array.isArray(fallbackProjects) ? fallbackProjects : [];
   }
 };
 
-export const fetchProjectById = async (id) => {
+export const fetchProjectById = async (id, options = {}) => {
+  const { signal } = options;
+
   try {
-    const response = await axiosClient.get(`/projects/${id}`);
+    const response = await axiosClient.get(`/projects/${id}`, {
+      timeout: REQUEST_TIMEOUT_MS,
+      signal,
+    });
     return response.data;
   } catch {
-    // Eğer tekil proje alınamazsa null döndür; UI bunu yakalayıp yedek veya
-    // uygun mesajı gösterebilir. Hata atmayarak konsolda görünen hataları engelle.
-    return null;
+    const found = Array.isArray(fallbackProjects)
+      ? fallbackProjects.find((item) => item.id === id || item.slug === id)
+      : null;
+    return found || null;
   }
 };
 

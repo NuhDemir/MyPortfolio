@@ -6,6 +6,7 @@ import { fetchBlogBySlug } from "@modules/blog/services/blogService.js";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import CommentSection from "@modules/blog/components/CommentSection.jsx";
+import fallbackBlogs from "@shared/data/blogs.json";
 import "./styles/blog-pages.css";
 
 const stripHtml = (value = "") => value.replace(/<[^>]*>/g, " ").trim();
@@ -100,27 +101,56 @@ const BlogDetailPage = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [dataSource, setDataSource] = useState("unknown");
+
+  const fallbackBlog = useMemo(() => {
+    if (!slug) return null;
+    return Array.isArray(fallbackBlogs)
+      ? fallbackBlogs.find((item) => item.slug === slug || item.id === slug)
+      : null;
+  }, [slug]);
 
   useEffect(() => {
     if (!slug) {
       // Geçersiz slug geldiğinde sessizce null bırak
       setBlog(null);
+      setDataSource("unknown");
       return;
     }
 
     let isMounted = true;
+    const controller = new AbortController();
+
+    if (fallbackBlog) {
+      setBlog(fallbackBlog);
+      setDataSource("fallback");
+    }
 
     const loadBlog = async () => {
       setLoading(true);
 
       try {
-        const data = await fetchBlogBySlug(slug);
+        const data = await fetchBlogBySlug(slug, { signal: controller.signal });
         if (!isMounted) return;
-        setBlog(data);
+        if (data) {
+          setBlog(data);
+          setDataSource("live");
+        } else if (fallbackBlog) {
+          setBlog(fallbackBlog);
+          setDataSource("fallback");
+        } else {
+          setBlog(null);
+          setDataSource("unknown");
+        }
       } catch {
         if (!isMounted) return;
-        // Sessiz fallback: service local blog döndürebilir veya null gelir
-        setBlog(null);
+        if (fallbackBlog) {
+          setBlog(fallbackBlog);
+          setDataSource("fallback");
+        } else {
+          setBlog(null);
+          setDataSource("unknown");
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -130,12 +160,13 @@ const BlogDetailPage = () => {
 
     return () => {
       isMounted = false;
+      controller.abort();
     };
-  }, [slug]);
+  }, [slug, fallbackBlog]);
 
   const tags = useMemo(
     () => (Array.isArray(blog?.tags) ? blog.tags : []),
-    [blog]
+    [blog],
   );
 
   const galleryImages = useMemo(() => {
@@ -177,7 +208,7 @@ const BlogDetailPage = () => {
   const publisherName = useMemo(() => {
     if (!blog) return null;
     return resolvePublisherName(
-      blog.publisher || blog.publishedBy || blog.authorDetails || blog.author
+      blog.publisher || blog.publishedBy || blog.authorDetails || blog.author,
     );
   }, [blog]);
 
@@ -264,10 +295,10 @@ const BlogDetailPage = () => {
     () =>
       blog?.content ||
       "<p>Bu içerik henüz hazır değil, lütfen daha sonra tekrar kontrol edin.</p>",
-    [blog?.content]
+    [blog?.content],
   );
 
-  if (loading) {
+  if (loading && !blog) {
     return (
       <>
         <Navbar />
@@ -318,6 +349,14 @@ const BlogDetailPage = () => {
                 {blog.category || "Genel"}
               </span>
               <span className="blog-page__hero-date">{publishedStamp}</span>
+              <span
+                className="blog-page__status-chip"
+                data-state={dataSource}
+                aria-live="polite"
+              >
+                {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}
+                {loading ? " • Güncelleniyor" : ""}
+              </span>
             </div>
             <h1 className="blog-page__hero-title">{blog.title}</h1>
             <p className="blog-page__hero-subtitle">{heroSubtitle}</p>

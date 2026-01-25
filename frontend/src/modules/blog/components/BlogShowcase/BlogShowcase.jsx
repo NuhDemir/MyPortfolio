@@ -1,8 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import { fetchBlogs } from "@modules/blog/services/blogService.js";
-import "./BlogShowcase.css";
+import fallbackBlogs from "@shared/data/blogs.json";
+import {
+  ArrowRight,
+  BookOpenText,
+  Clock,
+  RefreshCw,
+  Wifi,
+  WifiOff,
+} from "lucide-react";
+import "./BlogShowcase.brutal.css";
 
 const BLOG_LIMIT = 3;
 
@@ -26,38 +34,57 @@ const sortBlogsByDate = (entries) =>
   [...entries].sort((a, b) => {
     const first = new Date(a?.publishedAt || a?.updatedAt || a?.createdAt || 0);
     const second = new Date(
-      b?.publishedAt || b?.updatedAt || b?.createdAt || 0
+      b?.publishedAt || b?.updatedAt || b?.createdAt || 0,
     );
     return second - first;
   });
 
 const BlogShowcase = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [blogs, setBlogs] = useState(fallbackBlogs);
+  const [refreshing, setRefreshing] = useState(false);
+  const [dataSource, setDataSource] = useState("fallback");
+
+  const DataSourceIcon = dataSource === "live" ? Wifi : WifiOff;
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const loadBlogs = async () => {
-      setLoading(true);
+      setRefreshing(true);
 
       try {
-        const data = await fetchBlogs();
+        const data = await fetchBlogs({ signal: controller.signal });
         if (!isMounted) return;
-        setBlogs(Array.isArray(data) ? data : []);
+        const nextBlogs =
+          Array.isArray(data) && data.length > 0 ? data : fallbackBlogs;
+        setBlogs(nextBlogs);
+        setDataSource(
+          Array.isArray(data) && data.length > 0 ? "live" : "fallback",
+        );
       } catch {
         if (!isMounted) return;
-        // Sessiz fallback: blogService local fallback döndürebiliyor
-        setBlogs([]);
+        setBlogs(fallbackBlogs);
+        setDataSource("fallback");
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) setRefreshing(false);
       }
     };
 
     loadBlogs();
 
+    const intervalId = window.setInterval(
+      () => {
+        if (!isMounted) return;
+        loadBlogs();
+      },
+      5 * 60 * 1000,
+    );
+
     return () => {
       isMounted = false;
+      controller.abort();
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -70,59 +97,81 @@ const BlogShowcase = () => {
     return sortBlogsByDate(publishedOnly).slice(0, BLOG_LIMIT);
   }, [blogs]);
 
-  if (!loading && visibleBlogs.length === 0) {
+  if (visibleBlogs.length === 0) {
     return null;
   }
 
   return (
     <section className="blog-showcase" id="blog-section">
       <div className="blog-showcase__header">
-        <span className="blog-showcase__eyebrow">Blog</span>
-        <h2 className="blog-showcase__title">Zihin Günlüğü</h2>
+        <div className="blog-showcase__header-meta">
+          <span className="blog-showcase__eyebrow">
+            <BookOpenText
+              className="blog-showcase__eyebrow-icon"
+              aria-hidden="true"
+            />
+            Blog
+          </span>
+          <span
+            className="blog-showcase__chip"
+            data-state={dataSource}
+            aria-live="polite"
+          >
+            <DataSourceIcon
+              className="blog-showcase__chip-icon"
+              aria-hidden="true"
+            />
+            {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}
+            {refreshing ? (
+              <>
+                <span aria-hidden="true"> • </span>
+                Güncelleniyor
+                <RefreshCw
+                  className="blog-showcase__chip-spinner"
+                  aria-hidden="true"
+                />
+              </>
+            ) : null}
+          </span>
+        </div>
+        <h2 className="blog-showcase__title">Blog Yazılarım</h2>
         <p className="blog-showcase__subtitle">
           Kod notları, deneyimler ve ilham verici kısa okumalar.
         </p>
         <Link className="blog-showcase__cta" to="/blog">
           Tüm yazıları gör
+          <ArrowRight className="blog-showcase__cta-icon" aria-hidden="true" />
         </Link>
       </div>
-
-      {loading ? (
-        <div className="blog-showcase__state">
-          <LoadingSpinner message="Blog yazıları yükleniyor..." />
-        </div>
-      ) : (
-        <div className="blog-showcase__grid">
-          {visibleBlogs.map((blog, index) => {
-            const blogSlug = normalizeSlug(blog);
-            const linkSlug = blogSlug || blog?.id || blog?._id;
-            const cardKey =
-              blogSlug ||
-              blog?.id ||
-              blog?._id ||
-              blog?.title ||
-              `blog-${index}`;
-            const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
-            return (
-              <article key={cardKey} className="blog-card">
-                <div className="blog-card__tag">{blog.category || "Genel"}</div>
-                <h3 className="blog-card__title">{blog.title}</h3>
-                <p className="blog-card__excerpt">{excerpt}</p>
-                <div className="blog-card__footer">
-                  <span className="blog-card__meta">
-                    {blog.readingTime
-                      ? `${blog.readingTime} dk okuma`
-                      : "Keşfet"}
-                  </span>
-                  <Link className="blog-card__link" to={`/blog/${linkSlug}`}>
-                    Yazıya git
-                  </Link>
-                </div>
-              </article>
-            );
-          })}
-        </div>
-      )}
+      <div className="blog-showcase__grid" data-refreshing={refreshing}>
+        {visibleBlogs.map((blog, index) => {
+          const blogSlug = normalizeSlug(blog);
+          const linkSlug = blogSlug || blog?.id || blog?._id;
+          const cardKey =
+            blogSlug || blog?.id || blog?._id || blog?.title || `blog-${index}`;
+          const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
+          return (
+            <article key={cardKey} className="blog-card">
+              <div className="blog-card__tag">{blog.category || "Genel"}</div>
+              <h3 className="blog-card__title">{blog.title}</h3>
+              <p className="blog-card__excerpt">{excerpt}</p>
+              <div className="blog-card__footer">
+                <span className="blog-card__meta">
+                  <Clock className="blog-card__meta-icon" aria-hidden="true" />
+                  {blog.readingTime ? `${blog.readingTime} dk okuma` : "Keşfet"}
+                </span>
+                <Link className="blog-card__link" to={`/blog/${linkSlug}`}>
+                  Yazıya git
+                  <ArrowRight
+                    className="blog-card__link-icon"
+                    aria-hidden="true"
+                  />
+                </Link>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </section>
   );
 };

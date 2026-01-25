@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import Pagination from "@shared/ui/Pagination.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import { fetchBlogs } from "@modules/blog/services/blogService.js";
+import fallbackBlogs from "@shared/data/blogs.json";
 import "./styles/blog-pages.css";
 
 const stripHtml = (value = "") => value.replace(/<[^>]*>/g, " ").trim();
@@ -36,8 +36,9 @@ const formatDate = (value) => {
 };
 
 const BlogListPage = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [blogs, setBlogs] = useState(fallbackBlogs);
+  const [refreshing, setRefreshing] = useState(false);
+  const [dataSource, setDataSource] = useState("fallback");
   const [selectedCategory, setSelectedCategory] = useState("tümü");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -45,26 +46,43 @@ const BlogListPage = () => {
 
   useEffect(() => {
     let isMounted = true;
+    const controller = new AbortController();
 
     const loadBlogs = async () => {
-      setLoading(true);
+      setRefreshing(true);
 
       try {
-        const data = await fetchBlogs();
+        const data = await fetchBlogs({ signal: controller.signal });
         if (!isMounted) return;
-        setBlogs(Array.isArray(data) ? data : []);
+        const nextBlogs =
+          Array.isArray(data) && data.length > 0 ? data : fallbackBlogs;
+        setBlogs(nextBlogs);
+        setDataSource(
+          Array.isArray(data) && data.length > 0 ? "live" : "fallback",
+        );
       } catch {
-        // Sessiz fallback: blogService zaten fallback döndürüyor; ekstra işlem yok
-        if (isMounted) setBlogs([]);
+        if (!isMounted) return;
+        setBlogs(fallbackBlogs);
+        setDataSource("fallback");
       } finally {
-        if (isMounted) setLoading(false);
+        if (isMounted) setRefreshing(false);
       }
     };
 
     loadBlogs();
 
+    const intervalId = window.setInterval(
+      () => {
+        if (!isMounted) return;
+        loadBlogs();
+      },
+      5 * 60 * 1000,
+    );
+
     return () => {
       isMounted = false;
+      controller.abort();
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -97,10 +115,10 @@ const BlogListPage = () => {
 
     return filteredByCategory.sort((a, b) => {
       const first = new Date(
-        a?.publishedAt || a?.updatedAt || a?.createdAt || 0
+        a?.publishedAt || a?.updatedAt || a?.createdAt || 0,
       );
       const second = new Date(
-        b?.publishedAt || b?.updatedAt || b?.createdAt || 0
+        b?.publishedAt || b?.updatedAt || b?.createdAt || 0,
       );
       const featureWeight = (val) => (val ? 1 : 0);
       return (
@@ -168,6 +186,15 @@ const BlogListPage = () => {
             </p>
           </header>
 
+          <div className="blog-page__status" aria-live="polite">
+            <span className="blog-page__status-chip" data-state={dataSource}>
+              {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}
+            </span>
+            <span className="blog-page__status-text">
+              {refreshing ? "Güncelleniyor..." : "İçerikler hazır"}
+            </span>
+          </div>
+
           <div className="blog-page__filters" aria-live="polite">
             <div className="blog-page__chips">
               {categories.map((category) => (
@@ -194,9 +221,7 @@ const BlogListPage = () => {
             </label>
           </div>
 
-          {loading ? (
-            <LoadingSpinner message="Blog yazıları yükleniyor..." />
-          ) : publishedBlogs.length === 0 ? (
+          {publishedBlogs.length === 0 ? (
             <p className="blog-page__empty">
               Henüz yayınlanmış blog yazısı bulunmuyor. Çok yakında yeni
               içerikler ekleyeceğim.
@@ -220,7 +245,7 @@ const BlogListPage = () => {
                         {formatDate(
                           featuredBlog?.publishedAt ||
                             featuredBlog?.updatedAt ||
-                            featuredBlog?.createdAt
+                            featuredBlog?.createdAt,
                         ) ?? "Yeni"}
                       </span>
                       {featuredBlog.readingTime ? (
@@ -263,7 +288,7 @@ const BlogListPage = () => {
                   const cardKey = slug || blog?.title || `blog-${index}`;
                   const publishedDate =
                     formatDate(
-                      blog?.publishedAt || blog?.updatedAt || blog?.createdAt
+                      blog?.publishedAt || blog?.updatedAt || blog?.createdAt,
                     ) ?? "Yeni";
                   const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
                   const tags = Array.isArray(blog?.tags) ? blog.tags : [];
