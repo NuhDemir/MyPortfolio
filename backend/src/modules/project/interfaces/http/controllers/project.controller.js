@@ -5,19 +5,12 @@ import createProjectUseCase from "../../../application/use-cases/createProject.u
 import updateProjectUseCase from "../../../application/use-cases/updateProject.use-case.js";
 import deleteProjectUseCase from "../../../application/use-cases/deleteProject.use-case.js";
 import exportProjectsJsonUseCase from "../../../application/use-cases/exportProjectsJson.use-case.js";
+import { parseProjectListFilters } from "../parsers/projectListFilters.parser.js";
 
 export const createProjectController = (dependencies) => {
   const list = asyncHandler(async (req, res) => {
-    const projects = await listProjectsUseCase(
-      {
-        status: req.query.status,
-        featured:
-          req.query.featured !== undefined
-            ? req.query.featured === "true"
-            : undefined,
-      },
-      dependencies,
-    );
+    const filters = parseProjectListFilters(req.query);
+    const projects = await listProjectsUseCase(filters, dependencies);
 
     res.json(projects);
   });

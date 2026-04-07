@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./style/Navbar.css";
 import { useTheme } from "@core/context/ThemeContext.jsx";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
@@ -19,6 +20,8 @@ export const Navbar = ({
   onScrollToProjects,
   onScrollToContact,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const iconRef = useRef(null);
   const [showFullMenu, setShowFullMenu] = useState(true);
@@ -47,9 +50,27 @@ export const Navbar = ({
   // Tıklama olaylarını yöneten yardımcı fonksiyonlar
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
-  const handleNavClick = (scrollFunction) => {
+  const navigateToSection = (sectionId) => {
+    if (location.pathname === "/") {
+      const sectionNode = document.getElementById(sectionId);
+      if (sectionNode) {
+        sectionNode.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+      return;
+    }
+
+    navigate(`/#${sectionId}`);
+  };
+
+  const handleNavClick = (scrollFunction, sectionId) => {
     playClickSound(); // Tıklama sesini çal
-    if (scrollFunction) scrollFunction();
+
+    if (scrollFunction) {
+      scrollFunction();
+    } else if (sectionId) {
+      navigateToSection(sectionId);
+    }
+
     closeMobileMenu();
   };
 
@@ -65,14 +86,32 @@ export const Navbar = ({
 
   const handleIconClick = () => {
     playClickSound(); // Tıklama sesini çal
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
+
     closeMobileMenu();
   };
 
   const navItemsData = [
-    { label: "About", action: () => handleNavClick(onScrollToAbout) },
-    { label: "Project", action: () => handleNavClick(onScrollToProjects) },
-    { label: "Contact", action: () => handleNavClick(onScrollToContact) },
+    {
+      label: "About",
+      sectionId: "about-section",
+      action: () => handleNavClick(onScrollToAbout, "about-section"),
+    },
+    {
+      label: "Project",
+      sectionId: "projects-section",
+      action: () => handleNavClick(onScrollToProjects, "projects-section"),
+    },
+    {
+      label: "Contact",
+      sectionId: "contact-section",
+      action: () => handleNavClick(onScrollToContact, "contact-section"),
+    },
   ];
 
   return (

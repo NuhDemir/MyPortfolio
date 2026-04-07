@@ -1,6 +1,9 @@
 /* frontend/src/components/ProjectList/ProjectList.css */
 
 .project-list-section {
+  --nb-border-color: var(--color-text-primary);
+  --nb-paper-bg: var(--color-background-paper);
+  --nb-shadow-offset: 8px;
   padding: clamp(4rem, 8vw, 7rem) 0;
   position: relative;
   overflow: hidden;
@@ -14,67 +17,13 @@
   padding: 0 var(--spacing-md);
 }
 
-.project-list-actions {
-  display: flex;
-  justify-content: center;
-  margin: calc(var(--spacing-sm) * -1) 0 var(--spacing-md);
-}
-
-.project-list-all-btn {
-  border: 2px solid var(--color-text-primary);
-  background: var(--color-background-paper);
-  color: var(--color-text-primary);
-  font-weight: 800;
-  padding: 0.55rem 1rem;
-  border-radius: 999px;
-  box-shadow: 4px 4px 0 0 var(--color-text-primary);
-  cursor: pointer;
-}
-
-.project-list-all-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 0 var(--color-text-primary);
-}
-
-.project-list-status {
-  display: flex;
-  justify-content: center;
-  margin-bottom: clamp(0.5rem, 2vw, 1rem);
-}
-
-.project-list-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.9rem;
-  border-radius: 14px;
-  border: 2px solid var(--color-border-primary);
-  background: var(--color-background-paper);
-  color: var(--color-text-primary);
-  font-weight: 700;
-  letter-spacing: 0.01em;
-  box-shadow: var(--box-shadow-neubrutalist-sm);
-}
-
-.project-list-chip[data-state="live"] {
-  background: linear-gradient(
-    135deg,
-    rgba(77, 208, 140, 0.2),
-    rgba(0, 166, 125, 0.12)
-  );
-}
-
-.project-list-chip[data-state="fallback"] {
-  background: linear-gradient(
-    135deg,
-    rgba(255, 193, 7, 0.2),
-    rgba(255, 167, 38, 0.12)
-  );
-}
-
 .project-list-wrapper {
   position: relative;
   isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .project-list-container {
@@ -113,14 +62,14 @@
   /* İkon rengini tema değişkeninden al (lucide ikonları bu rengi miras alır) */
   color: var(--color-text-on-primary, var(--color-button-primary-text));
   /* Neubrutalist kenarlık stilini koru */
-  border: 2px solid var(--color-text-primary);
+  border: 3px solid var(--color-text-primary);
   border-radius: var(--border-radius-circle);
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   /* Neubrutalist gölge stilini koru */
-  box-shadow: 5px 5px 0px 0px var(--color-text-primary);
+  box-shadow: 6px 6px 0px 0px var(--color-text-primary);
   transition: all var(--transition-duration-short) ease-out;
 }
 
@@ -141,7 +90,7 @@
   background-color: var(--color-button-primary-bg-hover);
   /* Neubrutalist hover efektini koru */
   transform: translate(2px, 2px) translateY(-50%);
-  box-shadow: 2px 2px 0px 0px var(--color-text-primary);
+  box-shadow: 3px 3px 0px 0px var(--color-text-primary);
 }
 
 .scroll-button-v2:focus-visible {
@@ -152,7 +101,7 @@
 .scroll-button-v2::after {
   content: "";
   position: absolute;
-  inset: 6px;
+  inset: 5px;
   border-radius: inherit;
   border: 1px dashed
     color-mix(in srgb, var(--color-text-primary) 50%, transparent);

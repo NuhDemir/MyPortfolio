@@ -129,101 +129,103 @@
 /* === VARSAYILAN (LIGHT) TEMA DEĞİŞKENLERİ === */
 :root {
   /* === Ana Renkler === */
-  --color-primary: #0cb845;
-  --color-primary-darker: #678d74;
-  --color-secondary: #dad8c5;
-  --color-accent: #a3c4a8;
-  --color-accent-hover: #89ab8e;
+  --color-primary: #36b069;
+  --color-primary-darker: #248a4f;
+  --color-secondary: #dce8df;
+  --color-accent: #8fd4ad;
+  --color-accent-hover: #74c798;
 
   /* === Arka Plan Renkleri === */
-  --color-background-page: #36b069;
+  --color-background-page: #eef7f1;
   --color-background-paper: #ffffff;
-  --color-background-paper-transparent: rgba(255, 255, 255, 0.2);
-  --color-background-paper-translucent: rgba(255, 255, 255, 0.75);
-  --color-background-overlay: rgba(50, 70, 50, 0.05);
-  --color-background-tooltip: #ecebe6;
+  --color-background-paper-transparent: rgba(255, 255, 255, 0.6);
+  --color-background-paper-translucent: rgba(255, 255, 255, 0.85);
+  --color-background-overlay: rgba(36, 138, 79, 0.08);
+  --color-background-tooltip: #e7f2ea;
 
   /* === Metin Renkleri === */
-  --color-text-primary: #2d2d2d;
-  --color-text-secondary: #4a4a4a;
-  --color-text-muted: #6c6c6c;
+  --color-text-primary: #1d2f26;
+  --color-text-secondary: #355447;
+  --color-text-muted: #557366;
   --color-text-on-primary: #ffffff;
-  --color-text-on-secondary: #2d2d2d;
-  --color-text-on-accent: #2d2d2d;
-  --color-text-link: #2d2d2d;
-  --color-text-link-hover: #4c745c;
-  --color-text-tooltip: #2d2d2d;
+  --color-text-on-secondary: #1d2f26;
+  --color-text-on-accent: #173a2b;
+  --color-text-link: #1f6c47;
+  --color-text-link-hover: #155236;
+  --color-text-tooltip: #1d2f26;
 
   /* === Kenarlık Renkleri === */
-  --color-border-primary: #ffffff;
-  --color-border-strong: #eaeaea;
-  --color-border-input: #1c733a;
-  --color-border-input-focus: #74c69d;
-  --color-border-input-focus-shadow: rgb(116, 198, 157);
+  --color-border-primary: #2c7e58;
+  --color-border-strong: #1d2f26;
+  --color-border-input: #2c7e58;
+  --color-border-input-focus: #36b069;
+  --color-border-input-focus-shadow: rgba(54, 176, 105, 0.35);
 
   /* === Butonlar === */
-  --color-button-primary-bg: #ccc7a5;
-  --color-button-primary-text: #201f1f;
-  --color-button-primary-bg-hover: #678d74;
-  --color-button-shadow: rgba(0, 0, 0, 0.08);
-  --color-button-disabled-text: rgba(0, 0, 0, 0.3);
-  --color-button-loader-track: rgba(0, 0, 0, 0.1);
+  --color-button-primary-bg: #36b069;
+  --color-button-primary-text: #ffffff;
+  --color-button-primary-bg-hover: #248a4f;
+  --color-button-shadow: rgba(29, 47, 38, 0.14);
+  --color-button-disabled-text: rgba(29, 47, 38, 0.35);
+  --color-button-loader-track: rgba(29, 47, 38, 0.14);
 
   /* === Navbar === */
-  --color-navbar-bg: #ccc7a5;
-  --color-navbar-text: #2d2d2d;
-  --color-navbar-border: #2d2d2d;
-  --color-navbar-icon-bg: #2d2d2d;
-  --color-navbar-item-hover-bg: #d0e0d2;
-  --color-navbar-bg-container: #a3c4a81a;
-  --color-navbar-border-container: #1c733a46;
-  --color-navbar-icon-bg-fixed: #d0d0c0;
-  --color-navbar-border-fixed: #000000;
+  --color-navbar-bg: #f2f8f4;
+  --color-navbar-text: #1d2f26;
+  --color-navbar-border: #1d2f26;
+  --color-navbar-icon-bg: #1d2f26;
+  --color-navbar-item-hover-bg: #d7ede0;
+  --color-navbar-bg-container: rgba(143, 212, 173, 0.2);
+  --color-navbar-border-container: rgba(36, 138, 79, 0.35);
+  --color-navbar-icon-bg-fixed: #d7ede0;
+  --color-navbar-border-fixed: #1d2f26;
 
   /* === Footer ve Sosyal === */
-  --color-footer-bg: #ccc7a5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
-  --color-footer-text: #4a4a4a;
-  --color-footer-border: #c1c1a5;
-  --color-social-links-bg: #247149;
+  --color-footer-bg: #dff0e5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
+  --color-footer-text: #2b473b;
+  --color-footer-border: #b8dbc6;
+  --color-social-links-bg: #2c8f56;
   --color-social-links-text: #ffffff;
-  --color-social-links-hover-underline: #678d74;
+  --color-social-links-hover-underline: #1f6c47;
 
   /* === Diğer Bileşenler === */
-  --color-splash-bg: #cce3d1;
-  --color-splash-text: #2d2d2d;
-  --color-splash-accent: #95bfa3;
-  --color-splash-grid: rgba(100, 120, 100, 0.05);
-  --color-splash-loader-bar-container-border: #95bfa3;
-  --color-splash-loader-bar-bg: #678d74;
-  --color-splash-scanlines-bg-mid: rgba(50, 60, 50, 0.05);
-  --color-splash-scanlines-bg-start: rgba(50, 60, 50, 0);
+  --color-splash-bg: #dff2e6;
+  --color-splash-text: #1d2f26;
+  --color-splash-accent: #8fd4ad;
+  --color-splash-grid: rgba(54, 176, 105, 0.08);
+  --color-splash-loader-bar-container-border: #8fd4ad;
+  --color-splash-loader-bar-bg: #2c8f56;
+  --color-splash-scanlines-bg-mid: rgba(29, 47, 38, 0.05);
+  --color-splash-scanlines-bg-start: rgba(29, 47, 38, 0);
 
   /* === Durum Renkleri === */
-  --color-error-bg: #fff0f0;
-  --color-error-text: #b00020;
-  --color-error-border: #e29595;
-  --color-error-accent-border: #b00020;
-  --color-success-bg: #e0f2e9;
-  --color-success-text: #2d6a4f;
-  --color-success-icon-glow: rgba(116, 198, 157, 0.2);
-  --color-spinner-track: rgba(0, 0, 0, 0.05);
-  --color-spinner-active: #678d74;
+  --color-error-bg: #fff2f2;
+  --color-error-text: #a02626;
+  --color-error-border: #e8a3a3;
+  --color-error-accent-border: #a02626;
+  --color-success-bg: #e7f7ee;
+  --color-success-text: #1f6c47;
+  --color-success-icon-glow: rgba(54, 176, 105, 0.2);
+  --color-spinner-track: rgba(29, 47, 38, 0.08);
+  --color-spinner-active: #2c8f56;
 
   /* === Alt Başlık ve Yorumlar === */
-  --subtitle-bg: #f8f8f4;
-  --subtitle-text-color: #2d2d2d;
+  --subtitle-bg: #f3f9f5;
+  --subtitle-text-color: #1d2f26;
   --paper-color: #ffffff;
-  --comments-bg: #f7f7f5;
-  --comments-text-color: #2d2d2d;
-  --comments-user-text-color: #2d2d2d;
-  --comments-job-title-color: #6c6c6c;
-  --comments-shadow: rgba(0, 0, 0, 0.05);
+  --comments-bg: #f4faf6;
+  --comments-text-color: #1d2f26;
+  --comments-user-text-color: #1d2f26;
+  --comments-job-title-color: #557366;
+  --comments-shadow: rgba(29, 47, 38, 0.08);
 
   /* --- Tipografi Font Aileleri --- */
-  --font-family-primary: "Space Grotesk", system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-family-primary:
+    "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-family-secondary: "Amatic SC", cursive;
-  --font-family-code: "Space Mono", monospace; /* Space Mono için de font eklemeniz gerekebilir */
+  --font-family-code:
+    "Space Mono", monospace; /* Space Mono için de font eklemeniz gerekebilir */
 
   /* --- Boyutlar, Ağırlıklar, Boşluklar... (Değişiklik yok) --- */
   --font-size-base: 16px;
@@ -274,14 +276,14 @@
     var(--transition-timing-function);
 
   /* === Admin Panel Variables (Light Mode) === */
-  --admin-bg: #f5f5f0;
+  --admin-bg: #eff7f2;
   --admin-surface: #ffffff;
-  --admin-surface-alt: #fafaf8;
-  --admin-text: #2d2d2d;
-  --admin-text-secondary: #4a4a4a;
-  --admin-text-muted: #6c6c6c;
-  --admin-line: #e0e0d8;
-  --admin-accent: #0cb845;
+  --admin-surface-alt: #f5fbf7;
+  --admin-text: #1d2f26;
+  --admin-text-secondary: #355447;
+  --admin-text-muted: #557366;
+  --admin-line: #cbe3d4;
+  --admin-accent: #36b069;
   --admin-border-width: 2px;
   --admin-radius: 0.5rem;
   --admin-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -416,7 +418,8 @@ body {
   overflow-x: hidden;
   padding-top: var(--navbar-height);
   position: relative;
-  transition: background-color var(--transition-duration-base)
+  transition:
+    background-color var(--transition-duration-base)
       var(--transition-timing-function),
     color var(--transition-duration-base) var(--transition-timing-function);
   background-image: repeating-linear-gradient(

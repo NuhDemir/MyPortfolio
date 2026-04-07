@@ -1,4 +1,5 @@
 import { generateSlug } from "../../../../shared/utils/slug.js";
+import { buildProjectListQuery } from "./projectListQueryBuilder.js";
 
 const normalizeTags = (tags) => {
   if (!tags) return [];
@@ -177,26 +178,7 @@ export class ProjectService {
   }
 
   async listProjects(filters = {}) {
-    const query = {};
-
-    if (filters.status) {
-      query.status = filters.status;
-    }
-
-    if (filters.featured !== undefined) {
-      if (filters.featured === true) {
-        query.$or = [{ featured: true }, { isFeatured: true }];
-      } else {
-        query.$and = [
-          {
-            $or: [{ featured: false }, { featured: { $exists: false } }],
-          },
-          {
-            $or: [{ isFeatured: false }, { isFeatured: { $exists: false } }],
-          },
-        ];
-      }
-    }
+    const query = buildProjectListQuery(filters);
 
     const projects = await this.projectRepository.findAll(query, {
       lean: filters.lean ?? false,

@@ -286,7 +286,7 @@ const ProjectsPage = () => {
   return (
     <div className={`app-container show theme-${theme}`}>
       <Navbar />
-      <SocialLinks />
+
       <ScrollToTop />
 
       <main className="projects-page">
@@ -301,10 +301,6 @@ const ProjectsPage = () => {
 
           <div className="projects-page-title">
             <h1>Projeler</h1>
-            <p>
-              Neubrutalism estetiğinde, seçili işleri ve case study’leri tek
-              ekranda.
-            </p>
           </div>
 
           <div className="projects-page-status" aria-live="polite">

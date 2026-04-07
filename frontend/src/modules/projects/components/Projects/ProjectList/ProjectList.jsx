@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProjectCard from "../ProjectCard/ProjectCard";
+import ProjectListMenu from "./ProjectListMenu.jsx";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
 import "./ProjectList.css";
 import {
@@ -20,8 +21,10 @@ const ProjectList = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projects, setProjects] = useState(fallbackProjects);
-  const [refreshing, setRefreshing] = useState(false);
-  const [dataSource, setDataSource] = useState("fallback");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [platformFilter, setPlatformFilter] = useState("all");
+  const [featuredOnly, setFeaturedOnly] = useState(false);
 
   // Ses dosyaları için ref
   const popSoundRef = useRef(null);
@@ -39,27 +42,30 @@ const ProjectList = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
+    const filters = {
+      q: searchQuery,
+      status: statusFilter,
+      platform: platformFilter,
+      featured: featuredOnly ? true : undefined,
+    };
 
     const loadProjects = async () => {
-      setRefreshing(true);
-
       try {
-        const data = await fetchProjects({ signal: controller.signal });
+        const response = await fetchProjects({
+          signal: controller.signal,
+          filters,
+          includeSource: true,
+        });
         if (!isMounted) return;
+
+        const data = Array.isArray(response?.items) ? response.items : [];
         const nextProjects =
           Array.isArray(data) && data.length > 0 ? data : fallbackProjects;
+
         setProjects(nextProjects);
-        setDataSource(
-          Array.isArray(data) && data.length > 0 ? "live" : "fallback",
-        );
       } catch {
         if (!isMounted) return;
         setProjects(fallbackProjects);
-        setDataSource("fallback");
-      } finally {
-        if (isMounted) {
-          setRefreshing(false);
-        }
       }
     };
 
@@ -78,7 +84,26 @@ const ProjectList = () => {
       controller.abort();
       window.clearInterval(intervalId);
     };
+  }, [featuredOnly, platformFilter, searchQuery, statusFilter]);
+
+  const platformOptions = React.useMemo(() => {
+    const options = new Set();
+    fallbackProjects.forEach((project) => {
+      const platform =
+        project?.metadata?.platform || project?.platform || project?.category;
+      if (platform && String(platform).trim()) {
+        options.add(String(platform).trim());
+      }
+    });
+    return ["all", ...Array.from(options).sort((a, b) => a.localeCompare(b))];
   }, []);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setStatusFilter("all");
+    setPlatformFilter("all");
+    setFeaturedOnly(false);
+  };
 
   // Ses çalma işlemini basitleştiren yardımcı fonksiyon
   const playSound = (audioRef) => {
@@ -124,21 +149,20 @@ const ProjectList = () => {
           src={MyProjectsSvg}
           alt="Projelerim Başlığı"
         />
-        <div className="project-list-actions">
-          <button
-            type="button"
-            className="project-list-all-btn"
-            onClick={() => navigate("/projects")}
-          >
-            Tüm projeler
-          </button>
-        </div>
-        <div className="project-list-status" aria-live="polite">
-          <span className="project-list-chip" data-state={dataSource}>
-            {dataSource === "live" ? "Canlı veri" : "Yedek içerik"}
-            {refreshing ? " • Güncelleniyor" : ""}
-          </span>
-        </div>
+        <ProjectListMenu
+          searchQuery={searchQuery}
+          onSearchQueryChange={setSearchQuery}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
+          platformFilter={platformFilter}
+          onPlatformFilterChange={setPlatformFilter}
+          platformOptions={platformOptions}
+          featuredOnly={featuredOnly}
+          onFeaturedOnlyChange={setFeaturedOnly}
+          onClearFilters={clearFilters}
+          onOpenAllProjects={() => navigate("/projects")}
+        />
+
         {/* Eğer backend yoksa sessizce fallback gösteriyoruz; hata UI'sı yok */}
         <div className="project-list-wrapper">
           {/* Sola Kaydırma Butonu */}
