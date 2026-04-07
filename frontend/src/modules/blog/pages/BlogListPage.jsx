@@ -4,8 +4,10 @@ import Pagination from "@shared/ui/Pagination.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
-import { fetchBlogs } from "@modules/blog/services/blogService.js";
-import fallbackBlogs from "@shared/data/blogs.json";
+import {
+  FALLBACK_BLOGS as fallbackBlogs,
+  fetchBlogs,
+} from "@modules/blog/services/blogService.js";
 import "./styles/blog-pages.css";
 
 const stripHtml = (value = "") => value.replace(/<[^>]*>/g, " ").trim();

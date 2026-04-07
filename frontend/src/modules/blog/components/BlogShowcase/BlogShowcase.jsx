@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { fetchBlogs } from "@modules/blog/services/blogService.js";
-import fallbackBlogs from "@shared/data/blogs.json";
+import {
+  FALLBACK_BLOGS as fallbackBlogs,
+  fetchBlogs,
+} from "@modules/blog/services/blogService.js";
 import {
   ArrowRight,
   BookOpenText,

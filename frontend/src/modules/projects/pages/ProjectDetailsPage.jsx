@@ -4,8 +4,10 @@ import { useTheme } from "@core/context/ThemeContext.jsx";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
-import { fetchProjects } from "@modules/projects/services/projectService.js";
-import fallbackProjects from "@modules/projects/data/projectData.json";
+import {
+  FALLBACK_PROJECTS as fallbackProjects,
+  fetchProjects,
+} from "@modules/projects/services/projectService.js";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";

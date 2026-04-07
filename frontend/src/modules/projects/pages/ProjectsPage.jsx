@@ -5,8 +5,10 @@ import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
 import ProjectCard from "@modules/projects/components/Projects/ProjectCard/ProjectCard.jsx";
-import { fetchProjects } from "@modules/projects/services/projectService.js";
-import fallbackProjects from "@modules/projects/data/projectData.json";
+import {
+  FALLBACK_PROJECTS as fallbackProjects,
+  fetchProjects,
+} from "@modules/projects/services/projectService.js";
 import "./ProjectsPage.css";
 
 const REQUEST_REFRESH_INTERVAL_MS = 5 * 60 * 1000;

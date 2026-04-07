@@ -2,11 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
-import { fetchBlogBySlug } from "@modules/blog/services/blogService.js";
+import {
+  FALLBACK_BLOGS as fallbackBlogs,
+  fetchBlogBySlug,
+} from "@modules/blog/services/blogService.js";
 import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import CommentSection from "@modules/blog/components/CommentSection.jsx";
-import fallbackBlogs from "@shared/data/blogs.json";
 import "./styles/blog-pages.css";
 
 const stripHtml = (value = "") => value.replace(/<[^>]*>/g, " ").trim();

@@ -3,8 +3,10 @@ import { useNavigate } from "react-router-dom";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
 import "./ProjectList.css";
-import fallbackProjects from "@modules/projects/data/projectData.json";
-import { fetchProjects } from "@modules/projects/services/projectService.js";
+import {
+  FALLBACK_PROJECTS as fallbackProjects,
+  fetchProjects,
+} from "@modules/projects/services/projectService.js";
 
 // İkonlar ve Başlık SVG'si
 import MyProjectsSvg from "/assets/icons/project/MyProject.svg";
