@@ -121,20 +121,32 @@ Render Dashboard → Cron Jobs → Add Cron Job
 - Schedule: `*/10 * * * *` (Her 10 dakika)
 - Command: `curl https://your-backend.onrender.com/api/health`
 
-### 3. GitHub Actions
+### 3. GitHub Actions (14 Dakika)
 
 ```yaml
-name: Keep Backend Alive
+name: Render Backend Keep Alive
 on:
   schedule:
-    - cron: "*/10 * * * *" # Her 10 dakika
+    - cron: "*/14 * * * *" # Her 14 dakika
+  workflow_dispatch:
 jobs:
-  ping:
+  ping-render-health:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Backend
-        run: curl https://your-backend.onrender.com/api/health
+      - name: Ping Render health endpoint
+        run: curl --fail --show-error --silent https://your-backend.onrender.com/api/health
 ```
+
+#### GitHub Secret Ayarı
+
+Workflow dosyası: `.github/workflows/render-keep-alive.yml`
+
+1. GitHub repo → **Settings** → **Secrets and variables** → **Actions**
+2. **New repository secret** tıkla
+3. Name: `RENDER_HEALTHCHECK_URL`
+4. Value: `https://your-backend.onrender.com/api/health`
+
+Bu ayar ile workflow her 14 dakikada bir health endpoint'i ping'ler ve backend'i sıcak tutar.
 
 ## ✅ Avantajlar
 
