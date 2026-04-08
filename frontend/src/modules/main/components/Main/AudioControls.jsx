@@ -7,6 +7,15 @@ import React, {
 } from "react";
 import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
 
+const SONGS = [
+  { path: "/audio/alisamadim.mp3", name: "Alışamadım" },
+  { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
+  {
+    path: "/audio/uzunincebiryoldayim.mp3",
+    name: "Uzun İnce Bir Yoldayım",
+  },
+];
+
 const AudioControls = forwardRef(
   ({ onIsPlayingChange, onAudioDataChange }, ref) => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -24,19 +33,11 @@ const AudioControls = forwardRef(
     const sourceRef = useRef(null);
     const animationFrameRef = useRef(null);
 
-    const songs = [
-      { path: "/audio/alisamadim.mp3", name: "Alışamadım" },
-      { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
-      {
-        path: "/audio/uzunincebiryoldayim.mp3",
-        name: "Uzun İnce Bir Yoldayım",
-      },
-    ];
-
     const setupAudioContext = useCallback(() => {
       if (!audioContextRef.current) {
-        audioContextRef.current = new (window.AudioContext ||
-          window.webkitAudioContext)();
+        audioContextRef.current = new (
+          window.AudioContext || window.webkitAudioContext
+        )();
         analyserRef.current = audioContextRef.current.createAnalyser();
         analyserRef.current.fftSize = 256;
         const bufferLength = analyserRef.current.frequencyBinCount;
@@ -44,7 +45,7 @@ const AudioControls = forwardRef(
       }
       if (audioRef.current && !sourceRef.current) {
         sourceRef.current = audioContextRef.current.createMediaElementSource(
-          audioRef.current
+          audioRef.current,
         );
         sourceRef.current.connect(analyserRef.current);
         analyserRef.current.connect(audioContextRef.current.destination);
@@ -52,7 +53,7 @@ const AudioControls = forwardRef(
     }, []);
 
     useEffect(() => {
-      const randomIndex = Math.floor(Math.random() * songs.length);
+      const randomIndex = Math.floor(Math.random() * SONGS.length);
       setCurrentSongIndex(randomIndex);
     }, []);
 
@@ -88,8 +89,8 @@ const AudioControls = forwardRef(
     const changeToRandomSong = () => {
       let newIndex;
       do {
-        newIndex = Math.floor(Math.random() * songs.length);
-      } while (newIndex === currentSongIndex && songs.length > 1);
+        newIndex = Math.floor(Math.random() * SONGS.length);
+      } while (newIndex === currentSongIndex && SONGS.length > 1);
       setCurrentSongIndex(newIndex);
       setCurrentTime(0);
       const wasPlaying = isPlaying;
@@ -156,7 +157,7 @@ const AudioControls = forwardRef(
       <div ref={ref} className="audio-controls">
         <div className="soundtrack-info">
           <div className="soundtrack-label">SOUNDTRACK</div>
-          <div className="song-name">{songs[currentSongIndex].name}</div>
+          <div className="song-name">{SONGS[currentSongIndex].name}</div>
         </div>
         <div className="audio-player">
           {/* Zaman Göstergesi ve Zaman Çubuğu */}
@@ -170,10 +171,20 @@ const AudioControls = forwardRef(
 
           {/* Kontrol Butonları */}
           <div className="controls-wrapper">
-            <button className="control-button" onClick={changeToRandomSong}>
+            <button
+              type="button"
+              className="control-button"
+              onClick={changeToRandomSong}
+              aria-label="Sonraki rastgele şarkıya geç"
+            >
               <SkipForward size={24} strokeWidth={2} />
             </button>
-            <button className="control-button play-button" onClick={togglePlay}>
+            <button
+              type="button"
+              className="control-button play-button"
+              onClick={togglePlay}
+              aria-label={isPlaying ? "Müziği duraklat" : "Müziği oynat"}
+            >
               {isPlaying ? (
                 <Pause size={28} strokeWidth={2} />
               ) : (
@@ -182,8 +193,10 @@ const AudioControls = forwardRef(
             </button>
             <div className="volume-control">
               <button
+                type="button"
                 className="control-button volume-button"
                 onClick={toggleMute}
+                aria-label={isMuted || volume === 0 ? "Sesi aç" : "Sesi kapat"}
               >
                 {isMuted || volume === 0 ? (
                   <VolumeX size={22} strokeWidth={2} />
@@ -204,7 +217,7 @@ const AudioControls = forwardRef(
           </div>
           <audio
             ref={audioRef}
-            src={songs[currentSongIndex].path}
+            src={SONGS[currentSongIndex].path}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onEnded={changeToRandomSong}
@@ -213,7 +226,7 @@ const AudioControls = forwardRef(
         </div>
       </div>
     );
-  }
+  },
 );
 
 export default AudioControls;

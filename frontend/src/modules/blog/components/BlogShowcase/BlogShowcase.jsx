@@ -164,6 +164,7 @@ const BlogShowcase = () => {
                 </span>
                 <Link className="blog-card__link" to={`/blog/${linkSlug}`}>
                   Yazıya git
+                  <span className="visually-hidden">: {blog.title}</span>
                   <ArrowRight
                     className="blog-card__link-icon"
                     aria-hidden="true"

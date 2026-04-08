@@ -5,7 +5,7 @@ import smileSvg from "/assets/icons/about/about_header/smile.svg";
 const Header = () => {
   return (
     <div className=" header ">
-      <img src={smileSvg} alt="smile" loading="lazy" />
+      <img src={smileSvg} alt="smile" loading="lazy" width={849} height={144} />
     </div>
   );
 };

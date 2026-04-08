@@ -66,33 +66,35 @@ const DefaultExperience = () => {
         onScrollToProjects={() => scrollToSection(projectsRef)}
         onScrollToContact={() => scrollToSection(contactRef)}
       />
-      <div className="content-container">
-        <Main
-          onIsPlayingChange={setIsPlaying}
-          onAudioDataChange={setAudioData}
-        />
-      </div>
-      <SocialLinks />
-      <ScrollToTop />
-      <section id="about-section" ref={aboutRef}>
-        <About />
-      </section>
-      <section id="projects-section" ref={projectsRef}>
-        <ProjectList />
-      </section>
-      <section id="blog-section" ref={blogRef}>
-        <BlogShowcase />
-      </section>
-      <section id="comments-section">
-        <Suspense
-          fallback={<div className="component-loader">Yükleniyor...</div>}
-        >
-          <Comments />
-        </Suspense>
-      </section>
-      <section id="contact-section" ref={contactRef}>
-        <MessageForm />
-      </section>
+      <main id="main-content">
+        <div className="content-container">
+          <Main
+            onIsPlayingChange={setIsPlaying}
+            onAudioDataChange={setAudioData}
+          />
+        </div>
+        <SocialLinks />
+        <ScrollToTop />
+        <section id="about-section" ref={aboutRef}>
+          <About />
+        </section>
+        <section id="projects-section" ref={projectsRef}>
+          <ProjectList />
+        </section>
+        <section id="blog-section" ref={blogRef}>
+          <BlogShowcase />
+        </section>
+        <section id="comments-section">
+          <Suspense
+            fallback={<div className="component-loader">Yükleniyor...</div>}
+          >
+            <Comments />
+          </Suspense>
+        </section>
+        <section id="contact-section" ref={contactRef}>
+          <MessageForm />
+        </section>
+      </main>
       <Footer />
     </div>
   );
@@ -116,6 +118,8 @@ const AppContent = () => {
 };
 
 const App = () => {
+  const isDev = import.meta.env.DEV;
+
   // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
@@ -129,14 +133,16 @@ const App = () => {
     apiUrl: API_BASE_URL,
     intervalMinutes: 10, // Her 10 dakikada bir ping at (Render 15 dk sonra uyuyor)
     enabled: isBackendKeepAliveEnabled,
+    debug: isDev,
   });
 
-  console.log("🔧 App Config:", {
-    apiBaseUrl: API_BASE_URL,
-    keepAliveEnabled: isBackendKeepAliveEnabled,
-    environment: import.meta.env.MODE,
-    isProduction: import.meta.env.PROD,
-  });
+  if (isDev) {
+    console.debug("App config initialized", {
+      keepAliveEnabled: isBackendKeepAliveEnabled,
+      environment: import.meta.env.MODE,
+      isProduction: import.meta.env.PROD,
+    });
+  }
 
   return (
     <Router>

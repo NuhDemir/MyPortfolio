@@ -29,7 +29,7 @@ Render Dashboard → Your Service → Environment:
 
 **EKLEYİN:**
 
-- ✅ `MONGO_URI` = `mongodb+srv://nuhdemirdev:KW2q6z7KtvMMEUcj@cluster0.nckrcqg.mongodb.net/portfolio?retryWrites=true&w=majority`
+- ✅ `MONGO_URI` = `mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority`
 
 ⚠️ **ÖNEMLİ:** Connection string'in sonuna **`/portfolio`** ekleyin (database adı)
 
@@ -40,7 +40,7 @@ NODE_ENV=production
 PORT=10000
 
 # Database - ÖNEMLİ: MONGO_URI kullanın
-MONGO_URI=mongodb+srv://nuhdemirdev:KW2q6z7KtvMMEUcj@cluster0.nckrcqg.mongodb.net/portfolio?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
 
 # JWT - ⚠️ Production'da güçlü şifreler kullanın!
 JWT_SECRET=super-guclu-en-az-32-karakter-rastgele-anahtar-buraya
@@ -48,9 +48,9 @@ JWT_REFRESH_SECRET=baska-bir-super-guclu-32-karakter-anahtar
 JWT_EXPIRES_IN=24h
 
 # Cloudinary (Mevcut değerleriniz)
-CLOUDINARY_CLOUD_NAME=dahmmlu7u
-CLOUDINARY_API_KEY=244259944224585
-CLOUDINARY_API_SECRET=_7l7gVgvSau3lWZv9FuhcMtWKTE
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
 # CORS & Frontend
 CORS_ALLOWED_ORIGINS=https://nuhdemir.dev

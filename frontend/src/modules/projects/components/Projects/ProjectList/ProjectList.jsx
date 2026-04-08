@@ -144,10 +144,13 @@ const ProjectList = () => {
   return (
     <>
       <section className="project-list-section" id="projects-section">
+        <h2 className="visually-hidden">Projelerim</h2>
         <img
           className="project-list-title-svg"
           src={MyProjectsSvg}
           alt="Projelerim Başlığı"
+          width={503}
+          height={109}
         />
         <ProjectListMenu
           searchQuery={searchQuery}

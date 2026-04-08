@@ -16,6 +16,8 @@ const Footer = () => {
             src={VectorSvg}
             alt={`${companyName} Logo`}
             className="footer-logo-svg"
+            width={49}
+            height={49}
           />
           <span className="footer-brand-name">{companyName}</span>
         </a>

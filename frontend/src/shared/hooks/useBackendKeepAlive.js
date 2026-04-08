@@ -16,6 +16,7 @@ export const useBackendKeepAlive = ({
   apiUrl,
   intervalMinutes = 10,
   enabled = true,
+  debug = false,
 } = {}) => {
   const intervalRef = useRef(null);
 
@@ -36,17 +37,18 @@ export const useBackendKeepAlive = ({
         });
 
         if (response.ok) {
-          const data = await response.json();
-          console.log("✅ Backend ping successful:", {
-            status: data.status,
-            timestamp: data.timestamp,
-            uptime: `${Math.floor(data.uptime / 60)} minutes`,
-          });
+          if (debug) {
+            console.debug("Backend ping successful");
+          }
         } else {
-          console.warn("⚠️ Backend ping failed:", response.status);
+          if (debug) {
+            console.warn("Backend ping failed");
+          }
         }
-      } catch (error) {
-        console.error("❌ Backend ping error:", error.message);
+      } catch {
+        if (debug) {
+          console.error("Backend ping error");
+        }
       }
     };
 
@@ -57,18 +59,22 @@ export const useBackendKeepAlive = ({
     const intervalMs = intervalMinutes * 60 * 1000;
     intervalRef.current = setInterval(pingBackend, intervalMs);
 
-    console.log(
-      `🔄 Backend keep-alive started: Ping every ${intervalMinutes} minutes`
-    );
+    if (debug) {
+      console.debug(
+        `Backend keep-alive started: Ping every ${intervalMinutes} minutes`,
+      );
+    }
 
     // Cleanup
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
-        console.log("🛑 Backend keep-alive stopped");
+        if (debug) {
+          console.debug("Backend keep-alive stopped");
+        }
       }
     };
-  }, [apiUrl, intervalMinutes, enabled]);
+  }, [apiUrl, intervalMinutes, enabled, debug]);
 
   return null;
 };

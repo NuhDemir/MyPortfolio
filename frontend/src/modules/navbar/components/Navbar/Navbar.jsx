@@ -132,18 +132,23 @@ export const Navbar = ({
 
       {/* Mobil Menü İkonu (Hamburger/Kapatma) */}
       {!showFullMenu && (
-        <div
+        <button
+          type="button"
           className="navbar-icon-fixed"
           onClick={toggleMobileMenu}
           onMouseEnter={playHoverSound}
           aria-expanded={isMobileMenuOpen}
           aria-controls="mobile-menu-list"
+          aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
         >
           <img
             src={isMobileMenuOpen ? closeIcon : hamburgerIcon}
-            alt="Menu Toggle"
+            alt=""
+            aria-hidden="true"
+            width={24}
+            height={24}
           />
-        </div>
+        </button>
       )}
 
       {/* Ana Navbar Konteyneri */}

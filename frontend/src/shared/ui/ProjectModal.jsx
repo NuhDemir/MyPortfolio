@@ -1,9 +1,14 @@
 import React from "react";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X, ExternalLink, Github } from "lucide-react";
 import "@shared/styles/common/ProjectModal.css";
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
+  const modalRef = useRef(null);
+  const previousFocusRef = useRef(null);
+  const [isMediaReady, setIsMediaReady] = useState(false);
+  const [hasMediaError, setHasMediaError] = useState(false);
+
   // Efekt 1: Modal açıkken arkadaki sayfanın kaymasını engelle
   useEffect(() => {
     if (isOpen) {
@@ -17,37 +22,87 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  // Efekt 2: "Escape" tuşuna basıldığında modalı kapat
+  // Efekt 2: Focus trap + ESC kapatma + kapanınca önceki odağa geri dön
   useEffect(() => {
+    if (!isOpen) return;
+
+    const modalElement = modalRef.current;
+    if (!modalElement) return;
+
+    previousFocusRef.current = document.activeElement;
+
+    const getFocusableElements = () =>
+      Array.from(
+        modalElement.querySelectorAll(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])',
+        ),
+      );
+
+    const focusableElements = getFocusableElements();
+    const initialFocus = focusableElements[0] || modalElement;
+    initialFocus.focus();
+
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
+        event.preventDefault();
         onClose();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const elements = getFocusableElements();
+
+      if (elements.length === 0) {
+        event.preventDefault();
+        modalElement.focus();
+        return;
+      }
+
+      const firstElement = elements[0];
+      const lastElement = elements[elements.length - 1];
+      const activeElement = document.activeElement;
+
+      if (event.shiftKey) {
+        if (
+          activeElement === firstElement ||
+          !modalElement.contains(activeElement)
+        ) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+        return;
+      }
+
+      if (activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
 
-    // Olay dinleyicisini ekle
     window.addEventListener("keydown", handleKeyDown);
 
-    // Temizlik: Component kaldırıldığında olay dinleyicisini kaldır
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
+      if (
+        previousFocusRef.current &&
+        typeof previousFocusRef.current.focus === "function"
+      ) {
+        previousFocusRef.current.focus();
+      }
     };
-  }, [onClose]); // onClose değişirse (genellikle değişmez) yeniden çalıştır
+  }, [isOpen, onClose]);
 
-  // Eğer modalın açık olmaması gerekiyorsa veya gösterilecek proje verisi yoksa,
-  // hiçbir şey render etme (boş dön).
-  if (!isOpen || !project) {
-    return null;
-  }
-
-  const tags = Array.isArray(project.tags) ? project.tags : [];
-  const techStack = Array.isArray(project.techStack) ? project.techStack : [];
+  const tags = Array.isArray(project?.tags) ? project.tags : [];
+  const techStack = Array.isArray(project?.techStack) ? project.techStack : [];
   const hasDetailsHtml =
-    typeof project.details === "string" && project.details.trim().length > 0;
+    typeof project?.details === "string" && project.details.trim().length > 0;
   const descriptionText =
-    typeof project.description === "string" ? project.description.trim() : "";
+    typeof project?.description === "string" ? project.description.trim() : "";
 
-  const title = project?.metadata?.title || project.title;
+  const title = project?.metadata?.title || project?.title;
   const tagline = project?.metadata?.tagline || "";
   const platform = project?.metadata?.platform;
   const role = project?.metadata?.role;
@@ -68,6 +123,24 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
     ? caseStudy.challenges
     : [];
   const metrics = Array.isArray(caseStudy?.metrics) ? caseStudy.metrics : [];
+  const modalTitleId = "project-modal-title";
+  const hasVisualMedia =
+    Boolean(heroVideoUrl || thumbnailUrl) && !hasMediaError;
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    setIsMediaReady(false);
+    setHasMediaError(false);
+  }, [isOpen, heroVideoUrl, thumbnailUrl]);
+
+  // Eğer modalın açık olmaması gerekiyorsa veya gösterilecek proje verisi yoksa,
+  // hiçbir şey render etme (boş dön).
+  if (!isOpen || !project) {
+    return null;
+  }
 
   return (
     // 1. Overlay: Tüm ekranı kaplayan yarı saydam arka plan.
@@ -76,7 +149,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
       {/* 2. Modal Konteyneri: İçerik kutusu.
           Tıklamaların overlay'e gitmesini engellemek için `stopPropagation` kullanılır. */}
       <div
+        ref={modalRef}
         className="project-modal-container"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={modalTitleId}
+        tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 3. Başlık Çubuğu: Nostaljik pencere başlığı */}
@@ -86,9 +164,12 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
             <span />
             <span />
           </div>
-          <h2 className="project-modal-title">{title}</h2>
+          <h2 className="project-modal-title" id={modalTitleId}>
+            {title}
+          </h2>
           <button
             className="project-modal-close-btn"
+            type="button"
             onClick={onClose}
             aria-label="Kapat"
           >
@@ -99,26 +180,61 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
         {/* 4. Ana İçerik Alanı: Kaydırılabilir bölüm */}
         <div className="project-modal-content">
           {/* Sol Sütun: Proje Görseli */}
-          <div className="project-modal-image-wrapper">
+          <div
+            className={`project-modal-image-wrapper ${
+              !isMediaReady && hasVisualMedia ? "is-loading" : ""
+            }`}
+          >
+            {!isMediaReady && hasVisualMedia ? (
+              <div
+                className="project-modal-media-skeleton"
+                aria-hidden="true"
+              />
+            ) : null}
+
             {heroVideoUrl ? (
               <video
-                className="project-modal-hero-video"
+                className={`project-modal-hero-video project-modal-media ${
+                  isMediaReady ? "is-ready" : ""
+                }`}
                 src={heroVideoUrl}
+                preload="metadata"
                 muted
                 playsInline
                 autoPlay
                 loop
+                onLoadedData={() => setIsMediaReady(true)}
+                onError={() => {
+                  setHasMediaError(true);
+                  setIsMediaReady(false);
+                }}
               />
-            ) : (
+            ) : thumbnailUrl ? (
               <img
+                className={`project-modal-media ${isMediaReady ? "is-ready" : ""}`}
                 src={thumbnailUrl}
                 alt={`${title} görseli`}
                 loading="lazy"
+                width={1280}
+                height={720}
+                onLoad={() => setIsMediaReady(true)}
                 onError={(e) => {
                   e.currentTarget.style.display = "none";
+                  setHasMediaError(true);
+                  setIsMediaReady(false);
                 }}
               />
+            ) : (
+              <div className="project-modal-image-fallback">
+                Proje gorseli yakinda eklenecek
+              </div>
             )}
+
+            {hasMediaError ? (
+              <div className="project-modal-image-fallback">
+                Medya yuklenemedi
+              </div>
+            ) : null}
           </div>
 
           {/* Sağ Sütun: Proje Detayları */}

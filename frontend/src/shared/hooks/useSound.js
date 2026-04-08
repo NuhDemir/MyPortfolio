@@ -7,6 +7,7 @@ const audioCache = {};
 
 // Ses sisteminin "kilidinin" açık olup olmadığını takip eden global state
 let isAudioContextUnlocked = false;
+const isDev = import.meta.env.DEV;
 
 /**
  * Tarayıcının otomatik oynatma kısıtlamalarını aşmak için "sessizliği bozan" fonksiyon.
@@ -22,7 +23,9 @@ const unlockAudioContext = () => {
   }
 
   isAudioContextUnlocked = true;
-  console.log("Audio Context Unlocked. Sounds can now play.");
+  if (isDev) {
+    console.debug("Audio context unlocked");
+  }
 
   // Bu dinleyiciye artık gerek kalmadığı için kaldırılır.
   window.removeEventListener("click", unlockAudioContext);
@@ -79,7 +82,7 @@ export const useSound = (soundUrl, volume = 0.5) => {
       });
     } else {
       console.warn(
-        `Sound (${soundUrl}) not found in cache. It might be loading.`
+        `Sound (${soundUrl}) not found in cache. It might be loading.`,
       );
     }
   }, [soundUrl]);

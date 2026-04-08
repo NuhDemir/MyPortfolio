@@ -1,6 +1,7 @@
 # 🚀 Production Deployment Checklist
 
 ## Backend: MyPortfolio
+
 **Production Client URL:** https://nuhdemir.dev
 
 ---
@@ -10,6 +11,7 @@
 ### 1. External Services
 
 #### MongoDB Atlas
+
 - [ ] Hesap oluşturuldu: https://mongodb.com/cloud/atlas
 - [ ] M0 FREE Cluster oluşturuldu
 - [ ] Database adı: `portfolio`
@@ -19,18 +21,21 @@
 - [ ] Connection string test edildi
 
 **Connection String Format:**
+
 ```
 mongodb+srv://USERNAME:PASSWORD@cluster0.xxxxx.mongodb.net/portfolio?retryWrites=true&w=majority
 ```
 
 #### Cloudinary
+
 - [ ] Hesap oluşturuldu: https://cloudinary.com
 - [ ] Dashboard'dan bilgiler alındı:
-  - Cloud Name: `dahmmlu7u` ✅
-  - API Key: `244259944224585` ✅
-  - API Secret: `_7l7gVgvSau3lWZv9FuhcMtWKTE` ✅
+  - Cloud Name: `your_cloud_name`
+  - API Key: `your_api_key`
+  - API Secret: `your_api_secret`
 
 #### GitHub Student Pack
+
 - [ ] Student Pack aktif: https://education.github.com/pack
 - [ ] Render.com kredisi alındı ($200/yıl)
 - [ ] Railway.app kredisi alındı ($20/ay - opsiyonel)
@@ -52,9 +57,9 @@ JWT_REFRESH_SECRET=BURAYA-EN-AZ-32-KARAKTER-GUCLU-RASTGELE-REFRESH-ANAHTAR
 JWT_EXPIRES_IN=24h
 
 # Cloudinary (Mevcut değerleriniz)
-CLOUDINARY_CLOUD_NAME=dahmmlu7u
-CLOUDINARY_API_KEY=244259944224585
-CLOUDINARY_API_SECRET=_7l7gVgvSau3lWZv9FuhcMtWKTE
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
 # Server
 NODE_ENV=production
@@ -70,6 +75,7 @@ FRONTEND_URL=https://nuhdemir.dev
 **Opsiyonel Yöntemler:**
 
 1. **Node.js ile:**
+
    ```bash
    node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
    ```
@@ -126,11 +132,13 @@ FRONTEND_URL=https://nuhdemir.dev
 ## 🧪 Deployment Sonrası Test
 
 ### 1. Health Check
+
 ```bash
 curl https://YOUR-BACKEND-URL.onrender.com/api/health
 ```
 
 **Beklenen Sonuç:**
+
 ```json
 {
   "status": "ok",
@@ -143,6 +151,7 @@ curl https://YOUR-BACKEND-URL.onrender.com/api/health
 - [ ] Health endpoint çalışıyor ✅
 
 ### 2. Database Bağlantısı
+
 ```bash
 # Render Dashboard → Logs
 # "Connected to MongoDB" mesajını ara
@@ -196,12 +205,14 @@ Render.com ücretsiz planında backend 15 dakika inaktif kalırsa uyku moduna gi
 - [ ] Frontend deploy sonrası ping loglarını console'da kontrol et
 
 **Console'da göreceğiniz:**
+
 ```
 🔄 Backend keep-alive started: Ping every 10 minutes
 ✅ Backend ping successful: { status: 'ok', timestamp: '...', uptime: '123 minutes' }
 ```
 
 **Manuel Monitoring (Opsiyonel):**
+
 - [ ] UptimeRobot kuruldu: https://uptimerobot.com
 - Check URL: `https://YOUR-BACKEND-URL.onrender.com/api/health`
 - Interval: Her 5 dakika
@@ -225,9 +236,10 @@ Render.com ücretsiz planında backend 15 dakika inaktif kalırsa uyku moduna gi
 ### Frontend'de Yapılacaklar:
 
 1. **API Base URL Güncelle**
+
    ```javascript
    // Frontend: src/core/http/axiosClient.js veya config
-   const API_URL = 'https://YOUR-BACKEND-URL.onrender.com/api'
+   const API_URL = "https://YOUR-BACKEND-URL.onrender.com/api";
    ```
 
 2. **Environment Variables (Frontend)**
@@ -244,22 +256,26 @@ Render.com ücretsiz planında backend 15 dakika inaktif kalırsa uyku moduna gi
 ## 🆘 Sorun Giderme
 
 ### Build Hatası
+
 - [ ] `package.json` doğru mu kontrol edildi
 - [ ] Node version uyumlu mu (`.node-version` = 20)
 - [ ] Build logs kontrol edildi
 
 ### Database Connection Hatası
+
 - [ ] MongoDB Atlas IP whitelist `0.0.0.0/0` mu?
 - [ ] Connection string doğru mu?
 - [ ] Database user şifresi doğru mu?
 - [ ] Database name var mı? (`/portfolio`)
 
 ### CORS Hatası
+
 - [ ] `CORS_ALLOWED_ORIGINS` doğru mu? (`https://nuhdemir.dev`)
 - [ ] Frontend URL'i doğru mu?
 - [ ] Browser console'da hata mesajı kontrol edildi
 
 ### Memory/Performance
+
 - [ ] Free tier limitler: 512MB RAM, CPU throttling
 - [ ] Gerekirse Starter plan'a upgrade ($7/ay)
 
@@ -269,16 +285,17 @@ Render.com ücretsiz planında backend 15 dakika inaktif kalırsa uyku moduna gi
 
 ### Kullanılan Servisler
 
-| Servis | Plan | Maliyet | URL |
-|--------|------|---------|-----|
-| **Render.com** | Free + Student | $0 | https://YOUR-URL.onrender.com |
-| **MongoDB Atlas** | M0 Free | $0 | - |
-| **Cloudinary** | Free Tier | $0 | - |
-| **Frontend** | - | - | https://nuhdemir.dev |
+| Servis            | Plan           | Maliyet | URL                           |
+| ----------------- | -------------- | ------- | ----------------------------- |
+| **Render.com**    | Free + Student | $0      | https://YOUR-URL.onrender.com |
+| **MongoDB Atlas** | M0 Free        | $0      | -                             |
+| **Cloudinary**    | Free Tier      | $0      | -                             |
+| **Frontend**      | -              | -       | https://nuhdemir.dev          |
 
 **Toplam Maliyet:** $0/ay 🎉
 
 ### Student Pack Kredileri
+
 - Render: $200/yıl kullanılabilir
 - Toplam tasarruf: ~$200/yıl
 
@@ -302,17 +319,21 @@ Render.com ücretsiz planında backend 15 dakika inaktif kalırsa uyku moduna gi
 ## 🎓 Notlar
 
 ### Render Free Tier Limitler
+
 - 750 saat/ay (bir uygulama için yeterli)
 - İlk istekte 30-60 saniye "cold start" olabilir (uyuma durumundan çıkış)
 - 512MB RAM
 - CPU throttling
 
 ### Performance İyileştirme
+
 Eğer cold start sorun olursa:
+
 1. UptimeRobot ile her 10 dakikada ping at (uyanık tut)
 2. Starter plan'a geç ($7/ay - Student Pack'ten düşer)
 
 ### Güvenlik
+
 - ✅ Environment variables güvenli (Render'da şifreli)
 - ✅ HTTPS otomatik
 - ✅ Rate limiting aktif
@@ -323,15 +344,16 @@ Eğer cold start sorun olursa:
 
 ## 🚀 Başarılar!
 
-Backend deployment'ınız hazır! 
+Backend deployment'ınız hazır!
 
 **Backend URL:** `https://YOUR-BACKEND-URL.onrender.com`  
 **Frontend URL:** `https://nuhdemir.dev`
 
 Herhangi bir sorun olursa:
+
 1. Render Dashboard → Logs kontrol et
 2. `DEPLOYMENT.md` dosyasına bak
 3. `QUICK_DEPLOY.md` rehberini oku
 
-**Deployment tarihi:** _______________  
+**Deployment tarihi:** ******\_\_\_******  
 **Deploy eden:** Nuh Demir
