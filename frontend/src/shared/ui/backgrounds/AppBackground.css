@@ -1,0 +1,52 @@
+.app-global-background {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.app-global-gradient {
+  position: absolute;
+  inset: 0;
+  background: var(--color-background-page);
+}
+
+.app-global-pattern {
+  --pattern-color: color-mix(in srgb, var(--color-primary) 34%, transparent);
+  --pattern-opacity: 0.34;
+}
+
+.app-global-pattern-soft {
+  --pattern-color: color-mix(
+    in srgb,
+    var(--color-text-primary) 18%,
+    transparent
+  );
+  --pattern-opacity: 0.18;
+  filter: blur(0.3px);
+}
+
+.theme-dark .app-global-pattern {
+  --pattern-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
+  --pattern-opacity: 0.26;
+}
+
+.theme-dark .app-global-pattern-soft {
+  --pattern-color: color-mix(
+    in srgb,
+    var(--color-text-primary) 24%,
+    transparent
+  );
+  --pattern-opacity: 0.15;
+}
+
+@media (max-width: 768px) {
+  .app-global-pattern {
+    --pattern-opacity: 0.2;
+  }
+
+  .app-global-pattern-soft {
+    --pattern-opacity: 0.1;
+  }
+}

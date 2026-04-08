@@ -14,6 +14,7 @@ import MessageForm from "@modules/message/components/Message/MessageForm.jsx";
 import Footer from "@modules/footer/components/Footer/Footer.jsx";
 import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
 import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
+import AppBackground from "@shared/ui/backgrounds/AppBackground.jsx";
 import DeveloperExperience from "@modules/developer/pages/DeveloperExperience.jsx";
 import RecruiterExperience from "@modules/recruiter/pages/RecruiterExperience.jsx";
 import { useTheme } from "@core/context/ThemeContext.jsx";
@@ -139,60 +140,63 @@ const App = () => {
 
   return (
     <Router>
-      <Routes>
-        <Route
-          path="/admin/*"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <AdminRoutes />
-            </Suspense>
-          }
-        />
-        <Route path="/" element={<AppContent />} />
-        <Route
-          path="/blog"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <BlogListPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/blog/:slug"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <BlogDetailPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/projects"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <ProjectsPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/projects/:slugOrId"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <ProjectDetailsPage />
-            </Suspense>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <AppBackground />
+      <div className="app-shell">
+        <Routes>
+          <Route
+            path="/admin/*"
+            element={
+              <Suspense
+                fallback={<div className="component-loader">Yükleniyor...</div>}
+              >
+                <AdminRoutes />
+              </Suspense>
+            }
+          />
+          <Route path="/" element={<AppContent />} />
+          <Route
+            path="/blog"
+            element={
+              <Suspense
+                fallback={<div className="component-loader">Yükleniyor...</div>}
+              >
+                <BlogListPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/blog/:slug"
+            element={
+              <Suspense
+                fallback={<div className="component-loader">Yükleniyor...</div>}
+              >
+                <BlogDetailPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/projects"
+            element={
+              <Suspense
+                fallback={<div className="component-loader">Yükleniyor...</div>}
+              >
+                <ProjectsPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/projects/:slugOrId"
+            element={
+              <Suspense
+                fallback={<div className="component-loader">Yükleniyor...</div>}
+              >
+                <ProjectDetailsPage />
+              </Suspense>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </Router>
   );
 };

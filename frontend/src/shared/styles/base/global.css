@@ -136,7 +136,7 @@
   --color-accent-hover: #74c798;
 
   /* === Arka Plan Renkleri === */
-  --color-background-page: #eef7f1;
+  --color-background-page: #36b069;
   --color-background-paper: #ffffff;
   --color-background-paper-transparent: rgba(255, 255, 255, 0.6);
   --color-background-paper-translucent: rgba(255, 255, 255, 0.85);
@@ -168,18 +168,25 @@
   --color-button-shadow: rgba(29, 47, 38, 0.14);
   --color-button-disabled-text: rgba(29, 47, 38, 0.35);
   --color-button-loader-track: rgba(29, 47, 38, 0.14);
-
   /* === Navbar === */
-  --color-navbar-bg: #f2f8f4;
-  --color-navbar-text: #1d2f26;
-  --color-navbar-border: #1d2f26;
-  --color-navbar-icon-bg: #1d2f26;
-  --color-navbar-item-hover-bg: #d7ede0;
-  --color-navbar-bg-container: rgba(143, 212, 173, 0.2);
-  --color-navbar-border-container: rgba(36, 138, 79, 0.35);
-  --color-navbar-icon-bg-fixed: #d7ede0;
-  --color-navbar-border-fixed: #1d2f26;
 
+  --color-navbar-bg: #f2f8f4;
+
+  --color-navbar-text: #1d2f26;
+
+  --color-navbar-border: #1d2f26;
+
+  --color-navbar-icon-bg: #1d2f26;
+
+  --color-navbar-item-hover-bg: #d7ede0;
+
+  --color-navbar-bg-container: rgba(143, 212, 173, 0.2);
+
+  --color-navbar-border-container: rgba(36, 138, 79, 0.35);
+
+  --color-navbar-icon-bg-fixed: #d7ede0;
+
+  --color-navbar-border-fixed: #1d2f26;
   /* === Footer ve Sosyal === */
   --color-footer-bg: #dff0e5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
   --color-footer-text: #2b473b;
@@ -301,7 +308,7 @@
   --color-accent: #58a6ff;
   --color-accent-hover: #79b8ff;
 
-  --color-background-page: #0d1117;
+  --color-background-page: #161b22;
   --color-background-paper: #161b22;
   --color-background-paper-transparent: rgba(22, 27, 34, 0.95);
   --color-background-paper-translucent: rgba(22, 27, 34, 0.75);
@@ -331,17 +338,17 @@
   --color-button-disabled-text: rgba(255, 255, 255, 0.5);
   --color-button-loader-track: rgba(255, 255, 255, 0.2);
 
-  --color-navbar-bg: #21262d;
+  --color-navbar-bg: rgba(22, 27, 34, 0.62);
   --color-navbar-text: #f0f6fc;
-  --color-navbar-border: #30363d;
-  --color-navbar-icon-bg: #30363d;
-  --color-navbar-item-hover-bg: #30363d;
-  --color-navbar-bg-container: #0d1117;
-  --color-navbar-border-container: #30363d;
-  --color-navbar-icon-bg-fixed: #161b22;
-  --color-navbar-border-fixed: #30363d;
-  --color-navbar-mobile-menu-bg: #21262d;
-  --color-navbar-mobile-menu-border: #30363d;
+  --color-navbar-border: rgba(129, 141, 158, 0.4);
+  --color-navbar-icon-bg: rgba(28, 35, 44, 0.72);
+  --color-navbar-item-hover-bg: rgba(120, 141, 169, 0.14);
+  --color-navbar-bg-container: rgba(11, 14, 20, 0.42);
+  --color-navbar-border-container: rgba(129, 141, 158, 0.28);
+  --color-navbar-icon-bg-fixed: rgba(20, 25, 33, 0.72);
+  --color-navbar-border-fixed: rgba(129, 141, 158, 0.36);
+  --color-navbar-mobile-menu-bg: rgba(18, 24, 32, 0.78);
+  --color-navbar-mobile-menu-border: rgba(129, 141, 158, 0.36);
 
   --color-footer-bg: #161b22;
   --color-footer-text: #8b949e;
@@ -422,14 +429,7 @@ body {
     background-color var(--transition-duration-base)
       var(--transition-timing-function),
     color var(--transition-duration-base) var(--transition-timing-function);
-  background-image: repeating-linear-gradient(
-    0deg,
-    rgba(255, 255, 255, 0.03) 0px,
-    rgba(255, 255, 255, 0.03) 1px,
-    transparent 2px,
-    transparent 3px
-  );
-  background-size: 100% 8px;
+  background-image: none;
 }
 
 body.admin-theme {
@@ -449,17 +449,8 @@ body.admin-theme.admin-sidebar-open {
 }
 /* Hafif noise (parazit) efekti */
 body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background-image: url("https://www.transparenttextures.com/patterns/noise.png");
-  opacity: 0.15;
-  mix-blend-mode: overlay;
-  z-index: 1;
+  display: none;
+  content: none;
 }
 
 /* Hafif titreşim efekti (CRT flicker) */
@@ -474,16 +465,22 @@ body::before {
 }
 
 body::after {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background: rgba(255, 255, 255, 0.02);
-  animation: flicker 0.12s infinite;
-  z-index: 2;
+  display: none;
+  content: none;
+}
+
+/* Dark mode'da arka planı soft ve düz tutmak için pattern katmanlarını kapat */
+body.theme-dark,
+.theme-dark body {
+  background-image: none;
+}
+
+body.theme-dark::before,
+body.theme-dark::after,
+.theme-dark body::before,
+.theme-dark body::after {
+  display: none;
+  content: none;
 }
 
 a {
@@ -550,6 +547,11 @@ button:focus-visible {
   flex: 1;
   width: 100%;
   position: relative;
+}
+
+.app-shell {
+  position: relative;
+  z-index: 3;
 }
 
 /* --- Mouse Light Effect Overlay --- */

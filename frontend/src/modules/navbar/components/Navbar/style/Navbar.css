@@ -16,9 +16,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: opacity var(--transition-duration-base)
-      var(--transition-timing-function),
+  transition:
+    opacity var(--transition-duration-base) var(--transition-timing-function),
     transform var(--transition-duration-base) var(--transition-timing-function);
+}
+
+.theme-dark .navbar-background-container {
+  backdrop-filter: blur(12px) saturate(130%);
+  -webkit-backdrop-filter: blur(12px) saturate(130%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.26);
 }
 
 /* Menü kaybolduğunda */
@@ -39,6 +45,11 @@
   border: 2px solid var(--color-navbar-border);
   position: relative;
   box-shadow: var(--box-shadow-sm);
+}
+
+.theme-dark .navbar-container {
+  background: var(--color-navbar-bg);
+  border-color: var(--color-navbar-border);
 }
 
 .icon-container {
@@ -159,6 +170,11 @@
   animation: fadeInMobileMenuNavbar var(--transition-duration-base) ease; /* Animasyon ismi güncellendi */
   box-shadow: var(--box-shadow-base);
   min-width: 180px;
+}
+
+.theme-dark .mobile-menu {
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
 }
 
 .mobile-menu .nav-item {

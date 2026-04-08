@@ -1,13 +1,13 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-const ThemeContext = createContext({ theme: "light", toggleTheme: () => {} });
+const ThemeContext = createContext({ theme: "dark", toggleTheme: () => {} });
 
 export const useTheme = () => useContext(ThemeContext);
 
 const getInitialTheme = () => {
   if (typeof window === "undefined") {
-    return "light";
+    return "dark";
   }
 
   const stored = window.localStorage.getItem("theme");
@@ -15,10 +15,7 @@ const getInitialTheme = () => {
     return stored;
   }
 
-  const prefersDark = window.matchMedia?.(
-    "(prefers-color-scheme: dark)"
-  ).matches;
-  return prefersDark ? "dark" : "light";
+  return "dark";
 };
 
 export const ThemeProvider = ({ children }) => {
@@ -38,7 +35,7 @@ export const ThemeProvider = ({ children }) => {
       toggleTheme: () =>
         setTheme((current) => (current === "light" ? "dark" : "light")),
     }),
-    [theme]
+    [theme],
   );
 
   return (
