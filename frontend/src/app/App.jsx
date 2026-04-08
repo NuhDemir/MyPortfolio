@@ -119,6 +119,8 @@ const AppContent = () => {
 
 const App = () => {
   const isDev = import.meta.env.DEV;
+  const isDebugLogsEnabled =
+    import.meta.env.VITE_DEBUG_LOGS === "true" && isDev;
 
   // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
   const API_BASE_URL =
@@ -133,10 +135,10 @@ const App = () => {
     apiUrl: API_BASE_URL,
     intervalMinutes: 10, // Her 10 dakikada bir ping at (Render 15 dk sonra uyuyor)
     enabled: isBackendKeepAliveEnabled,
-    debug: isDev,
+    debug: isDebugLogsEnabled,
   });
 
-  if (isDev) {
+  if (isDebugLogsEnabled) {
     console.debug("App config initialized", {
       keepAliveEnabled: isBackendKeepAliveEnabled,
       environment: import.meta.env.MODE,

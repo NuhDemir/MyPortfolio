@@ -7,7 +7,8 @@ const audioCache = {};
 
 // Ses sisteminin "kilidinin" açık olup olmadığını takip eden global state
 let isAudioContextUnlocked = false;
-const isDev = import.meta.env.DEV;
+const isDebugLogsEnabled =
+  import.meta.env.DEV && import.meta.env.VITE_DEBUG_LOGS === "true";
 
 /**
  * Tarayıcının otomatik oynatma kısıtlamalarını aşmak için "sessizliği bozan" fonksiyon.
@@ -23,7 +24,7 @@ const unlockAudioContext = () => {
   }
 
   isAudioContextUnlocked = true;
-  if (isDev) {
+  if (isDebugLogsEnabled) {
     console.debug("Audio context unlocked");
   }
 

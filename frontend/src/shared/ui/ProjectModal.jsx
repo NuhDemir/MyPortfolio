@@ -98,24 +98,26 @@ const ProjectModal = ({ project, isOpen, onClose }) => {
   const tags = Array.isArray(project?.tags) ? project.tags : [];
   const techStack = Array.isArray(project?.techStack) ? project.techStack : [];
   const hasDetailsHtml =
-    typeof project?.details === "string" && project.details.trim().length > 0;
+    typeof project?.details === "string" && project?.details?.trim().length > 0;
   const descriptionText =
-    typeof project?.description === "string" ? project.description.trim() : "";
+    typeof project?.description === "string"
+      ? project?.description?.trim()
+      : "";
 
   const title = project?.metadata?.title || project?.title;
   const tagline = project?.metadata?.tagline || "";
   const platform = project?.metadata?.platform;
   const role = project?.metadata?.role;
-  const status = project?.metadata?.status || project.status;
-  const createdAt = project?.metadata?.createdAt || project.createdAt;
+  const status = project?.metadata?.status || project?.status;
+  const createdAt = project?.metadata?.createdAt || project?.createdAt;
   const isFeatured = project?.isFeatured === true || project?.featured === true;
 
   const thumbnailUrl =
-    project?.visuals?.thumbnailUrl || project.imageUrl || undefined;
+    project?.visuals?.thumbnailUrl || project?.imageUrl || undefined;
   const heroVideoUrl = project?.visuals?.heroVideoUrl || undefined;
 
-  const liveUrl = project?.links?.liveDemo || project.liveUrl;
-  const githubUrl = project?.links?.github || project.githubUrl;
+  const liveUrl = project?.links?.liveDemo || project?.liveUrl;
+  const githubUrl = project?.links?.github || project?.githubUrl;
   const figmaUrl = project?.links?.figma;
 
   const caseStudy = project?.caseStudy;

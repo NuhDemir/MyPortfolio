@@ -1,8 +1,7 @@
-import React, { useRef } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap"; // GSAP'ı toaster animasyonu için import et
 
-// SVG'yi bir React Bileşeni olarak import ediyoruz
-import MainSvgComponent from "/assets/icons/main/main.svg";
+const HERO_IMAGE_PATH = "/assets/icons/main/main-hero.webp";
 
 // Ayrı bir hook'a gerek yoksa, mantığı doğrudan bileşene entegre edebiliriz.
 // Eğer hook'u başka yerde de kullanıyorsanız, onu GSAP kullanacak şekilde güncelleyebilirsiniz.
@@ -21,9 +20,23 @@ const developerQuotes = [
 // Bileşeni forwardRef ile sarmalıyoruz ki App.jsx'ten gelen ref'i alabilsin.
 const MainImage = React.forwardRef((props, ref) => {
   // Toaster (söz balonu) ve hover olayları için referanslar
-  const imageContainerRef = useRef(null); // Hover alanını belirlemek için
+  const containerRef = useRef(null);
   const toasterRef = useRef(null); // GSAP'ın anime edeceği toaster
   const quoteRef = useRef({ current: null, timer: null }); // Mevcut sözü ve zamanlayıcıyı saklamak için
+  const [isImageReady, setIsImageReady] = useState(false);
+
+  const assignRefs = (node) => {
+    containerRef.current = node;
+
+    if (typeof ref === "function") {
+      ref(node);
+      return;
+    }
+
+    if (ref) {
+      ref.current = node;
+    }
+  };
 
   const showQuote = () => {
     if (quoteRef.current.timer) clearTimeout(quoteRef.current.timer);
@@ -53,6 +66,20 @@ const MainImage = React.forwardRef((props, ref) => {
     }
   };
 
+  const handleImageReady = () => {
+    setIsImageReady(true);
+  };
+
+  useEffect(() => {
+    const quoteState = quoteRef.current;
+
+    return () => {
+      if (quoteState.timer) {
+        clearTimeout(quoteState.timer);
+      }
+    };
+  }, []);
+
   const hideQuote = () => {
     // Fare ayrıldıktan sonra hafif bir gecikmeyle gizle
     quoteRef.current.timer = setTimeout(() => {
@@ -71,13 +98,32 @@ const MainImage = React.forwardRef((props, ref) => {
   return (
     // `ref`'i doğrudan ana konteynere atıyoruz. GSAP animasyonları bu ref'i kullanacak.
     <div
-      ref={ref}
+      ref={assignRefs}
       className="main-image"
       onMouseEnter={showQuote}
       onMouseLeave={hideQuote}
+      onTouchStart={showQuote}
+      onTouchEnd={hideQuote}
     >
-      {/* SVG Bileşenini render ediyoruz */}
-      <img src={MainSvgComponent} />
+      {!isImageReady ? (
+        <div className="main-image-loader" aria-live="polite">
+          <div className="main-image-loader-chip">YUKLENIYOR</div>
+          <div className="main-image-loader-track" aria-hidden="true">
+            <span className="main-image-loader-bar" />
+          </div>
+        </div>
+      ) : null}
+
+      <img
+        src={HERO_IMAGE_PATH}
+        alt="Hero illustration"
+        className="main-image-visual"
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+        onLoad={handleImageReady}
+        onError={handleImageReady}
+      />
 
       {/* Sözleri gösteren "toaster" elemanı */}
       <div ref={toasterRef} className="quote-toaster" aria-live="polite">
@@ -87,4 +133,4 @@ const MainImage = React.forwardRef((props, ref) => {
   );
 });
 
-export default MainImage;
+export default memo(MainImage);
