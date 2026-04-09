@@ -24,6 +24,7 @@ const MainImage = React.forwardRef((props, ref) => {
   const toasterRef = useRef(null); // GSAP'ın anime edeceği toaster
   const quoteRef = useRef({ current: null, timer: null }); // Mevcut sözü ve zamanlayıcıyı saklamak için
   const [isImageReady, setIsImageReady] = useState(false);
+  const [hasImageError, setHasImageError] = useState(false);
 
   const assignRefs = (node) => {
     containerRef.current = node;
@@ -114,15 +115,20 @@ const MainImage = React.forwardRef((props, ref) => {
         </div>
       ) : null}
 
+      {hasImageError && (
+        <div className="main-image-error" aria-live="polite">
+          <span>Hero yüklenmedi</span>
+        </div>
+      )}
       <img
         src={HERO_IMAGE_PATH}
         alt="Hero illustration"
         className="main-image-visual"
+        onLoad={handleImageReady}
+        onError={() => setHasImageError(true)}
         loading="eager"
         decoding="async"
         fetchPriority="high"
-        onLoad={handleImageReady}
-        onError={handleImageReady}
       />
 
       {/* Sözleri gösteren "toaster" elemanı */}

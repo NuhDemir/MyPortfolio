@@ -303,6 +303,26 @@
   gap: 0.4rem;
 }
 
+.main-image-error {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+  background: color-mix(in srgb, var(--color-background-paper) 92%, #0c1420 8%);
+  border: 2px solid var(--color-text-primary);
+  box-shadow: 4px 4px 0 0 var(--color-text-primary);
+  padding: 0.55rem 1.2rem;
+  font-family: var(--font-family-code, monospace);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-align: center;
+  pointer-events: none;
+}
+
 .main-image-recover-overlay {
   position: absolute;
   inset: 0;

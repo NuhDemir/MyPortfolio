@@ -133,7 +133,13 @@ const ParticleSystem = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas || canvas.width === 0 || canvas.height === 0) {
+      return undefined;
+    }
     const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return undefined;
+    }
     let animationFrameId;
 
     const animate = () => {
