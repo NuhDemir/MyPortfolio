@@ -10,7 +10,7 @@ import {
 } from "@modules/projects/services/projectService.js";
 
 // İkonlar ve Başlık SVG'si
-import MyProjectsSvg from "/assets/icons/project/MyProject.svg";
+import MyProjectsSvg from "/assets/icons/project/MyProject.svg?url";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectList = () => {

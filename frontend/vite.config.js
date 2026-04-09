@@ -10,12 +10,9 @@ const API_PROXY_TARGET =
   process.env.VITE_API_PROXY_TARGET ?? "http://localhost:5000";
 
 export default defineConfig({
-  plugins: [
-    react({
-      // SVG dosyalarını ReactComponent olarak işlemek için
-      include: [/\.svg$/],
-    }),
-  ],
+  plugins: [react()],
+
+  publicDir: path.resolve(rootDir, "public"),
 
   resolve: {
     alias: {
@@ -27,6 +24,8 @@ export default defineConfig({
   },
 
   build: {
+    outDir: "dist",
+    assetsDir: "assets",
     rollupOptions: {
       output: {
         manualChunks: {

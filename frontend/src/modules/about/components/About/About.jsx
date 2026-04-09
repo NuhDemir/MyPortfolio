@@ -6,10 +6,10 @@ import Modal from "@shared/ui/Modal.jsx";
 import useAboutGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
 
 // SVG'leri URL olarak import et
-import ProgrammingLangSvg from "/assets/icons/about/programmingLanguage.svg";
-import DevToolsTechSvg from "/assets/icons/about/DevToolsTech.svg";
-import PodcastTalksSvg from "/assets/icons/about/PodcastTalks.svg";
-import ProjectsWorkSvg from "/assets/icons/about/ProjectsWork.svg";
+import ProgrammingLangSvg from "/assets/icons/about/programmingLanguage.svg?url";
+import DevToolsTechSvg from "/assets/icons/about/DevToolsTech.svg?url";
+import PodcastTalksSvg from "/assets/icons/about/PodcastTalks.svg?url";
+import ProjectsWorkSvg from "/assets/icons/about/ProjectsWork.svg?url";
 
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";

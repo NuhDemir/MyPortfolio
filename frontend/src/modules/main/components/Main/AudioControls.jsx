@@ -18,34 +18,67 @@ const loadSoundCloudWidgetScript = () => {
     return Promise.reject(new Error("Window is not available"));
   }
 
-  if (window.SC?.Widget) {
-    return Promise.resolve(window.SC);
-  }
-
-  const existingScript = document.querySelector(
-    `script[src="${SOUNDCLOUD_WIDGET_SCRIPT}"]`,
-  );
-
-  if (existingScript) {
-    return new Promise((resolve, reject) => {
-      existingScript.addEventListener("load", () => resolve(window.SC), {
-        once: true,
-      });
-      existingScript.addEventListener(
-        "error",
-        () => reject(new Error("SoundCloud widget script could not load")),
-        { once: true },
-      );
-    });
-  }
-
   return new Promise((resolve, reject) => {
+    if (window.SC?.Widget && typeof window.SC.Widget === "function") {
+      resolve(window.SC);
+      return;
+    }
+
+    const existingScript = document.querySelector(
+      `script[src="${SOUNDCLOUD_WIDGET_SCRIPT}"]`,
+    );
+
+    if (existingScript) {
+      let loadHandler = null;
+      let errorHandler = null;
+
+      const cleanup = () => {
+        if (loadHandler) {
+          existingScript.removeEventListener("load", loadHandler);
+        }
+        if (errorHandler) {
+          existingScript.removeEventListener("error", errorHandler);
+        }
+      };
+
+      loadHandler = () => {
+        cleanup();
+        if (window.SC?.Widget) {
+          resolve(window.SC);
+        } else {
+          reject(new Error("SC Widget not available after script load"));
+        }
+      };
+
+      errorHandler = () => {
+        cleanup();
+        reject(new Error("SoundCloud widget script failed to load"));
+      };
+
+      existingScript.addEventListener("load", loadHandler, { once: false });
+      existingScript.addEventListener("error", errorHandler, { once: false });
+
+      if (existingScript.readyState === "loaded" || existingScript.readyState === "complete") {
+        loadHandler();
+      }
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = SOUNDCLOUD_WIDGET_SCRIPT;
     script.async = true;
-    script.onload = () => resolve(window.SC);
+    script.crossOrigin = "anonymous";
+    script.onload = () => {
+      setTimeout(() => {
+        if (window.SC?.Widget && typeof window.SC.Widget === "function") {
+          resolve(window.SC);
+        } else {
+          reject(new Error("SC Widget not initialized properly"));
+        }
+      }, 100);
+    };
     script.onerror = () =>
-      reject(new Error("SoundCloud widget script could not load"));
+      reject(new Error("SoundCloud widget script network error"));
     document.head.appendChild(script);
   });
 };
@@ -91,11 +124,29 @@ const AudioControls = forwardRef(
       const initializeWidget = async () => {
         try {
           const sc = await loadSoundCloudWidgetScript();
-          if (isUnmounted || !iframeRef.current) {
+          if (isUnmounted) {
             return;
           }
 
-          const widget = sc.Widget(iframeRef.current);
+          if (!iframeRef.current || !iframeRef.current.ownerDocument) {
+            throw new Error("Iframe not mounted in DOM");
+          }
+
+          if (!sc?.Widget || typeof sc.Widget !== "function") {
+            throw new Error("SC Widget API not available");
+          }
+
+          let widget;
+          try {
+            widget = sc.Widget(iframeRef.current);
+          } catch (err) {
+            throw new Error(`Widget initialization error: ${err?.message}`)
+          }
+
+          if (!widget) {
+            throw new Error("Widget instance not created");
+          }
+
           widgetRef.current = widget;
 
           const handleReady = () => {
@@ -162,7 +213,14 @@ const AudioControls = forwardRef(
             widget.unbind(sc.Widget.Events.FINISH);
           }
         } catch (error) {
-          console.error("SoundCloud widget init failed", error);
+          if (!isUnmounted) {
+            console.error("SoundCloud widget init failed:", {
+              message: error?.message,
+              stack: error?.stack,
+              iframeRef: !!iframeRef.current,
+              SC: !!window.SC,
+            });
+          }
         }
       };
 

@@ -1,7 +1,7 @@
 import React, { useMemo } from "react";
 import { ArrowUpRight } from "lucide-react";
 import "./ProjectCard.css";
-import imageSvg from "/assets/icons/img/image.svg";
+import imageSvg from "/assets/icons/img/image.svg?url";
 
 // React.memo ile gereksiz re-render engelleniyor
 const ProjectCard = React.memo(({ project, onClick }) => {

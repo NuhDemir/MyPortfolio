@@ -10,9 +10,9 @@ import { ThemeToggleButton } from "./components/ThemeToggleButton";
 import { MobileMenuToggle } from "./components/MobileMenuToggle";
 
 // SVG dosyaları
-import iconSvgUrl from "/assets/icons/navitem/icon.svg";
-import hamburgerIcon from "/assets/icons/navbar/hamburger.svg";
-import closeIcon from "/assets/icons/navbar/close.svg";
+const ICON_SVG_PATH = "/assets/icons/navitem/icon.svg";
+const HAMBURGER_ICON_PATH = "/assets/icons/navbar/hamburger.svg";
+const CLOSE_ICON_PATH = "/assets/icons/navbar/close.svg";
 
 export const Navbar = ({
   onScrollToAbout,
@@ -178,8 +178,8 @@ export const Navbar = ({
           isOpen={isMobileMenuOpen}
           onToggle={toggleMobileMenu}
           onHoverSound={playHoverSound}
-          hamburgerIcon={hamburgerIcon}
-          closeIcon={closeIcon}
+          hamburgerIcon={HAMBURGER_ICON_PATH}
+          closeIcon={CLOSE_ICON_PATH}
         />
       )}
 
@@ -198,7 +198,7 @@ export const Navbar = ({
           >
             <img
               ref={iconRef}
-              src={iconSvgUrl}
+              src={ICON_SVG_PATH}
               alt="Icon"
               width="24px"
               height="24px"

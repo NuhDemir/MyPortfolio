@@ -133,43 +133,63 @@ const ParticleSystem = ({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || canvas.width === 0 || canvas.height === 0) {
+    if (!canvas) {
       return undefined;
     }
-    const ctx = canvas.getContext("2d");
+
+    const rect = canvas.getBoundingClientRect();
+    const width = Math.ceil(rect.width) || window.innerWidth;
+    const height = Math.ceil(rect.height) || window.innerHeight;
+
+    if (width === 0 || height === 0) {
+      return undefined;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+
+    const ctx = canvas.getContext("2d", { willReadFrequently: false });
     if (!ctx) {
       return undefined;
     }
     let animationFrameId;
 
     const animate = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      try {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } catch (e) {
+        return undefined;
+      }
       const audioIntensity =
         audioData && isPlaying
           ? audioData.reduce((a, b) => a + b, 0) / audioData.length / 128
           : 0;
 
-      particlesRef.current.forEach((p, index) => {
-        updateParticle(
-          p,
-          canvas,
-          audioIntensity,
-          isPlaying,
-          audioData,
-          mouseRef.current,
-          scrollY
-        );
-        drawParticle(ctx, p, isDarkMode, audioIntensity, scrollY);
-        drawConnections(
-          ctx,
-          particlesRef.current,
-          p,
-          index,
-          isDarkMode,
-          scrollY
-        );
-      });
-      ctx.shadowBlur = 0; // Her döngü sonunda gölgeyi sıfırla
+      try {
+        particlesRef.current.forEach((p, index) => {
+          updateParticle(
+            p,
+            canvas,
+            audioIntensity,
+            isPlaying,
+            audioData,
+            mouseRef.current,
+            scrollY
+          );
+          drawParticle(ctx, p, isDarkMode, audioIntensity, scrollY);
+          drawConnections(
+            ctx,
+            particlesRef.current,
+            p,
+            index,
+            isDarkMode,
+            scrollY
+          );
+        });
+        ctx.shadowBlur = 0;
+      } catch (err) {
+        console.error("Particle draw error:", err);
+      }
 
       animationFrameId = requestAnimationFrame(animate);
     };
