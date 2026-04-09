@@ -29,45 +29,52 @@ const loadSoundCloudWidgetScript = () => {
     );
 
     if (existingScript) {
-      let loadHandler = null;
-      let errorHandler = null;
+      // If a previous build injected crossorigin, recreate the script without it.
+      if (existingScript.crossOrigin) {
+        existingScript.remove();
+      } else {
+        let loadHandler = null;
+        let errorHandler = null;
 
-      const cleanup = () => {
-        if (loadHandler) {
-          existingScript.removeEventListener("load", loadHandler);
+        const cleanup = () => {
+          if (loadHandler) {
+            existingScript.removeEventListener("load", loadHandler);
+          }
+          if (errorHandler) {
+            existingScript.removeEventListener("error", errorHandler);
+          }
+        };
+
+        loadHandler = () => {
+          cleanup();
+          if (window.SC?.Widget) {
+            resolve(window.SC);
+          } else {
+            reject(new Error("SC Widget not available after script load"));
+          }
+        };
+
+        errorHandler = () => {
+          cleanup();
+          reject(new Error("SoundCloud widget script failed to load"));
+        };
+
+        existingScript.addEventListener("load", loadHandler, { once: false });
+        existingScript.addEventListener("error", errorHandler, { once: false });
+
+        if (
+          existingScript.readyState === "loaded" ||
+          existingScript.readyState === "complete"
+        ) {
+          loadHandler();
         }
-        if (errorHandler) {
-          existingScript.removeEventListener("error", errorHandler);
-        }
-      };
-
-      loadHandler = () => {
-        cleanup();
-        if (window.SC?.Widget) {
-          resolve(window.SC);
-        } else {
-          reject(new Error("SC Widget not available after script load"));
-        }
-      };
-
-      errorHandler = () => {
-        cleanup();
-        reject(new Error("SoundCloud widget script failed to load"));
-      };
-
-      existingScript.addEventListener("load", loadHandler, { once: false });
-      existingScript.addEventListener("error", errorHandler, { once: false });
-
-      if (existingScript.readyState === "loaded" || existingScript.readyState === "complete") {
-        loadHandler();
+        return;
       }
-      return;
     }
 
     const script = document.createElement("script");
     script.src = SOUNDCLOUD_WIDGET_SCRIPT;
     script.async = true;
-    script.crossOrigin = "anonymous";
     script.onload = () => {
       setTimeout(() => {
         if (window.SC?.Widget && typeof window.SC.Widget === "function") {
@@ -112,6 +119,7 @@ const AudioControls = forwardRef(
     const [volume, setVolume] = useState(0.7);
     const [isMuted, setIsMuted] = useState(false);
     const [isWidgetReady, setIsWidgetReady] = useState(false);
+    const [isWidgetError, setIsWidgetError] = useState(false);
 
     const iframeRef = useRef(null);
     const widgetRef = useRef(null);
@@ -214,12 +222,22 @@ const AudioControls = forwardRef(
           }
         } catch (error) {
           if (!isUnmounted) {
-            console.error("SoundCloud widget init failed:", {
-              message: error?.message,
-              stack: error?.stack,
-              iframeRef: !!iframeRef.current,
-              SC: !!window.SC,
-            });
+            // Suppress CORS errors - they're expected due to SoundCloud API restrictions
+            // but don't require user action
+            const isCORSError = error?.message?.includes("script") || 
+                                error?.message?.includes("load");
+            
+            if (!isCORSError) {
+              console.error("SoundCloud widget init failed:", {
+                message: error?.message,
+                stack: error?.stack,
+                iframeRef: !!iframeRef.current,
+                SC: !!window.SC,
+              });
+            }
+            
+            setIsWidgetError(true);
+            setIsWidgetReady(false);
           }
         }
       };
@@ -319,6 +337,23 @@ const AudioControls = forwardRef(
           <div className="soundtrack-label">SARKILARIM</div>
           <div className="song-name">{currentSongName}</div>
         </div>
+
+        {isWidgetError && (
+          <div className="widget-error-fallback">
+            <p className="error-message">
+              Müzik oynatıcı yüklenemedi. Lütfen{" "}
+              <a
+                href={SOUNDCLOUD_PLAYLIST_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="fallback-link"
+              >
+                SoundCloud'ta dinle
+              </a>
+            </p>
+          </div>
+        )}
+
         <div className="audio-player">
           {/* Zaman Göstergesi ve Zaman Çubuğu */}
           <div className="timeline-container">
@@ -384,10 +419,12 @@ const AudioControls = forwardRef(
             src={buildSoundCloudPlayerUrl()}
             allow="autoplay"
             style={{
-              position: "absolute",
-              width: 1,
-              height: 1,
-              opacity: 0,
+              position: "fixed",
+              left: -10000,
+              top: 0,
+              width: 320,
+              height: 166,
+              opacity: 0.001,
               pointerEvents: "none",
               border: 0,
             }}
