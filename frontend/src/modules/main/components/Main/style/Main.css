@@ -12,6 +12,35 @@
   padding: clamp(1rem, 5vw, 2.5rem) clamp(15px, 5vw, 60px);
 }
 
+.music-sketch-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.music-sketch-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.08));
+}
+
+.theme-dark .music-sketch-item {
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.main-content,
+.main-image {
+  position: relative;
+  z-index: 5;
+}
+
 .main-container::before {
   content: "";
   position: absolute;

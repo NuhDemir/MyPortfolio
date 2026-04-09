@@ -1,5 +1,5 @@
 export const NAVBAR_ITEMS = [
-  { label: "About", sectionId: "about-section" },
-  { label: "Project", sectionId: "projects-section" },
-  { label: "Contact", sectionId: "contact-section" },
+  { label: "Hakkımda", sectionId: "about-section" },
+  { label: "Projeler", sectionId: "projects-section" },
+  { label: "iletisim", sectionId: "contact-section" },
 ];

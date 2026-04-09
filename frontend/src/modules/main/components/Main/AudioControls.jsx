@@ -1,151 +1,246 @@
-import React, {
-  forwardRef,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { forwardRef, useState, useRef, useEffect } from "react";
 import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
 import { PatternBackground } from "@shared/ui/patterns";
 
-const SONGS = [
-  { path: "/audio/alisamadim.mp3", name: "Alısamadım" },
-  { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
-  {
-    path: "/audio/uzunincebiryoldayim.mp3",
-    name: "Uzun ince Bir Yoldayım",
-  },
-];
+const SOUNDCLOUD_PLAYLIST_URL =
+  "https://soundcloud.com/nuh-demir-210070335/sets/playlist";
+const SOUNDCLOUD_WIDGET_SCRIPT = "https://w.soundcloud.com/player/api.js";
+
+const formatSoundCloudTitle = (title) => {
+  if (!title) {
+    return "SoundCloud Playlist";
+  }
+  return title.length > 42 ? `${title.slice(0, 39)}...` : title;
+};
+
+const loadSoundCloudWidgetScript = () => {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("Window is not available"));
+  }
+
+  if (window.SC?.Widget) {
+    return Promise.resolve(window.SC);
+  }
+
+  const existingScript = document.querySelector(
+    `script[src="${SOUNDCLOUD_WIDGET_SCRIPT}"]`,
+  );
+
+  if (existingScript) {
+    return new Promise((resolve, reject) => {
+      existingScript.addEventListener("load", () => resolve(window.SC), {
+        once: true,
+      });
+      existingScript.addEventListener(
+        "error",
+        () => reject(new Error("SoundCloud widget script could not load")),
+        { once: true },
+      );
+    });
+  }
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = SOUNDCLOUD_WIDGET_SCRIPT;
+    script.async = true;
+    script.onload = () => resolve(window.SC);
+    script.onerror = () =>
+      reject(new Error("SoundCloud widget script could not load"));
+    document.head.appendChild(script);
+  });
+};
+
+const buildSoundCloudPlayerUrl = () => {
+  const query = new URLSearchParams({
+    url: SOUNDCLOUD_PLAYLIST_URL,
+    auto_play: "false",
+    hide_related: "true",
+    show_comments: "false",
+    show_user: "true",
+    show_reposts: "false",
+    show_teaser: "false",
+    visual: "false",
+    buying: "false",
+    sharing: "false",
+    download: "false",
+  });
+
+  return `https://w.soundcloud.com/player/?${query.toString()}`;
+};
 
 const AudioControls = forwardRef(
   ({ onIsPlayingChange, onAudioDataChange }, ref) => {
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
     const [duration, setDuration] = useState(0);
-    const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [currentSongName, setCurrentSongName] = useState(
+      "SoundCloud Playlist",
+    );
     const [volume, setVolume] = useState(0.7);
     const [isMuted, setIsMuted] = useState(false);
+    const [isWidgetReady, setIsWidgetReady] = useState(false);
 
-    const audioRef = useRef(null);
+    const iframeRef = useRef(null);
+    const widgetRef = useRef(null);
     const progressRef = useRef(null);
-    const audioContextRef = useRef(null);
-    const analyserRef = useRef(null);
-    const dataArrayRef = useRef(null);
-    const sourceRef = useRef(null);
-    const animationFrameRef = useRef(null);
-
-    const setupAudioContext = useCallback(() => {
-      if (!audioContextRef.current) {
-        audioContextRef.current = new (
-          window.AudioContext || window.webkitAudioContext
-        )();
-        analyserRef.current = audioContextRef.current.createAnalyser();
-        analyserRef.current.fftSize = 256;
-        const bufferLength = analyserRef.current.frequencyBinCount;
-        dataArrayRef.current = new Uint8Array(bufferLength);
-      }
-      if (audioRef.current && !sourceRef.current) {
-        sourceRef.current = audioContextRef.current.createMediaElementSource(
-          audioRef.current,
-        );
-        sourceRef.current.connect(analyserRef.current);
-        analyserRef.current.connect(audioContextRef.current.destination);
-      }
-    }, []);
 
     useEffect(() => {
-      const randomIndex = Math.floor(Math.random() * SONGS.length);
-      setCurrentSongIndex(randomIndex);
-    }, []);
+      onAudioDataChange(null);
+      let isUnmounted = false;
 
-    const analyzeAudio = useCallback(() => {
-      if (analyserRef.current && dataArrayRef.current) {
-        analyserRef.current.getByteFrequencyData(dataArrayRef.current);
-        onAudioDataChange([...dataArrayRef.current]);
-      }
-      animationFrameRef.current = requestAnimationFrame(analyzeAudio);
-    }, [onAudioDataChange]);
+      const initializeWidget = async () => {
+        try {
+          const sc = await loadSoundCloudWidgetScript();
+          if (isUnmounted || !iframeRef.current) {
+            return;
+          }
 
-    const togglePlay = async () => {
-      setupAudioContext();
-      if (audioContextRef.current?.state === "suspended") {
-        await audioContextRef.current.resume();
-      }
+          const widget = sc.Widget(iframeRef.current);
+          widgetRef.current = widget;
 
-      const newIsPlaying = !isPlaying;
-      setIsPlaying(newIsPlaying);
-      onIsPlayingChange(newIsPlaying);
+          const handleReady = () => {
+            if (isUnmounted) {
+              return;
+            }
 
-      if (newIsPlaying) {
-        await audioRef.current.play();
-        analyzeAudio();
-      } else {
-        audioRef.current.pause();
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
+            setIsWidgetReady(true);
+            widget.getDuration((durationMs) => {
+              setDuration((durationMs || 0) / 1000);
+            });
+            widget.getCurrentSound((sound) => {
+              setCurrentSongName(formatSoundCloudTitle(sound?.title));
+            });
+          };
+
+          const handlePlay = () => {
+            if (isUnmounted) {
+              return;
+            }
+            setIsPlaying(true);
+            onIsPlayingChange(true);
+          };
+
+          const handlePause = () => {
+            if (isUnmounted) {
+              return;
+            }
+            setIsPlaying(false);
+            onIsPlayingChange(false);
+          };
+
+          const handlePlayProgress = (event) => {
+            if (isUnmounted) {
+              return;
+            }
+
+            setCurrentTime((event?.currentPosition || 0) / 1000);
+            widget.getDuration((durationMs) => {
+              setDuration((durationMs || 0) / 1000);
+            });
+          };
+
+          const refreshCurrentTrack = () => {
+            widget.getCurrentSound((sound) => {
+              if (isUnmounted) {
+                return;
+              }
+              setCurrentSongName(formatSoundCloudTitle(sound?.title));
+            });
+          };
+
+          widget.bind(sc.Widget.Events.READY, handleReady);
+          widget.bind(sc.Widget.Events.PLAY, handlePlay);
+          widget.bind(sc.Widget.Events.PAUSE, handlePause);
+          widget.bind(sc.Widget.Events.PLAY_PROGRESS, handlePlayProgress);
+          widget.bind(sc.Widget.Events.FINISH, refreshCurrentTrack);
+
+          if (isUnmounted) {
+            widget.unbind(sc.Widget.Events.READY);
+            widget.unbind(sc.Widget.Events.PLAY);
+            widget.unbind(sc.Widget.Events.PAUSE);
+            widget.unbind(sc.Widget.Events.PLAY_PROGRESS);
+            widget.unbind(sc.Widget.Events.FINISH);
+          }
+        } catch (error) {
+          console.error("SoundCloud widget init failed", error);
         }
+      };
+
+      initializeWidget();
+
+      return () => {
+        isUnmounted = true;
+        setIsPlaying(false);
+        onIsPlayingChange(false);
+      };
+    }, [onAudioDataChange, onIsPlayingChange]);
+
+    useEffect(() => {
+      if (!widgetRef.current || !isWidgetReady) {
+        return;
+      }
+
+      widgetRef.current.setVolume((isMuted ? 0 : volume) * 100);
+    }, [isMuted, isWidgetReady, volume]);
+
+    const togglePlay = () => {
+      if (!isWidgetReady || !widgetRef.current) {
+        return;
+      }
+
+      if (isPlaying) {
+        widgetRef.current.pause();
+      } else {
+        widgetRef.current.play();
       }
     };
 
-    const changeToRandomSong = () => {
-      let newIndex;
-      do {
-        newIndex = Math.floor(Math.random() * SONGS.length);
-      } while (newIndex === currentSongIndex && SONGS.length > 1);
-      setCurrentSongIndex(newIndex);
-      setCurrentTime(0);
-      const wasPlaying = isPlaying;
-      if (wasPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-        onIsPlayingChange(false);
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
+    const playNextTrack = () => {
+      if (!isWidgetReady || !widgetRef.current) {
+        return;
       }
-      setTimeout(() => {
-        if (wasPlaying) {
-          togglePlay();
-        }
-      }, 150);
+
+      widgetRef.current.next();
+      widgetRef.current.getCurrentSound((sound) => {
+        setCurrentSongName(formatSoundCloudTitle(sound?.title));
+      });
     };
 
     const handleVolumeChange = (e) => {
       const newVolume = parseFloat(e.target.value);
       setVolume(newVolume);
-      if (audioRef.current) audioRef.current.volume = newVolume;
+      if (widgetRef.current) {
+        widgetRef.current.setVolume(newVolume * 100);
+      }
       if (newVolume > 0 && isMuted) setIsMuted(false);
     };
 
     const toggleMute = () => {
       const newMutedState = !isMuted;
       setIsMuted(newMutedState);
-      audioRef.current.volume = newMutedState ? 0 : volume;
-    };
-
-    const handleTimeUpdate = () => {
-      if (!audioRef.current) return;
-      setCurrentTime(audioRef.current.currentTime);
-      if (progressRef.current && audioRef.current.duration) {
-        const progress =
-          (audioRef.current.currentTime / audioRef.current.duration) * 100;
-        progressRef.current.style.width = `${progress}%`;
+      if (widgetRef.current) {
+        widgetRef.current.setVolume(newMutedState ? 0 : volume * 100);
       }
     };
 
-    const handleLoadedMetadata = () => {
-      if (!audioRef.current) return;
-      setDuration(audioRef.current.duration);
-      audioRef.current.volume = isMuted ? 0 : volume;
-    };
-
     const handleTimelineClick = (e) => {
-      if (!audioRef.current || !audioRef.current.duration) return;
+      if (!widgetRef.current || !duration) return;
       const timeline = e.currentTarget;
       const rect = timeline.getBoundingClientRect();
       const pos = (e.clientX - rect.left) / rect.width;
-      audioRef.current.currentTime = pos * audioRef.current.duration;
+      const seekToSeconds = Math.max(0, Math.min(duration, pos * duration));
+      widgetRef.current.seekTo(seekToSeconds * 1000);
+      setCurrentTime(seekToSeconds);
     };
+
+    useEffect(() => {
+      if (!progressRef.current || !duration) {
+        return;
+      }
+
+      const progress = (currentTime / duration) * 100;
+      progressRef.current.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    }, [currentTime, duration]);
 
     const formatTime = (time) => {
       if (isNaN(time) || time === 0) return "0:00";
@@ -163,8 +258,8 @@ const AudioControls = forwardRef(
           seed="audio-controls-naive"
         />
         <div className="soundtrack-info">
-          <div className="soundtrack-label">SOUNDTRACK</div>
-          <div className="song-name">{SONGS[currentSongIndex].name}</div>
+          <div className="soundtrack-label">SARKILARIM</div>
+          <div className="song-name">{currentSongName}</div>
         </div>
         <div className="audio-player">
           {/* Zaman Göstergesi ve Zaman Çubuğu */}
@@ -181,8 +276,9 @@ const AudioControls = forwardRef(
             <button
               type="button"
               className="control-button"
-              onClick={changeToRandomSong}
-              aria-label="Sonraki rastgele şarkıya geç"
+              onClick={playNextTrack}
+              aria-label="Sonraki şarkıya geç"
+              disabled={!isWidgetReady}
             >
               <SkipForward size={24} strokeWidth={2} />
             </button>
@@ -190,6 +286,7 @@ const AudioControls = forwardRef(
               type="button"
               className="control-button play-button"
               onClick={togglePlay}
+              disabled={!isWidgetReady}
               aria-label={isPlaying ? "Müziği duraklat" : "Müziği oynat"}
             >
               {isPlaying ? (
@@ -219,16 +316,23 @@ const AudioControls = forwardRef(
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 className="volume-slider"
+                disabled={!isWidgetReady}
               />
             </div>
           </div>
-          <audio
-            ref={audioRef}
-            src={SONGS[currentSongIndex].path}
-            onTimeUpdate={handleTimeUpdate}
-            onLoadedMetadata={handleLoadedMetadata}
-            onEnded={changeToRandomSong}
-            crossOrigin="anonymous"
+          <iframe
+            ref={iframeRef}
+            title="SoundCloud playlist player"
+            src={buildSoundCloudPlayerUrl()}
+            allow="autoplay"
+            style={{
+              position: "absolute",
+              width: 1,
+              height: 1,
+              opacity: 0,
+              pointerEvents: "none",
+              border: 0,
+            }}
           />
         </div>
       </div>
