@@ -120,7 +120,7 @@ const MainImage = React.forwardRef((props, ref) => {
         className="main-image-visual"
         loading="eager"
         decoding="async"
-        fetchpriority="high"
+        fetchPriority="high"
         onLoad={handleImageReady}
         onError={handleImageReady}
       />

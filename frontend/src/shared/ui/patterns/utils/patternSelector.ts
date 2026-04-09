@@ -34,6 +34,7 @@ const PATTERN_KEYWORDS: Record<PatternType, string[]> = {
   waves: ["creative", "design", "ux", "ui", "frontend", "art"],
   circles: ["experience", "journey", "roadmap", "progress", "learning"],
   mesh: ["general", "other", "misc", "default"],
+  naiveSketch: ["naive", "draw", "handmade", "music", "sketch"],
 };
 
 const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
@@ -72,6 +73,12 @@ const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
     density: 3,
     opacity: 0.25,
     animated: true,
+  },
+  naiveSketch: {
+    type: "naiveSketch",
+    density: 9,
+    opacity: 0.2,
+    animated: false,
   },
 };
 

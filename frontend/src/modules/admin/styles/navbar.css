@@ -67,35 +67,58 @@
 }
 
 .theme-toggle-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.85rem;
-  padding: 0.65rem 1.35rem;
-  border: var(--admin-border-width) solid var(--admin-line);
-  border-radius: 999px;
-  background: var(--admin-surface-alt);
+  padding: 0.62rem 1.2rem;
+  border: 3px solid color-mix(in srgb, var(--admin-line) 86%, #183f2b);
+  border-radius: 18px 22px 16px 20px;
+  background: color-mix(in srgb, var(--admin-surface-alt) 90%, #eef9f3 10%);
   color: var(--admin-fg);
   font-weight: 600;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  box-shadow:
+    5px 5px 0 0 color-mix(in srgb, var(--admin-accent) 52%, #1d5a3c),
+    0 0 0 1px color-mix(in srgb, #ffffff 45%, transparent) inset;
   transition:
     transform var(--admin-transition),
-    box-shadow var(--admin-transition);
+    box-shadow var(--admin-transition),
+    background-color var(--admin-transition);
   cursor: pointer;
+  overflow: hidden;
+}
+
+.theme-toggle-btn::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #ffffff 72%, transparent);
+  opacity: 0.58;
+  pointer-events: none;
 }
 
 .theme-toggle-btn:hover,
 .theme-toggle-btn:focus-visible {
-  transform: translate(
-    calc(var(--admin-border-width) * -0.4),
-    calc(var(--admin-border-width) * -0.4)
-  );
-  box-shadow: var(--admin-shadow);
+  transform: translateY(2px) rotate(0.35deg);
+  background: color-mix(in srgb, var(--admin-surface-alt) 82%, #f7fcf9 18%);
+  box-shadow: 2px 2px 0 0 color-mix(in srgb, var(--admin-accent) 52%, #1d5a3c);
+}
+
+.theme-toggle-btn:active {
+  transform: translateY(4px) rotate(-0.25deg);
+  box-shadow: 1px 1px 0 0 color-mix(in srgb, var(--admin-accent) 52%, #1d5a3c);
 }
 
 .theme-toggle-btn svg {
   font-size: 1.45rem;
+  transform: rotate(-5deg);
 }
 
 .admin-user-info {

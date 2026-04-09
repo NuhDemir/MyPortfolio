@@ -4,16 +4,15 @@ import "./style/Navbar.css";
 import { useTheme } from "@core/context/ThemeContext.jsx";
 import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 import { useSound } from "@shared/hooks/useSound.js"; // Ses hook'unu import et
+import { NAVBAR_ITEMS } from "./config/navItems";
+import { NavbarMenuList } from "./components/NavbarMenuList";
+import { ThemeToggleButton } from "./components/ThemeToggleButton";
+import { MobileMenuToggle } from "./components/MobileMenuToggle";
 
 // SVG dosyaları
 import iconSvgUrl from "/assets/icons/navitem/icon.svg";
-import LineSvg from "/assets/icons/main/Line.svg";
 import hamburgerIcon from "/assets/icons/navbar/hamburger.svg";
 import closeIcon from "/assets/icons/navbar/close.svg";
-
-// MUI Icons
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 export const Navbar = ({
   onScrollToAbout,
@@ -26,6 +25,7 @@ export const Navbar = ({
   const iconRef = useRef(null);
   const [showFullMenu, setShowFullMenu] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const themeTransitionTimeoutRef = useRef(null);
 
   // Sesleri tanımla
   const playHoverSound = useSound("/audio/hover-click.mp3", 0.2);
@@ -74,15 +74,83 @@ export const Navbar = ({
     closeMobileMenu();
   };
 
+  const handleSectionNavigation = (sectionId) => {
+    if (sectionId === "about-section") {
+      handleNavClick(onScrollToAbout, sectionId);
+      return;
+    }
+
+    if (sectionId === "projects-section") {
+      handleNavClick(onScrollToProjects, sectionId);
+      return;
+    }
+
+    handleNavClick(onScrollToContact, sectionId);
+  };
+
   const toggleMobileMenu = () => {
     playClickSound(); // Tıklama sesini çal
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  const handleThemeToggle = () => {
+  const getThemeTransitionDuration = (htmlElement) => {
+    const durationValue = window
+      .getComputedStyle(htmlElement)
+      .getPropertyValue("--theme-transition-duration")
+      .trim();
+    const parsed = Number.parseFloat(durationValue);
+
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      return 1100;
+    }
+
+    return durationValue.endsWith("ms") ? parsed : parsed * 1000;
+  };
+
+  const handleThemeToggle = (event) => {
     playClickSound(); // Tıklama sesini çal
+
+    const htmlElement = document.documentElement;
+    const targetButton = event?.currentTarget;
+    if (htmlElement && targetButton) {
+      const rect = targetButton.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const nextTheme = theme === "light" ? "dark" : "light";
+
+      htmlElement.style.setProperty("--theme-transition-x", `${centerX}px`);
+      htmlElement.style.setProperty("--theme-transition-y", `${centerY}px`);
+      htmlElement.style.setProperty(
+        "--theme-transition-overlay",
+        nextTheme === "dark"
+          ? "rgba(9, 16, 23, 0.86)"
+          : "rgba(246, 252, 249, 0.88)",
+      );
+      htmlElement.classList.remove("theme-transition-active");
+      void htmlElement.offsetWidth;
+      htmlElement.classList.add("theme-transition-active");
+
+      if (themeTransitionTimeoutRef.current) {
+        window.clearTimeout(themeTransitionTimeoutRef.current);
+      }
+
+      const transitionDuration = getThemeTransitionDuration(htmlElement);
+
+      themeTransitionTimeoutRef.current = window.setTimeout(() => {
+        htmlElement.classList.remove("theme-transition-active");
+      }, transitionDuration + 80);
+    }
+
     toggleTheme();
   };
+
+  useEffect(() => {
+    return () => {
+      if (themeTransitionTimeoutRef.current) {
+        window.clearTimeout(themeTransitionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleIconClick = () => {
     playClickSound(); // Tıklama sesini çal
@@ -96,59 +164,23 @@ export const Navbar = ({
     closeMobileMenu();
   };
 
-  const navItemsData = [
-    {
-      label: "About",
-      sectionId: "about-section",
-      action: () => handleNavClick(onScrollToAbout, "about-section"),
-    },
-    {
-      label: "Project",
-      sectionId: "projects-section",
-      action: () => handleNavClick(onScrollToProjects, "projects-section"),
-    },
-    {
-      label: "Contact",
-      sectionId: "contact-section",
-      action: () => handleNavClick(onScrollToContact, "contact-section"),
-    },
-  ];
-
   return (
     <>
-      {/* Tema Değiştirme Butonu */}
-      <button
-        onClick={handleThemeToggle}
-        onMouseEnter={playHoverSound}
-        className="theme-toggle-button"
-        aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      >
-        {theme === "light" ? (
-          <Brightness4Icon fontSize="inherit" />
-        ) : (
-          <Brightness7Icon fontSize="inherit" />
-        )}
-      </button>
+      <ThemeToggleButton
+        theme={theme}
+        onToggle={handleThemeToggle}
+        onHoverSound={playHoverSound}
+      />
 
       {/* Mobil Menü İkonu (Hamburger/Kapatma) */}
       {!showFullMenu && (
-        <button
-          type="button"
-          className="navbar-icon-fixed"
-          onClick={toggleMobileMenu}
-          onMouseEnter={playHoverSound}
-          aria-expanded={isMobileMenuOpen}
-          aria-controls="mobile-menu-list"
-          aria-label={isMobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
-        >
-          <img
-            src={isMobileMenuOpen ? closeIcon : hamburgerIcon}
-            alt=""
-            aria-hidden="true"
-            width={24}
-            height={24}
-          />
-        </button>
+        <MobileMenuToggle
+          isOpen={isMobileMenuOpen}
+          onToggle={toggleMobileMenu}
+          onHoverSound={playHoverSound}
+          hamburgerIcon={hamburgerIcon}
+          closeIcon={closeIcon}
+        />
       )}
 
       {/* Ana Navbar Konteyneri */}
@@ -174,53 +206,26 @@ export const Navbar = ({
             />
           </div>
 
-          <div className="nav-items-container">
-            {navItemsData.map((item) => (
-              <div
-                key={item.label}
-                className="nav-item"
-                onClick={item.action}
-                onMouseEnter={playHoverSound}
-                role="button"
-                tabIndex={0}
-                onKeyPress={(e) => e.key === "Enter" && item.action()}
-              >
-                {item.label}
-              </div>
-            ))}
-          </div>
-
-          {/* Köşe Noktaları */}
-          <div className="decorative-dot" style={{ left: -3, top: -3 }} />
-          <div className="decorative-dot" style={{ right: -3, top: -3 }} />
-          <div className="decorative-dot" style={{ left: -3, bottom: -3 }} />
-          <div className="decorative-dot" style={{ right: -3, bottom: -3 }} />
+          <NavbarMenuList
+            items={NAVBAR_ITEMS}
+            className="nav-items-container"
+            itemClassName="nav-item"
+            onHoverSound={playHoverSound}
+            onActivate={handleSectionNavigation}
+          />
         </div>
-
-        {/* Alt Çizgi SVG'si */}
-        {showFullMenu && (
-          <div className="navbar-outline">
-            <img src={LineSvg} alt="" aria-hidden="true" />
-          </div>
-        )}
       </div>
 
       {/* Açılan Mobil Menü */}
       {isMobileMenuOpen && !showFullMenu && (
         <div className="mobile-menu" id="mobile-menu-list" role="menu">
-          {navItemsData.map((item) => (
-            <div
-              key={item.label}
-              className="nav-item"
-              onClick={item.action}
-              onMouseEnter={playHoverSound}
-              role="menuitem"
-              tabIndex={0}
-              onKeyPress={(e) => e.key === "Enter" && item.action()}
-            >
-              {item.label}
-            </div>
-          ))}
+          <NavbarMenuList
+            items={NAVBAR_ITEMS}
+            className="mobile-menu-list"
+            itemClassName="nav-item"
+            onHoverSound={playHoverSound}
+            onActivate={handleSectionNavigation}
+          />
         </div>
       )}
     </>

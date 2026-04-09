@@ -6,13 +6,14 @@ import React, {
   useCallback,
 } from "react";
 import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { PatternBackground } from "@shared/ui/patterns";
 
 const SONGS = [
-  { path: "/audio/alisamadim.mp3", name: "Alışamadım" },
+  { path: "/audio/alisamadim.mp3", name: "Alısamadım" },
   { path: "/audio/ardinabakmayolcu.mp3", name: "Ardına Bakma Yolcu" },
   {
     path: "/audio/uzunincebiryoldayim.mp3",
-    name: "Uzun İnce Bir Yoldayım",
+    name: "Uzun ince Bir Yoldayım",
   },
 ];
 
@@ -155,6 +156,12 @@ const AudioControls = forwardRef(
 
     return (
       <div ref={ref} className="audio-controls">
+        <PatternBackground
+          variant="naiveSketch"
+          opacity={0.26}
+          className="audio-controls-pattern"
+          seed="audio-controls-naive"
+        />
         <div className="soundtrack-info">
           <div className="soundtrack-label">SOUNDTRACK</div>
           <div className="song-name">{SONGS[currentSongIndex].name}</div>

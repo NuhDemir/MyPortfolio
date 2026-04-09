@@ -5,6 +5,7 @@ export const PATTERN_VARIANTS = [
   "lines",
   "waves",
   "circles",
+  "naiveSketch",
 ];
 
 export const VINTAGE_NEUBRUTAL_PATTERN_VARIANTS = ["grid", "lines", "dots"];
@@ -39,5 +40,10 @@ export const PATTERN_PRESETS = {
     size: "68px 68px",
     image:
       "radial-gradient(circle at 34px 34px, transparent 17px, var(--pattern-color) 18px, transparent 19px)",
+  },
+  naiveSketch: {
+    size: "120px 120px, 64px 64px, 88px 88px",
+    image:
+      "repeating-linear-gradient(12deg, transparent 0 16px, color-mix(in srgb, var(--pattern-color) 58%, transparent) 16px 18px, transparent 18px 30px), radial-gradient(circle at 12px 14px, color-mix(in srgb, var(--pattern-color) 55%, transparent) 1.8px, transparent 2px), radial-gradient(circle at 56px 58px, color-mix(in srgb, var(--pattern-color) 45%, transparent) 2.2px, transparent 2.5px)",
   },
 };

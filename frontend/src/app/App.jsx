@@ -122,6 +122,58 @@ const App = () => {
   const isDebugLogsEnabled =
     import.meta.env.VITE_DEBUG_LOGS === "true" && isDev;
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+
+    const supportsFinePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
+
+    if (!supportsFinePointer) {
+      return undefined;
+    }
+
+    const rootStyle = document.documentElement.style;
+    let rafId = 0;
+
+    const setMouseVars = (x, y) => {
+      rootStyle.setProperty("--mouse-x", `${x}px`);
+      rootStyle.setProperty("--mouse-y", `${y}px`);
+    };
+
+    const handlePointerMove = (event) => {
+      const { clientX, clientY } = event;
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+      rafId = requestAnimationFrame(() => {
+        setMouseVars(clientX, clientY);
+      });
+    };
+
+    const handlePointerLeave = () => {
+      setMouseVars(window.innerWidth * 0.5, window.innerHeight * 0.5);
+    };
+
+    handlePointerLeave();
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+    window.addEventListener("pointerleave", handlePointerLeave, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerleave", handlePointerLeave);
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+      }
+    };
+  }, []);
+
   // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";

@@ -1,76 +1,174 @@
 /* Ana Konteyner: Grenli doku ve scanline efektleri içerir */
 .social-links-container {
-  padding: var(--spacing-lg) var(--spacing-md);
-  background-color: var(--color-navbar-bg-container);
+  padding: clamp(1rem, 3vw, 1.5rem) var(--spacing-md);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   position: relative;
-  overflow: hidden; /* Sahte elemanların taşmasını engeller */
+  overflow: visible;
 }
 
 /* Grenli doku efekti için sahte eleman */
 .social-links-container::before {
-  content: "";
+  content: none;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   background-image: url("data:image/svg+xml,..."); /* SVG data URI for grain */
-  opacity: 0.05;
+  opacity: 0.08;
   pointer-events: none;
   z-index: 0;
   /* SVG Grain data URI */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-image: none;
+}
+
+.social-links-container::after {
+  content: none;
+  position: absolute;
+  right: clamp(10px, 2vw, 20px);
+  top: clamp(6px, 1.5vw, 16px);
+  font-family: "Amatic SC", cursive;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  color: color-mix(in srgb, var(--color-primary) 80%, #0f3f2a);
+  letter-spacing: 0.3rem;
+  opacity: 0.7;
+  transform: rotate(-6deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Linklerin grid yapısı */
 .social-links-grid {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
+  gap: clamp(0.55rem, 1.8vw, 0.95rem);
   position: relative;
   z-index: 1;
 }
 
 /* Her bir sosyal link ("Tuş") */
 .social-button {
+  --naive-fill: color-mix(
+    in srgb,
+    var(--color-button-primary-bg) 74%,
+    #e4f7ec 26%
+  );
+  --naive-fill-deep: color-mix(in srgb, var(--color-primary) 70%, #73b88e 30%);
+  --naive-border: color-mix(in srgb, var(--color-text-primary) 94%, #081910 6%);
+  --naive-shadow: color-mix(
+    in srgb,
+    var(--color-primary-darker) 58%,
+    #184832 42%
+  );
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-lg);
+  min-height: 52px;
+  padding: clamp(0.5rem, 1.5vw, 0.65rem) clamp(0.95rem, 2.2vw, 1.25rem);
 
-  font-size: var(--font-size-lg);
+  font-family: "Amatic SC", "Space Grotesk", cursive;
+  font-size: clamp(1.2rem, 2.2vw, 1.42rem);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
+  color: color-mix(in srgb, var(--color-text-primary) 88%, #0b2519);
+  line-height: 1;
   text-decoration: none;
 
-  background-color: var(--color-background-paper);
-  border: 2px solid var(--color-text-primary);
-  border-radius: var(--border-radius-base);
+  background-color: var(--naive-fill);
+  border: 4px solid var(--naive-border);
+  border-radius: 22px 26px 20px 24px;
 
-  /* 3D Tuş Efekti */
-  box-shadow: 0px 5px 0px 0px var(--color-text-primary);
+  box-shadow:
+    0 7px 0 0 var(--naive-shadow),
+    0 0 0 1px color-mix(in srgb, #ffffff 35%, transparent) inset;
 
   position: relative;
-  top: 0;
-  transition: all var(--transition-duration-short) ease-out;
+  transform: rotate(var(--naive-tilt, -1.15deg));
+  transition:
+    transform var(--transition-duration-short) ease-out,
+    box-shadow var(--transition-duration-short) ease-out,
+    background-color var(--transition-duration-short) ease-out,
+    border-radius var(--transition-duration-short) ease-out;
+}
+
+.social-button::before {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  top: 7px;
+  height: 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #ffffff 76%, transparent);
+  opacity: 0.62;
+  pointer-events: none;
+}
+
+.social-button::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 2px solid color-mix(in srgb, var(--naive-border) 48%, transparent);
+  border-radius: 24px 28px 22px 25px;
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 /* Hover ve Aktif ("Basılma") Durumları */
 .social-button:hover {
-  top: 2px;
-  box-shadow: 0px 3px 0px 0px var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--naive-fill) 74%, #ffffff 26%);
+  border-radius: 24px 22px 24px 20px;
+  transform: translateY(2px) rotate(calc(var(--naive-tilt, -1.15deg) + 0.55deg));
+  box-shadow:
+    0 5px 0 0 var(--naive-shadow),
+    0 0 0 1px color-mix(in srgb, #ffffff 44%, transparent) inset;
 }
 
 .social-button:active {
-  top: 5px;
-  box-shadow: 0px 0px 0px 0px var(--color-text-primary);
+  background-color: var(--naive-fill-deep);
+  transform: translateY(6px) rotate(calc(var(--naive-tilt, -1.15deg) - 0.25deg));
+  box-shadow: 0 1px 0 0 var(--naive-shadow);
+}
+
+.social-button:focus-visible {
+  outline: 3px dashed color-mix(in srgb, var(--color-primary) 65%, #1d2f26);
+  outline-offset: 3px;
 }
 
 .social-icon {
-  margin-bottom: -2px; /* İkonu metinle daha iyi hizala */
+  margin-bottom: -1px; /* İkonu metinle daha iyi hizala */
+  transform: rotate(-5deg);
+}
+
+.social-text {
+  letter-spacing: 0.01em;
+  transform: translateY(0.5px);
+}
+
+.social-links-grid .social-button:nth-child(1) {
+  --naive-tilt: -1.8deg;
+}
+
+.social-links-grid .social-button:nth-child(2) {
+  --naive-tilt: 1.2deg;
+}
+
+.social-links-grid .social-button:nth-child(3) {
+  --naive-tilt: -0.6deg;
+}
+
+.social-links-grid .social-button:nth-child(4) {
+  --naive-tilt: 1.5deg;
+}
+
+.social-links-grid .social-button:nth-child(5) {
+  --naive-tilt: -1deg;
 }
 
 /* === YENİ SPLASH EKRANI: Terminal Teması === */
@@ -153,10 +251,25 @@
 /* === RESPONSIVE STİLLER === */
 @media (max-width: 768px) {
   .social-links-grid {
-    gap: var(--spacing-sm);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.55rem, 2.8vw, 0.8rem);
   }
+
   .social-button {
-    font-size: var(--font-size-md);
-    padding: var(--spacing-sm) var(--spacing-md);
+    width: 100%;
+    min-height: 50px;
+    font-size: clamp(1.05rem, 4.8vw, 1.2rem);
+    padding: 0.45rem 0.7rem;
+  }
+
+  .social-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 420px) {
+  .social-links-grid {
+    grid-template-columns: 1fr;
   }
 }

@@ -168,25 +168,18 @@
   --color-button-shadow: rgba(29, 47, 38, 0.14);
   --color-button-disabled-text: rgba(29, 47, 38, 0.35);
   --color-button-loader-track: rgba(29, 47, 38, 0.14);
+
   /* === Navbar === */
-
   --color-navbar-bg: #f2f8f4;
-
   --color-navbar-text: #1d2f26;
-
   --color-navbar-border: #1d2f26;
-
   --color-navbar-icon-bg: #1d2f26;
-
   --color-navbar-item-hover-bg: #d7ede0;
-
   --color-navbar-bg-container: rgba(143, 212, 173, 0.2);
-
   --color-navbar-border-container: rgba(36, 138, 79, 0.35);
-
   --color-navbar-icon-bg-fixed: #d7ede0;
-
   --color-navbar-border-fixed: #1d2f26;
+
   /* === Footer ve Sosyal === */
   --color-footer-bg: #dff0e5; /* rgba(2, 63, 1, 0.26) değeri geçersizdi, düzelttim */
   --color-footer-text: #2b473b;
@@ -297,6 +290,21 @@
   --admin-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   --admin-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.15);
   --admin-transition: 0.2s ease;
+
+  /* --- Naive Cursor Tokens --- */
+  --cursor-naive-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 3 L3 20 L8 15 L12 21 L15 19 L11 13 L19 13 Z' fill='%23e9fff0' stroke='%231d2f26' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+    3 3;
+  --cursor-naive-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 3 L14 9 L20 12 L14 15 L12 21 L10 15 L4 12 L10 9 Z' fill='%238fd4ad' stroke='%231d2f26' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+    12 12;
+  --mouse-x: 50vw;
+  --mouse-y: 50vh;
+  --cursor-spot-radius: 125px;
+  --cursor-spot-feather: 70%;
+  --cursor-spot-color: rgba(13, 20, 17, 0.11);
+  --theme-transition-x: 50vw;
+  --theme-transition-y: 50vh;
+  --theme-transition-duration: 1080ms;
+  --theme-transition-overlay: rgba(246, 252, 249, 0.88);
 }
 
 /* === DARK TEMA DEĞİŞKENLERİ === */
@@ -338,17 +346,17 @@
   --color-button-disabled-text: rgba(255, 255, 255, 0.5);
   --color-button-loader-track: rgba(255, 255, 255, 0.2);
 
-  --color-navbar-bg: rgba(22, 27, 34, 0.62);
+  --color-navbar-bg: rgba(26, 38, 33, 0.62);
   --color-navbar-text: #f0f6fc;
-  --color-navbar-border: rgba(129, 141, 158, 0.4);
-  --color-navbar-icon-bg: rgba(28, 35, 44, 0.72);
-  --color-navbar-item-hover-bg: rgba(120, 141, 169, 0.14);
-  --color-navbar-bg-container: rgba(11, 14, 20, 0.42);
-  --color-navbar-border-container: rgba(129, 141, 158, 0.28);
-  --color-navbar-icon-bg-fixed: rgba(20, 25, 33, 0.72);
-  --color-navbar-border-fixed: rgba(129, 141, 158, 0.36);
-  --color-navbar-mobile-menu-bg: rgba(18, 24, 32, 0.78);
-  --color-navbar-mobile-menu-border: rgba(129, 141, 158, 0.36);
+  --color-navbar-border: rgba(146, 169, 157, 0.4);
+  --color-navbar-icon-bg: rgba(33, 49, 41, 0.72);
+  --color-navbar-item-hover-bg: rgba(143, 212, 173, 0.14);
+  --color-navbar-bg-container: rgba(13, 20, 17, 0.42);
+  --color-navbar-border-container: rgba(146, 169, 157, 0.28);
+  --color-navbar-icon-bg-fixed: rgba(23, 34, 29, 0.72);
+  --color-navbar-border-fixed: rgba(146, 169, 157, 0.36);
+  --color-navbar-mobile-menu-bg: rgba(21, 31, 27, 0.78);
+  --color-navbar-mobile-menu-border: rgba(146, 169, 157, 0.36);
 
   --color-footer-bg: #161b22;
   --color-footer-text: #8b949e;
@@ -392,6 +400,13 @@
   --admin-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
   --admin-shadow-md: 0 6px 12px rgba(0, 0, 0, 0.5);
   --admin-transition: 0.2s ease;
+
+  --cursor-naive-default: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 3 L3 20 L8 15 L12 21 L15 19 L11 13 L19 13 Z' fill='%2317221d' stroke='%23f0f6fc' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+    3 3;
+  --cursor-naive-pointer: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M12 3 L14 9 L20 12 L14 15 L12 21 L10 15 L4 12 L10 9 Z' fill='%2358a6ff' stroke='%23f0f6fc' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")
+    12 12;
+  --cursor-spot-color: rgba(214, 252, 228, 0.12);
+  --theme-transition-overlay: rgba(9, 16, 23, 0.86);
 }
 
 /* ==========================================================================
@@ -465,8 +480,16 @@ body::before {
 }
 
 body::after {
-  display: none;
-  content: none;
+  content: "";
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 10050;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--theme-transition-overlay);
+  clip-path: circle(0px at var(--theme-transition-x) var(--theme-transition-y));
+  will-change: clip-path, opacity;
 }
 
 /* Dark mode'da arka planı soft ve düz tutmak için pattern katmanlarını kapat */
@@ -475,12 +498,90 @@ body.theme-dark,
   background-image: none;
 }
 
-body.theme-dark::before,
 body.theme-dark::after,
-.theme-dark body::before,
 .theme-dark body::after {
   display: none;
   content: none;
+}
+
+html.theme-transition-active body::after {
+  display: block !important;
+  content: "" !important;
+  animation: themeModeReveal var(--theme-transition-duration)
+    cubic-bezier(0.22, 0.76, 0.18, 1) forwards;
+}
+
+@keyframes themeModeReveal {
+  0% {
+    opacity: 0;
+    clip-path: circle(
+      0px at var(--theme-transition-x) var(--theme-transition-y)
+    );
+  }
+  16% {
+    opacity: 0.62;
+  }
+  62% {
+    opacity: 0.33;
+    clip-path: circle(
+      138vmax at var(--theme-transition-x) var(--theme-transition-y)
+    );
+  }
+  100% {
+    opacity: 0;
+    clip-path: circle(
+      172vmax at var(--theme-transition-x) var(--theme-transition-y)
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-transition-active body::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html,
+  body {
+    cursor: var(--cursor-naive-default), auto;
+  }
+
+  a,
+  button,
+  [role="button"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  summary,
+  label[for],
+  select {
+    cursor: var(--cursor-naive-pointer), pointer;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  textarea {
+    cursor: text;
+  }
+
+  body:not(.admin-theme)::before {
+    content: "";
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 998;
+    pointer-events: none;
+    background: radial-gradient(
+      circle var(--cursor-spot-radius) at var(--mouse-x) var(--mouse-y),
+      var(--cursor-spot-color) 0%,
+      transparent var(--cursor-spot-feather)
+    );
+    transition: background 120ms linear;
+  }
 }
 
 a {
