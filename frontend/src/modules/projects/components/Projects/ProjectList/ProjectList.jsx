@@ -10,7 +10,7 @@ import {
 } from "@modules/projects/services/projectService.js";
 
 // İkonlar ve Başlık SVG'si
-import MyProjectsSvg from "/assets/icons/project/MyProject.svg?url";
+const MY_PROJECTS_SVG_PATH = "/assets/icons/project/MyProject.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectList = () => {
@@ -147,7 +147,7 @@ const ProjectList = () => {
         <h2 className="visually-hidden">Projelerim</h2>
         <img
           className="project-list-title-svg"
-          src={MyProjectsSvg}
+          src={MY_PROJECTS_SVG_PATH}
           alt="Projelerim Başlığı"
           width={503}
           height={109}

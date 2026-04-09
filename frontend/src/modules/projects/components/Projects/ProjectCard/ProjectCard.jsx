@@ -1,7 +1,8 @@
 import React, { useMemo } from "react";
 import { ArrowUpRight } from "lucide-react";
 import "./ProjectCard.css";
-import imageSvg from "/assets/icons/img/image.svg?url";
+
+const IMAGE_SVG_PATH = "/assets/icons/img/image.svg";
 
 // React.memo ile gereksiz re-render engelleniyor
 const ProjectCard = React.memo(({ project, onClick }) => {
@@ -11,7 +12,7 @@ const ProjectCard = React.memo(({ project, onClick }) => {
   const imageUrl = project?.visuals?.thumbnailUrl || project?.imageUrl || "";
 
   // Eğer imageUrl varsa onu kullan, yoksa varsayılan svg
-  const imageSource = imageUrl || imageSvg;
+  const imageSource = imageUrl || IMAGE_SVG_PATH;
 
   // İlk 3 tag'ı useMemo ile optimize et
   const displayTags = useMemo(() => tags.slice(0, 3), [tags]);
@@ -50,7 +51,7 @@ const ProjectCard = React.memo(({ project, onClick }) => {
             width={300} // performans için genişlik
             height={200} // performans için yükseklik
             onError={(e) => {
-              e.currentTarget.src = imageSvg; // fallback
+              e.currentTarget.src = IMAGE_SVG_PATH; // fallback
             }}
           />
         </div>

@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
-import arrow_rightSvg from "/assets/icons/arrow_right.svg";
 import { PatternBackground } from "@shared/ui/patterns";
+
+const ARROW_RIGHT_SVG_PATH = "/assets/icons/arrow_right.svg";
 
 // onClick prop'unu ekliyoruz
 const PortfolioButton = forwardRef(({ onClick }, ref) => (
@@ -14,7 +15,7 @@ const PortfolioButton = forwardRef(({ onClick }, ref) => (
     <button ref={ref} className="portfolio-button" onClick={onClick}>
       Kesfet
       <img
-        src={arrow_rightSvg}
+        src={ARROW_RIGHT_SVG_PATH}
         alt="Arrow Right"
         className="portfolio-button-icon"
         width={25}

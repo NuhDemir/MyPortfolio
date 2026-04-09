@@ -5,11 +5,10 @@ import ServiceCard from "./ServiceCard/ServiceCard.jsx";
 import Modal from "@shared/ui/Modal.jsx";
 import useAboutGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
 
-// SVG'leri URL olarak import et
-import ProgrammingLangSvg from "/assets/icons/about/programmingLanguage.svg?url";
-import DevToolsTechSvg from "/assets/icons/about/DevToolsTech.svg?url";
-import PodcastTalksSvg from "/assets/icons/about/PodcastTalks.svg?url";
-import ProjectsWorkSvg from "/assets/icons/about/ProjectsWork.svg?url";
+const PROGRAMMING_LANG_SVG_PATH = "/assets/icons/about/programmingLanguage.svg";
+const DEVTOOLS_TECH_SVG_PATH = "/assets/icons/about/DevToolsTech.svg";
+const PODCAST_TALKS_SVG_PATH = "/assets/icons/about/PodcastTalks.svg";
+const PROJECTS_WORK_SVG_PATH = "/assets/icons/about/ProjectsWork.svg";
 
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
@@ -22,7 +21,7 @@ const GITHUB_USERNAME = "NuhDemir";
 const services = [
   {
     id: "programming",
-    icon: ProgrammingLangSvg,
+    icon: PROGRAMMING_LANG_SVG_PATH,
     iconBgColor: "#ffdc58",
     title: "Programming Lang",
     description: "Modern dillerle ölçeklenebilir kod yazma.",
@@ -30,7 +29,7 @@ const services = [
   },
   {
     id: "devtools",
-    icon: DevToolsTechSvg,
+    icon: DEVTOOLS_TECH_SVG_PATH,
     iconBgColor: "#9c27b0",
     title: "Dev Tools & Tech",
     description: "Verimlilik için en yeni araçları kullanma.",
@@ -38,7 +37,7 @@ const services = [
   },
   {
     id: "podcast",
-    icon: PodcastTalksSvg,
+    icon: PODCAST_TALKS_SVG_PATH,
     iconBgColor: "#f44336",
     title: "Podcast & Talks",
     description: "Bilgi ve teknoloji trendlerini paylaşma.",
@@ -46,7 +45,7 @@ const services = [
   },
   {
     id: "projects",
-    icon: ProjectsWorkSvg,
+    icon: PROJECTS_WORK_SVG_PATH,
     iconBgColor: "#2196f3",
     title: "Projects & Work",
     description: "Kalite odaklı etkili projeler sunma.",
