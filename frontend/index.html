@@ -1,52 +1,44 @@
 <!DOCTYPE html>
 <html lang="tr">
-  <head>
-    <!-- Temel Karakter Seti ve Görüntü Alanı Ayarları -->
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO ve Tarayıcı Görünümü için Meta Etiketleri -->
-    <title>Nuh Demir | Web Geliştirici & Tasarımcı</title>
-    <meta
-      name="description"
-      content="Nuh Demir'in kişisel portfolyo sitesi. Modern web teknolojileri ile geliştirilen projelerimi ve hizmetlerimi keşfedin."
-    />
-    <meta name="theme-color" content="#36B069" />
-    <!-- Sitenizin ana rengiyle değiştirin -->
+<head>
+  <!-- Temel Karakter Seti ve Görüntü Alanı Ayarları -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/assets/icons/main/main.svg" />
+  <!-- SEO ve Tarayıcı Görünümü için Meta Etiketleri -->
+  <title>Nuh Demir | Web Geliştirici & Tasarımcı</title>
+  <meta name="description"
+    content="Nuh Demir'in kişisel portfolyo sitesi. Modern web teknolojileri ile geliştirilen projelerimi ve hizmetlerimi keşfedin." />
+  <meta name="theme-color" content="#36B069" />
+  <!-- Sitenizin ana rengiyle değiştirin -->
 
-    <!-- ==================================================================== -->
-    <!--          PERFORMANS İÇİN KRİTİK KAYNAKLARI ÖNCEDEN YÜKLEME          -->
-    <!-- ==================================================================== -->
+  <!-- Favicon -->
+  <link rel="icon" type="image/png"
+    href="https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947776/portfolio/public/assets/icons/main/main.png" />
 
-    <!-- 1. En Önemli Fontları Önceden Yükle (LCP elemanları için) -->
-    <!-- Not: 'href' yollarının `public/fonts/` klasörünüzdekiyle aynı olduğundan emin olun. -->
-    <link
-      rel="preload"
-      href="/fonts/space-grotesk-v21-latin_latin-ext-700.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      href="/fonts/space-grotesk-v21-latin_latin-ext-regular.woff2"
-      as="font"
-      type="font/woff2"
-      crossorigin
-    />
+  <!-- ==================================================================== -->
+  <!--          PERFORMANS İÇİN KRİTİK KAYNAKLARI ÖNCEDEN YÜKLEME          -->
+  <!-- ==================================================================== -->
 
-    <!-- Diğer kritik SVG'ler varsa (isteğe bağlı): -->
-    <!-- <link rel="preload" href="/assets/icons/project/MyProject.svg" as="image" /> -->
-    <!-- <link rel="preload" href="/assets/icons/about/smile.svg" as="image" /> -->
-  </head>
-  <body>
-    <!-- React uygulamasının bağlanacağı kök element -->
-    <div id="root"></div>
+  <!-- 1. En Önemli Fontları Önceden Yükle (LCP elemanları için) -->
+  <!-- Not: 'href' yollarının `public/fonts/` klasörünüzdekiyle aynı olduğundan emin olun. -->
+  <link rel="preload" href="/fonts/space-grotesk-v21-latin_latin-ext-700.woff2" as="font" type="font/woff2"
+    crossorigin />
+  <link rel="preload" href="/fonts/space-grotesk-v21-latin_latin-ext-regular.woff2" as="font" type="font/woff2"
+    crossorigin />
 
-    <!-- JavaScript dosyasını 'defer' ile yükleyerek render-bloklamayı önle -->
-    <script type="module" defer src="/src/main.jsx"></script>
-  </body>
+  <!-- Diğer kritik SVG'ler varsa (isteğe bağlı): -->
+  <!-- <link rel="preload" href="https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947794/portfolio/public/assets/icons/project/MyProject.svg" as="image" /> -->
+  <!-- <link rel="preload" href="https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947702/portfolio/public/assets/icons/about/about_header/smile.svg" as="image" /> -->
+</head>
+
+<body>
+  <!-- React uygulamasının bağlanacağı kök element -->
+  <div id="root"></div>
+
+  <!-- JavaScript dosyasını 'defer' ile yükleyerek render-bloklamayı önle -->
+  <script type="module" defer src="/src/main.jsx"></script>
+</body>
+
 </html>

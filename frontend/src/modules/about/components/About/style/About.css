@@ -8,16 +8,32 @@
   padding: var(--spacing-lg) var(--spacing-md);
   /* Mobil için padding ayarlandı */
 }
-.header {
-  /* SmileSvg'yi içeren div için sınıf */
-  padding-bottom: var(--spacing-lg);
+/* ── About Header — naive sketch ─────────────────────────────────────────── */
+
+.about-header {
+  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+
 }
 
-.header img {
-  width: clamp(300px, 70vw, 600px);
-  height: auto;
+.about-header__title {
+  font-family: var(--font-family-secondary);
+  font-size: clamp(3.8rem, 10vw, 7rem);
+  font-weight: 700;
+  line-height: 0.95;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xs);
+  display: inline-block;
+  transform: rotate(-0.8deg);
+  transform-origin: left center;
+}
+
+.about-header__underline {
   display: block;
-  margin: 0 0 var(--spacing-md) 0; /* Resmi ortalar */
+  width: clamp(200px, 55vw, 340px);
+  height: auto;
+  transform: rotate(0.4deg);
 }
 
 .about-grid {
@@ -153,7 +169,13 @@
    ========================================================================== */
 @media (min-width: 768px) {
   .about-container {
-    padding: var(--spacing-xl) var(--container-padding); /* Padding'i eski haline getir */
+    padding: var(--spacing-xl) var(--container-padding);
+  }
+
+  .about-header {
+    padding: var(--spacing-xxl) 0 var(--spacing-xl);
+    padding-left: var(--spacing-xl);
+    border-left-width: 5px;
   }
 
   .about-grid {
@@ -240,5 +262,20 @@
   .learn-more:hover {
     color: var(--color-text-link-hover);
     transform: translateX(3px);
+  }
+}
+
+/* ==========================================================================
+   4. SMALL MOBILE (max-width: 480px)
+   ========================================================================== */
+@media (max-width: 480px) {
+  .about-header {
+    padding: var(--spacing-lg) 0 var(--spacing-md);
+    padding-left: var(--spacing-md);
+    border-left-width: 3px;
+  }
+
+  .about-header__underline {
+    width: clamp(160px, 80vw, 260px);
   }
 }

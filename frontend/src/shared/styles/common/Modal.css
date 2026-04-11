@@ -1,130 +1,354 @@
-/* frontend/src/components/common/style/Modal.css */
+/* ==========================================================================
+   Modal — Naive Sketch Style
+   Palette: #36b069 primary | #248a4f darker | #8fd4ad accent | #1d2f26 dark
+   ========================================================================== */
+
+/* ── Overlay ─────────────────────────────────────────────────────────────── */
 
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: var(--color-background-overlay); /* Tema değişkeni */
+  inset: 0;
+  background-color: rgba(29, 47, 38, 0.58);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* En üstte (Navbar'dan ve Splash'tan da üstte olmalı) */
-  opacity: 0; /* GSAP kontrol */
-  visibility: hidden; /* GSAP kontrol */
-  padding: var(--spacing-md); /* Kenarlardan biraz boşluk, modal taşmasın */
-}
-/* ... mevcut stillerinizin sonuna ekleyin ... */
+  z-index: 10000;
+  padding: var(--spacing-md);
 
-.project-modal-links {
-  margin-top: var(--spacing-lg);
-  padding-top: var(--spacing-md);
-  border-top: 1px solid var(--color-border-primary);
-  display: flex;
-  gap: var(--spacing-md);
+  /* GSAP controls these — do not set initial to visible */
+  opacity: 0;
+  visibility: hidden;
+
+  backdrop-filter: blur(3px) saturate(110%);
+  -webkit-backdrop-filter: blur(3px) saturate(110%);
 }
 
-.project-modal-links a {
-  font-weight: var(--font-weight-semibold);
-  text-decoration: none;
-  color: var(--color-text-link);
-  transition: color 0.2s ease;
-}
-
-.project-modal-links a:hover {
-  color: var(--color-text-link-hover);
-  text-decoration: underline;
-}
+/* ── Container ───────────────────────────────────────────────────────────── */
 
 .modal-container {
-  background-color: var(--color-background-paper); /* Tema değişkeni */
-  padding: var(--spacing-lg) var(--spacing-xl); /* Tema değişkenleri */
-  border-radius: var(--border-radius-lg); /* Tema değişkeni */
-  border: 3px solid var(--color-border-strong); /* Tema değişkeni */
-  box-shadow: var(--box-shadow-neubrutalist); /* Tema değişkeni */
-  max-width: 700px;
-  width: 100%; /* Overlay padding'i ile max-width'e kadar genişler */
-  max-height: 85vh;
-  overflow-y: auto;
+  /* Layout */
   position: relative;
-  transform: scale(0.9) translateY(20px); /* GSAP kontrol */
-  opacity: 0; /* GSAP kontrol */
-  visibility: hidden; /* GSAP kontrol */
-  color: var(--color-text-primary); /* İçerik metin rengi */
+  width: 100%;
+  max-width: 660px;
+  max-height: 88vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  /* Paper background */
+  background-color: var(--color-background-paper);
+
+  /* Generous but asymmetric padding — hand-placed feel */
+  padding: var(--spacing-xl) calc(var(--spacing-xl) + 4px)
+    var(--spacing-xl) var(--spacing-xl);
+
+  /* Uneven corners — no two the same, like a cut piece of paper */
+  border-radius: 4px 22px 6px 20px;
+
+  /* Thick neubrutalist border */
+  border: 3px solid var(--color-border-strong);
+
+  /* Double-layer shadow: solid offset + soft hint behind it */
+  box-shadow:
+    9px 11px 0 0 var(--color-border-strong),
+    18px 21px 0 0 color-mix(in srgb, var(--color-border-strong) 14%, transparent);
+
+  color: var(--color-text-primary);
+
+  /* GSAP controls these */
+  transform: scale(0.9) translateY(20px);
+  opacity: 0;
+  visibility: hidden;
 }
+
+/* Thin custom scrollbar */
+.modal-container::-webkit-scrollbar {
+  width: 5px;
+}
+.modal-container::-webkit-scrollbar-track {
+  background: var(--color-secondary);
+  border-radius: 0 22px 6px 0;
+}
+.modal-container::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-primary) 55%, transparent);
+  border-radius: 4px;
+}
+.modal-container::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Dark theme adjustments */
+.theme-dark .modal-container {
+  background-color: var(--color-background-paper);
+  border-color: var(--color-border-strong);
+  box-shadow:
+    9px 11px 0 0 color-mix(in srgb, var(--color-border-strong) 80%, transparent),
+    18px 21px 0 0 color-mix(in srgb, var(--color-border-strong) 10%, transparent);
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
 
 .modal-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid var(--color-border-primary); /* Tema değişkeni */
-  padding-bottom: var(--spacing-md); /* Tema değişkeni */
-  margin-bottom: var(--spacing-lg); /* Tema değişkeni */
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+
+  /* Dashed separator — hand-drawn rule feel */
+  border-bottom: 2px dashed
+    color-mix(in srgb, var(--color-border-primary) 55%, transparent);
+  padding-bottom: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .modal-header h2 {
   margin: 0;
-  font-size: var(--font-size-h3); /* Tema değişkeni */
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary); /* Tema değişkeni */
+  /* Amatic SC gives the handwritten headline feel */
+  font-family: var(--font-family-secondary);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+
+  /* Slight left offset for an off-center look */
+  padding-left: 2px;
 }
 
+/* ── Close Button ────────────────────────────────────────────────────────── */
+
 .modal-close-button {
-  background: none;
-  border: none;
+  /* Reset */
+  background: var(--color-secondary);
   cursor: pointer;
-  padding: var(--spacing-xs); /* Tema değişkeni */
   line-height: 0;
-  color: var(--color-text-muted); /* Tema değişkeni */
-  transition: color var(--transition-duration-short) ease;
+  flex-shrink: 0;
+
+  /* Sketch-style button box */
+  padding: 6px;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 8px 3px 10px 4px; /* uneven corners */
+  box-shadow: 3px 3px 0 0 var(--color-border-strong);
+
+  color: var(--color-text-primary);
+  transition:
+    transform var(--transition-duration-short) ease,
+    box-shadow var(--transition-duration-short) ease,
+    background-color var(--transition-duration-short) ease;
+
+  /* Align icon nicely with the title top */
+  margin-top: 4px;
 }
+
 .modal-close-button:hover {
-  color: var(--color-text-primary); /* Tema değişkeni */
+  background-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-secondary));
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-border-strong);
 }
+
+.modal-close-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: none;
+}
+
 .modal-close-button svg {
-  /* react-icons için */
   display: block;
+  /* Keep the icon crisp */
+  stroke-width: 0.5;
 }
+
+/* ── Content ─────────────────────────────────────────────────────────────── */
 
 .modal-content {
   line-height: var(--line-height-base);
-  color: var(--color-text-secondary); /* İçerik metin rengi */
+  color: var(--color-text-secondary);
 }
+
 .modal-content h3 {
+  font-family: var(--font-family-secondary);
+  font-size: clamp(1.6rem, 3.5vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-primary);
   margin-top: var(--spacing-lg);
   margin-bottom: var(--spacing-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-primary);
-  font-size: var(--font-size-lg);
+
+  /* Subtle left accent line — like a pencil underline */
+  padding-left: var(--spacing-sm);
+  border-left: 3px solid
+    color-mix(in srgb, var(--color-primary) 70%, transparent);
 }
+
 .modal-content h3:first-child {
   margin-top: 0;
 }
+
 .modal-content p {
   margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-md);
 }
+
+/* List with hand-drawn style markers */
 .modal-content ul {
-  list-style: disc;
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-md);
+}
+
+.modal-content ul li {
+  position: relative;
+  margin-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-sm);
+}
+
+/* Crayon-dot bullet */
+.modal-content ul li::before {
+  content: "";
+  position: absolute;
+  left: -12px;
+  top: 0.55em;
+  width: 7px;
+  height: 6px;
+  background: var(--color-primary);
+  border-radius: 60% 40% 55% 45%; /* slightly blob-shaped */
+  opacity: 0.75;
+}
+
+.modal-content ol {
   margin-left: var(--spacing-lg);
   margin-bottom: var(--spacing-md);
+  padding-left: 0;
 }
-.modal-content li {
+
+.modal-content ol li {
   margin-bottom: var(--spacing-sm);
 }
+
 .modal-content a {
   color: var(--color-text-link);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
+
 .modal-content a:hover {
   color: var(--color-text-link-hover);
 }
 
+/* ── Project Modal Links (used externally) ───────────────────────────────── */
+
+.project-modal-links {
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 2px dashed
+    color-mix(in srgb, var(--color-border-primary) 50%, transparent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.project-modal-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  text-decoration: none;
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+  padding: 6px var(--spacing-sm);
+  border: 2px solid var(--color-border-strong);
+  border-radius: 6px 2px 8px 3px; /* uneven */
+  box-shadow: 3px 3px 0 0 var(--color-border-strong);
+  transition:
+    transform var(--transition-duration-short) ease,
+    box-shadow var(--transition-duration-short) ease;
+}
+
+.project-modal-links a:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 0 var(--color-border-strong);
+  text-decoration: none;
+  color: var(--color-text-on-primary);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
-  .modal-container {
-    padding: var(--spacing-md) var(--spacing-lg);
-    max-height: 90vh;
+  .modal-overlay {
+    padding: var(--spacing-sm);
+    align-items: flex-end; /* slide up from bottom on tablet/mobile */
   }
+
+  .modal-container {
+    max-width: 100%;
+    max-height: 92vh;
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
+    border-radius: 16px 20px 0 0; /* flat bottom — sheet-from-bottom feel */
+    box-shadow:
+      0 -4px 0 0 var(--color-border-strong),
+      -4px 0 0 0 color-mix(in srgb, var(--color-border-strong) 35%, transparent),
+      4px 0 0 0 color-mix(in srgb, var(--color-border-strong) 35%, transparent);
+  }
+
   .modal-header h2 {
-    font-size: var(--font-size-xl);
+    font-size: clamp(1.7rem, 6vw, 2.2rem);
+  }
+
+  .modal-content h3 {
+    font-size: clamp(1.4rem, 4.5vw, 1.7rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-overlay {
+    padding: 0;
+  }
+
+  .modal-container {
+    max-height: 94vh;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+    border-radius: 20px 20px 0 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    box-shadow: 0 -4px 0 0 var(--color-border-strong);
+  }
+
+  .modal-header {
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-sm);
+  }
+
+  .modal-header h2 {
+    font-size: clamp(1.5rem, 7vw, 2rem);
+  }
+
+  .modal-close-button {
+    padding: 5px;
+  }
+
+  .modal-content p {
+    font-size: var(--font-size-sm);
+  }
+
+  .modal-content h3 {
+    font-size: clamp(1.3rem, 5.5vw, 1.6rem);
+  }
+
+  .project-modal-links {
+    flex-direction: column;
+  }
+
+  .project-modal-links a {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 360px) {
+  .modal-container {
+    padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
+  }
+
+  .modal-header h2 {
+    font-size: 1.4rem;
   }
 }

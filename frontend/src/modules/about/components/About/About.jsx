@@ -5,10 +5,10 @@ import ServiceCard from "./ServiceCard/ServiceCard.jsx";
 import Modal from "@shared/ui/Modal.jsx";
 import useAboutGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
 
-const PROGRAMMING_LANG_SVG_PATH = "/assets/icons/about/programmingLanguage.svg";
-const DEVTOOLS_TECH_SVG_PATH = "/assets/icons/about/DevToolsTech.svg";
-const PODCAST_TALKS_SVG_PATH = "/assets/icons/about/PodcastTalks.svg";
-const PROJECTS_WORK_SVG_PATH = "/assets/icons/about/ProjectsWork.svg";
+const PROGRAMMING_LANG_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947706/portfolio/public/assets/icons/about/programmingLanguage.svg";
+const DEVTOOLS_TECH_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947703/portfolio/public/assets/icons/about/DevToolsTech.svg";
+const PODCAST_TALKS_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947705/portfolio/public/assets/icons/about/PodcastTalks.svg";
+const PROJECTS_WORK_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947709/portfolio/public/assets/icons/about/ProjectsWork.svg";
 
 import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
 import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";

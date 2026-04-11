@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import ProjectListMenu from "./ProjectListMenu.jsx";
 import ProjectModal from "@shared/ui/ProjectModal.jsx";
+import { PatternBackground } from "@shared/ui/patterns";
 import "./ProjectList.css";
 import {
   FALLBACK_PROJECTS as fallbackProjects,
   fetchProjects,
 } from "@modules/projects/services/projectService.js";
-
-// İkonlar ve Başlık SVG'si
-const MY_PROJECTS_SVG_PATH = "/assets/icons/project/MyProject.svg";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const ProjectList = () => {
@@ -145,13 +143,27 @@ const ProjectList = () => {
     <>
       <section className="project-list-section" id="projects-section">
         <h2 className="visually-hidden">Projelerim</h2>
-        <img
-          className="project-list-title-svg"
-          src={MY_PROJECTS_SVG_PATH}
-          alt="Projelerim Başlığı"
-          width={503}
-          height={109}
-        />
+        <header className="project-list-hero" aria-label="Projeler başlığı">
+          <PatternBackground
+            variant="paper"
+            opacity={0.36}
+            className="project-list-hero__paper-pattern"
+          />
+          <PatternBackground
+            variant="naiveSketch"
+            opacity={0.12}
+            className="project-list-hero__doodle-pattern"
+          />
+
+          
+
+          <div className="project-list-hero__content">
+            <p className="project-list-hero__title">PROJELERİM</p>
+            <p className="project-list-hero__subtitle">
+              YAPTIĞIM ÇALIŞMALAR VE DENEYİMLERİM
+            </p>
+          </div>
+        </header>
         <ProjectListMenu
           searchQuery={searchQuery}
           onSearchQueryChange={setSearchQuery}

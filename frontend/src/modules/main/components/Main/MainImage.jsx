@@ -1,7 +1,7 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import { gsap } from "gsap"; // GSAP'ı toaster animasyonu için import et
 
-const HERO_IMAGE_PATH = "/assets/icons/main/main-hero.webp";
+const HERO_IMAGE_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947757/portfolio/public/assets/icons/main/main-hero.webp";
 
 // Ayrı bir hook'a gerek yoksa, mantığı doğrudan bileşene entegre edebiliriz.
 // Eğer hook'u başka yerde de kullanıyorsanız, onu GSAP kullanacak şekilde güncelleyebilirsiniz.

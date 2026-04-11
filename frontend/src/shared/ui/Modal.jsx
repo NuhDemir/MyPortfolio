@@ -1,8 +1,9 @@
 // src/components/common/Modal.jsx
 import React, { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
-import "@shared/styles/common/Modal.css"; // Modal stilleri
-import useAboutModalGsapAnimation from "@shared/hooks/useAboutModalGsapAnimation.js"; // Kendi GSAP hook'unuz
+import "@shared/styles/common/Modal.css";
+import useAboutModalGsapAnimation from "@shared/hooks/useAboutModalGsapAnimation.js";
+import { PatternBackground } from "@shared/ui/patterns";
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   const modalRef = useRef(null);
@@ -60,6 +61,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     <div className="modal-overlay" ref={overlayRef}>
       {/* Modal Konteyneri */}
       <div className="modal-container" ref={modalRef}>
+        <PatternBackground variant="naiveSketch" opacity={0.06} />
         {/* Modal Başlığı */}
         <div className="modal-header">
           <h2>{title}</h2>

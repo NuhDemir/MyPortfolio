@@ -2,7 +2,7 @@ import React from "react";
 import { FaDribbble, FaInstagram, FaMediumM, FaTwitter } from "react-icons/fa";
 import "./style/Footer.scss";
 
-const VECTOR_SVG_PATH = "/assets/icons/footer/Vector.svg";
+const VECTOR_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947722/portfolio/public/assets/icons/footer/Vector.svg";
 
 // Removed companyName prop as the name is fixed in the design
 const Footer = () => {

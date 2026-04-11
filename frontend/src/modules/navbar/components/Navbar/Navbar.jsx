@@ -8,11 +8,12 @@ import { NAVBAR_ITEMS } from "./config/navItems";
 import { NavbarMenuList } from "./components/NavbarMenuList";
 import { ThemeToggleButton } from "./components/ThemeToggleButton";
 import { MobileMenuToggle } from "./components/MobileMenuToggle";
+import { NavbarPattern } from "./components/NavbarPattern";
 
 // SVG dosyaları
-const ICON_SVG_PATH = "/assets/icons/navitem/icon.svg";
-const HAMBURGER_ICON_PATH = "/assets/icons/navbar/hamburger.svg";
-const CLOSE_ICON_PATH = "/assets/icons/navbar/close.svg";
+const ICON_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947779/portfolio/public/assets/icons/navitem/icon.svg";
+const HAMBURGER_ICON_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947778/portfolio/public/assets/icons/navbar/hamburger.svg";
+const CLOSE_ICON_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947777/portfolio/public/assets/icons/navbar/close.svg";
 
 export const Navbar = ({
   onScrollToAbout,
@@ -190,6 +191,7 @@ export const Navbar = ({
         }`}
       >
         <div className="navbar-container">
+          <NavbarPattern />
           <div
             className="icon-container"
             onClick={handleIconClick}

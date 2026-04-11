@@ -3,7 +3,7 @@ import React from "react";
 import useCommentHeaderAnimation from "../../hooks/useCommentHeaderAnimation"; // Yeni hook'u import et
 import "./style/Comments.scss"; // Veya ilgili CSS dosyanız
 
-const COMMENTS_HEADER_SVG_PATH = "/assets/icons/comments/commentsHeader.svg";
+const COMMENTS_HEADER_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947718/portfolio/public/assets/icons/comments/commentsHeader.svg";
 
 const CommentsHeader = () => {
   // Animasyon hook'unu çağır ve ref'i al

@@ -6,11 +6,12 @@ import { MeshPattern } from "./patterns/MeshPattern.jsx";
 import { LinesPattern } from "./patterns/LinesPattern.jsx";
 import { WavesPattern } from "./patterns/WavesPattern.jsx";
 import { CirclesPattern } from "./patterns/CirclesPattern.jsx";
+import { PaperPattern } from "./patterns/PaperPattern.jsx";
 import { NaiveSketchPattern } from "./patterns/NaiveSketchPattern.jsx";
 import "./PatternBackground.css";
 
 const PATTERN_KEYS = Object.keys(PATTERN_PRESETS).filter(
-  (key) => key !== "naiveSketch",
+  (key) => key !== "naiveSketch" && key !== "paper",
 );
 const PATTERN_COMPONENTS = {
   grid: GridPattern,
@@ -19,6 +20,7 @@ const PATTERN_COMPONENTS = {
   lines: LinesPattern,
   waves: WavesPattern,
   circles: CirclesPattern,
+  paper: PaperPattern,
   naiveSketch: NaiveSketchPattern,
 };
 

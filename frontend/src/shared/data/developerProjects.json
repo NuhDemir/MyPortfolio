@@ -3,7 +3,7 @@
     "id": "proj-01",
     "title": "Portfolyo Sitesi",
     "description": "React, NodeJs ve modern web teknolojileri kullanılarak geliştirilmiş interaktif ve responsive kişisel portfolyo sitesi.",
-    "imageUrl": "/images/portfolio.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947876/portfolio/public/images/portfolio.png",
     "liveUrl": "https://www.nuhdemir.netlify.app",
     "githubUrl": "https://github.com/NuhDemir/MyPortfolio",
     "tags": [
@@ -22,7 +22,7 @@
     "id": "proj-02",
     "title": "Electron ARP & Network Explorer",
     "description": "Yerel ağ tarama ve ARP tablosunu görselleştiren, Electron + React ile geliştirilmiş masaüstü ağ keşif aracı.",
-    "imageUrl": "/images/arp.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947842/portfolio/public/images/arp.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/your-username/electron-arp-explorer",
     "tags": [
@@ -42,7 +42,7 @@
     "id": "proj-03",
     "title": "SeeSound - Yapay Zeka Destekli Mobil Uygulama",
     "description": "İşitme engelli kullanıcılar için çevre seslerini algılayıp bildiren ve acil durum iletişimini kolaylaştıran erişilebilir mobil uygulama.",
-    "imageUrl": "/images/seesound.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947892/portfolio/public/images/seesound.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/seesound",
     "tags": [
@@ -62,7 +62,7 @@
     "id": "proj-04",
     "title": "2048 Oyunu ve Geliştirme Rehberi",
     "description": "Vanilla JavaScript ile geliştirilmiş klasik 2048 oyunu ve oyun geliştiriciler için adım adım rehber.",
-    "imageUrl": "/images/2048.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947840/portfolio/public/images/2048.png",
     "liveUrl": "https://2048-gamex.netlify.app/",
     "githubUrl": "https://github.com/NuhDemir/2048_Game",
     "tags": [
@@ -81,7 +81,7 @@
     "id": "proj-05",
     "title": "Hastane Yönetim Sistemi",
     "description": "ASP.NET MVC ve SQL Server ile geliştirilmiş, hasta kayıt, doktor atama ve ilaç yönetimi modülleri içeren hastane yönetim sistemi.",
-    "imageUrl": "/images/project-hospital-management.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947892/portfolio/public/images/project-hospital-management.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/Hospital_Management_System",
     "tags": [
@@ -100,7 +100,7 @@
     "id": "proj-06",
     "title": "Çarşı E-Ticaret Sitesi (React Frontend)",
     "description": "React tabanlı, ürün listeleme ve sepet işlemleri sunan kullanıcı odaklı e-ticaret ön yüzü.",
-    "imageUrl": "/images/project-carsi-banner.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947879/portfolio/public/images/project-carsi-banner.png",
     "liveUrl": "https://carsi-react.netlify.app/",
     "githubUrl": "https://github.com/NuhDemir/Carsi_Ecommerce",
     "tags": [
@@ -119,7 +119,7 @@
     "id": "proj-07",
     "title": "Çarşı - MERN Fullstack E-Ticaret",
     "description": "MERN yığını ile inşa edilmiş, ürün yönetimi ve sipariş akışı gibi tam özellikli e-ticaret platformu.",
-    "imageUrl": "/images/carsi.png",
+    "imageUrl": "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947853/portfolio/public/images/carsi.png",
     "liveUrl": null,
     "githubUrl": "https://github.com/NuhDemir/Carsi_MERN",
     "tags": [

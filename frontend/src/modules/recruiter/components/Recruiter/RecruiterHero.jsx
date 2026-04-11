@@ -12,7 +12,7 @@ const RecruiterHero = () => {
       transition={{ duration: 0.5 }}
     >
       <div className="hero-avatar">
-        <img src="/assets/icons/main/main.png" alt="Nuh Demir" />
+        <img src="https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947776/portfolio/public/assets/icons/main/main.png" alt="Nuh Demir" />
       </div>
       <div className="hero-content">
         <h1>Nuh Demir</h1>

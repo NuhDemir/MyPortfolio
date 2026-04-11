@@ -264,8 +264,8 @@
   right: clamp(2%, 5vw, 5%);
   margin-block: auto;
   width: clamp(450px, 42.5vw, 812px);
-  max-width: 56%;
-  min-width: 325px;
+  max-width: 76%;
+  min-width: 425px;
   aspect-ratio: 1 / 1;
   height: auto;
   max-height: 72svh;

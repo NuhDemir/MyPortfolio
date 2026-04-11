@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { PatternBackground } from "@shared/ui/patterns";
 
-const ARROW_RIGHT_SVG_PATH = "/assets/icons/arrow_right.svg";
+const ARROW_RIGHT_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947716/portfolio/public/assets/icons/arrow_right.svg";
 
 // onClick prop'unu ekliyoruz
 const PortfolioButton = forwardRef(({ onClick }, ref) => (
