@@ -90,6 +90,7 @@ export const normalizeProjectJson = (input) => {
     const submission = {
       id: project.id,
       slug: project.slug,
+      title,
       isFeatured: project.isFeatured ?? project.featured,
       metadata: {
         ...(project.metadata && typeof project.metadata === "object"

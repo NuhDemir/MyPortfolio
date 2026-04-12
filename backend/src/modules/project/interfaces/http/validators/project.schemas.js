@@ -224,10 +224,18 @@ export const createProjectSchema = z
   .object({
     ...v3BaseFields,
     ...legacyCompatFields,
-    // title required on create (no .optional() override)
-    title: z.string().min(1, { message: "Başlık alanı boş bırakılamaz." }),
   })
-  .passthrough();
+  .passthrough()
+  .superRefine((data, ctx) => {
+    const title = data?.title ?? data?.metadata?.title;
+    if (!title || String(title).trim().length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["title"],
+        message: "Başlık alanı boş bırakılamaz.",
+      });
+    }
+  });
 
 export const updateProjectSchema = z
   .object({
