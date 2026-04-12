@@ -1,0 +1,46 @@
+.about-admin-success {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border: var(--admin-border-width) solid var(--admin-line);
+  border-radius: calc(var(--admin-radius) * 0.55);
+  background: color-mix(in srgb, var(--admin-accent) 14%, var(--admin-surface));
+  color: var(--admin-text);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.about-admin-summary__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.about-admin-summary__grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.9rem;
+  border: var(--admin-border-width) solid var(--admin-line);
+  border-radius: calc(var(--admin-radius) * 0.45);
+  background: var(--admin-surface-alt);
+}
+
+.about-admin-summary__grid strong {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--admin-text-muted);
+}
+
+.about-admin-summary__grid span {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--admin-text);
+}
+
+.form-group--json textarea {
+  min-height: 240px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}

@@ -6,9 +6,10 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "lint": "eslint ./src --ext .js",
-  "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --watch=false",
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --watch=false",
     "test:watch": "npm run test -- --watch",
-    "test:coverage": "npm run test -- --coverage"
+    "test:coverage": "npm run test -- --coverage",
+    "seed:admin": "node scripts/createAdminUser.js"
   },
   "type": "module",
   "keywords": [],

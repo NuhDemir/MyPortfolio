@@ -2,6 +2,7 @@ import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded
 import WorkspacesRoundedIcon from "@mui/icons-material/WorkspacesRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import CommentRoundedIcon from "@mui/icons-material/CommentRounded";
+import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 
 export const ADMIN_NAV_LINKS = [
   {
@@ -31,6 +32,13 @@ export const ADMIN_NAV_LINKS = [
     description: "Yorum yönetimi",
     Icon: CommentRoundedIcon,
     eyebrow: "Moderasyon",
+  },
+  {
+    to: "/admin/about",
+    label: "About",
+    description: "Hakkımda icerigi",
+    Icon: ContactPageRoundedIcon,
+    eyebrow: "Icerik Yonetimi",
   },
 ];
 

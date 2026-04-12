@@ -74,6 +74,7 @@ export const createHttpApp = ({
         auth: "/api/auth",
         blog: "/api/blog",
         projects: "/api/projects",
+        about: "/api/about",
         admin: "/api/admin/dashboard",
       },
     });

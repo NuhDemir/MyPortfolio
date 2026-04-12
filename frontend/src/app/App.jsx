@@ -76,21 +76,11 @@ const DefaultExperience = () => {
         </div>
         <SocialLinks />
         <ScrollToTop />
-        <div className="about-projects-layout">
-          <div
-            id="about-section"
-            ref={aboutRef}
-            className="about-projects-layout__about"
-          >
-            <About />
-          </div>
-          <div
-            id="projects-section"
-            ref={projectsRef}
-            className="about-projects-layout__projects"
-          >
-            <ProjectList />
-          </div>
+        <div id="about-section" ref={aboutRef}>
+          <About />
+        </div>
+        <div id="projects-section" ref={projectsRef}>
+          <ProjectList />
         </div>
         <section id="blog-section" ref={blogRef}>
           <BlogShowcase />

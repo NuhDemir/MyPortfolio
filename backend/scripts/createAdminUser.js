@@ -1,18 +1,16 @@
 import "dotenv/config";
 import mongoose from "mongoose";
 import PasswordHasher from "../src/modules/auth/infrastructure/security/PasswordHasher.js";
-import { MongooseUserRepository } from "../src/modules/auth/infrastructure/persistence/mongoose/MongooseUserRepository.js";
+import { UserModel } from "../src/modules/auth/infrastructure/persistence/mongoose/UserModel.js";
+
+const DEFAULT_ADMIN_USERNAME = "nuhdemir";
+const DEFAULT_ADMIN_EMAIL = "nuhdemir.dev@gmail.com";
+const DEFAULT_ADMIN_PASSWORD = "dMr213**!!";
 
 const resolveSeedConfig = () => {
-  const username = process.env.ADMIN_SEED_USERNAME;
-  const email = process.env.ADMIN_SEED_EMAIL;
-  const password = process.env.ADMIN_SEED_PASSWORD;
-
-  if (!username || !email || !password) {
-    throw new Error(
-      "ADMIN_SEED_USERNAME, ADMIN_SEED_EMAIL, and ADMIN_SEED_PASSWORD must be set in environment variables"
-    );
-  }
+  const username = process.env.ADMIN_SEED_USERNAME || DEFAULT_ADMIN_USERNAME;
+  const email = process.env.ADMIN_SEED_EMAIL || DEFAULT_ADMIN_EMAIL;
+  const password = process.env.ADMIN_SEED_PASSWORD || DEFAULT_ADMIN_PASSWORD;
 
   return { username, email, password };
 };
@@ -29,20 +27,50 @@ const createAdminUser = async () => {
 
   await mongoose.connect(mongoUri);
   try {
-    const userRepository = new MongooseUserRepository();
-
-    const existingByUsername = await userRepository.findByIdentity(username);
+    const existingByUsername = await UserModel.findOne({ username });
     if (existingByUsername) {
+      const passwordHasher = new PasswordHasher();
+      const hashedPassword = await passwordHasher.hash(password);
+
+      await UserModel.updateOne(
+        { _id: existingByUsername._id },
+        {
+          $set: {
+            email,
+            password: hashedPassword,
+            role: "admin",
+            isActive: true,
+            updatedAt: new Date(),
+          },
+        }
+      );
+
       console.log(
-        `Admin user '${username}' already exists (id: ${existingByUsername.id}).`
+        `Admin user '${username}' already exists. Role and password were refreshed.`
       );
       return;
     }
 
-    const existingByEmail = await userRepository.findByEmail(email);
+    const existingByEmail = await UserModel.findOne({ email });
     if (existingByEmail) {
+      const passwordHasher = new PasswordHasher();
+      const hashedPassword = await passwordHasher.hash(password);
+
+      await UserModel.updateOne(
+        { _id: existingByEmail._id },
+        {
+          $set: {
+            username,
+            password: hashedPassword,
+            role: "admin",
+            isActive: true,
+            updatedAt: new Date(),
+          },
+        }
+      );
+
       console.log(
-        `An account with email '${email}' already exists (username: ${existingByEmail.username}).`
+        `Account with email '${email}' was promoted to admin username '${username}'.`
       );
       return;
     }
@@ -50,7 +78,7 @@ const createAdminUser = async () => {
     const passwordHasher = new PasswordHasher();
     const hashedPassword = await passwordHasher.hash(password);
 
-    const createdUser = await userRepository.create({
+    const createdUser = await UserModel.create({
       username,
       email,
       password: hashedPassword,
@@ -58,7 +86,7 @@ const createAdminUser = async () => {
     });
 
     console.log(
-      `Created admin user '${createdUser.username}' with id ${createdUser.id}.`
+      `Created admin user '${createdUser.username}' with id ${createdUser._id}.`
     );
   } finally {
     await mongoose.disconnect();

@@ -6,8 +6,9 @@ const IMAGE_SVG_PATH = "/assets/icons/img/image.svg";
 
 // React.memo ile gereksiz re-render engelleniyor
 const ProjectCard = React.memo(({ project, onClick }) => {
-  const title = project?.metadata?.title || project?.title || "";
-  const description = project?.metadata?.tagline || project?.description || "";
+  const title = project?.title || project?.metadata?.title || "";
+  const description =
+    project?.tagline || project?.metadata?.tagline || project?.description || "";
   const tags = Array.isArray(project?.tags) ? project.tags : [];
   const imageUrl = project?.visuals?.thumbnailUrl || project?.imageUrl || "";
 

@@ -10,6 +10,7 @@ import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
 import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import ContactPageRoundedIcon from "@mui/icons-material/ContactPageRounded";
 import ErrorMessage from "@shared/ui/ErrorMessage.jsx";
 import LoadingSpinner from "@shared/ui/LoadingSpinner.jsx";
 import { getDashboardSnapshot } from "../services/dashboardService";
@@ -309,6 +310,10 @@ const AdminDashboardPage = () => {
                 </span>
               ) : null}
             </Link>
+            <Link className="dashboard-action" to="/admin/about">
+              <ContactPageRoundedIcon fontSize="inherit" aria-hidden="true" />
+              About
+            </Link>
           </div>
         </div>
         <div className="dashboard-hero__meta">
@@ -394,6 +399,21 @@ const AdminDashboardPage = () => {
           <span className="dashboard-card__note">
             {stats.pendingCommentCount} beklemede
           </span>
+          <span className="dashboard-card__cta" aria-hidden="true">
+            Yönet <ChevronRightRoundedIcon fontSize="inherit" />
+          </span>
+        </Link>
+        <Link
+          className="dashboard-card dashboard-card--link"
+          to="/admin/about"
+          aria-label="About icerigini yonet"
+        >
+          <span className="dashboard-card__icon" aria-hidden="true">
+            <ContactPageRoundedIcon fontSize="inherit" />
+          </span>
+          <span className="dashboard-card__title">About</span>
+          <span className="dashboard-card__value">CMS</span>
+          <span className="dashboard-card__note">Hakkımda icerigi</span>
           <span className="dashboard-card__cta" aria-hidden="true">
             Yönet <ChevronRightRoundedIcon fontSize="inherit" />
           </span>

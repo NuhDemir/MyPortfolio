@@ -81,6 +81,16 @@
   transform: rotate(-1deg);
 }
 
+.about-header__subtitle {
+  margin: 0.7rem 0 0;
+  max-width: 68ch;
+  font-family: var(--font-family-primary);
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+  letter-spacing: 0.02em;
+}
+
 .about-grid {
   position: relative;
   z-index: 2;
@@ -146,6 +156,41 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-text-secondary);
+}
+
+.stat-card__cta {
+  width: fit-content;
+  margin-top: 0.25rem;
+  padding: 0.28rem 0.64rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 14px 6px 16px 8px / 8px 16px 6px 14px;
+  background: var(--color-secondary);
+  color: var(--color-text-primary);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  font-family: var(--font-family-primary);
+  transform: rotate(-0.45deg);
+  transition:
+    transform var(--transition-duration-short) ease,
+    background var(--transition-duration-short) ease,
+    color var(--transition-duration-short) ease,
+    box-shadow var(--transition-duration-short) ease;
+}
+
+.stat-card__cta:hover {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  transform: rotate(0.55deg) translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--color-border-strong);
+}
+
+.stat-card__cta:focus-visible {
+  outline: 3px dashed var(--color-border-input-focus);
+  outline-offset: 2px;
 }
 
 .services-section {
@@ -299,6 +344,11 @@
 
   .stat-card__inner {
     min-height: 118px;
+  }
+
+  .stat-card__cta {
+    font-size: 0.64rem;
+    padding: 0.25rem 0.54rem;
   }
 
   .service-card {

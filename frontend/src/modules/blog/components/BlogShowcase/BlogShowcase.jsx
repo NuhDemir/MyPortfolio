@@ -41,6 +41,44 @@ const sortBlogsByDate = (entries) =>
     return second - first;
   });
 
+/* Doodle: el çizimi yıldız SVG */
+const DoodleStar = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 38 38"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <path
+      d="M19 3 L22 14 L33 14 L24 21 L27 33 L19 26 L11 33 L14 21 L5 14 L16 14 Z"
+      fill="var(--color-accent)"
+      stroke="var(--color-border-strong)"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+    <circle cx="33" cy="6" r="2.5" fill="var(--color-primary)" stroke="var(--color-border-strong)" strokeWidth="1.5" />
+    <circle cx="5"  cy="31" r="2"   fill="var(--color-accent)"  stroke="var(--color-border-strong)" strokeWidth="1.5" />
+  </svg>
+);
+
+/* Doodle: asimetrik nokta kümesi SVG */
+const DoodleDots = ({ className }) => (
+  <svg
+    className={className}
+    viewBox="0 0 50 50"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    <circle cx="10" cy="10" r="5"   fill="var(--color-accent)"   stroke="var(--color-border-strong)" strokeWidth="2" />
+    <circle cx="28" cy="7"  r="3.5" fill="var(--color-primary)"  stroke="var(--color-border-strong)" strokeWidth="2" />
+    <circle cx="42" cy="18" r="4"   fill="var(--color-accent)"   stroke="var(--color-border-strong)" strokeWidth="2" />
+    <circle cx="18" cy="30" r="3"   fill="var(--color-primary)"  stroke="var(--color-border-strong)" strokeWidth="1.5" />
+    <circle cx="38" cy="38" r="5"   fill="var(--color-accent)"   stroke="var(--color-border-strong)" strokeWidth="2" />
+  </svg>
+);
+
 const BlogShowcase = () => {
   const [blogs, setBlogs] = useState(fallbackBlogs);
   const [refreshing, setRefreshing] = useState(false);
@@ -105,6 +143,10 @@ const BlogShowcase = () => {
 
   return (
     <section className="blog-showcase" id="blog-section">
+      {/* Dekoratif doodle elementler */}
+      <DoodleStar className="blog-showcase__doodle blog-showcase__doodle--star" />
+      <DoodleDots className="blog-showcase__doodle blog-showcase__doodle--dots" />
+
       <div className="blog-showcase__header">
         <div className="blog-showcase__header-meta">
           <span className="blog-showcase__eyebrow">
@@ -145,6 +187,7 @@ const BlogShowcase = () => {
           <ArrowRight className="blog-showcase__cta-icon" aria-hidden="true" />
         </Link>
       </div>
+
       <div className="blog-showcase__grid" data-refreshing={refreshing}>
         {visibleBlogs.map((blog, index) => {
           const blogSlug = normalizeSlug(blog);

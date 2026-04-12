@@ -1,57 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Header from "./Header.jsx";
 import StatCard from "./StatCard.jsx";
 import ServiceCard from "./ServiceCard/ServiceCard.jsx";
 import Modal from "@shared/ui/Modal.jsx";
 import useAboutGsapAnimations from "../../hooks/useAboutGsapAnimation.js";
-
-const PROGRAMMING_LANG_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947706/portfolio/public/assets/icons/about/programmingLanguage.svg";
-const DEVTOOLS_TECH_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947703/portfolio/public/assets/icons/about/DevToolsTech.svg";
-const PODCAST_TALKS_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947705/portfolio/public/assets/icons/about/PodcastTalks.svg";
-const PROJECTS_WORK_SVG_PATH = "https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947709/portfolio/public/assets/icons/about/ProjectsWork.svg";
-
-import ProgrammingLangContent from "./ServiceCard/ModalContents/ProgrammingLangContent.jsx";
-import DevToolsTechContent from "./ServiceCard/ModalContents/DevToolsTechContent.jsx";
-import PodcastTalksContent from "./ServiceCard/ModalContents/PodcastTalksContent.jsx";
-import ProjectsWorkContent from "./ServiceCard/ModalContents/ProjectsWorkContent.jsx";
+import {
+  cloneDefaultAboutContent,
+} from "@modules/about/data/defaultAboutContent.js";
+import { getAboutContent } from "@modules/about/services/aboutContentService.js";
 import "./style/About.css";
 
-const GITHUB_USERNAME = "NuhDemir";
-
-const services = [
-  {
-    id: "programming",
-    icon: PROGRAMMING_LANG_SVG_PATH,
-    iconBgColor: "var(--color-accent)",
-    title: "Programming Lang",
-    description: "Modern dillerle ölçeklenebilir kod yazma.",
-    modalContent: <ProgrammingLangContent />,
-  },
-  {
-    id: "devtools",
-    icon: DEVTOOLS_TECH_SVG_PATH,
-    iconBgColor: "var(--color-primary)",
-    title: "Dev Tools & Tech",
-    description: "Verimlilik için en yeni araçları kullanma.",
-    modalContent: <DevToolsTechContent />,
-  },
-  {
-    id: "podcast",
-    icon: PODCAST_TALKS_SVG_PATH,
-    iconBgColor: "var(--color-secondary)",
-    title: "Podcast & Talks",
-    description: "Bilgi ve teknoloji trendlerini paylaşma.",
-    modalContent: <PodcastTalksContent />,
-  },
-  {
-    id: "projects",
-    icon: PROJECTS_WORK_SVG_PATH,
-    iconBgColor: "var(--color-accent)",
-    title: "Projects & Work",
-    description: "Kalite odaklı etkili projeler sunma.",
-    modalContent: <ProjectsWorkContent />,
-  },
-];
+const sortByOrder = (items = []) =>
+  [...items].sort((a, b) => Number(a?.order ?? 0) - Number(b?.order ?? 0));
 
 const AboutStarDoodle = () => (
   <svg
@@ -104,26 +64,187 @@ const AboutDotsDoodle = () => (
   </svg>
 );
 
+const AboutServiceModalContent = ({ service }) => {
+  if (!service) {
+    return null;
+  }
+
+  const modal = service.modal ?? {};
+  const sections = Array.isArray(modal.sections) ? modal.sections : [];
+
+  return (
+    <div className="about-modal-content" data-about-modal={service.id ?? "service"}>
+      <section className="about-modal-content__panel scribble-card-wrap">
+        <div
+          className="about-modal-content__panel-fill scribble-card-wrap__fill"
+          aria-hidden="true"
+        />
+        <div className="about-modal-content__panel-body naive-shadow--sm">
+          <h3 className="about-modal-content__heading">
+            {modal.heading || service.title}
+          </h3>
+          <p className="about-modal-content__lead">{modal.lead}</p>
+        </div>
+      </section>
+
+      {sections.map((section, sectionIndex) => (
+        <section
+          key={`${service.id}-section-${section.title}-${sectionIndex}`}
+          className="about-modal-content__section"
+        >
+          <h4 className="about-modal-content__section-title">{section.title}</h4>
+          <ul className="about-modal-content__section-body about-modal-content__list">
+            {(section.items ?? []).map((item, itemIndex) => (
+              <li
+                key={`${service.id}-item-${item.title}-${itemIndex}`}
+                className="about-modal-content__item"
+              >
+                <span className="about-modal-content__item-title">{item.title}</span>
+                <span className="about-modal-content__item-body">{item.body}</span>
+                {item.linkLabel && item.linkUrl ? (
+                  <span className="about-modal-content__item-body">
+                    <a
+                      className="about-modal-content__inline-link"
+                      href={item.linkUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {item.linkLabel}
+                    </a>
+                  </span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+
+      {modal.footnote ? (
+        <p className="about-modal-content__footnote">
+          {modal.footnote}{" "}
+          {modal.footnoteLinkLabel && modal.footnoteLinkUrl ? (
+            <a
+              className="about-modal-content__inline-link"
+              href={modal.footnoteLinkUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {modal.footnoteLinkLabel}
+            </a>
+          ) : null}
+        </p>
+      ) : null}
+    </div>
+  );
+};
+
 const About = () => {
   const { headerRef, statsContainerRef, servicesContainerRef, animateModalContentLoad } =
     useAboutGsapAnimations();
 
-  const [repoCount, setRepoCount] = useState(null);
-  const [followers, setFollowers] = useState(null);
+  const [aboutContent, setAboutContent] = useState(() => cloneDefaultAboutContent());
+  const [githubStats, setGithubStats] = useState({});
   const [activeModalId, setActiveModalId] = useState(null);
-  const [currentModalData, setCurrentModalData] = useState({
-    title: "",
-    content: null,
-  });
+  const [currentModalService, setCurrentModalService] = useState(null);
+
+  const header = aboutContent?.header ?? {};
+  const github = aboutContent?.github ?? {};
+
+  const stats = useMemo(
+    () => sortByOrder(Array.isArray(aboutContent?.stats) ? aboutContent.stats : []),
+    [aboutContent?.stats],
+  );
+
+  const services = useMemo(
+    () =>
+      sortByOrder(Array.isArray(aboutContent?.services) ? aboutContent.services : []),
+    [aboutContent?.services],
+  );
+
+  const githubUsername = github.username || "NuhDemir";
+
+  const resolveStatValue = (stat) => {
+    if (stat?.valueSource === "github") {
+      return githubStats?.[stat.githubField] ?? "...";
+    }
+
+    return stat?.staticValue ?? "...";
+  };
 
   useEffect(() => {
-    fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
+    let isMounted = true;
+
+    const loadAboutContent = async () => {
+      try {
+        const data = await getAboutContent();
+
+        if (!isMounted || !data) {
+          return;
+        }
+
+        setAboutContent((prev) => ({
+          ...prev,
+          ...data,
+          header: {
+            ...(prev.header ?? {}),
+            ...(data.header ?? {}),
+          },
+          github: {
+            ...(prev.github ?? {}),
+            ...(data.github ?? {}),
+          },
+          stats: Array.isArray(data.stats) ? data.stats : prev.stats,
+          services: Array.isArray(data.services) ? data.services : prev.services,
+          seo: {
+            ...(prev.seo ?? {}),
+            ...(data.seo ?? {}),
+          },
+        }));
+      } catch {
+        // Fallback content is already loaded from local defaults.
+      }
+    };
+
+    loadAboutContent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    const controller = new AbortController();
+
+    fetch(`https://api.github.com/users/${githubUsername}`, {
+      signal: controller.signal,
+    })
       .then((res) => res.json())
       .then((data) => {
-        setRepoCount(data.public_repos);
-        setFollowers(data.followers);
+        if (!isMounted) {
+          return;
+        }
+
+        setGithubStats({
+          public_repos: data?.public_repos,
+          followers: data?.followers,
+          following: data?.following,
+          public_gists: data?.public_gists,
+        });
+      })
+      .catch(() => {
+        if (!isMounted) {
+          return;
+        }
+
+        setGithubStats({});
       });
-  }, []);
+
+    return () => {
+      isMounted = false;
+      controller.abort();
+    };
+  }, [githubUsername]);
 
   useEffect(() => {
     if (activeModalId === null) {
@@ -141,17 +262,17 @@ const About = () => {
   }, [activeModalId, animateModalContentLoad]);
 
   const openModal = (serviceId) => {
-    const service = services.find((s) => s.id === serviceId);
+    const service = services.find((entry) => entry.id === serviceId);
     if (service) {
-      setCurrentModalData({
-        title: service.title,
-        content: service.modalContent,
-      });
+      setCurrentModalService(service);
       setActiveModalId(serviceId);
     }
   };
 
-  const closeModal = () => setActiveModalId(null);
+  const closeModal = () => {
+    setActiveModalId(null);
+    setCurrentModalService(null);
+  };
 
   return (
     <div className="about-container">
@@ -160,8 +281,10 @@ const About = () => {
 
         <div className="about-shell__body naive-shadow">
           <div ref={headerRef} className="about-shell__header">
-            <Header />
-       
+            <Header title={header.title} subtitle={header.subtitle} />
+            {header.badge ? (
+              <span className="about-shell__tag naive-pill">{header.badge}</span>
+            ) : null}
           </div>
 
           <AboutStarDoodle />
@@ -169,15 +292,27 @@ const About = () => {
 
           <div className="about-grid">
             <div className="stats-container" ref={statsContainerRef}>
-              <StatCard value={repoCount ?? "..."} label="Repositories" />
-              <StatCard value={followers ?? "..."} label="Followers" />
+              {stats.map((stat, index) => (
+                <StatCard
+                  key={`${stat.key ?? stat.label ?? "stat"}-${index}`}
+                  value={resolveStatValue(stat)}
+                  label={stat.label}
+                  actionLabel={stat?.cta?.label}
+                  actionHref={stat?.cta?.url}
+                  actionAriaLabel={
+                    stat?.cta?.label
+                      ? `${stat.label} baglantisini ac`
+                      : undefined
+                  }
+                />
+              ))}
             </div>
 
             <div className="services-section" ref={servicesContainerRef}>
               {services.map((service) => (
                 <ServiceCard
                   key={service.id}
-                  icon={service.icon}
+                  icon={service.iconUrl}
                   iconBgColor={service.iconBgColor}
                   title={service.title}
                   description={service.description}
@@ -192,9 +327,9 @@ const About = () => {
       <Modal
         isOpen={activeModalId !== null}
         onClose={closeModal}
-        title={currentModalData.title}
+        title={currentModalService?.modal?.heading || currentModalService?.title || ""}
       >
-        {currentModalData.content}
+        <AboutServiceModalContent service={currentModalService} />
       </Modal>
     </div>
   );

@@ -24,34 +24,51 @@ const isProjectFeatured = (project) =>
   project?.isFeatured === true || project?.featured === true;
 
 const getProjectTitle = (project) =>
-  project?.metadata?.title || project?.title || "";
+  project?.title || project?.metadata?.title || "";
 
 const getProjectTagline = (project) =>
-  project?.metadata?.tagline || project?.description || "";
+  project?.tagline || project?.metadata?.tagline || project?.description || "";
 
 const getProjectPlatform = (project) =>
-  project?.metadata?.platform || project?.platform || "";
+  project?.context?.platform || project?.metadata?.platform || project?.platform || "";
 
 const getProjectRole = (project) =>
-  project?.metadata?.role || project?.role || "";
+  project?.context?.role || project?.metadata?.role || project?.role || "";
 
-const getProjectTeam = (project) =>
-  project?.metadata?.team || project?.team || "";
+const getProjectTeam = (project) => {
+  const size = project?.context?.teamSize ?? project?.teamSize;
+  return size != null ? String(size) : (project?.metadata?.team || project?.team || "");
+};
 
 const getProjectDuration = (project) =>
-  project?.metadata?.duration || project?.duration || "";
+  project?.context?.duration || project?.duration || "";
+
+const getProjectArchitecture = (project) =>
+  project?.context?.architecture || "";
+
+const getProjectRepositoryAccess = (project) =>
+  project?.context?.repositoryAccess || "";
+
+const getProjectDifficulty = (project) =>
+  project?.context?.difficulty || project?.difficulty || "";
 
 const getProjectCreatedAt = (project) =>
-  project?.metadata?.createdAt || project?.createdAt || "";
+  project?.context?.startDate ||
+  project?.startDate ||
+  project?.metadata?.createdAt ||
+  project?.createdAt ||
+  "";
 
 const getProjectLinks = (project) => ({
   liveDemo: project?.links?.liveDemo || project?.liveUrl || "",
-  github: project?.links?.github || project?.githubUrl || "",
-  figma: project?.links?.figma || project?.figmaUrl || "",
+  github:   project?.links?.github   || project?.githubUrl || "",
+  figma:    project?.links?.figma    || project?.figmaUrl  || "",
+  documentation: project?.links?.documentation || "",
 });
 
 const getProjectHeroMedia = (project) => ({
   heroVideoUrl: project?.visuals?.heroVideoUrl || "",
+  heroImageUrl: project?.visuals?.heroImageUrl || "",
   thumbnailUrl: project?.visuals?.thumbnailUrl || project?.imageUrl || "",
 });
 
@@ -68,34 +85,29 @@ const hasCaseStudy = (project) => {
 };
 
 const getPrimaryTechStack = (project) => {
-  // Requirement: "ikon yığını" yerine ana teknolojileri metin olarak göster
-  // V2: techStack: [{category, items: []}]
-  // Legacy: technologies (array) veya tags
   const tokens = [];
 
-  if (Array.isArray(project?.techStack)) {
-    for (const group of project.techStack) {
-      if (Array.isArray(group?.items)) {
-        tokens.push(...group.items);
-      }
-    }
-  }
-
-  if (tokens.length === 0 && Array.isArray(project?.technologies)) {
+  // v3: flat unified technologies array
+  if (Array.isArray(project?.technologies) && project.technologies.length > 0) {
     for (const item of project.technologies) {
       if (typeof item === "string") tokens.push(item);
       else if (item?.name) tokens.push(item.name);
     }
   }
 
+  // legacy fallback: techStack grouped format
+  if (tokens.length === 0 && Array.isArray(project?.techStack)) {
+    for (const group of project.techStack) {
+      if (Array.isArray(group?.items)) tokens.push(...group.items);
+    }
+  }
+
+  // last resort: tags
   if (tokens.length === 0 && Array.isArray(project?.tags)) {
     tokens.push(...project.tags);
   }
 
-  const normalized = tokens.map((t) => String(t).trim()).filter(Boolean);
-
-  // Keep it short in sticky bar
-  return normalized.slice(0, 6);
+  return tokens.map((t) => String(t).trim()).filter(Boolean).slice(0, 6);
 };
 
 const matchesProjectParam = (project, slugOrId) => {
@@ -332,38 +344,43 @@ const ProjectDetailsPage = () => {
     return next;
   }, [project, sortedProjects]);
 
-  const title = project ? getProjectTitle(project) : "";
-  const tagline = project ? getProjectTagline(project) : "";
-  const platform = project ? getProjectPlatform(project) : "";
-  const role = project ? getProjectRole(project) : "";
-  const team = project ? getProjectTeam(project) : "";
-  const duration = project ? getProjectDuration(project) : "";
-  const createdAt = project ? getProjectCreatedAt(project) : "";
+  const title        = project ? getProjectTitle(project)        : "";
+  const tagline      = project ? getProjectTagline(project)      : "";
+  const platform     = project ? getProjectPlatform(project)     : "";
+  const role         = project ? getProjectRole(project)         : "";
+  const team         = project ? getProjectTeam(project)         : "";
+  const duration     = project ? getProjectDuration(project)     : "";
+  const architecture = project ? getProjectArchitecture(project) : "";
+  const repoAccess   = project ? getProjectRepositoryAccess(project) : "";
+  const difficulty   = project ? getProjectDifficulty(project)   : "";
+  const createdAt    = project ? getProjectCreatedAt(project)    : "";
   const links = project
     ? getProjectLinks(project)
-    : { liveDemo: "", github: "", figma: "" };
+    : { liveDemo: "", github: "", figma: "", documentation: "" };
   const heroMedia = project
     ? getProjectHeroMedia(project)
-    : { heroVideoUrl: "", thumbnailUrl: "" };
+    : { heroVideoUrl: "", heroImageUrl: "", thumbnailUrl: "" };
   const primaryTech = project ? getPrimaryTechStack(project) : [];
 
   const gallery = useMemo(() => {
-    // Optional future-proof fields: visuals.gallery or caseStudy.gallery
-    const vGallery = Array.isArray(project?.visuals?.gallery)
-      ? project.visuals.gallery
+    // v3: canonical galleryImages top-level field
+    const topLevel = Array.isArray(project?.galleryImages)
+      ? project.galleryImages
       : [];
+    // case study gallery (supplementary)
     const csGallery = Array.isArray(project?.caseStudy?.gallery)
       ? project.caseStudy.gallery
       : [];
-    const merged = [...vGallery, ...csGallery]
+
+    const merged = [...topLevel, ...csGallery]
       .filter((item) => item && typeof item === "object" && item.url)
       .map((item) => ({
-        url: item.url,
-        alt: item.alt || item.caption || title,
+        url:     item.url,
+        alt:     item.alt || item.caption || title,
         caption: item.caption || "",
+        type:    item.type || "screenshot",
       }));
 
-    // de-dup by url
     const seen = new Set();
     return merged.filter((x) => {
       if (seen.has(x.url)) return false;
@@ -373,28 +390,26 @@ const ProjectDetailsPage = () => {
   }, [project, title]);
 
   const beforeAfter = useMemo(() => {
-    const v = project?.visuals || {};
+    const v  = project?.visuals   || {};
     const cs = project?.caseStudy || {};
-
-    const beforeSrc =
-      v.beforeImageUrl ||
-      cs?.process?.beforeImageUrl ||
-      cs?.beforeImageUrl ||
-      "";
-
-    const afterSrc =
-      v.afterImageUrl || cs?.process?.afterImageUrl || cs?.afterImageUrl || "";
-
-    return { beforeSrc, afterSrc };
+    return {
+      beforeSrc: v.beforeImageUrl || cs.beforeImageUrl || "",
+      afterSrc:  v.afterImageUrl  || cs.afterImageUrl  || "",
+    };
   }, [project]);
 
-  const architectureDiagramUrl =
-    project?.visuals?.architectureDiagramUrl ||
-    project?.caseStudy?.architectureDiagramUrl ||
-    "";
+  const architectureDiagramUrl = useMemo(
+    () =>
+      project?.visuals?.architectureDiagramUrl ||
+      project?.caseStudy?.architectureDiagramUrl ||
+      "",
+    [project],
+  );
 
-  const wireframeUrl =
-    project?.visuals?.wireframeUrl || project?.caseStudy?.wireframeUrl || "";
+  const wireframeUrl = useMemo(
+    () => project?.visuals?.wireframeUrl || project?.caseStudy?.wireframeUrl || "",
+    [project],
+  );
 
   const metrics = Array.isArray(project?.caseStudy?.metrics)
     ? project.caseStudy.metrics
@@ -404,7 +419,7 @@ const ProjectDetailsPage = () => {
     ? project.caseStudy.challenges
     : [];
 
-  const statusChip = project?.metadata?.status || project?.status || "";
+  const statusChip = project?.status || project?.metadata?.status || "";
   const caseStudyChip = hasCaseStudy(project);
 
   const openLightbox = (item) => {
@@ -524,6 +539,16 @@ const ProjectDetailsPage = () => {
                   Figma
                 </a>
               ) : null}
+              {links.documentation ? (
+                <a
+                  className="cta ghost"
+                  href={links.documentation}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Docs
+                </a>
+              ) : null}
             </div>
           </div>
 
@@ -531,12 +556,12 @@ const ProjectDetailsPage = () => {
             {heroMedia.heroVideoUrl ? (
               <HoverVideo
                 src={heroMedia.heroVideoUrl}
-                poster={heroMedia.thumbnailUrl}
+                poster={heroMedia.heroImageUrl || heroMedia.thumbnailUrl}
               />
             ) : (
               <img
                 className="project-hero-image"
-                src={heroMedia.thumbnailUrl}
+                src={heroMedia.heroImageUrl || heroMedia.thumbnailUrl}
                 alt={`${title} kapak görseli`}
                 loading="eager"
                 width={1200}
@@ -593,8 +618,30 @@ const ProjectDetailsPage = () => {
             </div>
             <div className="context-item">
               <span className="context-label">Takım</span>
-              <span className="context-value">{team || "Solo Project"}</span>
+              <span className="context-value">
+                {team
+                  ? (isNaN(Number(team)) ? team : `${team} kişi`)
+                  : "Solo Project"}
+              </span>
             </div>
+            {architecture ? (
+              <div className="context-item">
+                <span className="context-label">Mimari</span>
+                <span className="context-value">{architecture}</span>
+              </div>
+            ) : null}
+            {repoAccess ? (
+              <div className="context-item">
+                <span className="context-label">Repo</span>
+                <span className="context-value">{repoAccess}</span>
+              </div>
+            ) : null}
+            {difficulty ? (
+              <div className="context-item">
+                <span className="context-label">Seviye</span>
+                <span className="context-value">{difficulty}</span>
+              </div>
+            ) : null}
             <div className="context-item" data-wide>
               <span className="context-label">Tech Stack</span>
               <span className="context-value">
