@@ -1,5 +1,12 @@
-import React, { forwardRef, useState, useRef, useEffect } from "react";
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useLayoutEffect,
+} from "react";
 import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
+import { gsap } from "gsap";
 import { PatternBackground } from "@shared/ui/patterns";
 
 const SOUNDCLOUD_PLAYLIST_URL =
@@ -124,6 +131,151 @@ const AudioControls = forwardRef(
     const iframeRef = useRef(null);
     const widgetRef = useRef(null);
     const progressRef = useRef(null);
+    const controlsRootRef = useRef(null);
+
+    const setControlsRef = (node) => {
+      controlsRootRef.current = node;
+
+      if (typeof ref === "function") {
+        ref(node);
+        return;
+      }
+
+      if (ref) {
+        ref.current = node;
+      }
+    };
+
+    useLayoutEffect(() => {
+      const rootNode = controlsRootRef.current;
+      if (!rootNode) {
+        return undefined;
+      }
+
+      const context = gsap.context(() => {
+        const soundtrackInfo = rootNode.querySelector(".soundtrack-info");
+        const soundtrackLabel = rootNode.querySelector(".soundtrack-label");
+        const songName = rootNode.querySelector(".song-name");
+        const timelineContainer = rootNode.querySelector(".timeline-container");
+        const controlsWrapper = rootNode.querySelector(".controls-wrapper");
+        const fallbackBox = rootNode.querySelector(".widget-error-fallback");
+        const controlButtons = rootNode.querySelectorAll(".control-button");
+        const volumeSlider = rootNode.querySelector(".volume-slider");
+        const timeDisplays = rootNode.querySelectorAll(".time-display");
+
+        gsap.set(rootNode, {
+          autoAlpha: 1,
+          y: 0,
+          rotate: 0,
+          filter: "none",
+        });
+
+        const introTimeline = gsap.timeline({
+          defaults: {
+            immediateRender: false,
+          },
+        });
+
+        introTimeline
+          .from(rootNode, {
+            y: 64,
+            autoAlpha: 0,
+            rotate: 1.4,
+            duration: 0.75,
+            ease: "power3.out",
+            clearProps: "opacity,visibility,transform",
+          })
+          .from(
+            soundtrackInfo,
+            {
+              y: 20,
+              autoAlpha: 0,
+              duration: 0.42,
+              ease: "power2.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.42",
+          )
+          .from(
+            [soundtrackLabel, songName],
+            {
+              y: 8,
+              autoAlpha: 0,
+              stagger: 0.06,
+              duration: 0.28,
+              ease: "power1.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.22",
+          )
+          .from(
+            timelineContainer,
+            {
+              autoAlpha: 0,
+              scaleX: 0.32,
+              transformOrigin: "left center",
+              duration: 0.44,
+              ease: "power2.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.15",
+          )
+          .from(
+            timeDisplays,
+            {
+              autoAlpha: 0,
+              y: 7,
+              stagger: 0.05,
+              duration: 0.24,
+              ease: "power1.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.35",
+          )
+          .from(
+            controlsWrapper,
+            {
+              autoAlpha: 0,
+              y: 18,
+              duration: 0.34,
+              ease: "power2.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.2",
+          )
+          .from(
+            [...controlButtons, volumeSlider].filter(Boolean),
+            {
+              autoAlpha: 0,
+              y: 12,
+              scale: 0.74,
+              stagger: {
+                each: 0.045,
+                from: "center",
+              },
+              duration: 0.4,
+              ease: "back.out(1.7)",
+              clearProps: "opacity,visibility,transform",
+            },
+            "-=0.2",
+          )
+          .from(
+            fallbackBox,
+            {
+              autoAlpha: 0,
+              y: 14,
+              duration: 0.34,
+              ease: "power2.out",
+              clearProps: "opacity,visibility,transform",
+            },
+            "<",
+          );
+      }, controlsRootRef);
+
+      return () => {
+        context.revert();
+      };
+    }, []);
 
     useEffect(() => {
       onAudioDataChange(null);
@@ -326,7 +478,7 @@ const AudioControls = forwardRef(
     };
 
     return (
-      <div ref={ref} className="audio-controls">
+      <div ref={setControlsRef} className="audio-controls">
         <PatternBackground
           variant="naiveSketch"
           opacity={0.26}

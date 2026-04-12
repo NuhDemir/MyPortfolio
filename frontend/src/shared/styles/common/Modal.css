@@ -159,7 +159,17 @@
 
 .modal-content {
   line-height: var(--line-height-base);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  position: relative;
+  z-index: 2;
+}
+
+.modal-content * {
+  color: inherit;
+}
+
+.modal-content strong {
+  color: var(--color-text-primary);
 }
 
 .modal-content h3 {
@@ -233,6 +243,134 @@
   color: var(--color-text-link-hover);
 }
 
+/* ── About Modal Content (StatCard visual language) ─────────────────────── */
+
+.about-modal-content {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.about-modal-content__panel {
+  position: relative;
+  border-radius: 14px 7px 20px 9px / 10px 18px 8px 18px;
+}
+
+.about-modal-content__panel-fill {
+  border-width: 3px;
+  transform: translate(5px, 6px) rotate(0.9deg);
+  opacity: 0.5;
+}
+
+.about-modal-content__panel-body {
+  position: relative;
+  z-index: 1;
+  border: 3px solid var(--color-border-strong);
+  border-radius: inherit;
+  background: var(--color-background-page);
+  padding: var(--spacing-md);
+  transform: rotate(-0.45deg);
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.about-modal-content__heading {
+  margin: 0;
+  border-left: none;
+  padding-left: 0;
+  font-family: var(--font-family-secondary);
+  font-size: clamp(1.6rem, 3.6vw, 2.1rem);
+  line-height: 0.95;
+  color: var(--color-text-primary);
+  transform: rotate(-0.5deg);
+}
+
+.about-modal-content__lead {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+.about-modal-content__section {
+  border: 2px dashed color-mix(in srgb, var(--color-border-primary) 45%, transparent);
+  border-radius: 10px 5px 14px 7px;
+  background: color-mix(in srgb, var(--color-secondary) 35%, transparent);
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
+.about-modal-content__section-title {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.about-modal-content__list {
+  list-style: none;
+  margin: var(--spacing-sm) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-sm);
+}
+
+.about-modal-content__item {
+  position: relative;
+  padding: 0.55rem 0.65rem 0.6rem 1.2rem;
+  border: 2px solid var(--color-border-strong);
+  border-radius: 11px 6px 13px 8px;
+  background: var(--color-background-paper);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+}
+
+.about-modal-content__item::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 0.95rem;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  border: 1px solid var(--color-border-strong);
+}
+
+.about-modal-content__item-title {
+  display: block;
+  font-family: var(--font-family-primary);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--color-text-primary);
+}
+
+.about-modal-content__item-body {
+  display: block;
+  margin-top: 0.22rem;
+  font-family: var(--font-family-primary);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+
+.about-modal-content__inline-link {
+  font-weight: 700;
+}
+
+.about-modal-content__footnote {
+  margin: 0;
+  border-top: 2px dashed
+    color-mix(in srgb, var(--color-border-primary) 45%, transparent);
+  padding-top: var(--spacing-sm);
+  font-family: var(--font-family-primary);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  color: var(--color-text-secondary);
+}
+
 /* ── Project Modal Links (used externally) ───────────────────────────────── */
 
 .project-modal-links {
@@ -296,6 +434,14 @@
   .modal-content h3 {
     font-size: clamp(1.4rem, 4.5vw, 1.7rem);
   }
+
+  .about-modal-content__panel-body {
+    padding: var(--spacing-sm);
+  }
+
+  .about-modal-content__section {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
 }
 
 @media (max-width: 480px) {
@@ -332,6 +478,20 @@
 
   .modal-content h3 {
     font-size: clamp(1.3rem, 5.5vw, 1.6rem);
+  }
+
+  .about-modal-content {
+    gap: var(--spacing-sm);
+  }
+
+  .about-modal-content__item {
+    padding: 0.5rem 0.55rem 0.55rem 1.1rem;
+  }
+
+  .about-modal-content__item-title,
+  .about-modal-content__item-body,
+  .about-modal-content__footnote {
+    font-size: 0.8rem;
   }
 
   .project-modal-links {

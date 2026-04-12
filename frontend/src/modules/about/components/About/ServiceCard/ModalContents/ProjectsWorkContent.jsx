@@ -1,68 +1,100 @@
-// src/components/About/ServiceCard/ModalContents/ProjectsWorkContent.jsx
 import React from "react";
 
-// Projeler ve İşler için modal içeriği
 const ProjectsWorkContent = () => {
+  const projectHighlights = [
+    {
+      name: "JavaScript Ogreniyorum",
+      summary:
+        "Temelden ileri seviyeye JavaScript konularini adim adim anlatan egitim reposu.",
+      href: "https://github.com/NuhDemir/javascript-ogreniyorum",
+    },
+    {
+      name: "Flutter Sign Language Translator",
+      summary:
+        "Sesli ifadeleri metin ve isaret dili gostergelerine ceviren erisilebilirlik odakli mobil prototip.",
+      href: "https://github.com/NuhDemir/flutter-sign-language",
+    },
+  ];
+
+  const professionalFocus = [
+    {
+      area: "Full-stack Product Delivery",
+      detail:
+        "React ve Node.js tabanli urunlerde tasarimdan yayina kadar tum teslim zincirini yonetme.",
+    },
+    {
+      area: "API & Backend Architecture",
+      detail:
+        "Node.js, Express ve MongoDB ile olceklenebilir, test edilebilir servis katmanlari kurma.",
+    },
+    {
+      area: "User-centric Iteration",
+      detail:
+        "Kullanicidan gelen geri bildirimleri hizli iterasyonla urune yansitma ve etkisini olcme.",
+    },
+  ];
+
   return (
-    <div>
-      <h3>Projects & Work Experience</h3>
-      <p>
-        Throughout my career and personal time, I've worked on a diverse range
-        of projects, focusing on delivering high-quality, user-centric
-        solutions.
-      </p>
-      <h4>Key Project Highlights:</h4>
-      <ul>
-        <li>
-          <strong>JavaScript Öğreniyorum:</strong> An educational repository
-          covering fundamental and advanced JavaScript concepts. Aimed at
-          helping beginners and intermediate developers strengthen their skills.
-          <a
-            href="https://github.com/NuhDemir/javascript-ogreniyorum"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            [GitHub Link]
-          </a>
-        </li>
-        <li>
-          <strong>Flutter Sign Language Translator:</strong> Developed a mobile
-          application prototype using Flutter to translate spoken words into
-          text and sign language visuals, aiming to improve accessibility for
-          the hearing impaired.
-          <a
-            href="https://github.com/NuhDemir/flutter-sign-language"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            [GitHub Link]
-          </a>
-        </li>
-        <li>
-          <strong>Diabetes Analysis Panel (This Project!):</strong> Created an
-          interactive dashboard using React and Node.js for visualizing and
-          analyzing diabetes risk factors from patient data, incorporating data
-          fetching, state management, and dynamic charting.
-        </li>
-        {/* Buraya diğer önemli projelerinizi veya iş deneyimlerinizi ekleyebilirsiniz */}
-        <li>
-          <strong>E-commerce Platform Backend:</strong> Designed and implemented
-          RESTful APIs using Node.js (Express) and MongoDB for a scalable
-          e-commerce application, handling products, orders, and user
-          authentication.
-        </li>
-      </ul>
-      <p>
-        You can explore more of my public projects on my{" "}
+    <div className="about-modal-content" data-about-modal="projects">
+      <section className="about-modal-content__panel scribble-card-wrap">
+        <div
+          className="about-modal-content__panel-fill scribble-card-wrap__fill"
+          aria-hidden="true"
+        />
+        <div className="about-modal-content__panel-body naive-shadow--sm">
+          <h3 className="about-modal-content__heading">Projects & Work Experience</h3>
+          <p className="about-modal-content__lead">
+            Urettigim projelerde teknik kaliteyi, kullanici deneyimini ve teslim
+            hizini birlikte optimize etmeyi hedefliyorum.
+          </p>
+        </div>
+      </section>
+
+      <section className="about-modal-content__section">
+        <h4 className="about-modal-content__section-title">Highlighted Repositories</h4>
+        <ul className="about-modal-content__section-body about-modal-content__list">
+          {projectHighlights.map((project) => (
+            <li key={project.name} className="about-modal-content__item">
+              <span className="about-modal-content__item-title">{project.name}</span>
+              <span className="about-modal-content__item-body">{project.summary}</span>
+              <span className="about-modal-content__item-body">
+                <a
+                  className="about-modal-content__inline-link"
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub repository
+                </a>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="about-modal-content__section">
+        <h4 className="about-modal-content__section-title">Delivery Focus</h4>
+        <ul className="about-modal-content__section-body about-modal-content__list">
+          {professionalFocus.map((focus) => (
+            <li key={focus.area} className="about-modal-content__item">
+              <span className="about-modal-content__item-title">{focus.area}</span>
+              <span className="about-modal-content__item-body">{focus.detail}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <p className="about-modal-content__footnote">
+        Tum acik kaynak calismalarimi{" "}
         <a
+          className="about-modal-content__inline-link"
           href="https://github.com/NuhDemir"
           target="_blank"
           rel="noopener noreferrer"
         >
-          GitHub profile
-        </a>
-        . I am always looking for challenging opportunities to build innovative
-        software.
+          GitHub profilimde
+        </a>{" "}
+        paylasiyorum.
       </p>
     </div>
   );

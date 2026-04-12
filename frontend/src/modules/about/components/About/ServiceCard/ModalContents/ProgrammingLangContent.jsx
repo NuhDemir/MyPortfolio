@@ -1,39 +1,59 @@
-// src/components/About/ServiceCard/ModalContents/ProgrammingLangContent.jsx
 import React from "react";
 
-// Programlama dilleri için modal içeriği
 const ProgrammingLangContent = () => {
+  const languages = [
+    {
+      name: "JavaScript (ES6+)",
+      description: "React ve Node.js tarafında uçtan uca ürün geliştirme.",
+    },
+    {
+      name: "TypeScript",
+      description:
+        "Büyük kod tabanlarında güvenli refactor ve daha güçlü API sözleşmeleri.",
+    },
+    {
+      name: "Python",
+      description:
+        "Otomasyon, veri işleme ve hızlı prototipleme odaklı backend görevleri.",
+    },
+    {
+      name: "Dart",
+      description:
+        "Flutter ile erişilebilir ve performanslı çapraz platform mobil deneyimler.",
+    },
+  ];
+
   return (
-    <div>
-      {/* İçerik başlığı */}
-      <h3>Programming Languages & Approach</h3>
-      <p>
-        Focused on writing scalable, maintainable, and performant code using
-        modern programming languages and adhering to clean code principles.
-      </p>
-      {/* Kullanılan diller listesi */}
-      <ul>
-        <li>
-          <strong>JavaScript (ES6+):</strong> Expertise in both frontend (React)
-          and backend (Node.js).
-        </li>
-        <li>
-          <strong>TypeScript:</strong> Preferred for type safety and improved
-          developer experience in larger projects.
-        </li>
-        <li>
-          <strong>Python:</strong> Used for data analysis, automation, and
-          backend tasks.
-        </li>
-        <li>
-          <strong>Dart:</strong> Primary language for mobile development with
-          Flutter.
-        </li>
-        {/* Add other relevant languages */}
-      </ul>
-      <p>
-        Selecting the most suitable language and technology stack for each
-        project to deliver efficient solutions.
+    <div className="about-modal-content" data-about-modal="programming">
+      <section className="about-modal-content__panel scribble-card-wrap">
+        <div
+          className="about-modal-content__panel-fill scribble-card-wrap__fill"
+          aria-hidden="true"
+        />
+        <div className="about-modal-content__panel-body naive-shadow--sm">
+          <h3 className="about-modal-content__heading">Programming Languages & Approach</h3>
+          <p className="about-modal-content__lead">
+            Her projede okunabilirlik, sürdürülebilirlik ve performans arasında
+            dengeli bir mimari hedefliyorum.
+          </p>
+        </div>
+      </section>
+
+      <section className="about-modal-content__section">
+        <h4 className="about-modal-content__section-title">Core Language Stack</h4>
+        <ul className="about-modal-content__section-body about-modal-content__list">
+          {languages.map((language) => (
+            <li key={language.name} className="about-modal-content__item">
+              <span className="about-modal-content__item-title">{language.name}</span>
+              <span className="about-modal-content__item-body">{language.description}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <p className="about-modal-content__footnote">
+        Hedefim teknoloji seçimini trend ile degil, urun gereksinimi ve uzun
+        vadeli bakim maliyeti ile birlikte degerlendirmek.
       </p>
     </div>
   );

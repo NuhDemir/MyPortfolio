@@ -24,6 +24,7 @@ export const Navbar = ({
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
   const iconRef = useRef(null);
+  const navbarContainerRef = useRef(null);
   const [showFullMenu, setShowFullMenu] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const themeTransitionTimeoutRef = useRef(null);
@@ -32,7 +33,7 @@ export const Navbar = ({
   const playHoverSound = useSound("/audio/hover-click.mp3", 0.2);
   const playClickSound = useSound("/audio/action-click.mp3", 0.4);
 
-  useScrollAnimation(iconRef);
+  useScrollAnimation(iconRef, navbarContainerRef);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -190,7 +191,7 @@ export const Navbar = ({
           showFullMenu ? "" : "navbar-hidden"
         }`}
       >
-        <div className="navbar-container">
+        <div className="navbar-container" ref={navbarContainerRef}>
           <NavbarPattern />
           <div
             className="icon-container"

@@ -1,281 +1,340 @@
-/* frontend/src/components/About/style/About.css (Yeniden Düzenlenmiş Hali) */
-
-/* ==========================================================================
-   1. MOBİL ÖNCELİKLİ TEMEL STİLLER (TÜM EKRANLAR İÇİN GEÇERLİ)
-   ========================================================================== */
+/* About naive 80s layout */
 
 .about-container {
-  padding: var(--spacing-lg) var(--spacing-md);
-  /* Mobil için padding ayarlandı */
+  padding: clamp(1.4rem, 4vw, 2.4rem) var(--spacing-md);
 }
-/* ── About Header — naive sketch ─────────────────────────────────────────── */
+
+.about-shell {
+  position: relative;
+  width: min(1160px, 100%);
+  margin: 0 auto;
+  border-radius: 18px 8px 24px 10px / 12px 24px 8px 22px;
+}
+
+.about-shell__fill {
+  border-width: 4px;
+  transform: translate(8px, 10px) rotate(1.2deg);
+  background: var(--color-accent);
+  opacity: 0.62;
+}
+
+.about-shell__body {
+  position: relative;
+  z-index: 1;
+  border: 4px solid var(--color-border-strong);
+  border-radius: inherit;
+  background: var(--color-background-paper);
+  box-shadow: var(--box-shadow-neubrutalist);
+  padding: clamp(0.9rem, 2.6vw, 1.6rem);
+  transform: rotate(-0.4deg);
+  overflow: hidden;
+}
+
+.about-shell__header {
+  position: relative;
+  z-index: 2;
+}
+
+.about-shell__tag {
+  margin-left: var(--spacing-lg);
+  margin-top: 0.35rem;
+  font-size: 0.64rem;
+  padding: 0.18rem 0.74rem;
+}
+
+.about-doodle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.about-doodle--star {
+  top: clamp(8px, 1.5vw, 14px);
+  right: clamp(10px, 2vw, 18px);
+  width: clamp(26px, 4vw, 44px);
+  transform: rotate(13deg);
+  opacity: 0.86;
+}
+
+.about-doodle--dots {
+  bottom: clamp(10px, 2vw, 18px);
+  right: clamp(8px, 1.2vw, 14px);
+  width: clamp(44px, 8vw, 70px);
+  transform: rotate(-8deg);
+  opacity: 0.8;
+}
 
 .about-header {
-  padding: var(--spacing-xl) 0 var(--spacing-lg);
+  padding: clamp(1.4rem, 3.6vw, 2.4rem) 0 clamp(0.8rem, 2.2vw, 1.2rem);
   padding-left: var(--spacing-lg);
-  margin-bottom: var(--spacing-md);
-
+  margin-bottom: var(--spacing-sm);
 }
 
 .about-header__title {
-  font-family: var(--font-family-secondary);
-  font-size: clamp(3.8rem, 10vw, 7rem);
-  font-weight: 700;
-  line-height: 0.95;
-  color: var(--color-text-primary);
-  margin: 0 0 var(--spacing-xs);
+  margin: 0;
   display: inline-block;
-  transform: rotate(-0.8deg);
-  transform-origin: left center;
-}
-
-.about-header__underline {
-  display: block;
-  width: clamp(200px, 55vw, 340px);
-  height: auto;
-  transform: rotate(0.4deg);
+  font-family: var(--font-family-secondary);
+  font-size: clamp(3.2rem, 11vw, 6.6rem);
+  line-height: 0.88;
+  letter-spacing: 0.03em;
+  color: var(--color-text-primary);
+  transform: rotate(-1deg);
 }
 
 .about-grid {
+  position: relative;
+  z-index: 2;
   display: grid;
-  /* Mobil için tek sütunlu yapı. Daha büyük ekranlarda değiştirilecek. */
   grid-template-columns: 1fr;
-  border-top: 2px solid var(--color-border-strong);
-  border-bottom: 2px solid var(--color-border-strong);
-  background: var(--color-background-paper-transparent);
+  gap: var(--spacing-sm);
 }
 
 .stats-container {
-  display: flex;
-  flex-direction: row; /* Mobil için yan yana */
-  flex-wrap: wrap;
-  justify-content: space-around;
-  padding: var(--spacing-md);
-  gap: var(--spacing-md);
-  /* Mobil düzende servislerden ayırmak için alt kenarlık */
-  border-bottom: 2px solid var(--color-border-strong);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-sm);
 }
 
 .stat-card {
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  flex-basis: calc(50% - var(--spacing-sm)); /* Satır başına iki istatistik */
+  position: relative;
+  border-radius: 14px 6px 20px 8px / 8px 20px 6px 16px;
+}
+
+.stat-card__fill {
+  background: var(--color-primary);
+  border-width: 3px;
+  transform: translate(5px, 6px) rotate(1deg);
+  opacity: 0.52;
+}
+
+.stat-card__inner {
+  position: relative;
+  z-index: 1;
+  border: 3px solid var(--color-border-strong);
+  border-radius: inherit;
+  background: var(--color-background-page);
+  color: var(--color-text-primary);
+  min-height: 130px;
+  display: grid;
+  align-content: center;
+  gap: 0.35rem;
+  padding: 0.8rem 0.85rem;
+  transform: rotate(-0.55deg);
+}
+
+.stat-card__doodle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  opacity: 0.86;
+  transform: rotate(8deg);
 }
 
 .stat-value {
-  font-size: var(--font-size-h3); /* Mobil için ayarlanmış boyut */
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  line-height: 1.1;
+  font-family: var(--font-family-secondary);
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  line-height: 0.9;
+  letter-spacing: 0.03em;
 }
 
 .stat-label {
-  font-size: var(--font-size-sm); /* Mobil için ayarlanmış boyut */
-  color: var(--color-text-secondary);
-  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--color-text-secondary);
 }
 
 .services-section {
   display: grid;
-  /* Mobil için tek sütunlu yapı. Daha büyük ekranlarda değiştirilecek. */
   grid-template-columns: 1fr;
+  gap: var(--spacing-sm);
 }
 
 .service-card {
-  padding: var(--spacing-lg);
-  /* Sadece son eleman hariç hepsine alt kenarlık ekle */
-  border-bottom: 2px solid var(--color-border-strong);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-  background-color: var(--color-background-paper-transparent);
   position: relative;
-  /* Geçişler sadece performans dostu özelliklere odaklanmalı */
-  transition: background-color var(--transition-duration-short) ease;
+  border: 3px solid var(--color-border-strong);
+  border-radius: 14px 6px 18px 10px / 10px 18px 8px 16px;
+  background: var(--color-background-paper);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+  padding: var(--spacing-md);
+  display: grid;
+  gap: 0.72rem;
+  transform: rotate(-0.55deg);
 }
 
-/* Tek sütunlu mobil düzende son kartın alt kenarlığını kaldır */
-.service-card:last-child {
-  border-bottom: none;
+.service-card:nth-child(even) {
+  transform: rotate(0.65deg);
+}
+
+.service-card::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 3px solid var(--color-border-strong);
+  border-radius: inherit;
+  background: var(--color-accent);
+  transform: translate(-5px, 6px) rotate(-0.8deg);
+  opacity: 0.36;
+  z-index: -1;
+  pointer-events: none;
 }
 
 .icon-wrapper {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--border-radius-circle);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Hover efekti büyük ekranlara taşındığı için transform'u buradan kaldırıyoruz. */
+  width: 52px;
+  height: 52px;
+  border: 3px solid var(--color-border-strong);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  display: grid;
+  place-items: center;
+  box-shadow: var(--box-shadow-neubrutalist-sm);
 }
 
 .service-icon {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
 }
 
 .service-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
+  margin: 0;
+  font-family: var(--font-family-secondary);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 0.95;
   color: var(--color-text-primary);
-  line-height: var(--line-height-heading);
+  transform: rotate(-0.7deg);
 }
 
 .service-desc {
-  font-size: var(--font-size-md);
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: 0.95rem;
+  line-height: 1.45;
   color: var(--color-text-secondary);
-  line-height: var(--line-height-base);
-  flex-grow: 1; /* Açıklamanın mevcut alanı doldurmasını sağlar */
 }
 
 .learn-more {
-  /* Arka planı tamamen şeffaf yap */
-  background-color: transparent;
-
-  /* Kenarlıkları kaldır */
-  border: none;
-
-  /* Odaklanma (focus) durumunda tarayıcının eklediği varsayılan dış çizgiyi kaldır */
-  /* Not: Erişilebilirlik için özel bir focus stili eklemek iyi bir pratiktir */
-  outline: none;
-
-  /* Metin ve Konumlandırma Stilleri */
-  padding: var(--spacing-xs) 0;
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  text-align: left;
-  color: var(--color-text-link);
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-
-  /* Geçiş Efektleri */
-  /* Renk ve olası arka plan rengi değişiklikleri için yumuşak geçiş */
-  transition: color var(--transition-duration-short) ease,
-    background-color var(--transition-duration-short) ease;
+  position: relative;
+  border: 3px solid var(--color-border-strong);
+  border-radius: 20px 8px 18px 10px / 10px 18px 8px 20px;
+  background: var(--color-secondary);
+  color: var(--color-text-primary);
+  box-shadow: var(--box-shadow-neubrutalist-sm);
+  font-family: var(--font-family-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  width: fit-content;
+  padding: 0.34rem 0.72rem;
+  cursor: var(--cursor-naive-pointer), pointer;
+  transform: rotate(-0.65deg);
+  transition:
+    background var(--transition-duration-short) ease,
+    transform var(--transition-duration-short) ease,
+    box-shadow var(--transition-duration-short) ease;
 }
+
+.learn-more:hover {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  transform: rotate(0.55deg) translate(2px, 2px);
+  box-shadow: 3px 3px 0 var(--color-border-strong);
+}
+
 .learn-more:focus-visible {
-  text-decoration: underline;
-  text-decoration-color: var(--color-text-link-hover, var(--color-accent));
-  text-underline-offset: 4px; /* Çizgi ile metin arasına boşluk koyar */
+  outline: 3px dashed var(--color-border-input-focus);
+  outline-offset: 2px;
 }
 
-/* ==========================================================================
-   2. TABLET VE ÜZERİ (min-width: 768px)
-   ========================================================================== */
 @media (min-width: 768px) {
   .about-container {
-    padding: var(--spacing-xl) var(--container-padding);
-  }
-
-  .about-header {
-    padding: var(--spacing-xxl) 0 var(--spacing-xl);
-    padding-left: var(--spacing-xl);
-    border-left-width: 5px;
+    padding: clamp(1.8rem, 3.4vw, 2.8rem) var(--container-padding);
   }
 
   .about-grid {
-    /* Izgara yapısını 2 sütunlu hale getir */
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: minmax(230px, 0.36fr) minmax(0, 1fr);
+    gap: var(--spacing-md);
   }
 
   .stats-container {
-    /* Dikey düzene geri dön */
-    flex-direction: column;
-    padding: var(--spacing-lg);
-    gap: var(--spacing-lg);
-    /* Dikey düzende sağ kenarlık ekle, alt kenarlığı kaldır */
-    border-right: 2px solid var(--color-border-strong);
-    border-bottom: none;
-  }
-
-  .stat-card {
-    text-align: left; /* Metni sola hizala */
-    flex-basis: auto; /* flex-basis'i sıfırla */
-  }
-
-  .stat-value {
-    font-size: var(--font-size-h2); /* Yazı boyutunu büyüt */
-  }
-
-  .stat-label {
-    font-size: var(--font-size-md); /* Yazı boyutunu büyüt */
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
   .services-section {
-    /* Servisleri 2 sütunlu ızgara yap */
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .service-card {
-    border-bottom: 2px solid var(--color-border-strong); /* Tümüne alt kenarlık ekle */
-    border-right: 2px solid var(--color-border-strong); /* Tümüne sağ kenarlık ekle */
-  }
-
-  /* İkinci sütundaki (çift numaralı) kartların sağ kenarlığını kaldır */
-  .services-section .service-card:nth-child(2n) {
-    border-right: none;
-  }
-
-  /* Son iki kartın (son satırın) alt kenarlığını kaldır */
-  .services-section .service-card:nth-last-child(-n + 2) {
-    border-bottom: none;
+    min-height: 228px;
   }
 }
 
-/* ==========================================================================
-   3. HOVER ETKİLEŞİMLERİ (Sadece mouse kullanabilen cihazlar için)
-   ========================================================================== */
-@media (hover: hover) and (min-width: 768px) {
-  /*
-    Bu blok, sadece mouse imleci olan (dokunmatik olmayan) ve 768px'den geniş
-    ekranlarda çalışır. Bu, mobil performansı ciddi şekilde artırır.
-  */
-  .service-card {
-    /* Performans Optimizasyonu: Tarayıcıya hangi özelliklerin değişeceğini önceden bildirir. */
-    will-change: transform, box-shadow;
+@media (max-width: 640px) {
+  .about-container {
+    padding-inline: var(--spacing-sm);
   }
 
-  .service-card:hover {
-    transform: translateY(-4px) scale(1.01);
-    box-shadow: var(--box-shadow-base);
-    z-index: 1; /* Üzerine gelindiğinde diğer kartların üzerinde kalır */
+  .about-shell__body {
+    border-width: 3px;
+    padding: 0.75rem;
+    transform: rotate(-0.15deg);
   }
 
-  .icon-wrapper {
-    will-change: transform;
-    transition: transform var(--transition-duration-short) ease;
+  .about-shell__fill {
+    border-width: 3px;
+    transform: translate(6px, 7px) rotate(0.8deg);
   }
 
-  .service-card:hover .icon-wrapper {
-    transform: scale(1.15);
-  }
-
-  .learn-more {
-    will-change: color, transform;
-  }
-
-  .learn-more:hover {
-    color: var(--color-text-link-hover);
-    transform: translateX(3px);
-  }
-}
-
-/* ==========================================================================
-   4. SMALL MOBILE (max-width: 480px)
-   ========================================================================== */
-@media (max-width: 480px) {
   .about-header {
-    padding: var(--spacing-lg) 0 var(--spacing-md);
-    padding-left: var(--spacing-md);
-    border-left-width: 3px;
+    padding-left: var(--spacing-sm);
   }
 
-  .about-header__underline {
-    width: clamp(160px, 80vw, 260px);
+  .about-shell__tag {
+    margin-left: var(--spacing-sm);
+  }
+
+  .stat-card__inner {
+    min-height: 118px;
+  }
+
+  .service-card {
+    padding: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .about-doodle--star {
+    top: 6px;
+    right: 6px;
+    width: 24px;
+  }
+
+  .about-doodle--dots {
+    width: 52px;
+    right: 4px;
+  }
+
+  .about-grid {
+    gap: 0.7rem;
+  }
+
+  .stats-container {
+    gap: 0.7rem;
+  }
+
+  .stat-value {
+    font-size: clamp(1.9rem, 10vw, 2.6rem);
+  }
+
+  .service-title {
+    font-size: clamp(1.3rem, 8vw, 1.9rem);
+  }
+
+  .service-desc {
+    font-size: 0.88rem;
   }
 }

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import gsap from "gsap";
 
 export const useGsapAnimation = (
@@ -7,10 +7,9 @@ export const useGsapAnimation = (
   subtitleRef,
   buttonRef,
   audioControlRef,
-  imageRef // MainImage için ref'i de ekleyelim
+  imageRef,
 ) => {
-  useEffect(() => {
-    // Tüm referansların geçerli olduğundan emin ol
+  useLayoutEffect(() => {
     const refs = [
       mainRef,
       titleRef,
@@ -19,70 +18,107 @@ export const useGsapAnimation = (
       audioControlRef,
       imageRef,
     ];
-    if (refs.some((ref) => !ref.current)) return;
 
-    // --- 1. GİRİŞ ANİMASYONU (Timeline) ---
-    // Bu kısım zaten iyiydi, koruyoruz.
-    const tl = gsap.timeline({
-      defaults: { ease: "power3.out", duration: 0.8 },
-    });
+    if (refs.some((ref) => !ref.current)) {
+      return undefined;
+    }
 
-    // Animate edilecek elementleri bir dizide toplayalım
+    const mainElement = mainRef.current;
     const animatedElements = [
-      titleRef.current,
-      subtitleRef.current,
-      audioControlRef.current,
       buttonRef.current,
-      imageRef.current, // Resmi de animasyona dahil edelim
+      imageRef.current,
     ];
 
-    // Animasyon öncesi başlangıç durumlarını ayarla
-    gsap.set(animatedElements, { opacity: 0, y: 30 });
+    let introTimeline = null;
 
-    // Animasyon sekansını oluştur
-    tl.to(animatedElements, {
-      opacity: 1,
-      y: 0,
-      stagger: 0.2, // Elemanların art arda gelmesini sağlar
-      delay: 0.3, // Animasyonun başlaması için hafif bir gecikme
-    });
+    const playIntro = () => {
+      introTimeline?.kill();
 
-    // --- 2. PERFORMANSLI PARALLAX ANİMASYONU (Mouse Takibi) ---
-    // Olay dinleyicisi fonksiyonu
-    const handleMouseMove = (e) => {
-      if (!mainRef.current) return;
+      gsap.set(animatedElements, { autoAlpha: 0, y: 30 });
 
-      const { clientX, clientY } = e;
-      const { innerWidth, innerHeight } = window;
+      introTimeline = gsap.timeline({
+        defaults: { ease: "power3.out", duration: 0.8 },
+      });
 
-      // Mouse pozisyonuna göre -20px ile +20px arasında bir hareket hesapla
-      // Bu değerleri değiştirerek efekti artırıp azaltabilirsiniz.
-      const parallaxAmount = 20;
-      const offsetX = (clientX / innerWidth - 0.5) * -parallaxAmount;
-      const offsetY = (clientY / innerHeight - 0.5) * -parallaxAmount;
-
-      // GSAP ile section'ın CSS değişkenlerini yumuşak bir geçişle güncelle
-      gsap.to(mainRef.current, {
-        "--bg-x": `${offsetX}px`,
-        "--bg-y": `${offsetY}px`,
-        duration: 0.8, // Hareketin ne kadar sürede tamamlanacağı
-        ease: "power2.out",
+      introTimeline.to(animatedElements, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.2,
+        delay: 0.2,
+        clearProps: "opacity,visibility,transform",
       });
     };
 
-    // Olay dinleyicisini window'a ekle
-    window.addEventListener("mousemove", handleMouseMove);
+    const context = gsap.context(() => {
+      playIntro();
+    }, mainElement);
 
-    // --- 3. TEMİZLEME (Cleanup) FONKSİYONU ---
-    // Component unmount olduğunda (sayfadan ayrıldığında) çalışır
-    return () => {
-      // Tüm GSAP animasyonlarını ve zamanlanmış olayları öldür
-      // Bu, hafıza sızıntılarını ve istenmeyen animasyonları önler
-      tl.kill();
-      gsap.killTweensOf(mainRef.current); // mainRef üzerindeki animasyonları da durdur
+    const supportsFinePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)",
+    ).matches;
 
-      // Eklediğimiz olay dinleyicisini kaldır
-      window.removeEventListener("mousemove", handleMouseMove);
+    let moveX = null;
+    let moveY = null;
+
+    if (supportsFinePointer) {
+      moveX = gsap.quickTo(mainElement, "--bg-x", {
+        duration: 0.8,
+        ease: "power2.out",
+      });
+      moveY = gsap.quickTo(mainElement, "--bg-y", {
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    }
+
+    const handlePointerMove = (event) => {
+      if (!moveX || !moveY) {
+        return;
+      }
+
+      const parallaxAmount = 20;
+      const offsetX = (event.clientX / window.innerWidth - 0.5) * -parallaxAmount;
+      const offsetY = (event.clientY / window.innerHeight - 0.5) * -parallaxAmount;
+
+      moveX(`${offsetX}px`);
+      moveY(`${offsetY}px`);
     };
-  }, [mainRef, titleRef, subtitleRef, buttonRef, audioControlRef, imageRef]); // ref'leri bağımlılık dizisine ekle
+
+    const handlePointerLeave = () => {
+      if (!moveX || !moveY) {
+        return;
+      }
+
+      moveX("0px");
+      moveY("0px");
+    };
+
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        playIntro();
+      }
+    };
+
+    if (supportsFinePointer) {
+      window.addEventListener("pointermove", handlePointerMove, {
+        passive: true,
+      });
+      window.addEventListener("pointerleave", handlePointerLeave, {
+        passive: true,
+      });
+    }
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      if (supportsFinePointer) {
+        window.removeEventListener("pointermove", handlePointerMove);
+        window.removeEventListener("pointerleave", handlePointerLeave);
+      }
+
+      window.removeEventListener("pageshow", handlePageShow);
+      introTimeline?.kill();
+      context.revert();
+    };
+  }, [mainRef, titleRef, subtitleRef, buttonRef, audioControlRef, imageRef]);
 };

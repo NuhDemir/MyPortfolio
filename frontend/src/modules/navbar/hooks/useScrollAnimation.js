@@ -1,73 +1,106 @@
 // src/hooks/useScrollAnimation.js
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export const useScrollAnimation = (targetRef) => {
-  // Daha genel bir isim: targetRef
-  useEffect(() => {
-    const targetElement = targetRef.current;
-    if (!targetElement) {
-      console.warn("useScrollAnimation Hook: Target element not found.");
-      return;
+export const useScrollAnimation = (iconRef, containerRef = null) => {
+  useLayoutEffect(() => {
+    const iconElement = iconRef?.current;
+    const navbarContainerElement = containerRef?.current;
+
+    if (!iconElement && !navbarContainerElement) {
+      return undefined;
     }
 
-    // --- 1. Başlangıç Görünüm Animasyonu (Scroll'dan Bağımsız) ---
-    // Sayfa yüklendiğinde ikonun yumuşak bir şekilde belirmesi için.
-    // Bu, scroll animasyonunun rotasyonunu etkilememeli.
-    gsap.fromTo(
-      targetElement,
-      { scale: 0.5, autoAlpha: 0, rotation: 0 }, // Başlangıç durumu: küçük, görünmez, rotasyonsuz
-      {
-        scale: 1,
-        autoAlpha: 1,
-        rotation: 0, // Başlangıçta dönmesin, scroll ile dönecek
-        duration: 0.8,
-        ease: "back.out(1.4)", // Güzel bir belirme efekti
-        delay: 0.3, // Belki splash screen sonrası için hafif bir gecikme
+    const rafIds = [];
+    const queueRefresh = () => {
+      const rafId = window.requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+      rafIds.push(rafId);
+    };
+
+    const refreshNavbarTriggers = () => {
+      ScrollTrigger.refresh();
+    };
+
+    const parentContainer = iconElement?.parentElement;
+
+    const context = gsap.context(() => {
+      if (navbarContainerElement) {
+        const navItems = navbarContainerElement.querySelectorAll(".nav-item");
+
+        gsap.set(navbarContainerElement, { autoAlpha: 1, y: 0, filter: "none" });
+
+        gsap.from(navbarContainerElement, {
+          y: -18,
+          autoAlpha: 0,
+          filter: "blur(4px)",
+          duration: 0.56,
+          ease: "power3.out",
+          immediateRender: false,
+          clearProps: "opacity,visibility,transform,filter",
+        });
+
+        if (navItems.length > 0) {
+          gsap.from(navItems, {
+            y: -10,
+            autoAlpha: 0,
+            stagger: 0.055,
+            duration: 0.34,
+            ease: "power2.out",
+            immediateRender: false,
+            clearProps: "opacity,visibility,transform",
+          });
+        }
       }
-    );
 
-    // --- 2. Scroll ile Dönme Animasyonu ---
-    // Bu animasyon, sayfa kaydırıldıkça targetElement'in rotasyonunu değiştirecek.
-    const scrollTween = gsap.to(targetElement, {
-      rotation: "+=1080", // Sayfa boyunca toplamda 3 tam tur daha DÖNSÜN (mevcut pozisyonuna ekleyerek)
-      // Örn: Eğer sayfanın yarısına gelindiğinde 540 derece dönmüş olacak.
-      ease: "none", // Scrub ile en iyi sonucu 'none' verir, kaydırmayla birebir senkronize olur.
-      scrollTrigger: {
-        trigger: document.body, // Animasyonun tetikleyicisi tüm sayfa
-        start: "top top", // Animasyon, sayfanın en tepesi viewport'un en tepesine geldiğinde başlar
-        end: "bottom bottom", // Animasyon, sayfanın en altı viewport'un en altına geldiğinde biter
-        scrub: 1.5, // Kaydırmayı 1.5 saniyelik bir yumuşaklıkla takip eder.
-        // `true` da kullanabilirsiniz, daha direkt bir takip için.
-        // Değer ne kadar yüksekse, o kadar yumuşak/gecikmeli olur.
-        // markers: true,        // Geliştirme sırasında tetik noktalarını görmek için açın
-        // onUpdate: self => {   // İsteğe bağlı: İlerlemeyi ve rotasyonu loglamak için
-        //   console.log("Scroll Progress:", self.progress.toFixed(3), "Rotation:", gsap.getProperty(targetElement, "rotation").toFixed(2));
-        // }
-      },
-    });
+      if (iconElement) {
+        gsap.set(iconElement, { scale: 1, autoAlpha: 1, rotation: 0 });
 
-    // --- 3. Hover Animasyonu (Ölçek Değişimi) ---
-    const parentContainer = targetElement.parentElement;
-    let hoverTween = null; // Aktif hover animasyonunu tutmak için
+        gsap.from(iconElement, {
+          scale: 0.5,
+          autoAlpha: 0,
+          duration: 0.75,
+          ease: "back.out(1.4)",
+          delay: 0.08,
+          immediateRender: false,
+          clearProps: "opacity,visibility,transform",
+        });
 
+        gsap.to(iconElement, {
+          rotation: "+=1080",
+          ease: "none",
+          scrollTrigger: {
+            trigger: document.documentElement,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.25,
+            invalidateOnRefresh: true,
+          },
+        });
+      }
+    }, navbarContainerElement || undefined);
+
+    let hoverTween = null;
     const handleMouseEnter = () => {
-      if (hoverTween) hoverTween.kill(); // Önceki hover animasyonunu durdur
-      hoverTween = gsap.to(targetElement, {
-        scale: 1.25, // Hover'da biraz daha büyüsün
-        duration: 0.25,
+      if (!iconElement) return;
+      hoverTween?.kill();
+      hoverTween = gsap.to(iconElement, {
+        scale: 1.22,
+        duration: 0.24,
         ease: "power1.out",
       });
     };
 
     const handleMouseLeave = () => {
-      if (hoverTween) hoverTween.kill(); // Önceki hover animasyonunu durdur
-      hoverTween = gsap.to(targetElement, {
-        scale: 1, // Normal ölçeğine dönsün
-        duration: 0.25,
+      if (!iconElement) return;
+      hoverTween?.kill();
+      hoverTween = gsap.to(iconElement, {
+        scale: 1,
+        duration: 0.24,
         ease: "power1.in",
       });
     };
@@ -75,30 +108,30 @@ export const useScrollAnimation = (targetRef) => {
     if (parentContainer) {
       parentContainer.addEventListener("mouseenter", handleMouseEnter);
       parentContainer.addEventListener("mouseleave", handleMouseLeave);
-    } else {
-      console.warn(
-        "useScrollAnimation Hook: Parent container for hover not found."
-      );
     }
 
-    // --- Temizlik Fonksiyonu (ÇOK ÖNEMLİ!) ---
+    window.addEventListener("load", refreshNavbarTriggers);
+    window.addEventListener("pageshow", refreshNavbarTriggers);
+
+    queueRefresh();
+    queueRefresh();
+    const delayedRefreshId = window.setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 200);
+
     return () => {
-      // Event listener'ları kaldır
       if (parentContainer) {
         parentContainer.removeEventListener("mouseenter", handleMouseEnter);
         parentContainer.removeEventListener("mouseleave", handleMouseLeave);
       }
 
-      // ScrollTrigger'ı ve bağlantılı animasyonu temizle
-      if (scrollTween && scrollTween.scrollTrigger) {
-        scrollTween.scrollTrigger.kill(); // Sadece bu hook'un oluşturduğu ScrollTrigger'ı öldürür
-      }
-      if (hoverTween) {
-        hoverTween.kill(); // Aktif hover tween'ini temizle
-      }
+      window.removeEventListener("load", refreshNavbarTriggers);
+      window.removeEventListener("pageshow", refreshNavbarTriggers);
+      window.clearTimeout(delayedRefreshId);
+      rafIds.forEach((id) => window.cancelAnimationFrame(id));
 
-      // targetElement üzerindeki tüm GSAP animasyonlarını durdur (başlangıç animasyonu dahil)
-      gsap.killTweensOf(targetElement);
+      hoverTween?.kill();
+      context.revert();
     };
-  }, [targetRef]); // targetRef değişirse bu effect yeniden çalışır
+  }, []);
 };

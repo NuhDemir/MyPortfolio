@@ -1,62 +1,83 @@
-// src/components/About/ServiceCard/ModalContents/PodcastTalksContent.jsx
 import React from "react";
 
-// Podcast ve Konuşmalar için modal içeriği
 const PodcastTalksContent = () => {
+  const channels = [
+    {
+      title: "Yazilim Kiraathanesi Podcast",
+      detail:
+        "Yazilim trendleri, kariyer yolculugu ve sektorden konuklarla teknik sohbetler.",
+      links: [
+        {
+          label: "Spotify",
+          href: "https://open.spotify.com/show/0a8ZmRsXCWKaOFjKIEN38q?si=b08a136895f340a8",
+        },
+        {
+          label: "Youtube",
+          href: "https://youtube.com/playlist?list=PLiw0pe3ARm0SX4pQ6nHDqZboa4ymQQuuc&si=9UCKW6cNherIgjTm",
+        },
+      ],
+    },
+    {
+      title: "Tech Talks & Meetups",
+      detail:
+        "React performansi, Node.js pratikleri ve modern frontend mimarisi odakli sunumlar.",
+      links: [],
+    },
+    {
+      title: "Medium Articles",
+      detail: "Uygulamaya donuk teknik yazilar ve adim adim gelistirme rehberleri.",
+      links: [{ label: "Medium", href: "https://medium.com/@nuhdemir.dev" }],
+    },
+  ];
+
   return (
-    <div>
-      <h3>Podcasts & Talks</h3>
-      <p>
-        Sharing knowledge and insights through various platforms is a passion. I
-        actively participate in the tech community via:
-      </p>
-      <ul>
-        <li>
-          <strong>Yazılım Kıraathanesi Podcast:</strong> Co-hosting a podcast
-          discussing software development trends, career advice, and interviews
-          with industry professionals. You can listen on{" "}
-          <a
-            href="https://open.spotify.com/show/0a8ZmRsXCWKaOFjKIEN38q?si=b08a136895f340a8"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Spotify
-          </a>
-          ,{" "}
-          <a
-            href="https://youtube.com/playlist?list=PLiw0pe3ARm0SX4pQ6nHDqZboa4ymQQuuc&si=9UCKW6cNherIgjTm"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Youtube Podcast
-          </a>
-          , etc. {/* Gerçek linkleri ekleyin */}
-        </li>
-        <li>
-          <strong>Tech Talks & Meetups:</strong> Presenting on topics like React
-          performance, Node.js best practices, and modern frontend architectures
-          at local and online events.
-        </li>
-        <li>
-          <strong>Medium Articles:</strong> Writing technical articles and
-          tutorials on{" "}
-          <a
-            href="https://medium.com/@nuhdemir.dev"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Medium
-          </a>{" "}
-          to share practical knowledge.
-        </li>
-        <li>
-          <strong>Community Engagement:</strong> Actively participating in
-          online forums and communities to help others and stay updated.
-        </li>
-      </ul>
-      <p>
-        Believing in the power of shared knowledge to uplift the entire
-        developer community.
+    <div className="about-modal-content" data-about-modal="podcast">
+      <section className="about-modal-content__panel scribble-card-wrap">
+        <div
+          className="about-modal-content__panel-fill scribble-card-wrap__fill"
+          aria-hidden="true"
+        />
+        <div className="about-modal-content__panel-body naive-shadow--sm">
+          <h3 className="about-modal-content__heading">Podcasts & Talks</h3>
+          <p className="about-modal-content__lead">
+            Bilgiyi paylasmanin yazilim toplulugunu guclendirdigine inaniyorum;
+            uretilen her icerik yeni bir gelisim kapisi aciyor.
+          </p>
+        </div>
+      </section>
+
+      <section className="about-modal-content__section">
+        <h4 className="about-modal-content__section-title">Knowledge Sharing Channels</h4>
+        <ul className="about-modal-content__section-body about-modal-content__list">
+          {channels.map((channel) => (
+            <li key={channel.title} className="about-modal-content__item">
+              <span className="about-modal-content__item-title">{channel.title}</span>
+              <span className="about-modal-content__item-body">{channel.detail}</span>
+              {channel.links.length > 0 && (
+                <span className="about-modal-content__item-body">
+                  {channel.links.map((link, index) => (
+                    <React.Fragment key={link.label}>
+                      {index > 0 && " | "}
+                      <a
+                        className="about-modal-content__inline-link"
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    </React.Fragment>
+                  ))}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <p className="about-modal-content__footnote">
+        Topluluktan ogrendigimi tekrar topluluga aktarmayi kariyerimin temel
+        bir parcasi olarak goruyorum.
       </p>
     </div>
   );

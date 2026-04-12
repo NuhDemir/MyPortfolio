@@ -1,0 +1,294 @@
+/* ProjectListHeader.css
+   Header-specific styles for the naive-art hero section.
+   Generic doodle utilities live in shared/styles/base/naive-utils.css.
+   All values reference :root CSS variables — no raw hex. */
+
+/* ── Wrapper (owns width + margin; positions the fill block) ─────────────── */
+
+.project-list-hero-wrap {
+  position: relative;
+  width: min(1100px, calc(100% - var(--spacing-lg) * 2));
+  margin: 0 auto clamp(2rem, 5vw, 3rem);
+  /* border-radius set here so the fill block can inherit it */
+  border-radius: 4px 22px 6px 18px / 18px 6px 22px 4px;
+}
+
+/* ── Offset fill block (the "messy fill" that peeks behind the card) ──────── */
+
+/*
+ * This is a sibling of <header>, positioned behind it (z-index: 0).
+ * Rotated 1.3 deg and shifted right + down so it bleeds from two edges —
+ * like a sheet of coloured paper jammed crookedly behind the white card.
+ * Uses .scribble-card-wrap__fill from naive-utils for the base shape,
+ * but we override border-radius to match the wrap.
+ */
+.project-list-hero__fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  border: 3px solid var(--color-border-strong);
+  border-radius: inherit;
+  transform: translate(7px, 9px) rotate(1.3deg);
+  z-index: 0;
+  opacity: 0.45;
+  pointer-events: none;
+  transition:
+    background var(--transition-duration-base) var(--transition-timing-function),
+    border-color var(--transition-duration-base)
+      var(--transition-timing-function);
+}
+
+/* ── Hero card ───────────────────────────────────────────────────────────── */
+
+.project-list-hero {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin: 0;
+  padding: clamp(1.8rem, 4vw, 2.8rem) clamp(1.5rem, 3.5vw, 3rem);
+  border: 3px solid var(--color-border-strong);
+  background: var(--color-background-paper);
+  /* Matching the wrap's border-radius */
+  border-radius: 4px 22px 6px 18px / 18px 6px 22px 4px;
+  /* Neubrutalist token — no blur, ever */
+  box-shadow: var(--box-shadow-neubrutalist);
+  overflow: hidden;
+  isolation: isolate;
+  transition:
+    background var(--transition-duration-base) var(--transition-timing-function),
+    border-color var(--transition-duration-base)
+      var(--transition-timing-function),
+    box-shadow var(--transition-duration-base) var(--transition-timing-function);
+}
+
+/* ── Pattern backgrounds (stay behind all content) ───────────────────────── */
+
+.project-list-hero__paper-pattern {
+  z-index: 0;
+  inset: 0;
+}
+
+.project-list-hero__doodle-pattern {
+  z-index: 0;
+  inset: 0;
+  background-position: 8px -12px;
+}
+
+/* Perforated edge — holes punch through to the page background colour */
+.project-list-hero::before,
+.project-list-hero::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 4;
+  background: radial-gradient(
+      circle at 12px 6px,
+      var(--color-background-page) 7px,
+      transparent 8px
+    )
+    repeat-x;
+  background-size: 26px 14px;
+  opacity: 0.6;
+}
+
+.project-list-hero::before {
+  top: -7px;
+}
+
+.project-list-hero::after {
+  bottom: -7px;
+  transform: scaleY(-1);
+}
+
+/* ── SVG decorative doodles ──────────────────────────────────────────────── */
+
+.project-list-hero__doodle {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* Top-left: wonky star — partially bleeds off the card edge intentionally */
+.project-list-hero__doodle--star-tl {
+  top: -10px;
+  left: -8px;
+  width: clamp(38px, 6vw, 58px);
+  height: clamp(38px, 6vw, 58px);
+  transform: rotate(-14deg);
+  opacity: 0.82;
+}
+
+/* Top-right: scattered dots cluster */
+.project-list-hero__doodle--dots-tr {
+  top: 10px;
+  right: 14px;
+  width: clamp(46px, 7vw, 72px);
+  height: auto;
+  transform: rotate(7deg);
+  opacity: 0.68;
+}
+
+/* Bottom-right: small asterisk accent */
+.project-list-hero__doodle--asterisk-br {
+  bottom: 14px;
+  right: clamp(40px, 5vw, 70px);
+  width: clamp(18px, 2.8vw, 28px);
+  height: clamp(18px, 2.8vw, 28px);
+  transform: rotate(20deg);
+  opacity: 0.5;
+}
+
+/* ── Content area ────────────────────────────────────────────────────────── */
+
+.project-list-hero__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: grid;
+  gap: clamp(0.6rem, 1.5vw, 1rem);
+}
+
+/* Tag size — shape + colours come from .naive-tag in naive-utils.css */
+.project-list-hero__tag {
+  font-size: clamp(0.58rem, 1.05vw, 0.73rem);
+  padding: 0.2em 1em 0.24em;
+  margin: 0 auto;
+  /* Extra tilt on top of the .naive-tag base rotation */
+  transform: rotate(-2.2deg);
+}
+
+/* Title — Amatic SC, big, slightly tilted */
+.project-list-hero__title {
+  margin: 0;
+  font-family: var(--font-family-secondary), cursive;
+  font-size: clamp(2.8rem, 9.5vw, 7.6rem);
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+  /* More aggressive tilt than before — this is what makes it feel hand-lettered */
+  transform: rotate(-1.5deg);
+}
+
+/* Divider — wavy hand-drawn feel via border-image approach */
+.project-list-hero__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: min(380px, 55%);
+}
+
+.project-list-hero__divider-line {
+  flex: 1;
+  height: 3px;
+  /* Dashed line evokes a hand-drawn dotted rule */
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-border-primary) 0px,
+    var(--color-border-primary) 6px,
+    transparent 6px,
+    transparent 10px
+  );
+  border-radius: 2px;
+  opacity: 0.55;
+}
+
+.project-list-hero__divider-dot {
+  width: 9px;
+  height: 9px;
+  /* Slightly off-circle — like a hand-drawn dot */
+  border-radius: 52% 48% 46% 54% / 54% 46% 48% 52%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-border-strong);
+  flex-shrink: 0;
+  transform: rotate(12deg);
+  opacity: 0.75;
+}
+
+/* Subtitle */
+.project-list-hero__subtitle {
+  margin: 0;
+  font-family: var(--font-family-primary);
+  font-size: clamp(0.9rem, 2.4vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: clamp(0.05em, 0.4vw, 0.12em);
+  line-height: 1.2;
+  color: var(--color-text-secondary);
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
+
+@media (max-width: 992px) {
+  .project-list-hero-wrap {
+    width: min(920px, calc(100% - var(--spacing-md) * 2));
+  }
+}
+
+@media (max-width: 768px) {
+  .project-list-hero-wrap {
+    width: calc(100% - var(--spacing-md) * 2);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .project-list-hero {
+    border-width: 2px;
+    border-radius: 4px 14px 5px 12px / 12px 5px 14px 4px;
+    padding: 1.1rem 1rem 1.25rem;
+  }
+
+  .project-list-hero__fill {
+    border-width: 2px;
+    transform: translate(5px, 7px) rotate(1deg);
+  }
+
+  .project-list-hero__title {
+    font-size: clamp(2.4rem, 12vw, 4.6rem);
+    letter-spacing: 0.02em;
+    transform: rotate(-1.2deg);
+  }
+
+  .project-list-hero__subtitle {
+    font-size: clamp(0.8rem, 3.4vw, 1.2rem);
+    letter-spacing: 0.06em;
+  }
+
+  .project-list-hero__doodle--dots-tr {
+    top: 6px;
+    right: 8px;
+  }
+
+  .project-list-hero__doodle--asterisk-br {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-list-hero-wrap {
+    width: calc(100% - var(--spacing-sm) * 2);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .project-list-hero {
+    padding: 1rem 0.8rem 1.1rem;
+  }
+
+  .project-list-hero__title {
+    font-size: clamp(2rem, 14vw, 3.6rem);
+  }
+
+  .project-list-hero__subtitle {
+    font-size: clamp(0.72rem, 3.8vw, 1rem);
+    letter-spacing: 0.04em;
+  }
+
+  .project-list-hero__doodle--star-tl {
+    width: 32px;
+    height: 32px;
+  }
+}

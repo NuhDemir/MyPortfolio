@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react"; // useRef'i import et
+import React, { useEffect, useState } from "react";
 import Header from "./Header.jsx";
 import StatCard from "./StatCard.jsx";
 import ServiceCard from "./ServiceCard/ServiceCard.jsx";
@@ -22,7 +22,7 @@ const services = [
   {
     id: "programming",
     icon: PROGRAMMING_LANG_SVG_PATH,
-    iconBgColor: "#ffdc58",
+    iconBgColor: "var(--color-accent)",
     title: "Programming Lang",
     description: "Modern dillerle ölçeklenebilir kod yazma.",
     modalContent: <ProgrammingLangContent />,
@@ -30,7 +30,7 @@ const services = [
   {
     id: "devtools",
     icon: DEVTOOLS_TECH_SVG_PATH,
-    iconBgColor: "#9c27b0",
+    iconBgColor: "var(--color-primary)",
     title: "Dev Tools & Tech",
     description: "Verimlilik için en yeni araçları kullanma.",
     modalContent: <DevToolsTechContent />,
@@ -38,7 +38,7 @@ const services = [
   {
     id: "podcast",
     icon: PODCAST_TALKS_SVG_PATH,
-    iconBgColor: "#f44336",
+    iconBgColor: "var(--color-secondary)",
     title: "Podcast & Talks",
     description: "Bilgi ve teknoloji trendlerini paylaşma.",
     modalContent: <PodcastTalksContent />,
@@ -46,21 +46,67 @@ const services = [
   {
     id: "projects",
     icon: PROJECTS_WORK_SVG_PATH,
-    iconBgColor: "#2196f3",
+    iconBgColor: "var(--color-accent)",
     title: "Projects & Work",
     description: "Kalite odaklı etkili projeler sunma.",
     modalContent: <ProjectsWorkContent />,
   },
 ];
 
-const About = () => {
-  // Referansları burada, ana bileşende oluştur
-  const headerRef = useRef(null);
-  const statsContainerRef = useRef(null);
-  const servicesContainerRef = useRef(null);
+const AboutStarDoodle = () => (
+  <svg
+    className="about-doodle about-doodle--star"
+    viewBox="0 0 44 44"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M22 5 L26 17 L39 17 L29 24 L33 37 L22 30 L11 37 L15 24 L5 17 L18 17 Z"
+      fill="var(--color-accent)"
+      stroke="var(--color-border-strong)"
+      strokeWidth="2"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
-  // Hook'u çağır ve oluşturduğun referansları ona gönder
-  useAboutGsapAnimations(headerRef, statsContainerRef, servicesContainerRef);
+const AboutDotsDoodle = () => (
+  <svg
+    className="about-doodle about-doodle--dots"
+    viewBox="0 0 62 34"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle
+      cx="8"
+      cy="10"
+      r="5.5"
+      fill="var(--color-primary)"
+      stroke="var(--color-border-strong)"
+      strokeWidth="2"
+    />
+    <circle
+      cx="30"
+      cy="22"
+      r="4"
+      fill="var(--color-accent)"
+      stroke="var(--color-border-strong)"
+      strokeWidth="2"
+    />
+    <circle
+      cx="52"
+      cy="12"
+      r="6"
+      fill="var(--color-secondary)"
+      stroke="var(--color-border-strong)"
+      strokeWidth="2"
+    />
+  </svg>
+);
+
+const About = () => {
+  const { headerRef, statsContainerRef, servicesContainerRef, animateModalContentLoad } =
+    useAboutGsapAnimations();
 
   const [repoCount, setRepoCount] = useState(null);
   const [followers, setFollowers] = useState(null);
@@ -71,7 +117,6 @@ const About = () => {
   });
 
   useEffect(() => {
-    // GitHub verisi çekme (değişiklik yok)
     fetch(`https://api.github.com/users/${GITHUB_USERNAME}`)
       .then((res) => res.json())
       .then((data) => {
@@ -79,6 +124,21 @@ const About = () => {
         setFollowers(data.followers);
       });
   }, []);
+
+  useEffect(() => {
+    if (activeModalId === null) {
+      return undefined;
+    }
+
+    const timerId = window.setTimeout(() => {
+      const modalContentRoot = document.querySelector(".modal-content");
+      animateModalContentLoad(modalContentRoot ?? document);
+    }, 120);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [activeModalId, animateModalContentLoad]);
 
   const openModal = (serviceId) => {
     const service = services.find((s) => s.id === serviceId);
@@ -95,28 +155,40 @@ const About = () => {
 
   return (
     <div className="about-container">
-      {/* Referansları ilgili DOM elementlerine bağla */}
-      <div ref={headerRef}>
-        <Header />
-      </div>
-      <div className="about-grid">
-        <div className="stats-container" ref={statsContainerRef}>
-          <StatCard value={repoCount ?? "..."} label="Repositories" />
-          <StatCard value={followers ?? "..."} label="Followers" />
+      <div className="about-shell scribble-card-wrap">
+        <div className="about-shell__fill scribble-card-wrap__fill" aria-hidden="true" />
+
+        <div className="about-shell__body naive-shadow">
+          <div ref={headerRef} className="about-shell__header">
+            <Header />
+       
+          </div>
+
+          <AboutStarDoodle />
+          <AboutDotsDoodle />
+
+          <div className="about-grid">
+            <div className="stats-container" ref={statsContainerRef}>
+              <StatCard value={repoCount ?? "..."} label="Repositories" />
+              <StatCard value={followers ?? "..."} label="Followers" />
+            </div>
+
+            <div className="services-section" ref={servicesContainerRef}>
+              {services.map((service) => (
+                <ServiceCard
+                  key={service.id}
+                  icon={service.icon}
+                  iconBgColor={service.iconBgColor}
+                  title={service.title}
+                  description={service.description}
+                  onLearnMoreClick={() => openModal(service.id)}
+                />
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="services-section" ref={servicesContainerRef}>
-          {services.map((service) => (
-            <ServiceCard
-              key={service.id}
-              icon={service.icon}
-              iconBgColor={service.iconBgColor}
-              title={service.title}
-              description={service.description}
-              onLearnMoreClick={() => openModal(service.id)}
-            />
-          ))}
-        </div>
       </div>
+
       <Modal
         isOpen={activeModalId !== null}
         onClose={closeModal}

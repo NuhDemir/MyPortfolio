@@ -14,18 +14,21 @@ const useCommentHeaderAnimation = () => {
     const imageElement = headerElement?.querySelector("img");
 
     if (headerElement && imageElement) {
+      let revealTween = null;
+
       // Animasyon başlangıç durumu (isteğe bağlı, CSS'de de ayarlanabilir)
       gsap.set(imageElement, { opacity: 0, y: 30, scale: 0.9 });
 
       // ScrollTrigger ile animasyonu tetikle
-      ScrollTrigger.create({
+      const trigger = ScrollTrigger.create({
         trigger: headerElement, // Konteyner tetikleyici olacak
         start: "top 85%", // Konteynerin üstü ekranın %85'ine geldiğinde başla
         // end: 'bottom 20%', // İsteğe bağlı bitiş noktası
         // markers: true, // Geliştirme sırasında yardımcı olur
         onEnter: () => {
           // Tetiklendiğinde animasyonu oynat
-          gsap.to(imageElement, {
+          revealTween?.kill();
+          revealTween = gsap.to(imageElement, {
             duration: 0.8,
             opacity: 1,
             y: 0,
@@ -36,12 +39,14 @@ const useCommentHeaderAnimation = () => {
         },
         once: true, // Animasyon sadece bir kere tetiklensin
       });
+
+      return () => {
+        trigger.kill();
+        revealTween?.kill();
+      };
     }
 
-    // Cleanup (ScrollTrigger'ları temizlemek iyi bir pratiktir)
-    return () => {
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+    return undefined;
   }, []); // Sadece component mount olduğunda çalışır
 
   // Hook'tan ref'i döndür ki bileşene bağlanabilsin

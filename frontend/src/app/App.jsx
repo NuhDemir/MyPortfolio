@@ -21,6 +21,7 @@ import { useTheme } from "@core/context/ThemeContext.jsx";
 import { useUserRole } from "@core/context/UserRoleContext.jsx";
 import { useBackendKeepAlive } from "@shared/hooks/useBackendKeepAlive.js";
 import "@shared/styles/base/global.css";
+import "@shared/styles/base/naive-utils.css";
 import "@shared/styles/base/components.css";
 
 const Comments = lazy(
@@ -75,12 +76,22 @@ const DefaultExperience = () => {
         </div>
         <SocialLinks />
         <ScrollToTop />
-        <section id="about-section" ref={aboutRef}>
-          <About />
-        </section>
-        <section id="projects-section" ref={projectsRef}>
-          <ProjectList />
-        </section>
+        <div className="about-projects-layout">
+          <div
+            id="about-section"
+            ref={aboutRef}
+            className="about-projects-layout__about"
+          >
+            <About />
+          </div>
+          <div
+            id="projects-section"
+            ref={projectsRef}
+            className="about-projects-layout__projects"
+          >
+            <ProjectList />
+          </div>
+        </div>
         <section id="blog-section" ref={blogRef}>
           <BlogShowcase />
         </section>

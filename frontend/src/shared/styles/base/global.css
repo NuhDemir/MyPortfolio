@@ -688,6 +688,30 @@ section {
   width: 100%;
 }
 
+.about-projects-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
+}
+
+.about-projects-layout__about,
+.about-projects-layout__projects {
+  min-width: 0;
+}
+
+@media (min-width: 1200px) {
+  .about-projects-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--spacing-sm);
+  }
+
+  .about-projects-layout__about,
+  .about-projects-layout__projects {
+    height: 100%;
+  }
+}
+
 /* --- Yardımcı Sınıflar --- */
 .fade-in {
   animation: fadeInAnimation var(--transition-duration-long) ease-in forwards;
