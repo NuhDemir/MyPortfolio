@@ -148,7 +148,7 @@ const v3BaseFields = {
   title:       z.string().min(1, { message: "Başlık alanı boş bırakılamaz." }).optional(),
   tagline:     z.string().min(1).optional(),
   description: z.string().min(1).optional(),
-  category:    z.enum(["web","mobile","desktop","api","library","tool","other"]).optional(),
+  category:    z.string().min(1).optional(),
   status:      z.enum(["active","archived","draft","maintenance"]).optional(),
   isFeatured:  z.coerce.boolean().optional(),
   priority:    z.coerce.number().min(1).max(10).optional(),

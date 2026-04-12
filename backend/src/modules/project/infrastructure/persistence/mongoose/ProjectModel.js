@@ -56,8 +56,6 @@ const projectSchema = new mongoose.Schema({
   category: {
     type: String,
     trim: true,
-    enum: ["web", "mobile", "desktop", "api", "library", "tool", "other"],
-    default: "web",
   },
   status: {
     type: String,
