@@ -29,8 +29,8 @@ const tagsSchema = z
 
 const technologySchema = z.object({
   name:        z.string().min(1),
-  category:    z.enum(["frontend","backend","database","devops","design","testing","mobile","other"]).optional(),
-  proficiency: z.enum(["learning","competent","proficient","expert"]).optional(),
+  category:    z.string().optional(),
+  proficiency: z.string().optional(),
 });
 
 const projectContextSchema = z

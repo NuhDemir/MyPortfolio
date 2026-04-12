@@ -127,21 +127,11 @@ const projectSchema = new mongoose.Schema({
       name: { type: String, required: true, trim: true },
       category: {
         type: String,
-        enum: [
-          "frontend",
-          "backend",
-          "database",
-          "devops",
-          "design",
-          "testing",
-          "mobile",
-          "other",
-        ],
-        default: "other",
+        trim: true,
       },
       proficiency: {
         type: String,
-        enum: ["learning", "competent", "proficient", "expert"],
+        trim: true,
       },
     },
   ],
