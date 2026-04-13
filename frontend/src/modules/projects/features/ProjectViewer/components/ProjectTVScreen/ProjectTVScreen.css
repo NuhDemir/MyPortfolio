@@ -1,210 +1,103 @@
+/* ═══════════════════════════════════════════════════════════════════
+   ProjectTVScreen — ekran içeriği
+   .project-tv__screen-shell içine gömülür, yüksekliği oradan alır.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Kök element ─────────────────────────────────────────────────── */
 .project-tv-screen {
   position: relative;
-  isolation: isolate;
   width: 100%;
-  max-width: 100%;
   height: 100%;
-  min-height: 0;
-  aspect-ratio: 4 / 3;
-  border: 4px solid var(--color-border-strong);
-  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  background: var(--color-background-paper);
-  color: var(--color-text-primary);
-  box-shadow: var(--box-shadow-neubrutalist);
-  transform: rotate(-0.65deg);
-  cursor: var(--cursor-naive-default), auto;
+  border-radius: inherit;
+  overflow: hidden;
+  background: #111;
+  isolation: isolate;
 }
 
-.project-tv-screen::before {
+/* Kapalı / sinyal yok */
+.project-tv-screen--dark {
+  background: #050505;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── CRT glare — sol üst parlama ─────────────────────────────────── */
+.project-tv-screen::after {
   content: "";
   position: absolute;
-  inset: -2px;
-  border: 3px solid var(--color-border-strong);
-  border-radius: inherit;
-  background: var(--color-primary);
-  transform: translate(-6px, 7px) rotate(-1.1deg);
-  opacity: 0.62;
-  z-index: -1;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 28% 22%,
+    rgba(255, 255, 255, 0.07) 0%,
+    transparent 52%
+  );
+  z-index: 6;
   pointer-events: none;
-}
-
-.project-tv-screen__panel {
-  position: relative;
-  height: 100%;
-  min-height: 0;
   border-radius: inherit;
-  background: var(--color-background-page);
-  padding: clamp(1.1rem, 2.5vw, 1.8rem);
-  display: grid;
-  gap: var(--spacing-sm);
-  overflow: hidden;
 }
 
+/* ── Görsel katmanı ──────────────────────────────────────────────── */
 .project-tv-screen__image-layer {
-  content: "";
   position: absolute;
   inset: 0;
   background-image: var(--project-bg-image);
   background-size: cover;
   background-position: center;
-  opacity: 0.16;
+  background-repeat: no-repeat;
   z-index: 0;
-  pointer-events: none;
 }
 
-.project-tv-screen__panel::after {
-  content: "";
+/* ── Vignette — köşe koyulaştırma ───────────────────────────────── */
+.project-tv-screen__vignette {
   position: absolute;
-  inset: 8px;
-  border: 2px dashed
-    color-mix(in srgb, var(--color-border-strong) 45%, transparent);
-  border-radius: inherit;
-  opacity: 0.5;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 42%,
+    rgba(0, 0, 0, 0.70) 100%
+  );
   z-index: 2;
   pointer-events: none;
 }
 
-.project-tv-screen__content {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  gap: var(--spacing-sm);
-  min-height: 0;
-  max-height: 100%;
-  overflow: auto;
-  padding-right: 0.2rem;
-}
-
-.project-tv-screen__content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.project-tv-screen__content::-webkit-scrollbar-thumb {
-  background: var(--color-border-strong);
-  border-radius: 20px;
-}
-
-.project-tv-screen__doodle {
+/* ── CRT tarama çizgileri ────────────────────────────────────────── */
+.project-tv-screen__scanlines {
   position: absolute;
-  z-index: 1;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.10) 2px,
+    rgba(0, 0, 0, 0.10) 4px
+  );
+  z-index: 3;
   pointer-events: none;
 }
 
-.project-tv-screen__doodle--star {
-  top: 10px;
-  right: 10px;
-  width: clamp(28px, 4vw, 42px);
-  height: auto;
-  transform: rotate(14deg);
-  opacity: 0.85;
-}
-
-.project-tv-screen__doodle--dots {
-  bottom: 12px;
-  left: 10px;
-  width: clamp(42px, 7vw, 62px);
-  height: auto;
-  transform: rotate(-9deg);
-  opacity: 0.76;
-}
-
-.project-tv-screen--off,
-.project-tv-screen--empty {
-  background: var(--color-text-primary);
-  color: var(--color-background-paper);
-  transform: rotate(-0.35deg);
-}
-
-.project-tv-screen--off .project-tv-screen__panel,
-.project-tv-screen--empty .project-tv-screen__panel {
-  place-items: center;
-  align-content: center;
-  background: var(--color-text-primary);
-}
-
-.project-tv-screen__off-text,
-.project-tv-screen__empty-text {
+/* ── Durum yazısı (TV OFF / Sinyal yok) ─────────────────────────── */
+.project-tv-screen__status-text {
   margin: 0;
   font-family: var(--font-family-secondary);
-  font-size: clamp(2.2rem, 8vw, 4rem);
-  letter-spacing: 0.1em;
-  transform: rotate(-2.1deg);
+  font-size: clamp(1.1rem, 4vw, 2rem);
+  letter-spacing: 0.14em;
+  color: #999;
+  text-align: center;
+  transform: rotate(-1.5deg);
+  text-shadow: 0 0 14px rgba(153, 153, 153, 0.3);
+  user-select: none;
 }
 
-.project-tv-screen__header {
-  display: grid;
-  gap: var(--spacing-xs);
-}
-
-.project-tv-screen__title {
-  margin: 0;
-  font-family: var(--font-family-secondary);
-  font-size: clamp(2rem, 5vw, 3.6rem);
-  line-height: 0.92;
-  color: var(--color-text-primary);
-  transform: rotate(-1.4deg);
-}
-
-.project-tv-screen__badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.project-tv-screen__badge {
-  font-size: 0.72rem;
-  padding: 0.2rem 0.65rem;
-  transform: rotate(-1.6deg);
-}
-
-.project-tv-screen__description {
-  margin: 0;
-  font-family: var(--font-family-primary);
-  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
-  line-height: 1.5;
-  color: var(--color-text-secondary);
-  max-width: 72ch;
-}
-
-.project-tv-screen__tech-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.project-tv-screen__tech-item {
-  border: 3px solid var(--color-border-strong);
-  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
-  background: var(--color-secondary);
-  color: var(--color-text-primary);
-  font-family: var(--font-family-primary);
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.25rem 0.6rem;
-  box-shadow: var(--box-shadow-neubrutalist-sm);
-}
-
-.project-tv-screen__tech-item:nth-child(odd) {
-  transform: rotate(-1.2deg);
-}
-
-.project-tv-screen__tech-item:nth-child(even) {
-  transform: rotate(0.8deg);
-}
-
-@media (max-width: 768px) {
-  .project-tv-screen {
-    transform: rotate(-0.35deg);
-  }
-
-  .project-tv-screen::before {
-    transform: translate(-4px, 6px) rotate(-0.7deg);
-  }
-
-  .project-tv-screen__title {
-    font-size: clamp(1.7rem, 7vw, 2.8rem);
-  }
+/* ── Karıncalanma canvas ─────────────────────────────────────────── */
+.project-tv-screen__static {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  opacity: 0.93;
+  pointer-events: none;
 }

@@ -5,12 +5,62 @@ const numberButtons = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const hasLink = (value) => Boolean(value && String(value).trim());
 
-/* ── Dekoratif SVG: Yamuk yıldız ─────────────────────────── */
+/* ── Inline SVG defs — patterns & filters ────────────────────── */
+const RemoteSvgDefs = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width="0"
+    height="0"
+    style={{ position: "absolute", overflow: "hidden" }}
+  >
+    <defs>
+      {/* Paper grain filter */}
+      <filter id="remote-grain" x="0%" y="0%" width="100%" height="100%"
+        colorInterpolationFilters="sRGB">
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.82 0.78"
+          numOctaves="4"
+          stitchTiles="stitch"
+          result="noise"
+        />
+        <feColorMatrix type="saturate" values="0" in="noise" result="grayNoise" />
+        <feComposite in="grayNoise" in2="SourceAlpha" operator="in" result="masked" />
+        <feBlend in="SourceGraphic" in2="masked" mode="soft-light" />
+      </filter>
+
+      {/* Diagonal cross-hatch pattern for disabled buttons */}
+      <pattern
+        id="remote-hatch"
+        patternUnits="userSpaceOnUse"
+        width="8"
+        height="8"
+        patternTransform="rotate(45)"
+      >
+        <line x1="0" y1="0" x2="0" y2="8"
+          stroke="currentColor" strokeWidth="1.4" strokeOpacity="0.28" />
+      </pattern>
+
+      {/* Dot fill pattern for section backgrounds */}
+      <pattern
+        id="remote-dots"
+        patternUnits="userSpaceOnUse"
+        width="10"
+        height="10"
+      >
+        <circle cx="5" cy="5" r="1.1"
+          fill="currentColor" fillOpacity="0.12" />
+      </pattern>
+    </defs>
+  </svg>
+);
+
+/* ── Decorative: sketchy star ────────────────────────────────── */
 const ScribbleStar = ({ className = "" }) => (
   <svg
     className={`scribble-star ${className}`}
     viewBox="0 0 32 32"
-    xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
     focusable="false"
   >
@@ -25,20 +75,16 @@ const ScribbleStar = ({ className = "" }) => (
   </svg>
 );
 
-/* ── Dekoratif SVG: Asimetrik nokta ─────────────────────── */
+/* ── Decorative: asymmetric dot ──────────────────────────────── */
 const ScribbleDot = ({ className = "" }) => (
   <svg
     className={`scribble-dot ${className}`}
     viewBox="0 0 16 16"
-    xmlns="http://www.w3.org/2000/svg"
     aria-hidden="true"
     focusable="false"
   >
     <ellipse
-      cx="8"
-      cy="8"
-      rx="6.5"
-      ry="5.5"
+      cx="8" cy="8" rx="6.5" ry="5.5"
       transform="rotate(-12 8 8)"
       stroke="var(--color-border-strong)"
       strokeWidth="2"
@@ -48,7 +94,7 @@ const ScribbleDot = ({ className = "" }) => (
   </svg>
 );
 
-/* ── Ana Bileşen ─────────────────────────────────────────── */
+/* ── Main component ──────────────────────────────────────────── */
 const ProjectRemote = ({
   project,
   total,
@@ -63,34 +109,25 @@ const ProjectRemote = ({
   onOpenAllProjects,
 }) => {
   const demoUrl = project?.links?.liveDemo || project?.liveUrl || "";
-  const repoUrl = project?.links?.github || project?.githubUrl || "";
+  const repoUrl = project?.links?.github   || project?.githubUrl || "";
   const [jumpChannel, setJumpChannel] = useState("");
 
   useEffect(() => {
-    if (total <= 0) {
-      setJumpChannel("");
-      return;
-    }
-
+    if (total <= 0) { setJumpChannel(""); return; }
     setJumpChannel(String(Math.min(activeIndex + 1, total)));
   }, [activeIndex, total]);
 
   const safeGoTo = (channel) => {
     if (total <= 0) return;
-    const boundedChannel = Math.min(Math.max(channel, 1), total);
-    onGoTo(boundedChannel - 1);
+    onGoTo(Math.min(Math.max(channel, 1), total) - 1);
   };
 
-  const jumpBy = (step) => {
-    const nextChannel = activeIndex + 1 + step;
-    safeGoTo(nextChannel);
-  };
+  const jumpBy    = (step) => safeGoTo(activeIndex + 1 + step);
 
-  const handleJumpSubmit = (event) => {
-    event.preventDefault();
+  const handleJumpSubmit = (e) => {
+    e.preventDefault();
     const parsed = Number.parseInt(jumpChannel, 10);
-    if (Number.isNaN(parsed)) return;
-    safeGoTo(parsed);
+    if (!Number.isNaN(parsed)) safeGoTo(parsed);
   };
 
   const handleZero = () => {
@@ -99,148 +136,152 @@ const ProjectRemote = ({
   };
 
   return (
-    <aside
-      className="project-remote-wrap scribble-card-wrap"
-      aria-label="Project remote"
-    >
-      {/* Taşan arka plan gölgesi */}
-      <div
-        className="project-remote__fill scribble-card-wrap__fill"
-        aria-hidden="true"
-      />
+    <aside className="project-remote-wrap" aria-label="Project remote">
+      <RemoteSvgDefs />
 
-      {/* Dekoratif SVG'ler */}
+      {/* Taşan offset gölgesi */}
+      <div className="project-remote__shadow" aria-hidden="true" />
+
+      {/* Dekoratif elemanlar */}
       <ScribbleStar className="project-remote__deco project-remote__deco--star-tl" />
-      <ScribbleDot className="project-remote__deco project-remote__deco--dot-br" />
+      <ScribbleDot  className="project-remote__deco project-remote__deco--dot-br"  />
       <ScribbleStar className="project-remote__deco project-remote__deco--star-br" />
 
-      <div className="project-remote naive-shadow">
-        <div className="project-remote__all-row">
+      <div className="project-remote">
+
+        {/* ── Tüm projelere git ─────────────────────────────────── */}
+        <div className="project-remote__section">
           <button
             type="button"
-            className="project-remote__button project-remote__button--all messy-button"
+            className="project-remote__btn project-remote__btn--all"
             onClick={onOpenAllProjects}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">TUM PROJELERE GIT</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">TUM PROJELERE GIT</span>
           </button>
         </div>
 
-        {/* Durum çubuğu */}
-        <div className="project-remote__status" aria-live="polite">
-          <span className={`project-remote__led ${isOn ? "is-on" : ""}`} aria-hidden="true" />
+        {/* ── LCD status bar ────────────────────────────────────── */}
+        <div className="project-remote__lcd" aria-live="polite">
+          <span
+            className={`project-remote__led${isOn ? " project-remote__led--on" : ""}`}
+            aria-hidden="true"
+          />
           {isOn
             ? `● REMOTE ACTIVE • CH ${activeIndex + 1}/${total || 0}`
             : "○ REMOTE STANDBY"}
         </div>
 
-        {/* Üst satır: Güç + Demo + Repo */}
-        <div className="project-remote__top-row">
+        {/* ── Üst satır: güç · demo · repo ──────────────────────── */}
+        <div className="project-remote__section project-remote__top-row">
           <button
             type="button"
-            className="project-remote__button project-remote__button--power messy-button"
+            className="project-remote__btn project-remote__btn--power"
             onClick={onToggle}
             aria-label={isOn ? "TV kapat" : "TV aç"}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">⏻</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">⏻</span>
           </button>
 
           <button
             type="button"
-            className="project-remote__button project-remote__button--link messy-button"
+            className="project-remote__btn project-remote__btn--demo"
             onClick={onOpenDemo}
             disabled={!hasLink(demoUrl)}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">🔗 demo</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">🔗 demo</span>
           </button>
 
           <button
             type="button"
-            className="project-remote__button project-remote__button--repo messy-button"
+            className="project-remote__btn project-remote__btn--repo"
             onClick={onOpenRepo}
             disabled={!hasLink(repoUrl)}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">GH repo</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">GH repo</span>
           </button>
         </div>
 
-        {/* Numpad */}
-        <div className="project-remote__numpad" aria-label="Kanal seçici">
-          {numberButtons.map((number) => {
-            const index = number - 1;
-            return (
-              <button
-                key={number}
-                type="button"
-                className="project-remote__button project-remote__button--digit messy-button"
-                onClick={() => onGoTo(index)}
-                disabled={total <= index}
-                aria-label={`Kanal ${number}`}
-              >
-                <span className="messy-button__fill" aria-hidden="true" />
-                <span className="messy-button__label">{number}</span>
-              </button>
-            );
-          })}
+        {/* ── Numpad ────────────────────────────────────────────── */}
+        <div
+          className="project-remote__section project-remote__numpad"
+          aria-label="Kanal seçici"
+        >
+          {numberButtons.map((n) => (
+            <button
+              key={n}
+              type="button"
+              className="project-remote__btn project-remote__btn--digit"
+              onClick={() => onGoTo(n - 1)}
+              disabled={total < n}
+              aria-label={`Kanal ${n}`}
+            >
+              <span className="project-remote__btn-fill" aria-hidden="true" />
+              <span className="project-remote__btn-label">{n}</span>
+            </button>
+          ))}
 
           <button
             type="button"
-            className="project-remote__button project-remote__button--digit project-remote__button--zero messy-button"
+            className="project-remote__btn project-remote__btn--digit project-remote__btn--zero"
             onClick={handleZero}
             disabled={total <= 0}
             aria-label="Kanal 0"
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">0</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">0</span>
           </button>
         </div>
 
-        {/* Kanal ▲▼ */}
-        <div className="project-remote__channel-row">
+        {/* ── Kanal ▲ ▼ ─────────────────────────────────────────── */}
+        <div className="project-remote__section project-remote__ch-row">
           <button
             type="button"
-            className="project-remote__button project-remote__button--channel messy-button"
+            className="project-remote__btn project-remote__btn--ch"
             onClick={onPrev}
             disabled={total <= 1}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">▲ kanal</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">▲ kanal</span>
           </button>
           <button
             type="button"
-            className="project-remote__button project-remote__button--channel messy-button"
+            className="project-remote__btn project-remote__btn--ch"
             onClick={onNext}
             disabled={total <= 1}
           >
-            <span className="messy-button__fill" aria-hidden="true" />
-            <span className="messy-button__label">▼ kanal</span>
+            <span className="project-remote__btn-fill" aria-hidden="true" />
+            <span className="project-remote__btn-label">▼ kanal</span>
           </button>
         </div>
 
-        {total > 10 ? (
-          <div className="project-remote__extended" aria-label="Gelismis kanal kontrolu">
+        {/* ── 10+ kanal genişletilmiş mod ───────────────────────── */}
+        {total > 10 && (
+          <div
+            className="project-remote__section project-remote__extended"
+            aria-label="Gelismis kanal kontrolu"
+          >
             <p className="project-remote__extended-label">10+ kanal modu</p>
 
             <div className="project-remote__jump-controls">
               <button
                 type="button"
-                className="project-remote__button project-remote__button--step messy-button"
+                className="project-remote__btn project-remote__btn--step"
                 onClick={() => jumpBy(-10)}
               >
-                <span className="messy-button__fill" aria-hidden="true" />
-                <span className="messy-button__label">-10</span>
+                <span className="project-remote__btn-fill" aria-hidden="true" />
+                <span className="project-remote__btn-label">-10</span>
               </button>
-
               <button
                 type="button"
-                className="project-remote__button project-remote__button--step messy-button"
+                className="project-remote__btn project-remote__btn--step"
                 onClick={() => jumpBy(10)}
               >
-                <span className="messy-button__fill" aria-hidden="true" />
-                <span className="messy-button__label">+10</span>
+                <span className="project-remote__btn-fill" aria-hidden="true" />
+                <span className="project-remote__btn-label">+10</span>
               </button>
             </div>
 
@@ -251,21 +292,23 @@ const ProjectRemote = ({
                 min={1}
                 max={total}
                 value={jumpChannel}
-                onChange={(event) => setJumpChannel(event.target.value)}
-                aria-label={`Kanal numarasi giriniz 1 ile ${total} arasi`}
-                placeholder={`1-${total}`}
+                onChange={(e) => setJumpChannel(e.target.value)}
+                aria-label={`Kanal numarasi 1-${total}`}
+                placeholder={`1–${total}`}
               />
-
               <button
                 type="submit"
-                className="project-remote__button project-remote__button--jump messy-button"
+                className="project-remote__btn project-remote__btn--jump"
               >
-                <span className="messy-button__fill" aria-hidden="true" />
-                <span className="messy-button__label">GIT</span>
+                <span className="project-remote__btn-fill" aria-hidden="true" />
+                <span className="project-remote__btn-label">GIT</span>
               </button>
             </form>
           </div>
-        ) : null}
+        )}
+
+        {/* ── Marka ─────────────────────────────────────────────── */}
+        <p className="project-remote__brand" aria-hidden="true">DMR-84</p>
       </div>
     </aside>
   );

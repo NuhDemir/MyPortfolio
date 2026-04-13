@@ -100,7 +100,7 @@ const loadSoundCloudWidgetScript = () => {
 const buildSoundCloudPlayerUrl = () => {
   const query = new URLSearchParams({
     url: SOUNDCLOUD_PLAYLIST_URL,
-    auto_play: "false",
+    auto_play: "true",
     hide_related: "true",
     show_comments: "false",
     show_user: "true",
@@ -321,6 +321,9 @@ const AudioControls = forwardRef(
             widget.getCurrentSound((sound) => {
               setCurrentSongName(formatSoundCloudTitle(sound?.title));
             });
+            widget.play();
+            setIsPlaying(true);
+            onIsPlayingChange(true);
           };
 
           const handlePlay = () => {
