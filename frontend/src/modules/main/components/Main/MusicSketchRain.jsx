@@ -1,6 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import cloudinaryAssetMap from "@shared/assets/cloudinaryAssetMap.json";
 
-const SKETCH_BASE_PATH = "/assets/icons/sketch/";
+const resolveSketchUrl = (filename) => {
+  const localPath = `/assets/icons/sketch/${filename}`;
+  return cloudinaryAssetMap.items[localPath] ?? localPath;
+};
 
 // AudioControls estetiğine uygun: spark/wind/wave/ribbon odaklı seçim.
 const SKETCH_ICON_POOL = [
@@ -18,7 +22,7 @@ const SKETCH_ICON_POOL = [
   "Abstract-Ribbon-Vine-Line-1--Streamline-Variable-Scribbles.png",
   "Abstract-Ribbon-Vine-Line-3--Streamline-Variable-Scribbles.png",
   "Pop-Explode-Sparkle-Filled--Streamline-Variable-Scribbles.png",
-];
+].map(resolveSketchUrl);
 
 const randomBetween = (min, max) => min + Math.random() * (max - min);
 
@@ -43,7 +47,7 @@ const createParticle = (width, height, withStartOffset = false) => {
     phase: randomBetween(0, Math.PI * 2),
     opacity: randomBetween(0.32, 0.8),
     size,
-    icon: `${SKETCH_BASE_PATH}${SKETCH_ICON_POOL[Math.floor(Math.random() * SKETCH_ICON_POOL.length)]}`,
+    icon: SKETCH_ICON_POOL[Math.floor(Math.random() * SKETCH_ICON_POOL.length)],
   };
 };
 

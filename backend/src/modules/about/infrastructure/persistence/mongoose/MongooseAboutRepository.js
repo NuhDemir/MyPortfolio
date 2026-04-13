@@ -40,7 +40,6 @@ export class MongooseAboutRepository extends AboutRepository {
         $set: setPayload,
         $setOnInsert: {
           slug: MAIN_SLUG,
-          "meta.version": 0,
         },
         $inc: {
           "meta.version": 1,
