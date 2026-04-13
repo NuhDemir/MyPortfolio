@@ -13,7 +13,7 @@
 }
 
 .music-sketch-rain {
-  position: absolute;
+  position: fixed;
   inset: 0;
   z-index: 4;
   pointer-events: none;

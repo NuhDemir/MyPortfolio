@@ -51,34 +51,31 @@ const createParticle = (width, height, withStartOffset = false) => {
   };
 };
 
-const MusicSketchRain = ({ isActive, containerRef }) => {
+const MusicSketchRain = ({ isActive }) => {
   const [particles, setParticles] = useState([]);
   const particlesRef = useRef([]);
   const animationFrameRef = useRef(0);
   const pointerRef = useRef({ x: null, y: null });
-  const boundsRef = useRef({ width: 0, height: 0, left: 0, top: 0 });
+  const boundsRef = useRef({ width: 0, height: 0 });
   const lastTimeRef = useRef(0);
 
   const particleCount = useMemo(() => {
-    const width = boundsRef.current.width || 1200;
+    const width = boundsRef.current.width || window.innerWidth;
     const estimated = Math.round(width / 64);
     return Math.min(32, Math.max(14, estimated));
   }, [isActive]);
 
   useEffect(() => {
-    if (!isActive || !containerRef?.current) {
+    if (!isActive) {
       setParticles([]);
       particlesRef.current = [];
       return;
     }
 
     const updateBounds = () => {
-      const rect = containerRef.current.getBoundingClientRect();
       boundsRef.current = {
-        width: rect.width,
-        height: rect.height,
-        left: rect.left,
-        top: rect.top,
+        width: window.innerWidth,
+        height: window.innerHeight,
       };
     };
 
@@ -165,33 +162,20 @@ const MusicSketchRain = ({ isActive, containerRef }) => {
     };
 
     const handlePointerMove = (event) => {
-      const { left, top, width, height } = boundsRef.current;
-      const localX = event.clientX - left;
-      const localY = event.clientY - top;
-
-      if (localX < 0 || localY < 0 || localX > width || localY > height) {
-        pointerRef.current = { x: null, y: null };
-        return;
-      }
-
-      pointerRef.current = { x: localX, y: localY };
+      pointerRef.current = { x: event.clientX, y: event.clientY };
     };
 
     const handlePointerLeave = () => {
       pointerRef.current = { x: null, y: null };
     };
 
-    const resizeObserver = new ResizeObserver(() => {
+    const handleResize = () => {
       updateBounds();
-    });
+    };
 
-    resizeObserver.observe(containerRef.current);
-    window.addEventListener("pointermove", handlePointerMove, {
-      passive: true,
-    });
-    window.addEventListener("pointerleave", handlePointerLeave, {
-      passive: true,
-    });
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
+    window.addEventListener("resize", handleResize, { passive: true });
     animationFrameRef.current = requestAnimationFrame(animate);
 
     return () => {
@@ -200,12 +184,12 @@ const MusicSketchRain = ({ isActive, containerRef }) => {
       lastTimeRef.current = 0;
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
-      resizeObserver.disconnect();
+      window.removeEventListener("resize", handleResize);
       pointerRef.current = { x: null, y: null };
       particlesRef.current = [];
       setParticles([]);
     };
-  }, [containerRef, isActive, particleCount]);
+  }, [isActive, particleCount]);
 
   if (!isActive || particles.length === 0) {
     return null;
