@@ -40,6 +40,16 @@ const PATTERN_KEYWORDS: Record<PatternType, string[]> = {
   "gradient-mesh": ["ambient", "atmosphere", "depth", "organic", "fluid"],
   "grid-fine": ["precision", "detail", "technical", "accurate", "blueprint"],
   noise: ["texture", "film", "grain", "vintage", "photography", "analog"],
+  "dot-grid": ["macos", "sonoma", "wallpaper", "retina", "display", "screen"],
+  "stripe-v": ["column", "vertical", "partition", "divide", "section"],
+  chevron: ["herringbone", "zigzag", "woven", "fabric", "textile"],
+  sine: ["waveform", "audio", "sound", "frequency", "signal", "rhythm"],
+  concentric: ["target", "focus", "bullseye", "radar", "scope"],
+  triangles: ["geometry", "polygon", "math", "crystal", "facet"],
+  diamond: ["gem", "luxury", "premium", "crystal", "elite", "high-end"],
+  dash: ["notebook", "journal", "rule", "writing", "note", "paper"],
+  plus: ["medical", "health", "science", "cross", "add", "hospital"],
+  orbit: ["space", "cosmic", "atom", "solar", "planetary", "universe"],
 };
 
 const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
@@ -114,6 +124,66 @@ const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
     density: 5,
     opacity: 0.15,
     animated: false,
+  },
+  "dot-grid": {
+    type: "dot-grid",
+    density: 18,
+    opacity: 0.14,
+    animated: false,
+  },
+  "stripe-v": {
+    type: "stripe-v",
+    density: 8,
+    opacity: 0.08,
+    animated: false,
+  },
+  chevron: {
+    type: "chevron",
+    density: 12,
+    opacity: 0.12,
+    animated: false,
+  },
+  sine: {
+    type: "sine",
+    density: 6,
+    opacity: 0.16,
+    animated: true,
+  },
+  concentric: {
+    type: "concentric",
+    density: 5,
+    opacity: 0.14,
+    animated: true,
+  },
+  triangles: {
+    type: "triangles",
+    density: 10,
+    opacity: 0.12,
+    animated: false,
+  },
+  diamond: {
+    type: "diamond",
+    density: 14,
+    opacity: 0.13,
+    animated: false,
+  },
+  dash: {
+    type: "dash",
+    density: 8,
+    opacity: 0.1,
+    animated: false,
+  },
+  plus: {
+    type: "plus",
+    density: 16,
+    opacity: 0.12,
+    animated: false,
+  },
+  orbit: {
+    type: "orbit",
+    density: 4,
+    opacity: 0.16,
+    animated: true,
   },
 };
 

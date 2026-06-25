@@ -1,13 +1,25 @@
 .rdp {
-  padding-top: var(--ds-navbar-height);
+  padding-top: calc(var(--ds-navbar-height) + var(--ds-space-8));
   padding-bottom: var(--ds-space-20);
   min-height: 100vh;
+  position: relative;
+}
+
+.rdp__glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 70% at 50% 20%, var(--glow-color));
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.8s ease;
 }
 
 .rdp__container {
   max-width: 960px;
   margin: 0 auto;
   padding: 0 var(--ds-container-gutter);
+  position: relative;
+  z-index: 1;
 }
 
 .rdp__not-found {

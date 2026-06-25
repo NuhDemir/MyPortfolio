@@ -10,6 +10,22 @@
   padding: var(--ds-space-12) var(--ds-container-gutter) 0;
   max-width: 1040px;
   margin: 0 auto;
+  position: relative;
+}
+
+.mn2__glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 25%, var(--glow-color));
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  transition: background 0.8s ease;
+}
+
+.mn2 > *:not(.mn2__glow) {
+  position: relative;
+  z-index: 1;
 }
 
 /* ── Logo ───────────────────────────────────────────────────────────────── */

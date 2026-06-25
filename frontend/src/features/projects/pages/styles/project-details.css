@@ -2,6 +2,22 @@
   max-width: 1000px;
   margin: 0 auto;
   padding: var(--ds-space-8) var(--ds-container-gutter);
+  position: relative;
+}
+
+.prj-detail > *:not(.prj-detail__glow) {
+  position: relative;
+  z-index: 1;
+}
+
+.prj-detail__glow {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 90% 70% at 50% 20%, var(--glow-color));
+  pointer-events: none;
+  z-index: 0;
+  transition: background 0.8s ease;
+  opacity: 0.4;
 }
 
 .prj-detail--notfound {

@@ -5,11 +5,13 @@ import { useTheme } from "@core";
 const LOGO_LIGHT = "/logo/logo-portfolio.png";
 const LOGO_DARK = "/logo/logo-portfolio-dark.png";
 
-const MainImage = forwardRef((props, ref) => {
+const MainImage = forwardRef(({ isPlaying }, ref) => {
   const { theme } = useTheme();
   const containerRef = useRef(null);
   const toasterRef = useRef(null);
+  const imgRef = useRef(null);
   const quoteRef = useRef({ current: null, timer: null });
+  const spinRef = useRef(null);
   const [isImageReady, setIsImageReady] = useState(false);
   const [hasImageError, setHasImageError] = useState(false);
 
@@ -21,16 +23,43 @@ const MainImage = forwardRef((props, ref) => {
     else if (ref) ref.current = node;
   };
 
+  useEffect(() => {
+    const img = imgRef.current;
+    if (!img) return;
+
+    if (isPlaying) {
+      spinRef.current = gsap.to(img, {
+        rotation: 360,
+        duration: 12,
+        repeat: -1,
+        ease: "linear",
+      });
+    } else {
+      if (spinRef.current) {
+        spinRef.current.kill();
+        spinRef.current = null;
+      }
+      gsap.to(img, {
+        rotation: 0,
+        duration: 0.8,
+        ease: "power2.out",
+      });
+    }
+
+    return () => {
+      if (spinRef.current) {
+        spinRef.current.kill();
+        spinRef.current = null;
+      }
+    };
+  }, [isPlaying]);
+
   const showQuote = () => {
     if (quoteRef.current.timer) clearTimeout(quoteRef.current.timer);
     if (toasterRef.current) {
       toasterRef.current.textContent = quoteRef.current.current;
       gsap.to(toasterRef.current, {
-        opacity: 1,
-        y: 15,
-        visibility: "visible",
-        duration: 0.3,
-        ease: "power2.out",
+        opacity: 1, y: 15, visibility: "visible", duration: 0.3, ease: "power2.out",
       });
     }
   };
@@ -39,11 +68,7 @@ const MainImage = forwardRef((props, ref) => {
     quoteRef.current.timer = setTimeout(() => {
       if (toasterRef.current) {
         gsap.to(toasterRef.current, {
-          opacity: 0,
-          y: 0,
-          visibility: "hidden",
-          duration: 0.3,
-          ease: "power2.in",
+          opacity: 0, y: 0, visibility: "hidden", duration: 0.3, ease: "power2.in",
         });
       }
     }, 150);
@@ -52,7 +77,7 @@ const MainImage = forwardRef((props, ref) => {
   return (
     <div
       ref={assignRefs}
-      className="main-image"
+      className={`main-image ${isPlaying ? "main-image--spinning" : ""}`}
       onMouseEnter={showQuote}
       onMouseLeave={hideQuote}
       onTouchStart={showQuote}
@@ -74,6 +99,7 @@ const MainImage = forwardRef((props, ref) => {
       )}
 
       <img
+        ref={imgRef}
         key={logoSrc}
         src={logoSrc}
         alt="Hero illustration"

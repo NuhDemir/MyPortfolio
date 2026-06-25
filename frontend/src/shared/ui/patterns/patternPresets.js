@@ -1,8 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   PATTERN PRESETS v4 — Mask-image based (theme-agnostic)
-   SVGs use solid black → shapes act as alpha mask.
-   Color comes from CSS background-color via --ds-fg.
-   Light → dark gray pattern | Dark → white pattern  (auto)
+   PATTERN PRESETS v5 — 21 Apple-professional patterns
+   Mask-image based (theme-agnostic). SVGs use solid black → alpha mask.
+   Color from CSS background-color via --ds-fg.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const svg2url = (s) =>
@@ -28,6 +27,16 @@ export const PATTERN_VARIANTS = [
   "gradient-mesh",
   "grid-fine",
   "noise",
+  "dot-grid",
+  "stripe-v",
+  "chevron",
+  "sine",
+  "concentric",
+  "triangles",
+  "diamond",
+  "dash",
+  "plus",
+  "orbit",
 ];
 
 export const VINTAGE_NEUBRUTAL_PATTERN_VARIANTS = ["grid","lines","dots","micro-dot","grid-fine"];
@@ -98,5 +107,69 @@ export const PATTERN_PRESETS = {
   noise: {
     size: "64px 64px",
     mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="1" height="1" x="3" y="7" fill="${B}"/><rect width="1" height="1" x="12" y="3" fill="${B}"/><rect width="1" height="1" x="19" y="15" fill="${B}"/><rect width="1" height="1" x="27" y="8" fill="${B}"/><rect width="1" height="1" x="35" y="22" fill="${B}"/><rect width="1" height="1" x="44" y="5" fill="${B}"/><rect width="1" height="1" x="51" y="18" fill="${B}"/><rect width="1" height="1" x="8" y="28" fill="${B}"/><rect width="1" height="1" x="16" y="35" fill="${B}"/><rect width="1" height="1" x="25" y="42" fill="${B}"/><rect width="1" height="1" x="38" y="30" fill="${B}"/><rect width="1" height="1" x="47" y="39" fill="${B}"/><rect width="1" height="1" x="55" y="27" fill="${B}"/><rect width="1" height="1" x="6" y="48" fill="${B}"/><rect width="1" height="1" x="14" y="55" fill="${B}"/><rect width="1" height="1" x="30" y="50" fill="${B}"/><rect width="1" height="1" x="41" y="58" fill="${B}"/><rect width="1" height="1" x="58" y="48" fill="${B}"/><rect width="1" height="1" x="11" y="11" fill="${B}"/><rect width="1" height="1" x="33" y="33" fill="${B}"/><rect width="1" height="1" x="53" y="53" fill="${B}"/></svg>`)
+  },
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     10 NEW — Apple-professional patterns
+     ═══════════════════════════════════════════════════════════════════════ */
+
+  /* ── Dot Grid (macOS Sonoma wallpaper texture) ───────────────────────── */
+  "dot-grid": {
+    size: "20px 20px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"><circle cx="10" cy="10" r="0.6" fill="${B}"/><circle cx="0" cy="0" r="0.6" fill="${B}"/><circle cx="20" cy="0" r="0.6" fill="${B}"/><circle cx="0" cy="20" r="0.6" fill="${B}"/><circle cx="20" cy="20" r="0.6" fill="${B}"/></svg>`)
+  },
+
+  /* ── Vertical Stripes (minimal partition lines) ─────────────────────── */
+  "stripe-v": {
+    size: "48px 100px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="100"><rect x="0" y="0" width="0.5" height="100" fill="${B}"/><rect x="24" y="0" width="0.5" height="100" fill="${B}"/></svg>`)
+  },
+
+  /* ── Chevron / Herringbone ──────────────────────────────────────────── */
+  chevron: {
+    size: "40px 32px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="32"><polyline points="0,16 20,4 40,16" fill="none" stroke="${B}" stroke-width="0.5"/><polyline points="0,28 20,16 40,28" fill="none" stroke="${B}" stroke-width="0.35"/></svg>`)
+  },
+
+  /* ── Sine Wave ──────────────────────────────────────────────────────── */
+  sine: {
+    size: "80px 32px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="80" height="32"><path d="M0 16 Q20 4 40 16 Q60 28 80 16" fill="none" stroke="${B}" stroke-width="0.45"/></svg>`)
+  },
+
+  /* ── Concentric Rings ───────────────────────────────────────────────── */
+  concentric: {
+    size: "72px 72px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="72" height="72"><circle cx="36" cy="36" r="8" fill="none" stroke="${B}" stroke-width="0.4"/><circle cx="36" cy="36" r="18" fill="none" stroke="${B}" stroke-width="0.3"/><circle cx="36" cy="36" r="28" fill="none" stroke="${B}" stroke-width="0.25"/></svg>`)
+  },
+
+  /* ── Triangular Tessellation ────────────────────────────────────────── */
+  triangles: {
+    size: "48px 42px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="48" height="42"><polygon points="12,4 24,21 0,21" fill="none" stroke="${B}" stroke-width="0.4"/><polygon points="36,4 48,21 24,21" fill="none" stroke="${B}" stroke-width="0.4"/><polygon points="24,38 36,21 12,21" fill="none" stroke="${B}" stroke-width="0.4"/></svg>`)
+  },
+
+  /* ── Diamond Grid ───────────────────────────────────────────────────── */
+  diamond: {
+    size: "36px 36px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><polygon points="18,2 34,18 18,34 2,18" fill="none" stroke="${B}" stroke-width="0.4"/></svg>`)
+  },
+
+  /* ── Dashed Rules (notebook / journal lines) ────────────────────────── */
+  dash: {
+    size: "200px 28px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="200" height="28"><line x1="0" y1="14" x2="60" y2="14" stroke="${B}" stroke-width="0.5"/><line x1="80" y1="14" x2="140" y2="14" stroke="${B}" stroke-width="0.5"/><line x1="160" y1="14" x2="200" y2="14" stroke="${B}" stroke-width="0.5"/></svg>`)
+  },
+
+  /* ── Plus Marks (medical / scientific precision) ────────────────────── */
+  plus: {
+    size: "28px 28px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28"><line x1="14" y1="6" x2="14" y2="22" stroke="${B}" stroke-width="0.5"/><line x1="6" y1="14" x2="22" y2="14" stroke="${B}" stroke-width="0.5"/></svg>`)
+  },
+
+  /* ── Orbital Rings ──────────────────────────────────────────────────── */
+  orbit: {
+    size: "90px 90px",
+    mask: svg2url(`<svg xmlns="http://www.w3.org/2000/svg" width="90" height="90"><ellipse cx="45" cy="45" rx="36" ry="14" fill="none" stroke="${B}" stroke-width="0.35" transform="rotate(-30 45 45)"/><ellipse cx="45" cy="45" rx="36" ry="14" fill="none" stroke="${B}" stroke-width="0.35" transform="rotate(30 45 45)"/><ellipse cx="45" cy="45" rx="36" ry="14" fill="none" stroke="${B}" stroke-width="0.35" transform="rotate(90 45 45)"/><circle cx="45" cy="45" r="4" fill="${B}" opacity="0.6"/></svg>`)
   },
 };

@@ -4,6 +4,7 @@ import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Disc3, Github, Li
 import Title from "../components/Main/Title.jsx";
 import Subtitle from "../components/Main/Subtitle.jsx";
 import MainImage from "../components/Main/MainImage.jsx";
+import { useDominantColor } from "@shared";
 import "./MainV2.css";
 
 const SOUNDCLOUD_URL = "https://soundcloud.com/nuh-demir-210070335/sets/playlist";
@@ -131,6 +132,7 @@ const MainV2 = ({ onIsPlayingChange }) => {
 
   const nowName = track?.title || "SoundCloud Playlist";
   const nowArt = track?.artwork_url;
+  const glowColor = useDominantColor(nowArt || null);
 
   const total = playlist.length;
   const prevIdx = total > 1 ? (index - 1 + total) % total : -1;
@@ -146,8 +148,9 @@ const MainV2 = ({ onIsPlayingChange }) => {
   return (
     <>
       <section className="mn2">
+        <div className="mn2__glow" style={{ "--glow-color": glowColor }} />
         <div className="mn2__top">
-          <MainImage />
+          <MainImage isPlaying={isPlaying} />
         </div>
 
         <div className="mn2__body">

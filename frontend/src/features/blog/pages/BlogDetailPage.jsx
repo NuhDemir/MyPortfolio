@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useScrollReveal } from "@shared";
 import { ArrowLeft } from "lucide-react";
-import { LoadingSpinner } from "@shared";
+import { LoadingSpinner, useDominantColor } from "@shared";
 import { CommentSection } from "@features/blog";
 import { useBlogDetail } from "../hooks/useBlogDetail.js";
 import {
@@ -30,6 +28,8 @@ const BlogDetailPage = () => {
     };
   }, [blog]);
 
+  const glowColor = useDominantColor(metaData?.thumbnail);
+
   if (loading && !blog) {
     return (
       <main className="blog-page">
@@ -52,26 +52,19 @@ const BlogDetailPage = () => {
     );
   }
 
-  const rev0 = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
-  const rev1 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
-  const rev2 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.15 });
-  const rev3 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
-  const rev4 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.25 });
-
   return (
     <main className="blog-page">
+      <div className="blog-page__glow" style={{ "--glow-color": glowColor }} />
       <div className="blog-page__container">
-        <motion.div {...rev0}>
-          <Link to="/blog" className="blog-detail__back">
-            <ArrowLeft size={16} />
-            Blog'a don
-          </Link>
-        </motion.div>
+        <Link to="/blog" className="blog-detail__back">
+          <ArrowLeft size={16} />
+          Blog'a don
+        </Link>
 
-        <motion.header className={`blog-hero ${metaData.thumbnail ? "blog-hero--has-image" : ""}`} {...rev1}>
+        <header className={`blog-hero ${metaData.thumbnail ? "blog-hero--has-image" : ""}`}>
           {metaData.thumbnail && (
             <div className="blog-hero__bg">
-              <img src={metaData.thumbnail} alt={blog.title} className="blog-hero__img" />
+              <img src={metaData.thumbnail} alt={blog.title} className="blog-hero__img" crossOrigin="anonymous" />
               <div className="blog-hero__overlay" />
             </div>
           )}
@@ -94,14 +87,14 @@ const BlogDetailPage = () => {
               </div>
             )}
           </div>
-        </motion.header>
+        </header>
 
-        <motion.section className="blog-detail__layout" {...rev2}>
+        <section className="blog-detail__layout">
           <article className="blog-detail__content"
             dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} />
-        </motion.section>
+        </section>
 
-        <motion.section className="blog-detail__meta" {...rev3}>
+        <section className="blog-detail__meta">
           <div className="blog-detail__card">
             <h2>Icerik Kunyesi</h2>
             <ul>
@@ -111,12 +104,12 @@ const BlogDetailPage = () => {
               <li><span>Veri Kaynagi</span><strong>{dataSource === "live" ? "Canli Sunucu" : "Lokal Onbellek"}</strong></li>
             </ul>
           </div>
-        </motion.section>
+        </section>
 
         {(blog._id || blog.id) && (
-          <motion.div className="blog-detail__layout" {...rev4}>
+          <div className="blog-detail__layout">
             <CommentSection blogId={blog._id || blog.id} />
-          </motion.div>
+          </div>
         )}
       </div>
     </main>

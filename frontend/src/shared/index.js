@@ -14,6 +14,7 @@ export { useBackendKeepAlive } from "./hooks/useBackendKeepAlive.js";
 export { default as useAboutModalGsapAnimation } from "./hooks/useAboutModalGsapAnimation.js";
 export { useModalAnimation, overlayVariants, panelSlideDown } from "./hooks/useModalAnimation.js";
 export { useScrollReveal, revealVariants } from "./hooks/useScrollReveal.js";
+export { useDominantColor } from "./hooks/useDominantColor.js";
 export { default as Lightbox } from "./ui/Lightbox/Lightbox.jsx";
 export { default as BeforeAfterSlider } from "./ui/BeforeAfterSlider/BeforeAfterSlider.jsx";
 export { default as Reveal } from "./ui/Reveal/Reveal.jsx";

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { useScrollReveal } from "@shared";
+import { useDominantColor } from "@shared";
 import Lightbox from "@shared/ui/Lightbox/Lightbox.jsx";
 import HoverVideo from "@shared/ui/HoverVideo/HoverVideo.jsx";
 import { useProjectData } from "../hooks/useProjectData.js";
@@ -63,13 +62,12 @@ const ProjectDetailsPage = () => {
     setLightbox({ open: true, url: item.url, alt: item.alt || "" });
   }, []);
 
-  const revSection = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
-  const revCtx = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
-  const revBento = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
-  const revProcess = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 });
-  const revGallery = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 });
-  const revDeep = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.5 });
-  const revFooter = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.6 });
+  const heroMediaForGlow = useMemo(() => {
+    if (!project) return null;
+    const media = getProjectHeroMedia(project);
+    return media.heroImageUrl || media.thumbnailUrl || null;
+  }, [project]);
+  const glowColor = useDominantColor(heroMediaForGlow);
 
   if (!project) {
     return (
@@ -96,13 +94,14 @@ const ProjectDetailsPage = () => {
     <>
       <ProjectSEO project={project} />
       <main className="prj-detail">
+        <div className="prj-detail__glow" style={{ "--glow-color": glowColor }} />
         <header className="prj-detail__topbar">
           <button type="button" className="prj-detail__back" onClick={() => navigate("/projects")}>
             ← Projelere Don
           </button>
         </header>
 
-        <motion.section className="prj-detail__hero" {...revSection}>
+        <section className="prj-detail__hero">
           <div className="prj-detail__hero-left">
             <div className="prj-detail__kickers">
               {featured && <span className="prj-detail__kicker prj-detail__kicker--feat">Featured</span>}
@@ -148,35 +147,33 @@ const ProjectDetailsPage = () => {
               />
             ) : null}
           </div>
-        </motion.section>
+        </section>
 
-        <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
-          <ContextBar
-            project={project}
-            expanded={contextExpanded}
-            onToggle={() => setContextExpanded((v) => !v)}
-          />
-        </motion.div>
+        <ContextBar
+          project={project}
+          expanded={contextExpanded}
+          onToggle={() => setContextExpanded((v) => !v)}
+        />
 
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 })}>
+        <section>
           <BentoGrid project={project} />
-        </motion.section>
+        </section>
 
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 })}>
+        <section>
           <ProcessGrid project={project} onLightbox={openLightbox} />
-        </motion.section>
+        </section>
 
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 })}>
+        <section>
           <ProjectGallery project={project} onLightbox={openLightbox} />
-        </motion.section>
+        </section>
 
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.5 })}>
+        <section>
           <DeepDive project={project} />
-        </motion.section>
+        </section>
 
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.6 })}>
+        <section>
           <ProjectFooter project={project} nextProject={prevNext.next} prevProject={prevNext.prev} />
-        </motion.section>
+        </section>
 
         <Lightbox
           open={lightbox.open}

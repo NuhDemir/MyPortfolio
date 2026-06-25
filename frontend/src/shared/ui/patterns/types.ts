@@ -15,7 +15,17 @@ export type PatternType =
   | "diagonal"
   | "gradient-mesh"
   | "grid-fine"
-  | "noise";
+  | "noise"
+  | "dot-grid"
+  | "stripe-v"
+  | "chevron"
+  | "sine"
+  | "concentric"
+  | "triangles"
+  | "diamond"
+  | "dash"
+  | "plus"
+  | "orbit";
 
 export type PatternIntensity = "low" | "medium" | "high";
 
