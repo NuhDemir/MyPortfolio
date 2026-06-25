@@ -1,9 +1,8 @@
 // src/components/common/Modal.jsx
 import React, { useEffect, useRef } from "react";
 import { IoClose } from "react-icons/io5";
-import "@shared/styles/common/Modal.css";
-import useAboutModalGsapAnimation from "@shared/hooks/useAboutModalGsapAnimation.js";
-import { PatternBackground } from "@shared/ui/patterns";
+import "@shared/design-system/components/Modal.css";
+import { useAboutModalGsapAnimation, PatternBackground } from "@shared";
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   const modalRef = useRef(null);

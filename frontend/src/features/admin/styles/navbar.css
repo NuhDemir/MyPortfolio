@@ -1,0 +1,262 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ADMIN NAVBAR v2 — Floating Pill (matches NavbarV2 glassmorphism)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Layout (Floating Pill) ────────────────────────────────────────────── */
+.anv2 {
+  position: fixed;
+  top: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  height: 3.5rem;
+  width: max-content;
+  max-width: 92vw;
+
+  background-color: var(--ds-surface-alpha, rgba(255, 255, 255, 0.7));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--ds-border-alpha, rgba(0, 0, 0, 0.08));
+  border-radius: 9999px;
+
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ds-space-3);
+  transition: top var(--ds-motion-base) var(--ds-ease-standard);
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.1);
+}
+
+.anv2--hidden {
+  top: -5rem;
+}
+
+.dark .anv2 {
+  background-color: var(--ds-surface-alpha, rgba(15, 15, 15, 0.7));
+  border-color: var(--ds-border-alpha, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Inner grid ────────────────────────────────────────────────────────── */
+.anv2__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+}
+
+/* ── Logo ──────────────────────────────────────────────────────────────── */
+.anv2__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--ds-fg);
+  color: var(--ds-bg);
+  text-decoration: none;
+  flex-shrink: 0;
+  transition: transform var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.anv2__logo:hover {
+  transform: scale(0.95);
+}
+
+/* ── Nav links ─────────────────────────────────────────────────────────── */
+.anv2__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-1);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.anv2__links::-webkit-scrollbar { display: none; }
+
+.anv2__link {
+  position: relative;
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: 0.875rem;
+  color: var(--ds-muted);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: 9999px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.anv2__link:hover {
+  color: var(--ds-fg);
+}
+
+.anv2__link--active {
+  color: var(--ds-fg);
+}
+
+.anv2__link-text {
+  position: relative;
+  z-index: 10;
+}
+
+/* Framer Motion pill background */
+.anv2__link-bg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--ds-surface);
+  border-radius: 9999px;
+  z-index: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Actions (right side) ──────────────────────────────────────────────── */
+.anv2__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  margin-left: var(--ds-space-2);
+}
+
+.anv2__theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--ds-fg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-ease-standard);
+  flex-shrink: 0;
+}
+
+.anv2__theme-btn:hover {
+  background-color: var(--ds-surface);
+}
+
+.anv2__user {
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-muted);
+  white-space: nowrap;
+}
+
+.anv2__logout {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-xs);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: var(--ds-space-1) var(--ds-space-2);
+  border-radius: 9999px;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard),
+              background var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.anv2__logout:hover {
+  color: var(--ds-error, #ef4444);
+  background: var(--ds-surface);
+}
+
+/* ── Mobile hamburger ──────────────────────────────────────────────────── */
+.anv2__hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ds-fg);
+  transition: background-color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.anv2__hamburger:hover {
+  background-color: var(--ds-surface);
+}
+
+/* ── Mobile menu overlay ───────────────────────────────────────────────── */
+.anv2__mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background-color: var(--ds-bg);
+  z-index: 999;
+  padding: 5rem var(--ds-container-gutter) var(--ds-space-8);
+  overflow-y: auto;
+}
+
+.anv2__mobile-overlay--open {
+  display: block;
+}
+
+.anv2__mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.anv2__mobile-link {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: 1.5rem;
+  color: var(--ds-muted);
+  padding: var(--ds-space-3);
+  border-radius: var(--ds-radius-lg);
+  background: transparent;
+  border: none;
+  text-align: left;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.anv2__mobile-link:hover,
+.anv2__mobile-link--active {
+  color: var(--ds-fg);
+}
+
+.anv2__mobile-link--logout {
+  color: var(--ds-error, #ef4444);
+}
+
+.anv2__mobile-divider {
+  height: 1px;
+  background: var(--ds-border-soft);
+  margin: var(--ds-space-2) 0;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  .anv2__links,
+  .anv2__user,
+  .anv2__logout {
+    display: none;
+  }
+
+  .anv2__hamburger {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .anv2 {
+    max-width: 96vw;
+  }
+}

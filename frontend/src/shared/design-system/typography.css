@@ -1,0 +1,128 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TYPOGRAPHY v2 — Font faces, display & body scale utilities
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Self-hosted @font-face ────────────────────────────────────────────── */
+@font-face { font-display:swap;font-family:"Amatic SC";font-style:normal;font-weight:400;src:url("/fonts/amatic-sc-v27-cyrillic_latin-regular.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Amatic SC";font-style:normal;font-weight:700;src:url("/fonts/amatic-sc-v27-cyrillic_latin-700.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:100;src:url("/fonts/outfit-v14-latin-100.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:200;src:url("/fonts/outfit-v14-latin-200.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:300;src:url("/fonts/outfit-v14-latin-300.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:400;src:url("/fonts/outfit-v14-latin-regular.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:500;src:url("/fonts/outfit-v14-latin-500.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:600;src:url("/fonts/outfit-v14-latin-600.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:700;src:url("/fonts/outfit-v14-latin-700.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:800;src:url("/fonts/outfit-v14-latin-800.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Outfit";font-style:normal;font-weight:900;src:url("/fonts/outfit-v14-latin-900.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Space Grotesk";font-style:normal;font-weight:300;src:url("/fonts/space-grotesk-v21-latin_latin-ext-300.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Space Grotesk";font-style:normal;font-weight:400;src:url("/fonts/space-grotesk-v21-latin_latin-ext-regular.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Space Grotesk";font-style:normal;font-weight:500;src:url("/fonts/space-grotesk-v21-latin_latin-ext-500.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Space Grotesk";font-style:normal;font-weight:600;src:url("/fonts/space-grotesk-v21-latin_latin-ext-600.woff2") format("woff2") }
+@font-face { font-display:swap;font-family:"Space Grotesk";font-style:normal;font-weight:700;src:url("/fonts/space-grotesk-v21-latin_latin-ext-700.woff2") format("woff2") }
+
+/* ── Display (Nike Futura ND approximation) ────────────────────────────── */
+.ds-display {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  font-size: var(--ds-text-4xl);
+  line-height: var(--ds-leading-tight);
+  letter-spacing: var(--ds-tracking-display);
+  text-transform: uppercase;
+}
+
+.ds-display--md {
+  font-size: var(--ds-text-3xl);
+}
+
+.ds-display--sm {
+  font-size: var(--ds-text-2xl);
+}
+
+/* ── Heading Scale ─────────────────────────────────────────────────────── */
+.ds-heading-1 {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-display);
+  font-size: var(--ds-text-2xl);
+  line-height: var(--ds-leading-snug);
+}
+
+.ds-heading-2 {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-xl);
+  line-height: var(--ds-leading-snug);
+}
+
+.ds-heading-3 {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-lg);
+  line-height: var(--ds-leading-normal);
+}
+
+/* ── Body Scale ────────────────────────────────────────────────────────── */
+.ds-body {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-body);
+  font-size: var(--ds-text-base);
+  line-height: var(--ds-leading-body);
+}
+
+.ds-body--medium {
+  font-weight: var(--ds-weight-medium);
+}
+
+.ds-body--sm {
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-normal);
+}
+
+.ds-body--lg {
+  font-size: var(--ds-text-lg);
+  line-height: var(--ds-leading-body);
+}
+
+/* ── Utility ───────────────────────────────────────────────────────────── */
+.ds-caption {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-normal);
+  color: var(--ds-muted);
+}
+
+.ds-meta {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-body);
+  font-size: var(--ds-text-xs);
+  line-height: var(--ds-leading-normal);
+  color: var(--ds-meta);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-tracking-wide);
+}
+
+.ds-mono {
+  font-family: var(--ds-font-mono);
+  font-size: var(--ds-text-sm);
+  line-height: var(--ds-leading-normal);
+}
+
+.ds-link {
+  font-weight: var(--ds-weight-medium);
+  text-decoration: none;
+  color: var(--ds-fg);
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.ds-link:hover {
+  color: var(--ds-muted);
+}
+
+.ds-link--accent {
+  color: var(--ds-info);
+}
+
+.ds-link--accent:hover {
+  color: var(--ds-info);
+  opacity: 0.8;
+}

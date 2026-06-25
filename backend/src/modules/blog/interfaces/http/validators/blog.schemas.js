@@ -14,9 +14,7 @@ const baseBlogSchema = {
       z.array(z.string()),
     ])
     .optional(),
-  category: z
-    .enum(["geliştirme", "kişisel", "teknoloji", "tasarım", "eğitim", "diğer"])
-    .optional(),
+  category: z.string().optional(),
   isPublished: z.coerce.boolean().optional(),
   status: z.enum(["draft", "published", "archived", "scheduled"]).optional(),
 };

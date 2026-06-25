@@ -1,0 +1,54 @@
+.bas {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-3);
+}
+
+.bas__frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border);
+  background: var(--ds-surface);
+}
+
+.bas__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+}
+
+.bas__overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow: hidden;
+  border-right: 2px solid var(--ds-accent);
+}
+
+.bas__handle {
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  background: var(--ds-accent);
+  border: 2px solid var(--ds-bg);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: var(--ds-elev-ring);
+}
+
+.bas__range {
+  width: 100%;
+  accent-color: var(--ds-accent);
+  cursor: pointer;
+}

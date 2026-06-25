@@ -1,0 +1,12 @@
+export { DEFAULT_ABOUT_CONTENT, cloneDefaultAboutContent } from "./data/defaultAboutContent.js";
+export { useAboutData } from "./hooks/useAboutData.js";
+export { useAboutAnimations } from "./hooks/useAboutAnimations.js";
+export { Stats } from "./components/Stats.jsx";
+export { LanguageChart, MetricsChart } from "./components/Charts.jsx";
+export { Bio } from "./components/Bio.jsx";
+export { Skills } from "./components/Skills.jsx";
+export { Services } from "./components/Services.jsx";
+export { ResourcesTeaser } from "./components/ResourcesTeaser.jsx";
+export { getServicesData } from "./services/servicesDataService.js";
+export { Timeline } from "./components/Timeline.jsx";
+export { CTA } from "./components/CTA.jsx";

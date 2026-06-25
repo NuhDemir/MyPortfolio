@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "@shared/styles/common/ParticleSystem.css";
+import "@shared/design-system/components/ParticleSystem.css";
 
 // Animasyon döngüsünü daha okunaklı hale getirmek için yardımcı fonksiyonlar
 const updateParticle = (

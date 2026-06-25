@@ -1,0 +1,26 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   CSS RESET v2 — Solid, comprehensive foundation
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility;scroll-behavior:smooth}
+body{font-family:var(--ds-font-body);font-size:var(--ds-text-base);font-weight:var(--ds-weight-body);line-height:var(--ds-leading-body);color:var(--ds-fg);background-color:var(--ds-bg);transition:background-color var(--ds-motion-base) var(--ds-ease-standard),color var(--ds-motion-base) var(--ds-ease-standard);min-height:100vh}
+img,video,canvas{display:block;max-width:100%;height:auto}
+img{-webkit-user-drag:none}
+a{color:var(--ds-fg);text-decoration:none;font-weight:var(--ds-weight-medium);transition:color var(--ds-motion-fast) var(--ds-ease-standard)}
+a:hover{color:var(--ds-muted)}
+h1,h2,h3,h4,h5,h6{font-weight:var(--ds-weight-display);line-height:var(--ds-leading-tight);color:var(--ds-fg)}
+h1{font-size:var(--ds-text-3xl);letter-spacing:var(--ds-tracking-display)}
+h2{font-size:var(--ds-text-2xl)}
+h3{font-size:var(--ds-text-xl)}
+h4{font-size:var(--ds-text-lg)}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit}
+button:focus-visible{outline:var(--ds-focus-ring);outline-offset:2px}
+input,textarea,select{font-family:inherit;font-size:inherit;color:inherit;border:1px solid var(--ds-border);background-color:var(--ds-surface);transition:border-color var(--ds-motion-fast) var(--ds-ease-standard)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--ds-border-active);box-shadow:var(--ds-focus-ring)}
+::selection{background-color:var(--ds-fg);color:var(--ds-bg)}
+ul,ol{list-style:none}
+fieldset{border:none}
+hr{border:none;border-top:1px solid var(--ds-border-soft);margin:var(--ds-space-8) 0}
+:target{scroll-margin-top:var(--ds-navbar-height)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}

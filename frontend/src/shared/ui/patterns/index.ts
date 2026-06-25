@@ -6,6 +6,13 @@
 // Main component
 export { PatternBackground } from "./components/PatternBackground";
 
+// Pattern presets
+export {
+  PATTERN_VARIANTS,
+  VINTAGE_NEUBRUTAL_PATTERN_VARIANTS,
+  PATTERN_PRESETS,
+} from "./patternPresets.js";
+
 // Types
 export type {
     PatternType,

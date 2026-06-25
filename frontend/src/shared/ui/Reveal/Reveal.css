@@ -1,0 +1,11 @@
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity var(--ds-motion-base) var(--ds-ease-out),
+              transform var(--ds-motion-base) var(--ds-ease-out);
+}
+
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,0 +1,52 @@
+/* ── Blog Filters ────────────────────────────────────────────────────────── */
+.blog-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+.blog-filters__search {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  flex: 1;
+  min-width: 180px;
+  padding: 0 var(--ds-space-3);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-bg);
+  color: var(--ds-muted);
+}
+
+.blog-filters__search:focus-within { border-color: var(--ds-border-active); }
+
+.blog-filters__input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 0;
+  font-size: var(--ds-text-sm);
+  color: var(--ds-fg);
+  outline: none;
+}
+
+.blog-filters__clear {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--ds-muted);
+  cursor: pointer;
+}
+
+.blog-filters__select,
+.blog-filters__date {
+  padding: 8px 12px;
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  font-size: var(--ds-text-sm);
+  outline: none;
+}

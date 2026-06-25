@@ -1,0 +1,43 @@
+{
+  "services": [
+    {
+      "id": "frontend",
+      "title": "Frontend Mimarisi",
+      "image": "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "problem": "Modern web uygulamaları sıfır layout shift, 60 FPS ve SEO 100/100 ile çalışmak zorunda. Hydration overhead, bundle size ve state yönetimi karmaşası ürün kalitesini düşürür.",
+      "solution": "React 19 Server Components ve Next.js 16 App Router ile FCP 0.8s altı, Lighthouse 100/100 SEO skorlu uygulamalar geliştiriyorum. Zustand + TanStack Query ile optimize state yönetimi, Tailwind CSS 4 ile atomic tasarım sistemleri, GSAP 3 ile native-thread animasyonlar.",
+      "tech": ["React 19", "Next.js 16", "TypeScript", "Tailwind CSS 4", "Zustand", "TanStack Query", "GSAP 3"],
+      "links": [{ "label": "Bi Sepet E-Commerce", "url": "https://github.com/NuhDemir" }]
+    },
+    {
+      "id": "backend",
+      "title": "Backend Mühendisliği",
+      "image": "https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "problem": "API latency, veritabanı darboğazları, race condition'lar ve dağıtık sistemlerde veri tutarlılığı — her biri iş mantığını sessizce baltalar.",
+      "solution": "NestJS 11, Node.js 20 ve Python FastAPI ile Modular Monolith ve Clean Architecture prensiplerinde backend sistemleri kuruyorum. BullMQ + Redis ile 100ms altı API latency, Prisma + PostgreSQL ile tip-güvenli veritabanı katmanı.",
+      "tech": ["NestJS 11", "Node.js 20", "Python FastAPI", "PostgreSQL", "MongoDB", "Redis", "BullMQ", "Docker"],
+      "links": [
+        { "label": "Language Core API", "url": "https://github.com/NuhDemir" },
+        { "label": "ClubMS Backend", "url": "https://github.com/NuhDemir" }
+      ]
+    },
+    {
+      "id": "mobile",
+      "title": "Mobil Uygulama Geliştirme",
+      "image": "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "problem": "iOS ve Android için ayrı kod tabanları, UI thread blokajları ve gecikmeli native etkileşimler — cross-platform geliştirmenin klasik tuzakları.",
+      "solution": "React Native 0.81 + Expo 54 ile tek kod tabanından iOS/Android uygulamaları. Reanimated 4 ile UI thread'de 60 FPS native animasyonlar, MMKV ile senkron state persistence.",
+      "tech": ["React Native", "Expo 54", "Reanimated 4", "MMKV", "Zustand"],
+      "links": [{ "label": "Intenva Mülakat Asistanı", "url": "https://github.com/NuhDemir" }]
+    },
+    {
+      "id": "architecture",
+      "title": "Mimari & Altyapı",
+      "image": "https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "problem": "Spagetti kod, test edilemez modüller ve manuel deployment — büyüyen projelerde teknik borç katlanarak artar.",
+      "solution": "Feature-Sliced Design (FSD), Domain-Driven Design ve Modular Monolith mimarileriyle sürdürülebilir kod tabanları. GitHub Actions CI/CD, Docker containerization, JWT rotasyonlu güvenlik katmanı, Swagger/OpenAPI dokümantasyonu.",
+      "tech": ["Docker", "GitHub Actions", "JWT", "Swagger", "Prisma", "Zod", "FSD", "DDD"],
+      "links": [{ "label": "Solar Panel Monitoring", "url": "https://github.com/NuhDemir" }]
+    }
+  ]
+}

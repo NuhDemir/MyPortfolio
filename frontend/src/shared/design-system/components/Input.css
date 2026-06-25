@@ -1,0 +1,95 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   INPUT — Form elements
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ds-input {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  width: 100%;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-body);
+  color: var(--ds-fg);
+  background-color: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  padding: 12px 16px;
+  min-height: 48px;
+  transition: var(--ds-transition-border), box-shadow var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.ds-input::placeholder {
+  color: var(--ds-muted);
+}
+
+.ds-input:hover {
+  border-color: var(--ds-fg);
+}
+
+.ds-input:focus {
+  outline: none;
+  border-color: var(--ds-fg);
+  box-shadow: var(--ds-focus-ring);
+}
+
+.ds-input--error {
+  border-color: var(--ds-danger);
+}
+
+.ds-input--error:focus {
+  box-shadow: 0 0 0 2px var(--ds-danger);
+}
+
+/* ── Search variant ────────────────────────────────────────────────────── */
+
+.ds-input--search {
+  border-radius: var(--ds-radius-lg);
+  background-color: var(--ds-surface);
+  border: none;
+}
+
+/* ── Textarea ──────────────────────────────────────────────────────────── */
+
+.ds-textarea {
+  composes: ds-input;
+  min-height: 120px;
+  resize: vertical;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* ── Select ────────────────────────────────────────────────────────────── */
+
+.ds-select {
+  composes: ds-input;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23707072' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+/* ── Field wrapper ─────────────────────────────────────────────────────── */
+
+.ds-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.ds-field__label {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-fg);
+}
+
+.ds-field__error {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-danger);
+}
+
+.ds-field__hint {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-muted);
+}

@@ -1,0 +1,48 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TAG / BADGE — Pill-shaped labels
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ds-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-xs);
+  line-height: 1;
+  padding: 4px 12px;
+  border-radius: var(--ds-radius-pill);
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: var(--ds-tracking-wide);
+}
+
+.ds-tag--default {
+  background-color: var(--ds-surface);
+  color: var(--ds-fg);
+}
+
+.ds-tag--accent {
+  background-color: var(--ds-accent);
+  color: var(--ds-accent-on);
+}
+
+.ds-tag--success {
+  background-color: var(--ds-success-muted);
+  color: var(--ds-success);
+}
+
+.ds-tag--warn {
+  background-color: var(--ds-warn-muted);
+  color: var(--ds-warn);
+}
+
+.ds-tag--danger {
+  background-color: var(--ds-danger-muted);
+  color: var(--ds-danger);
+}
+
+.ds-tag--info {
+  background-color: var(--ds-info-muted);
+  color: var(--ds-info);
+}

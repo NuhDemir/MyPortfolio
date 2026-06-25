@@ -8,13 +8,9 @@ import exportBlogsJsonUseCase from "../../../application/use-cases/exportBlogsJs
 
 export const createBlogController = (dependencies) => {
   const list = asyncHandler(async (req, res) => {
-    const blogs = await listBlogsUseCase(
-      {
-        isAdmin: req.user?.role === "admin",
-      },
-      dependencies,
-    );
-
+    const isAdmin = req.user?.role === "admin";
+    const blogs = await listBlogsUseCase({ isAdmin }, dependencies);
+    console.log(`[Blog Controller] List returned ${blogs.length} blogs (admin=${isAdmin})`);
     res.json(blogs);
   });
 
@@ -36,7 +32,15 @@ export const createBlogController = (dependencies) => {
       author: req.user.id,
     };
 
-    // Handle file upload or URL
+    console.log("[Blog Controller] Create payload received:", {
+      title: payload.title,
+      contentLength: payload.content?.length,
+      category: payload.category,
+      tags: payload.tags,
+      isPublished: payload.isPublished,
+      hasThumbnail: !!req.file?.path || !!req.body.thumbnailUrl,
+    });
+
     if (req.file?.path) {
       payload.thumbnail = req.file.path;
     } else if (req.body.thumbnailUrl) {
@@ -44,6 +48,7 @@ export const createBlogController = (dependencies) => {
     }
 
     const blog = await createBlogUseCase(payload, dependencies);
+    console.log("[Blog Controller] Blog created:", { id: blog.id, slug: blog.slug, title: blog.title });
     res.status(201).json(blog);
   });
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Code, Briefcase } from "lucide-react";
-import { useUserRole } from "@core/context/UserRoleContext.jsx";
-import "@shared/styles/common/RoleSelectionModal.css";
+import { useUserRole } from "@core";
+import "@shared/design-system/components/RoleSelectionModal.css";
 
 const RoleSelectionModal = ({ isOpen, onClose }) => {
   const { selectRole } = useUserRole();

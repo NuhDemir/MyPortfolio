@@ -1,0 +1,266 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   NAVBAR v2 — Framer-style Floating Pill (Glassmorphism)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Layout (Floating Pill) ────────────────────────────────────────────── */
+.nv2 {
+  position: fixed;
+  top: 1.5rem; /* Yüzen görünüm için üstten boşluk */
+  left: 50%;
+  transform: translateX(-50%); /* Tam merkeze hizalama */
+  z-index: 1000;
+  height: 3.5rem; /* Butonların rahat nefes alacağı yükseklik */
+  width: max-content; /* Sadece içeriği kadar genişle */
+  max-width: 90vw;
+  
+  /* Glassmorphism & Pill UI */
+  background-color: var(--ds-surface-alpha, rgba(255, 255, 255, 0.6));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--ds-border-alpha, rgba(0, 0, 0, 0.08));
+  border-radius: 9999px; /* Tam yuvarlak hap görünümü */
+  
+  display: flex;
+  align-items: center;
+  padding: 0 var(--ds-space-3);
+  transition: top var(--ds-motion-base) var(--ds-ease-standard);
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* Yukarı doğru kaybolma efekti (transform override yapmamak için top değişir) */
+.nv2--hidden {
+  top: -5rem; 
+}
+
+.dark .nv2 {
+  background-color: var(--ds-surface-alpha, rgba(15, 15, 15, 0.6));
+  border-color: var(--ds-border-alpha, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* ── Inner grid ────────────────────────────────────────────────────────── */
+.nv2__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+}
+
+/* ── Logo ──────────────────────────────────────────────────────────────── */
+.nv2__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--ds-surface);
+  color: var(--ds-bg);
+  cursor: pointer;
+  transition: transform var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.nv2__logo:hover {
+  transform: scale(0.95);
+}
+
+.nv2__logo-icon {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-bold);
+  font-size: var(--ds-text-base);
+  line-height: 1;
+}
+
+.nv2__logo-img {
+  height: 32px;
+  width: auto;
+  display: block;
+}
+
+/* Text logoyu minimalist tasarımda kaldırdık, sadece ikon kaldı */
+.nv2__logo-text {
+  display: none; 
+}
+
+/* ── Nav links ─────────────────────────────────────────────────────────── */
+.nv2__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-1);
+  list-style: none;
+}
+
+.nv2__link {
+  position: relative;
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: 0.875rem; /* Biraz daha zarif font boyutu */
+  color: var(--ds-muted);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: 9999px;
+  background: transparent !important; /* Eski arkaplan ezildi */
+  border: none;
+  cursor: pointer;
+  transition: color var(--ds-motion-fast) var(--ds-ease-standard);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nv2__link:hover {
+  color: var(--ds-fg);
+}
+
+.nv2__link--active {
+  color: var(--ds-fg);
+}
+
+/* Metnin animasyonlu bg'nin üstünde kalması için */
+.nv2__link-text {
+  position: relative;
+  z-index: 10;
+}
+
+/* Framer Motion ile hareket edecek pill arkaplanı */
+.nv2__link-bg {
+  position: absolute;
+  inset: 0;
+  background-color: var(--ds-surface); /* Aktif sekme rengi */
+  border-radius: 9999px;
+  z-index: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* ── Actions (right side) ──────────────────────────────────────────────── */
+.nv2__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  margin-left: var(--ds-space-2);
+}
+
+.nv2__theme-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: var(--ds-fg);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.nv2__theme-btn:hover {
+  background-color: var(--ds-surface);
+}
+
+/* ── Mobile hamburger ──────────────────────────────────────────────────── */
+.nv2__hamburger {
+  display: none;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.nv2__hamburger:hover {
+  background-color: var(--ds-surface);
+}
+
+.nv2__hamburger span {
+  display: block;
+  width: 16px;
+  height: 1.5px;
+  background-color: var(--ds-fg);
+  border-radius: 1px;
+  position: relative;
+  transition: background-color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.nv2__hamburger span::before,
+.nv2__hamburger span::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 1.5px;
+  background-color: var(--ds-fg);
+  border-radius: 1px;
+  left: 0;
+  transition: transform var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.nv2__hamburger span::before { top: -5px; }
+.nv2__hamburger span::after  { top: 5px; }
+
+.nv2__hamburger--open span {
+  background-color: transparent;
+}
+
+.nv2__hamburger--open span::before {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.nv2__hamburger--open span::after {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+/* ── Mobile menu overlay ───────────────────────────────────────────────── */
+.nv2__mobile-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  top: 0;
+  background-color: var(--ds-bg);
+  z-index: 999;
+  padding: 6rem var(--ds-container-gutter) var(--ds-space-8);
+  overflow-y: auto;
+}
+
+.nv2__mobile-overlay--open {
+  display: block;
+}
+
+.nv2__mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+  list-style: none;
+}
+
+.nv2__mobile-link {
+  font-family: var(--ds-font-body);
+  font-weight: var(--ds-weight-medium);
+  font-size: 1.5rem;
+  color: var(--ds-muted);
+  padding: var(--ds-space-3);
+  border-radius: var(--ds-radius-lg);
+  background: transparent;
+  border: none;
+  text-align: left;
+  transition: color var(--ds-transition-bg);
+  text-decoration: none;
+  display: block;
+  width: 100%;
+}
+
+.nv2__mobile-link:hover,
+.nv2__mobile-link--active {
+  color: var(--ds-fg);
+}
+
+/* ── Responsive ────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .nv2__links {
+    display: none;
+  }
+  .nv2__hamburger {
+    display: flex;
+  }
+}

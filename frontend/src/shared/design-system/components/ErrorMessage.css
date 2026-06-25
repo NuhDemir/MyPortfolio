@@ -1,0 +1,5 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   ERROR MESSAGE — Clean error display
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ds-error{padding:var(--ds-space-4);background:var(--ds-danger-muted);border-left:3px solid var(--ds-danger);font-family:var(--ds-font-body);font-size:var(--ds-text-sm);color:var(--ds-danger)}

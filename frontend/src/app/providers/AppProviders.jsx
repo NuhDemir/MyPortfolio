@@ -1,5 +1,5 @@
-import { ThemeProvider } from "@core/context/ThemeContext.jsx";
-import { UserRoleProvider } from "@core/context/UserRoleContext.jsx";
+import { ThemeProvider } from "@core";
+import { UserRoleProvider } from "@core";
 
 export const AppProviders = ({ children }) => (
   <ThemeProvider>

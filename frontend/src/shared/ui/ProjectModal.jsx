@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useRef, useState } from "react";
 import { X, ExternalLink, Github } from "lucide-react";
-import "@shared/styles/common/ProjectModal.css";
+import "@shared/design-system/components/ProjectModal.css";
 
 const ProjectModal = ({ project, isOpen, onClose }) => {
   const modalRef = useRef(null);

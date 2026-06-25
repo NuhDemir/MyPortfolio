@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { readStoredUser } from "../auth/userStorage";
+import { readStoredUser } from "../auth/authStorage.js";
 
 const userHasAccess = (user, allowedRoles) => {
   if (!user?.token) {

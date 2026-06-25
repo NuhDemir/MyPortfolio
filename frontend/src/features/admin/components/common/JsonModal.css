@@ -1,0 +1,226 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   JSON MODAL — Apple-style sheet, clean & responsive
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Overlay ────────────────────────────────────────────────────────────── */
+.json-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-4);
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* ── Sheet ──────────────────────────────────────────────────────────────── */
+.json-modal {
+  width: 100%;
+  max-width: 640px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-bg);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 24px 48px -12px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────────── */
+.json-modal-header {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-5) var(--ds-space-6);
+  border-bottom: 1px solid var(--ds-border-soft);
+}
+
+.json-modal-header h2 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-lg);
+  font-weight: var(--ds-weight-bold);
+  color: var(--ds-fg);
+  letter-spacing: var(--ds-tracking-display);
+  margin: 0;
+  flex: 1;
+}
+
+/* ── Close Button ───────────────────────────────────────────────────────── */
+.json-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 50%;
+  background: var(--ds-surface);
+  color: var(--ds-muted);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--ds-motion-fast) var(--ds-ease-standard),
+              color var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.json-modal-close:hover {
+  background: var(--ds-border-soft);
+  color: var(--ds-fg);
+}
+
+/* ── File Upload Label ──────────────────────────────────────────────────── */
+.json-modal-file-btn {
+  cursor: pointer;
+}
+
+.json-modal-file-btn input[type="file"] { display: none; }
+
+/* ── Body ───────────────────────────────────────────────────────────────── */
+.json-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--ds-space-5) var(--ds-space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────── */
+.json-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-4) var(--ds-space-6);
+  border-top: 1px solid var(--ds-border-soft);
+  background: var(--ds-surface-2);
+}
+
+/* ── JSON Textarea ──────────────────────────────────────────────────────── */
+.json-modal-textarea {
+  width: 100%;
+  min-height: 320px;
+  padding: var(--ds-space-4);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  color: var(--ds-fg);
+  font-family: var(--ds-font-mono);
+  font-size: 13px;
+  line-height: 1.6;
+  resize: vertical;
+  outline: none;
+  transition: border-color var(--ds-motion-fast) var(--ds-ease-standard),
+              background var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.json-modal-textarea:focus {
+  border-color: var(--ds-border-active);
+  background: var(--ds-bg);
+}
+
+.json-modal-textarea::placeholder {
+  color: var(--ds-meta);
+}
+
+/* ── JSON Code Block (Template) ─────────────────────────────────────────── */
+.json-modal-code {
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  font-family: var(--ds-font-mono);
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--ds-fg);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin: 0;
+}
+
+/* ── Template Description ───────────────────────────────────────────────── */
+.json-modal-desc {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-muted);
+  line-height: var(--ds-leading-body);
+  margin: 0;
+}
+
+/* ── Template Info Box ──────────────────────────────────────────────────── */
+.json-modal-info {
+  padding: var(--ds-space-4);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+}
+
+.json-modal-info h3 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-fg);
+  margin: 0 0 var(--ds-space-2) 0;
+}
+
+.json-modal-info ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-1);
+}
+
+.json-modal-info li {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-xs);
+  color: var(--ds-muted);
+  line-height: 1.5;
+}
+
+.json-modal-info li strong {
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-fg);
+}
+
+/* ── Responsive ─────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .json-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .json-modal {
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+  }
+
+  .json-modal-header {
+    padding: var(--ds-space-4) var(--ds-space-4);
+  }
+
+  .json-modal-body {
+    padding: var(--ds-space-4);
+  }
+
+  .json-modal-footer {
+    padding: var(--ds-space-3) var(--ds-space-4);
+    flex-direction: column;
+  }
+
+  .json-modal-footer .admin-btn {
+    width: 100%;
+  }
+
+  .json-modal-textarea {
+    min-height: 240px;
+    font-size: 12px;
+  }
+}

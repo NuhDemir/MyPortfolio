@@ -1,0 +1,34 @@
+.res-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ds-space-2);
+}
+
+.res-filter-pill {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-xs);
+  font-weight: 600;
+  color: var(--ds-muted);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: var(--ds-radius-full);
+  padding: 6px 14px;
+  cursor: pointer;
+  outline: none;
+  transition: all var(--ds-motion-fast) var(--ds-ease-standard);
+}
+
+.res-filter-pill:hover {
+  border-color: var(--ds-border-active);
+  color: var(--ds-fg);
+}
+
+.res-filter-pill.active {
+  background: var(--ds-fg);
+  color: var(--ds-bg);
+  border-color: var(--ds-fg);
+}
+
+.res-filter-pill:focus-visible {
+  box-shadow: 0 0 0 2px var(--ds-bg), 0 0 0 4px var(--ds-accent);
+}

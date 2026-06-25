@@ -31,7 +31,6 @@ const blogSchema = new mongoose.Schema({
   category: {
     type: String,
     trim: true,
-    enum: ["geliştirme", "kişisel", "teknoloji", "tasarım", "eğitim", "diğer"],
     default: "geliştirme",
   },
   author: {

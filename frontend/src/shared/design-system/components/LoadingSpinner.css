@@ -1,0 +1,11 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOADING SPINNER — Minimal Nike-style
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ds-spinner{display:flex;flex-direction:column;align-items:center;gap:var(--ds-space-3)}
+.ds-spinner__ring{width:36px;height:36px;border:3px solid var(--ds-border-soft);border-top-color:var(--ds-accent);border-radius:50%;animation:ds-spin 0.6s linear infinite}
+.ds-spinner__ring--sm{width:24px;height:24px;border-width:2px}
+.ds-spinner__ring--lg{width:50px;height:50px}
+.ds-spinner__text{font-family:var(--ds-font-body);font-size:var(--ds-text-sm);color:var(--ds-muted)}
+.ds-spinner--overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.7)}
+@keyframes ds-spin{to{transform:rotate(360deg)}}

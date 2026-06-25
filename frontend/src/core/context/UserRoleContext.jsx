@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { readStoredUser } from "@core/auth/userStorage";
+import { readStoredUser } from "../auth/authStorage.js";
 
 const UserRoleContext = createContext({
   role: null,

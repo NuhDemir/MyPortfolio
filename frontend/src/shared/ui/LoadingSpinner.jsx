@@ -1,23 +1,19 @@
-import "@shared/styles/base/components.css";
+import "@shared/design-system/components/LoadingSpinner.css";
 
-const LoadingSpinner = ({
-  message = "Yükleniyor...",
-  size = "medium",
-  overlay = false,
-}) => {
-  const spinnerSizeClass = `spinner-size-${size}`;
-  const containerClass = overlay
-    ? "loading-spinner-overlay"
-    : "loading-spinner-inline";
-
+const LoadingSpinner = ({ message = "Yükleniyor...", size = "medium", overlay = false }) => {
+  const Component = overlay ? "div" : "div";
   return (
-    <div className={containerClass} role="status" aria-live="polite">
+    <Component
+      className={overlay ? "ds-spinner--overlay" : "ds-spinner"}
+      role="status"
+      aria-live="polite"
+    >
       <div
-        className={`loading-spinner ${spinnerSizeClass}`}
+        className={`ds-spinner__ring ${size === "small" ? "ds-spinner__ring--sm" : size === "large" ? "ds-spinner__ring--lg" : ""}`}
         aria-hidden="true"
       />
-      {message && <p className="loading-message">{message}</p>}
-    </div>
+      {message && <p className="ds-spinner__text">{message}</p>}
+    </Component>
   );
 };
 

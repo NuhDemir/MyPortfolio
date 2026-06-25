@@ -3,6 +3,7 @@ import initBlogModule from "../../modules/blog/blog.module.js";
 import initProjectModule from "../../modules/project/project.module.js";
 import initCommentModule from "../../modules/comment/comment.module.js";
 import initAboutModule from "../../modules/about/about.module.js";
+import initResourceModule from "../../modules/resources/resources.module.js";
 import { createAdminDashboardRouter } from "./routes/admin-dashboard.routes.js";
 
 const modules = {
@@ -11,6 +12,7 @@ const modules = {
   project: null,
   comment: null,
   about: null,
+  resource: null,
 };
 
 export const registerRoutes = (app) => {
@@ -28,6 +30,7 @@ export const registerRoutes = (app) => {
   modules.project = initProjectModule({ authModule: modules.auth });
   modules.comment = initCommentModule({ authModule: modules.auth });
   modules.about = initAboutModule({ authModule: modules.auth });
+  modules.resource = initResourceModule({ authModule: modules.auth });
   const adminDashboardRouter = createAdminDashboardRouter({
     middleware: modules.auth.middleware,
     blogRepository: modules.blog.repositories.blogRepository,
@@ -38,6 +41,7 @@ export const registerRoutes = (app) => {
   app.use("/api/projects", modules.project.router);
   app.use("/api/comments", modules.comment.router);
   app.use("/api/about", modules.about.router);
+  app.use("/api/resources", modules.resource.router);
   app.use("/api/admin/dashboard", adminDashboardRouter);
 };
 

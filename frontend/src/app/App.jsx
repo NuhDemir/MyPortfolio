@@ -1,121 +1,63 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Navigate,
+  Outlet,
   Route,
   Routes,
+  useLocation,
 } from "react-router-dom";
-import { Navbar } from "@modules/navbar/components/Navbar/Navbar.jsx";
-import Main from "@modules/main/components/Main/Main.jsx";
-import About from "@modules/about/components/About/About.jsx";
-import ProjectList from "@modules/projects/components/Projects/ProjectList/ProjectList.jsx";
-import BlogShowcase from "@modules/blog/components/BlogShowcase/BlogShowcase.jsx";
-import MessageForm from "@modules/message/components/Message/MessageForm.jsx";
-import Footer from "@modules/footer/components/Footer/Footer.jsx";
-import SocialLinks from "@modules/social/components/SocialLinks/SocialLinks.jsx";
-import ScrollToTop from "@shared/ui/ScrollToTop.jsx";
-import AppBackground from "@shared/ui/backgrounds/AppBackground.jsx";
-import DeveloperExperience from "@modules/developer/pages/DeveloperExperience.jsx";
-import RecruiterExperience from "@modules/recruiter/pages/RecruiterExperience.jsx";
-import { useTheme } from "@core/context/ThemeContext.jsx";
-import { useUserRole } from "@core/context/UserRoleContext.jsx";
-import { useBackendKeepAlive } from "@shared/hooks/useBackendKeepAlive.js";
-import "@shared/styles/base/global.css";
-import "@shared/styles/base/naive-utils.css";
-import "@shared/styles/base/components.css";
+import { NavbarV2 } from "@features/navbar/v2/NavbarV2.jsx";
+import { FooterV2 } from "@features/footer/v2/FooterV2.jsx";
+import { ScrollToTop, AppBackground } from "@shared";
+import { DeveloperExperience } from "@features/developer";
+import { RecruiterExperience } from "@features/recruiter";
+import { useTheme } from "@core";
+import { useUserRole } from "@core";
+import { useBackendKeepAlive } from "@shared";
+import { PageTransitionWrapper } from "@core";
+import HomePage from "../pages/HomePage.jsx";
+import AboutPage from "../pages/AboutPage.jsx";
+import ContactPage from "../pages/ContactPage.jsx";
+import "../shared/design-system/tokens.css";
+import "../shared/design-system/reset.css";
+import "../shared/design-system/typography.css";
+import "../shared/design-system/components/Button.css";
 
-const Comments = lazy(
-  () => import("@modules/comments/components/Comments/Comments.jsx"),
-);
-const AdminRoutes = lazy(() => import("@modules/admin/routes/AdminRoutes.jsx"));
-const BlogListPage = lazy(() => import("@modules/blog/pages/BlogListPage.jsx"));
-const BlogDetailPage = lazy(
-  () => import("@modules/blog/pages/BlogDetailPage.jsx"),
-);
-const ProjectsPage = lazy(
-  () => import("@modules/projects/pages/ProjectsPage.jsx"),
-);
-const ProjectDetailsPage = lazy(
-  () => import("@modules/projects/pages/ProjectDetailsPage.jsx"),
-);
+const AdminRoutes = lazy(() => import("@features/admin").then((m) => ({ default: m.AdminRoutes })));
+const BlogListPage = lazy(() => import("@features/blog").then((m) => ({ default: m.BlogListPage })));
+const BlogDetailPage = lazy(() => import("@features/blog").then((m) => ({ default: m.BlogDetailPage })));
+const ProjectsPage = lazy(() => import("@features/projects").then((m) => ({ default: m.ProjectsPage })));
+const ProjectDetailsPage = lazy(() => import("@features/projects").then((m) => ({ default: m.ProjectDetailsPage })));
+const ResourcesPage = lazy(() => import("@features/resources").then((m) => ({ default: m.ResourcesPage })));
 
-const DefaultExperience = () => {
+const AppContent = () => {
+  const { role } = useUserRole();
+
+  if (role === "developer") return <DeveloperExperience />;
+  if (role === "recruiter") return <RecruiterExperience />;
+  return <HomePage />;
+};
+
+const AppLayout = () => {
+  const { role } = useUserRole();
   const { theme } = useTheme();
-  const [, setScrollY] = useState(0);
-  const [, setAudioData] = useState(null);
-  const [, setIsPlaying] = useState(false);
+  const location = useLocation();
 
-  const aboutRef = useRef(null);
-  const projectsRef = useRef(null);
-  const blogRef = useRef(null);
-  const contactRef = useRef(null);
-
-  const scrollToSection = (ref) => {
-    ref?.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const isRoleHome =
+    location.pathname === "/" &&
+    (role === "developer" || role === "recruiter");
 
   return (
     <div className={`app-container show theme-${theme}`}>
-      <Navbar
-        onScrollToAbout={() => scrollToSection(aboutRef)}
-        onScrollToProjects={() => scrollToSection(projectsRef)}
-        onScrollToContact={() => scrollToSection(contactRef)}
-      />
-      <main id="main-content">
-        <div className="content-container">
-          <Main
-            onIsPlayingChange={setIsPlaying}
-            onAudioDataChange={setAudioData}
-          />
-        </div>
-        <SocialLinks />
-        <ScrollToTop />
-        <div id="about-section" ref={aboutRef}>
-          <About />
-        </div>
-        <div id="projects-section" ref={projectsRef}>
-          <ProjectList />
-        </div>
-        <section id="blog-section" ref={blogRef}>
-          <BlogShowcase />
-        </section>
-        <section id="comments-section">
-          <Suspense
-            fallback={<div className="component-loader">Yükleniyor...</div>}
-          >
-            <Comments />
-          </Suspense>
-        </section>
-        <section id="contact-section" ref={contactRef}>
-          <MessageForm />
-        </section>
-      </main>
-      <Footer />
+      {!isRoleHome && <NavbarV2 />}
+      <PageTransitionWrapper>
+        {isRoleHome ? <AppContent /> : <Outlet />}
+      </PageTransitionWrapper>
+      {!isRoleHome && <FooterV2 />}
+      {!isRoleHome && <ScrollToTop />}
     </div>
   );
-};
-
-const AppContent = () => {
-  const { hasSelectedRole, role } = useUserRole();
-
-  if (hasSelectedRole) {
-    switch (role) {
-      case "developer":
-        return <DeveloperExperience />;
-      case "recruiter":
-        return <RecruiterExperience />;
-      default:
-        return <DefaultExperience />;
-    }
-  }
-
-  return <DefaultExperience />;
 };
 
 const App = () => {
@@ -124,17 +66,13 @@ const App = () => {
     import.meta.env.VITE_DEBUG_LOGS === "true" && isDev;
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+    if (typeof window === "undefined") return undefined;
 
     const supportsFinePointer = window.matchMedia(
       "(hover: hover) and (pointer: fine)",
     ).matches;
 
-    if (!supportsFinePointer) {
-      return undefined;
-    }
+    if (!supportsFinePointer) return undefined;
 
     const rootStyle = document.documentElement.style;
     let rafId = 0;
@@ -146,12 +84,8 @@ const App = () => {
 
     const handlePointerMove = (event) => {
       const { clientX, clientY } = event;
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
-      rafId = requestAnimationFrame(() => {
-        setMouseVars(clientX, clientY);
-      });
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => setMouseVars(clientX, clientY));
     };
 
     const handlePointerLeave = () => {
@@ -159,34 +93,26 @@ const App = () => {
     };
 
     handlePointerLeave();
-    window.addEventListener("pointermove", handlePointerMove, {
-      passive: true,
-    });
-    window.addEventListener("pointerleave", handlePointerLeave, {
-      passive: true,
-    });
+    window.addEventListener("pointermove", handlePointerMove, { passive: true });
+    window.addEventListener("pointerleave", handlePointerLeave, { passive: true });
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("pointerleave", handlePointerLeave);
-      if (rafId) {
-        cancelAnimationFrame(rafId);
-      }
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
-  // Backend Keep-Alive: Render.com ücretsiz planında 15 dakikada bir uyuma durumunu engelle
   const API_BASE_URL =
     import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
 
-  // Production'da veya geliştirme ortamında backend keep-alive aktif
   const isBackendKeepAliveEnabled =
     import.meta.env.PROD ||
     import.meta.env.VITE_API_BASE_URL?.includes("onrender.com");
 
   useBackendKeepAlive({
     apiUrl: API_BASE_URL,
-    intervalMinutes: 10, // Her 10 dakikada bir ping at (Render 15 dk sonra uyuyor)
+    intervalMinutes: 10,
     enabled: isBackendKeepAliveEnabled,
     debug: isDebugLogsEnabled,
   });
@@ -202,62 +128,84 @@ const App = () => {
   return (
     <Router>
       <AppBackground />
-      <div className="app-shell">
-        <Routes>
+      <Routes>
+        <Route
+          path="/admin/*"
+          element={
+            <Suspense
+              fallback={<div className="component-loader">Yükleniyor...</div>}
+            >
+              <AdminRoutes />
+            </Suspense>
+          }
+        />
+        <Route element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="hakkimda" element={<AboutPage />} />
           <Route
-            path="/admin/*"
+            path="projects"
             element={
               <Suspense
-                fallback={<div className="component-loader">Yükleniyor...</div>}
-              >
-                <AdminRoutes />
-              </Suspense>
-            }
-          />
-          <Route path="/" element={<AppContent />} />
-          <Route
-            path="/blog"
-            element={
-              <Suspense
-                fallback={<div className="component-loader">Yükleniyor...</div>}
-              >
-                <BlogListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/blog/:slug"
-            element={
-              <Suspense
-                fallback={<div className="component-loader">Yükleniyor...</div>}
-              >
-                <BlogDetailPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <Suspense
-                fallback={<div className="component-loader">Yükleniyor...</div>}
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
               >
                 <ProjectsPage />
               </Suspense>
             }
           />
           <Route
-            path="/projects/:slugOrId"
+            path="projects/:slugOrId"
             element={
               <Suspense
-                fallback={<div className="component-loader">Yükleniyor...</div>}
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
               >
                 <ProjectDetailsPage />
               </Suspense>
             }
           />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
+          <Route
+            path="blog"
+            element={
+              <Suspense
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
+              >
+                <BlogListPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="blog/:slug"
+            element={
+              <Suspense
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
+              >
+                <BlogDetailPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="kaynaklar"
+            element={
+              <Suspense
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
+              >
+                <ResourcesPage />
+              </Suspense>
+            }
+          />
+          <Route path="iletisim" element={<ContactPage />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </Router>
   );
 };

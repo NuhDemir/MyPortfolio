@@ -1,0 +1,44 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   HOME PAGE v2 — Clean Nike-style
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.home {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--ds-navbar-height);
+}
+
+/* ── Social Links ──────────────────────────────────────────────────────── */
+.home__social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-4);
+  padding: var(--ds-space-8) var(--ds-container-gutter);
+  margin-top: auto;
+}
+
+.home__social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ds-radius-pill);
+  color: var(--ds-muted);
+  background-color: var(--ds-surface);
+  transition: var(--ds-transition-all);
+}
+
+.home__social-link:hover {
+  background-color: var(--ds-accent);
+  color: var(--ds-accent-on);
+}
+
+@media (max-width: 640px) {
+  .home__social-link {
+    width: 40px;
+    height: 40px;
+  }
+}
