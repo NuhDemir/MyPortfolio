@@ -546,15 +546,14 @@
 .svc-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 100; /* Mimarinizde tanımlı makul bir üst katman değeri olmalı */
+  z-index: 10000;
   background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px); /* Apple HIG - Cam efekti */
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: var(--ds-space-4);
-  animation: overlayFadeIn 0.3s cubic-bezier(0.32, 0.72, 0, 1) forwards;
 }
 
 /* 2. MODAL: Gölge derinliği, animasyon ve fluid sınırlandırmalar */
@@ -568,10 +567,7 @@
   border-radius: var(--ds-radius-lg, 16px);
   box-shadow: 
     0 4px 24px rgba(0, 0, 0, 0.08), 
-    0 1px 3px rgba(0, 0, 0, 0.04); /* Çok katmanlı, yumuşak gölge */
-  transform: translateY(16px) scale(0.98);
-  opacity: 0;
-  animation: modalSlideUp 0.4s cubic-bezier(0.2, 0.9, 0.1, 1) 0.05s forwards;
+    0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 /* 3. CLOSE BUTTON: HIG Dokunmatik alan kuralları ve erişilebilirlik (A11y) */
@@ -766,23 +762,6 @@
   
   .svc-modal-link {
     width: 100%; /* Mobilde butonların tam genişlikte olması daha iyi bir UX sunar */
-  }
-}
-
-/* 8. KEYFRAMES: Kinetik animasyonlar */
-@keyframes overlayFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes modalSlideUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px) scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 

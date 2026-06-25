@@ -10,6 +10,7 @@ import {
   Timeline,
   CTA,
 } from "@features/about";
+import { LoadingSpinner } from "@shared";
 import "@features/about/styles/about.css";
 
 const AboutPage = () => {
@@ -25,9 +26,7 @@ const AboutPage = () => {
   if (loading) {
     return (
       <div className="about3">
-        <section className="about3__section">
-          <h1 className="about3__title">Nuh Demir</h1>
-        </section>
+        <LoadingSpinner />
       </div>
     );
   }

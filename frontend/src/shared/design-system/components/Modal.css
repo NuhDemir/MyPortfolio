@@ -1,12 +1,78 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   MODAL — Nike-inspired clean dialog
-   ═══════════════════════════════════════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ds-space-4);
+}
 
-.ds-modal-overlay{position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:var(--ds-space-4)}
-.ds-modal{background:var(--ds-bg);width:100%;max-width:560px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.15)}
-.ds-modal__header{display:flex;align-items:center;justify-content:space-between;padding:var(--ds-space-5) var(--ds-space-6);border-bottom:1px solid var(--ds-border-soft)}
-.ds-modal__title{font-family:var(--ds-font-display);font-weight:var(--ds-weight-medium);font-size:var(--ds-text-xl);color:var(--ds-fg)}
-.ds-modal__close{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:var(--ds-radius-pill);color:var(--ds-muted);transition:var(--ds-transition-all)}
-.ds-modal__close:hover{background:var(--ds-surface);color:var(--ds-fg)}
-.ds-modal__body{padding:var(--ds-space-6)}
-@media(max-width:640px){.ds-modal{max-width:100%;max-height:100vh}}
+.modal-container {
+  background: var(--ds-bg);
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--ds-radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ds-space-5) var(--ds-space-6);
+  border-bottom: 1px solid var(--ds-border-soft);
+  position: relative;
+  z-index: 1;
+}
+
+.modal-header h2 {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-xl);
+  color: var(--ds-fg);
+  margin: 0;
+}
+
+.modal-close-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--ds-border-soft);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  cursor: pointer;
+  transition: var(--ds-transition-all);
+}
+
+.modal-close-button:hover {
+  background: var(--ds-surface);
+  border-color: var(--ds-border);
+}
+
+.modal-content {
+  padding: var(--ds-space-6);
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .modal-container {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: var(--ds-radius-md);
+  }
+
+  .modal-overlay {
+    padding: 0;
+  }
+}
