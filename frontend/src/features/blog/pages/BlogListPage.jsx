@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Pagination } from "@shared";
 import { motion } from "framer-motion";
+import { useScrollReveal } from "@shared";
 import {
   FALLBACK_BLOGS as fallbackBlogs,
   fetchBlogs,
@@ -9,21 +10,41 @@ import {
 import { stripHtml, buildExcerpt, formatToLocaleDate } from "../utils/blogFormatters.js";
 import "./styles/blog-list.css";
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
+const BlogCardItem = ({ blog, index }) => {
+  const slug = blog?.slug || blog?.id || blog?._id;
+  const publishedDate = formatToLocaleDate(blog?.publishedAt || blog?.updatedAt || blog?.createdAt) ?? "Yeni";
+  const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
+  const coverUrl = blog?.thumbnail?.url || blog?.thumbnail || blog?.coverImage || null;
 
-const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: { 
-    y: 0, 
-    opacity: 1, 
-    transition: { type: "spring", stiffness: 300, damping: 24 } 
-  },
+  const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: index * 0.05 });
+
+  return (
+    <motion.article key={slug || `blog-${index}`} {...rev}>
+      <Link to={`/blog/${slug}`} className="blog-card">
+        <div className="blog-card__cover">
+          {coverUrl ? (
+            <img src={coverUrl} alt={blog.title} className="blog-card__cover-img" loading="lazy" />
+          ) : (
+            <div className="blog-card__cover-placeholder">
+              <span>{blog.title?.[0] || "B"}</span>
+            </div>
+          )}
+          <span className="blog-card__category-badge">
+            {blog.category || "Genel"}
+          </span>
+        </div>
+
+        <div className="blog-card__body">
+          <h3 className="blog-card__title">{blog.title}</h3>
+          <div className="blog-card__meta">
+            <span>{publishedDate}</span>
+            {blog.readingTime ? <span>{` • ${blog.readingTime} dk okuma`}</span> : null}
+          </div>
+          <p className="blog-card__excerpt">{excerpt}</p>
+        </div>
+      </Link>
+    </motion.article>
+  );
 };
 
 const BlogListPage = () => {
@@ -33,7 +54,7 @@ const BlogListPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("tümü");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6); // Modern grid için 6 daha ideal
+  const [itemsPerPage, setItemsPerPage] = useState(6);
 
   useEffect(() => {
     let isMounted = true;
@@ -123,17 +144,15 @@ const BlogListPage = () => {
     setCurrentPage(1);
   }, [selectedCategory, searchTerm]);
 
+  const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+
   return (
     <main className="blog-page" id="blog">
       <div className="blog-page__container">
-        
-        {/* Filtreleme ve Arama (Glassmorphism Sticky Bar) */}
-        <motion.div 
-          className="blog-page__filters" 
+        <motion.div
+          className="blog-page__filters"
           aria-live="polite"
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.4 }}
+          {...rev}
         >
           <div className="blog-page__chips">
             {categories.map((category) => (
@@ -164,41 +183,15 @@ const BlogListPage = () => {
             <p>Henüz yayınlanmış blog yazısı bulunmuyor.</p>
           </div>
         ) : (
-          <motion.div 
-            className="blog-list"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            {paginatedBlogs.map((blog, index) => {
-              const slug = blog?.slug || blog?.id || blog?._id;
-              const cardKey = slug || `blog-${index}`;
-              const publishedDate = formatToLocaleDate(blog?.publishedAt || blog?.updatedAt || blog?.createdAt) ?? "Yeni";
-              const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
-
-              return (
-                <motion.article key={cardKey} variants={itemVariants}>
-                  <Link to={`/blog/${slug}`} className="blog-card">
-                    <div className="blog-card__header">
-                      <span className="blog-card__category">
-                        {blog.category || "Genel"}
-                      </span>
-                    </div>
-                    <h3 className="blog-card__title">{blog.title}</h3>
-                    <div className="blog-card__meta">
-                      <span>{publishedDate}</span>
-                      {blog.readingTime ? <span>{` • ${blog.readingTime} dk okuma`}</span> : null}
-                    </div>
-                    <p className="blog-card__excerpt">{excerpt}</p>
-                  </Link>
-                </motion.article>
-              );
-            })}
-          </motion.div>
+          <div className="blog-list">
+            {paginatedBlogs.map((blog, index) => (
+              <BlogCardItem key={blog?.slug || blog?.id || blog?._id || `blog-${index}`} blog={blog} index={index} />
+            ))}
+          </div>
         )}
 
         {publishedBlogs.length > 0 && (
-          <div className="naive-pagination-wrapper">
+          <motion.div className="naive-pagination-wrapper" {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -210,7 +203,7 @@ const BlogListPage = () => {
                 setCurrentPage(1);
               }}
             />
-          </div>
+          </motion.div>
         )}
       </div>
     </main>

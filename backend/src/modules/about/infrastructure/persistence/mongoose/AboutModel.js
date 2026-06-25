@@ -134,6 +134,14 @@ const serviceModalSchema = new mongoose.Schema(
   { _id: false },
 );
 
+const linkSchema = new mongoose.Schema(
+  {
+    label: { type: String, required: true, trim: true, maxlength: 80 },
+    url: { type: String, required: true, trim: true },
+  },
+  { _id: false },
+);
+
 const serviceSchema = new mongoose.Schema(
   {
     id: {
@@ -144,13 +152,11 @@ const serviceSchema = new mongoose.Schema(
     },
     iconUrl: {
       type: String,
-      required: true,
       trim: true,
     },
     iconBgColor: {
       type: String,
       trim: true,
-      default: "var(--color-accent)",
     },
     title: {
       type: String,
@@ -160,17 +166,42 @@ const serviceSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
       trim: true,
-      maxlength: 500,
+      maxlength: 800,
     },
     order: {
       type: Number,
       default: 0,
     },
+    image: {
+      type: String,
+      trim: true,
+    },
+    problem: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+    },
+    solution: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+    },
+    desc: {
+      type: String,
+      trim: true,
+      maxlength: 1000,
+    },
+    tech: {
+      type: [String],
+      default: [],
+    },
+    links: {
+      type: [linkSchema],
+      default: [],
+    },
     modal: {
       type: serviceModalSchema,
-      required: true,
     },
   },
   { _id: false },

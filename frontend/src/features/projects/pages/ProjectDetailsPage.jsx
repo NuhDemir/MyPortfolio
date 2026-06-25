@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { useScrollReveal } from "@shared";
 import Lightbox from "@shared/ui/Lightbox/Lightbox.jsx";
 import HoverVideo from "@shared/ui/HoverVideo/HoverVideo.jsx";
 import { useProjectData } from "../hooks/useProjectData.js";
@@ -61,6 +63,14 @@ const ProjectDetailsPage = () => {
     setLightbox({ open: true, url: item.url, alt: item.alt || "" });
   }, []);
 
+  const revSection = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revCtx = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
+  const revBento = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
+  const revProcess = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 });
+  const revGallery = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 });
+  const revDeep = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.5 });
+  const revFooter = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.6 });
+
   if (!project) {
     return (
       <main className="prj-detail prj-detail--notfound">
@@ -92,7 +102,7 @@ const ProjectDetailsPage = () => {
           </button>
         </header>
 
-        <section className="prj-detail__hero">
+        <motion.section className="prj-detail__hero" {...revSection}>
           <div className="prj-detail__hero-left">
             <div className="prj-detail__kickers">
               {featured && <span className="prj-detail__kicker prj-detail__kicker--feat">Featured</span>}
@@ -138,19 +148,35 @@ const ProjectDetailsPage = () => {
               />
             ) : null}
           </div>
-        </section>
+        </motion.section>
 
-        <ContextBar
-          project={project}
-          expanded={contextExpanded}
-          onToggle={() => setContextExpanded((v) => !v)}
-        />
+        <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
+          <ContextBar
+            project={project}
+            expanded={contextExpanded}
+            onToggle={() => setContextExpanded((v) => !v)}
+          />
+        </motion.div>
 
-        <BentoGrid project={project} />
-        <ProcessGrid project={project} onLightbox={openLightbox} />
-        <ProjectGallery project={project} onLightbox={openLightbox} />
-        <DeepDive project={project} />
-        <ProjectFooter project={project} nextProject={prevNext.next} prevProject={prevNext.prev} />
+        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 })}>
+          <BentoGrid project={project} />
+        </motion.section>
+
+        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 })}>
+          <ProcessGrid project={project} onLightbox={openLightbox} />
+        </motion.section>
+
+        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 })}>
+          <ProjectGallery project={project} onLightbox={openLightbox} />
+        </motion.section>
+
+        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.5 })}>
+          <DeepDive project={project} />
+        </motion.section>
+
+        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.6 })}>
+          <ProjectFooter project={project} nextProject={prevNext.next} prevProject={prevNext.prev} />
+        </motion.section>
 
         <Lightbox
           open={lightbox.open}

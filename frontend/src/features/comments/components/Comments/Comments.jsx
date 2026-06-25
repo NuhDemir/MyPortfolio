@@ -1,10 +1,22 @@
 import { useState } from "react";
-import { Reveal } from "@shared";
-import comments from "@features/comments/data/comments.json";
+import { Reveal, LoadingSpinner } from "@shared";
+import { useComments } from "../../hooks/useComments.js";
 import "./Comments.css";
 
 const Comments = () => {
+  const { comments, loading } = useComments();
   const [activeCard, setActiveCard] = useState(null);
+
+  if (loading) {
+    return (
+      <section className="cs">
+        <h2 className="cs__heading">Yorumlar</h2>
+        <LoadingSpinner />
+      </section>
+    );
+  }
+
+  if (!comments.length) return null;
 
   return (
     <section className="cs">

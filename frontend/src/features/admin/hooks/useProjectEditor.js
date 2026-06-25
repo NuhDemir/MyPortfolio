@@ -21,20 +21,28 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(initialProjectFormState);
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [coverMode, setCoverMode] = useState("file");
+  const [coverUrl, setCoverUrl] = useState("");
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
+
+  const cleanupPreview = useCallback(() => {
+    if (coverPreview && coverPreview.startsWith("blob:")) {
+      URL.revokeObjectURL(coverPreview);
+    }
+  }, [coverPreview]);
 
   const resetForm = useCallback(() => {
     setIsFormVisible(false);
     setEditingId(null);
     setFormData(initialProjectFormState);
-    setImageFile(null);
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-    }
-    setImagePreview(null);
+    setCoverMode("file");
+    setCoverUrl("");
+    setCoverFile(null);
+    cleanupPreview();
+    setCoverPreview(null);
     setError(null);
-  }, [imagePreview, setError]);
+  }, [cleanupPreview, setError]);
 
   const handleInputChange = useCallback((event) => {
     const { name, value, type, checked } = event.target;
@@ -44,19 +52,39 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
     }));
   }, []);
 
-  const handleFileChange = useCallback(
+  const handleCoverFileChange = useCallback(
     (event) => {
       const file = event.target.files?.[0];
       if (file) {
-        setImageFile(file);
-        if (imagePreview) {
-          URL.revokeObjectURL(imagePreview);
-        }
-        setImagePreview(URL.createObjectURL(file));
+        setCoverFile(file);
+        cleanupPreview();
+        setCoverPreview(URL.createObjectURL(file));
       }
     },
-    [imagePreview],
+    [cleanupPreview],
   );
+
+  const handleCoverUrlChange = useCallback((event) => {
+    const url = event.target.value;
+    setCoverUrl(url);
+    if (url) setCoverPreview(url);
+  }, []);
+
+  const handleCoverModeChange = useCallback((mode) => {
+    setCoverMode(mode);
+    setCoverFile(null);
+    if (mode === "url") {
+      setCoverUrl("");
+      setCoverPreview(null);
+    }
+  }, []);
+
+  const handleClearCover = useCallback(() => {
+    setCoverFile(null);
+    setCoverUrl("");
+    cleanupPreview();
+    setCoverPreview(null);
+  }, [cleanupPreview]);
 
   const startNew = useCallback(() => {
     resetForm();
@@ -74,28 +102,15 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
       resetForm();
       setEditingId(projectId);
 
-      const metadata =
-        project?.metadata && typeof project.metadata === "object"
-          ? project.metadata
-          : {};
-      const visuals =
-        project?.visuals && typeof project.visuals === "object"
-          ? project.visuals
-          : {};
-      const links =
-        project?.links && typeof project.links === "object"
-          ? project.links
-          : {};
+      const metadata = project?.metadata && typeof project.metadata === "object" ? project.metadata : {};
+      const visuals = project?.visuals && typeof project.visuals === "object" ? project.visuals : {};
+      const links = project?.links && typeof project.links === "object" ? project.links : {};
 
       const createdAtRaw = metadata?.createdAt;
       const createdAt = createdAtRaw ? String(createdAtRaw).slice(0, 10) : "";
 
-      const techStackText = project?.techStack
-        ? JSON.stringify(project.techStack, null, 2)
-        : "";
-      const caseStudyText = project?.caseStudy
-        ? JSON.stringify(project.caseStudy, null, 2)
-        : "";
+      const techStackText = project?.techStack ? JSON.stringify(project.techStack, null, 2) : "";
+      const caseStudyText = project?.caseStudy ? JSON.stringify(project.caseStudy, null, 2) : "";
 
       setFormData({
         id: project?.id ?? "",
@@ -115,13 +130,17 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
         linksFigma: links?.figma ?? "",
         techStackJson: techStackText,
         caseStudyJson: caseStudyText,
-        tags: Array.isArray(project.tags)
-          ? project.tags.join(", ")
-          : (project.tags ?? ""),
+        tags: Array.isArray(project.tags) ? project.tags.join(", ") : (project.tags ?? ""),
         category: project?.category ?? "",
       });
 
-      setImagePreview(getDisplayThumbnail(project));
+      const existingThumb = getDisplayThumbnail(project);
+      if (existingThumb) {
+        setCoverMode("url");
+        setCoverUrl(existingThumb);
+        setCoverPreview(existingThumb);
+      }
+
       setIsFormVisible(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
@@ -144,17 +163,8 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
       const heroVideoUrl = String(formData.visualsHeroVideoUrl ?? "").trim();
       const primaryColor = String(formData.visualsPrimaryColor ?? "").trim();
 
-      if (!editingId && !imageFile && !thumbnailUrl) {
-        setError(
-          "Yeni proje oluşturmak için görsel zorunludur: bir dosya yükleyin veya visuals.thumbnailUrl girin.",
-        );
-        return;
-      }
-
-      if (!thumbnailUrl && (heroVideoUrl || primaryColor) && !imageFile) {
-        setError(
-          "Hero video / primary color girmek için visuals.thumbnailUrl da sağlamalısınız.",
-        );
+      if (!editingId && !coverFile && !coverUrl && !thumbnailUrl) {
+        setError("Yeni proje oluşturmak için görsel zorunludur (URL veya dosya).");
         return;
       }
 
@@ -173,10 +183,7 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
         return;
       }
 
-      if (
-        caseStudy !== undefined &&
-        (typeof caseStudy !== "object" || !caseStudy)
-      ) {
+      if (caseStudy !== undefined && (typeof caseStudy !== "object" || !caseStudy)) {
         setError("caseStudy bir JSON object olmalıdır.");
         return;
       }
@@ -184,24 +191,15 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
       const metadata = {
         title,
         tagline,
-        ...(formData.metadataCreatedAt
-          ? { createdAt: formData.metadataCreatedAt }
-          : {}),
+        ...(formData.metadataCreatedAt ? { createdAt: formData.metadataCreatedAt } : {}),
         ...(formData.metadataRole ? { role: formData.metadataRole } : {}),
-        ...(formData.metadataPlatform
-          ? { platform: formData.metadataPlatform }
-          : {}),
+        ...(formData.metadataPlatform ? { platform: formData.metadataPlatform } : {}),
         ...(formData.metadataStatus ? { status: formData.metadataStatus } : {}),
       };
 
-      const visuals =
-        thumbnailUrl || imageFile
-          ? {
-              thumbnailUrl: thumbnailUrl || "__upload__",
-              ...(heroVideoUrl ? { heroVideoUrl } : {}),
-              ...(primaryColor ? { primaryColor } : {}),
-            }
-          : undefined;
+      const visuals = thumbnailUrl || coverFile || coverUrl
+        ? { thumbnailUrl: thumbnailUrl || "__upload__", ...(heroVideoUrl ? { heroVideoUrl } : {}), ...(primaryColor ? { primaryColor } : {}) }
+        : undefined;
 
       const links = {
         ...(formData.linksLiveDemo ? { liveDemo: formData.linksLiveDemo } : {}),
@@ -228,33 +226,33 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
       setError(null);
 
       try {
-        if (imageFile) {
+        if (coverFile || (coverMode === "file" && coverFile)) {
           const dataToSubmit = new FormData();
           dataToSubmit.append("metadata", JSON.stringify(metadata));
           if (visuals) dataToSubmit.append("visuals", JSON.stringify(visuals));
-          if (Object.keys(links).length > 0)
-            dataToSubmit.append("links", JSON.stringify(links));
-          if (techStack !== undefined)
-            dataToSubmit.append("techStack", JSON.stringify(techStack));
-          if (caseStudy !== undefined)
-            dataToSubmit.append("caseStudy", JSON.stringify(caseStudy));
+          if (Object.keys(links).length > 0) dataToSubmit.append("links", JSON.stringify(links));
+          if (techStack !== undefined) dataToSubmit.append("techStack", JSON.stringify(techStack));
+          if (caseStudy !== undefined) dataToSubmit.append("caseStudy", JSON.stringify(caseStudy));
 
           if (formData.id) dataToSubmit.append("id", formData.id);
           if (formData.slug) dataToSubmit.append("slug", formData.slug);
-          dataToSubmit.append(
-            "isFeatured",
-            String(Boolean(formData.isFeatured)),
-          );
-          if (formData.category)
-            dataToSubmit.append("category", formData.category);
+          dataToSubmit.append("isFeatured", String(Boolean(formData.isFeatured)));
+          if (formData.category) dataToSubmit.append("category", formData.category);
           if (formData.tags) dataToSubmit.append("tags", formData.tags);
 
-          dataToSubmit.append("image", imageFile);
+          dataToSubmit.append("image", coverFile);
 
           if (editingId) {
             await updateProject(editingId, dataToSubmit);
           } else {
             await createProject(dataToSubmit);
+          }
+        } else if (coverMode === "url" && coverUrl) {
+          submission.visuals = { ...(submission.visuals || {}), thumbnailUrl: coverUrl };
+          if (editingId) {
+            await updateProject(editingId, submission);
+          } else {
+            await createProject(submission);
           }
         } else {
           if (editingId) {
@@ -272,33 +270,27 @@ export const useProjectEditor = ({ fetchProjects, setError, setLoading }) => {
         setLoading(false);
       }
     },
-    [
-      editingId,
-      fetchProjects,
-      formData,
-      imageFile,
-      resetForm,
-      setError,
-      setLoading,
-    ],
+    [editingId, fetchProjects, formData, coverMode, coverFile, coverUrl, resetForm, setError, setLoading],
   );
 
   return {
     isFormVisible,
     editingId,
     formData,
-    imageFile,
-    imagePreview,
+    coverMode,
+    coverUrl,
+    coverFile,
+    coverPreview,
     setIsFormVisible,
     setEditingId,
-    setFormData,
-    setImageFile,
-    setImagePreview,
     resetForm,
     startNew,
     startEdit,
     handleInputChange,
-    handleFileChange,
+    handleCoverFileChange,
+    handleCoverUrlChange,
+    handleCoverModeChange,
+    handleClearCover,
     handleSubmit,
   };
 };

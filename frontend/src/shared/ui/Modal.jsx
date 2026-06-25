@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { PatternBackground, useModalAnimation } from "@shared";
@@ -8,7 +8,7 @@ import "@shared/design-system/components/Modal.css";
 const Modal = ({ isOpen, onClose, title, children }) => {
   const { panelRef } = useModalAnimation(isOpen, onClose);
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
@@ -43,7 +43,8 @@ const Modal = ({ isOpen, onClose, title, children }) => {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

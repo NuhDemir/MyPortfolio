@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useScrollReveal } from "@shared";
 import { ArrowLeft } from "lucide-react";
 import { LoadingSpinner } from "@shared";
 import { CommentSection } from "@features/blog";
@@ -12,17 +13,6 @@ import {
   resolveBlogThumbnail,
 } from "../utils/blogFormatters.js";
 import "./styles/blog-detail.css";
-
-const motionConfig = {
-  container: {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.05 } }
-  },
-  fadeUp: {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.2, 0, 0, 1] } }
-  }
-};
 
 const BlogDetailPage = () => {
   const { slug } = useParams();
@@ -62,22 +52,23 @@ const BlogDetailPage = () => {
     );
   }
 
+  const rev0 = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const rev1 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
+  const rev2 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.15 });
+  const rev3 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
+  const rev4 = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.25 });
+
   return (
     <main className="blog-page">
-      <motion.div
-        className="blog-page__container"
-        variants={motionConfig.container}
-        initial="hidden"
-        animate="visible"
-      >
-        <motion.div variants={motionConfig.fadeUp}>
+      <div className="blog-page__container">
+        <motion.div {...rev0}>
           <Link to="/blog" className="blog-detail__back">
             <ArrowLeft size={16} />
             Blog'a don
           </Link>
         </motion.div>
 
-        <motion.header className={`blog-hero ${metaData.thumbnail ? "blog-hero--has-image" : ""}`} variants={motionConfig.fadeUp}>
+        <motion.header className={`blog-hero ${metaData.thumbnail ? "blog-hero--has-image" : ""}`} {...rev1}>
           {metaData.thumbnail && (
             <div className="blog-hero__bg">
               <img src={metaData.thumbnail} alt={blog.title} className="blog-hero__img" />
@@ -105,12 +96,12 @@ const BlogDetailPage = () => {
           </div>
         </motion.header>
 
-        <motion.section className="blog-detail__layout" variants={motionConfig.fadeUp}>
+        <motion.section className="blog-detail__layout" {...rev2}>
           <article className="blog-detail__content"
             dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} />
         </motion.section>
 
-        <motion.section className="blog-detail__meta" variants={motionConfig.fadeUp}>
+        <motion.section className="blog-detail__meta" {...rev3}>
           <div className="blog-detail__card">
             <h2>Icerik Kunyesi</h2>
             <ul>
@@ -123,11 +114,11 @@ const BlogDetailPage = () => {
         </motion.section>
 
         {(blog._id || blog.id) && (
-          <motion.div className="blog-detail__layout" variants={motionConfig.fadeUp}>
+          <motion.div className="blog-detail__layout" {...rev4}>
             <CommentSection blogId={blog._id || blog.id} />
           </motion.div>
         )}
-      </motion.div>
+      </div>
     </main>
   );
 };

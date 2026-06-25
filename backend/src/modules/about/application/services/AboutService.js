@@ -207,16 +207,18 @@ export class AboutService {
       ...service,
       id: service.id || `service-${index + 1}`,
       order: Number(service.order ?? index + 1),
-      modal: {
-        heading: service.modal?.heading || service.title || "Service Details",
-        lead: service.modal?.lead || "",
-        sections: Array.isArray(service.modal?.sections)
-          ? service.modal.sections
-          : [],
-        footnote: service.modal?.footnote || "",
-        footnoteLinkLabel: service.modal?.footnoteLinkLabel || "",
-        footnoteLinkUrl: service.modal?.footnoteLinkUrl || "",
-      },
+      modal: service.modal
+        ? {
+            heading: service.modal.heading || service.title || "Service Details",
+            lead: service.modal.lead || "",
+            sections: Array.isArray(service.modal.sections)
+              ? service.modal.sections
+              : [],
+            footnote: service.modal.footnote || "",
+            footnoteLinkLabel: service.modal.footnoteLinkLabel || "",
+            footnoteLinkUrl: service.modal.footnoteLinkUrl || "",
+          }
+        : undefined,
     }));
   }
 

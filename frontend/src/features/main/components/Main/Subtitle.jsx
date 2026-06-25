@@ -1,7 +1,7 @@
 import React, { forwardRef, useLayoutEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-const SUBTITLE_TEXT = "Frontend Developer & Mobile Developer";
+const SUBTITLE_TEXT = "Software Developer & Musician";
 
 const Subtitle = forwardRef((_, ref) => {
   const subtitleRootRef = useRef(null);

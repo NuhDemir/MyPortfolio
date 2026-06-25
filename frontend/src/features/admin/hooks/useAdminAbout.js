@@ -5,8 +5,6 @@ import {
   updateAboutAdminContent,
 } from "../services/aboutService";
 
-const toPrettyJson = (value) => JSON.stringify(value ?? [], null, 2);
-
 const toKeywordsString = (keywords) =>
   Array.isArray(keywords) ? keywords.join(", ") : "";
 
@@ -16,32 +14,13 @@ const createFormDataFromContent = (content) => ({
   subtitle: content?.header?.subtitle ?? "",
   githubUsername: content?.github?.username ?? "",
   githubProfileUrl: content?.github?.profileUrl ?? "",
-  statsJson: toPrettyJson(content?.stats),
-  servicesJson: toPrettyJson(content?.services),
+  stats: content?.stats ?? [],
+  services: content?.services ?? [],
   seoTitle: content?.seo?.title ?? "",
   seoDescription: content?.seo?.description ?? "",
   seoKeywords: toKeywordsString(content?.seo?.keywords),
   isActive: Boolean(content?.isActive),
 });
-
-const parseJsonArray = (rawValue, label) => {
-  if (!rawValue || !String(rawValue).trim()) {
-    return [];
-  }
-
-  let parsed;
-  try {
-    parsed = JSON.parse(rawValue);
-  } catch {
-    throw new Error(`${label} alani gecerli JSON olmali.`);
-  }
-
-  if (!Array.isArray(parsed)) {
-    throw new Error(`${label} alani JSON dizi formatinda olmali.`);
-  }
-
-  return parsed;
-};
 
 export const useAdminAbout = () => {
   const [loading, setLoading] = useState(false);
@@ -51,11 +30,11 @@ export const useAdminAbout = () => {
   const [formData, setFormData] = useState(() =>
     createFormDataFromContent(cloneDefaultAboutContent()),
   );
+  const [activeTab, setActiveTab] = useState("general");
 
   const fetchAbout = useCallback(async () => {
     setLoading(true);
     setError("");
-
     try {
       const content = await getAboutAdminContent();
       setFormData(createFormDataFromContent(content));
@@ -66,9 +45,7 @@ export const useAdminAbout = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchAbout();
-  }, [fetchAbout]);
+  useEffect(() => { fetchAbout(); }, [fetchAbout]);
 
   const handleInputChange = useCallback((event) => {
     const { name, type, checked, value } = event.target;
@@ -78,32 +55,97 @@ export const useAdminAbout = () => {
     }));
   }, []);
 
-  const buildPayload = useCallback((currentFormData) => {
-    const stats = parseJsonArray(currentFormData.statsJson, "Stats");
-    const services = parseJsonArray(currentFormData.servicesJson, "Services");
+  const updateService = useCallback((index, field, value) => {
+    setFormData((prev) => {
+      const updated = [...prev.services];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, services: updated };
+    });
+  }, []);
 
-    return {
-      header: {
-        badge: currentFormData.badge,
-        title: currentFormData.title,
-        subtitle: currentFormData.subtitle,
-      },
-      github: {
-        username: currentFormData.githubUsername,
-        profileUrl: currentFormData.githubProfileUrl,
-      },
-      stats,
-      services,
-      seo: {
-        title: currentFormData.seoTitle,
-        description: currentFormData.seoDescription,
-        keywords: currentFormData.seoKeywords
-          .split(",")
-          .map((keyword) => keyword.trim())
-          .filter(Boolean),
-      },
-      isActive: Boolean(currentFormData.isActive),
-    };
+  const addService = useCallback(() => {
+    setFormData((prev) => ({
+      ...prev,
+      services: [
+        ...prev.services,
+        { id: `service-${Date.now()}`, title: "", problem: "", solution: "", tech: [], links: [] },
+      ],
+    }));
+  }, []);
+
+  const removeService = useCallback((index) => {
+    setFormData((prev) => ({
+      ...prev,
+      services: prev.services.filter((_, i) => i !== index),
+    }));
+  }, []);
+
+  const addServiceTech = useCallback((serviceIndex, tech) => {
+    if (!tech.trim()) return;
+    setFormData((prev) => {
+      const updated = [...prev.services];
+      updated[serviceIndex] = {
+        ...updated[serviceIndex],
+        tech: [...(updated[serviceIndex].tech || []), tech.trim()],
+      };
+      return { ...prev, services: updated };
+    });
+  }, []);
+
+  const removeServiceTech = useCallback((serviceIndex, techIndex) => {
+    setFormData((prev) => {
+      const updated = [...prev.services];
+      updated[serviceIndex] = {
+        ...updated[serviceIndex],
+        tech: updated[serviceIndex].tech.filter((_, i) => i !== techIndex),
+      };
+      return { ...prev, services: updated };
+    });
+  }, []);
+
+  const addServiceLink = useCallback((serviceIndex, link) => {
+    if (!link.label.trim() || !link.url.trim()) return;
+    setFormData((prev) => {
+      const updated = [...prev.services];
+      updated[serviceIndex] = {
+        ...updated[serviceIndex],
+        links: [...(updated[serviceIndex].links || []), { label: link.label.trim(), url: link.url.trim() }],
+      };
+      return { ...prev, services: updated };
+    });
+  }, []);
+
+  const removeServiceLink = useCallback((serviceIndex, linkIndex) => {
+    setFormData((prev) => {
+      const updated = [...prev.services];
+      updated[serviceIndex] = {
+        ...updated[serviceIndex],
+        links: updated[serviceIndex].links.filter((_, i) => i !== linkIndex),
+      };
+      return { ...prev, services: updated };
+    });
+  }, []);
+
+  const updateStat = useCallback((index, field, value) => {
+    setFormData((prev) => {
+      const updated = [...prev.stats];
+      updated[index] = { ...updated[index], [field]: value };
+      return { ...prev, stats: updated };
+    });
+  }, []);
+
+  const addStat = useCallback(() => {
+    setFormData((prev) => ({
+      ...prev,
+      stats: [...prev.stats, { key: "", label: "", valueSource: "static", staticValue: "" }],
+    }));
+  }, []);
+
+  const removeStat = useCallback((index) => {
+    setFormData((prev) => ({
+      ...prev,
+      stats: prev.stats.filter((_, i) => i !== index),
+    }));
   }, []);
 
   const handleSubmit = useCallback(
@@ -114,7 +156,18 @@ export const useAdminAbout = () => {
       setSuccessMessage("");
 
       try {
-        const payload = buildPayload(formData);
+        const payload = {
+          header: { badge: formData.badge, title: formData.title, subtitle: formData.subtitle },
+          github: { username: formData.githubUsername, profileUrl: formData.githubProfileUrl },
+          stats: formData.stats,
+          services: formData.services,
+          seo: {
+            title: formData.seoTitle,
+            description: formData.seoDescription,
+            keywords: formData.seoKeywords.split(",").map((k) => k.trim()).filter(Boolean),
+          },
+          isActive: Boolean(formData.isActive),
+        };
         const updated = await updateAboutAdminContent(payload);
         setFormData(createFormDataFromContent(updated));
         setSuccessMessage("About icerigi basariyla guncellendi.");
@@ -124,18 +177,16 @@ export const useAdminAbout = () => {
         setSaving(false);
       }
     },
-    [buildPayload, formData],
+    [formData],
   );
 
   return {
-    loading,
-    saving,
-    error,
-    successMessage,
-    formData,
-    handleInputChange,
-    handleSubmit,
-    refresh: fetchAbout,
+    loading, saving, error, successMessage, formData, activeTab, setActiveTab,
+    handleInputChange, handleSubmit, refresh: fetchAbout,
+    updateService, addService, removeService,
+    addServiceTech, removeServiceTech,
+    addServiceLink, removeServiceLink,
+    updateStat, addStat, removeStat,
   };
 };
 

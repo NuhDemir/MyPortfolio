@@ -25,16 +25,6 @@ class CommentService {
   }
 
   async createComment(commentData) {
-    // Validate required fields
-    const hasResourceInfo = commentData.resourceType && commentData.resourceId;
-    const hasBlogId = commentData.blogId;
-
-    if (!hasResourceInfo && !hasBlogId) {
-      throw new Error(
-        "Either resourceType/resourceId or blogId must be provided"
-      );
-    }
-
     if (
       !commentData.author?.name ||
       !commentData.author?.email ||

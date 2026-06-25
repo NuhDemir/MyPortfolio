@@ -33,6 +33,8 @@ const baseResourceSchema = {
     .optional()
     .default(null),
   notes: z.string().optional().default(""),
+  coverImage: z.string().optional().default(""),
+  coverImageFit: z.enum(["cover", "contain", "auto"]).optional().default("cover"),
   isActive: z.coerce.boolean().optional().default(true),
   isFeatured: z.coerce.boolean().optional().default(false),
 };
@@ -52,6 +54,8 @@ export const updateResourceSchema = z.object({
   language: baseResourceSchema.language.optional(),
   difficulty: baseResourceSchema.difficulty.optional(),
   notes: baseResourceSchema.notes.optional(),
+  coverImage: baseResourceSchema.coverImage.optional(),
+  coverImageFit: baseResourceSchema.coverImageFit.optional(),
   isActive: baseResourceSchema.isActive.optional(),
   isFeatured: baseResourceSchema.isFeatured.optional(),
 });

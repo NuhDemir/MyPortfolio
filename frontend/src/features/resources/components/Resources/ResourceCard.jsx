@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { ExternalLink, Star, BookOpen, Play, FileText, GraduationCap, Wrench, Ellipsis } from "lucide-react";
 import { PatternBackground } from "@shared";
 import "./ResourceCard.css";
@@ -29,12 +30,20 @@ const DIFFICULTY_LABELS = {
 };
 
 const ResourceCard = React.memo(({ resource }) => {
-  const { title, description, url, type, tags, author, rating, difficulty, coverImage } = resource;
+  const navigate = useNavigate();
+  const { title, description, url, type, tags, author, rating, difficulty, coverImage, coverImageFit, slug } = resource;
+  const fitMode = coverImageFit || "cover";
 
   const displayTags = useMemo(() => (Array.isArray(tags) ? tags.slice(0, 3) : []), [tags]);
   const TypeIcon = TYPE_ICONS[type] || Ellipsis;
 
   const handleClick = () => {
+    const detailSlug = slug || resource._id || resource.id;
+    if (detailSlug) navigate(`/kaynaklar/${detailSlug}`);
+  };
+
+  const handleExternalClick = (e) => {
+    e.stopPropagation();
     if (url) window.open(url, "_blank", "noopener noreferrer");
   };
 
@@ -55,9 +64,9 @@ const ResourceCard = React.memo(({ resource }) => {
       aria-label={`${title} kaynagini ac`}
     >
       <div className="res-card">
-        <div className="res-card-cover">
+        <div className={`res-card-cover${fitMode === "auto" ? " res-card-cover--auto" : ""}`}>
           {coverImage ? (
-            <img src={coverImage} alt={title} className="res-card-cover-img" loading="lazy" />
+            <img src={coverImage} alt={title} className={`res-card-cover-img res-card-cover-img--${fitMode}`} loading="lazy" />
           ) : (
             <PatternBackground seed={resource.id || resource.slug} opacity={0.2} />
           )}
@@ -100,7 +109,11 @@ const ResourceCard = React.memo(({ resource }) => {
                 </span>
               )}
 
-              <ExternalLink size={14} className="res-card-ext-link" />
+              <ExternalLink
+                size={14}
+                className="res-card-ext-link"
+                onClick={handleExternalClick}
+              />
             </div>
           </div>
         </div>

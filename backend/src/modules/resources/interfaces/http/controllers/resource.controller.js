@@ -33,8 +33,6 @@ export const createResourceController = (dependencies) => {
 
     if (req.file?.path) {
       payload.coverImage = req.file.path;
-    } else if (req.body.coverImageUrl) {
-      payload.coverImage = req.body.coverImageUrl;
     }
 
     const resource = await createResourceUseCase(payload, dependencies);

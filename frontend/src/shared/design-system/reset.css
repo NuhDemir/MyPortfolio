@@ -24,3 +24,11 @@ fieldset{border:none}
 hr{border:none;border-top:1px solid var(--ds-border-soft);margin:var(--ds-space-8) 0}
 :target{scroll-margin-top:var(--ds-navbar-height)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important}}
+
+/* ── Global Scrollbar — thin line ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ds-border-soft); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--ds-border); }
+
+* { scrollbar-width: thin; scrollbar-color: var(--ds-border-soft) transparent; }

@@ -13,26 +13,30 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState(initialBlogFormState);
-  const [thumbnailFile, setThumbnailFile] = useState(null);
-  const [thumbnailPreview, setThumbnailPreview] = useState(null);
+  const [coverMode, setCoverMode] = useState("file");
+  const [coverUrl, setCoverUrl] = useState("");
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(null);
 
   const categories = useMemo(() => blogCategories, []);
 
-  const cleanupThumbnailPreview = useCallback(() => {
-    if (thumbnailPreview && thumbnailPreview.startsWith("blob:")) {
-      URL.revokeObjectURL(thumbnailPreview);
+  const cleanupPreview = useCallback(() => {
+    if (coverPreview && coverPreview.startsWith("blob:")) {
+      URL.revokeObjectURL(coverPreview);
     }
-  }, [thumbnailPreview]);
+  }, [coverPreview]);
 
   const resetForm = useCallback(() => {
     setIsFormVisible(false);
     setEditingId(null);
     setFormData(initialBlogFormState);
-    setThumbnailFile(null);
-    cleanupThumbnailPreview();
-    setThumbnailPreview(null);
+    setCoverMode("file");
+    setCoverUrl("");
+    setCoverFile(null);
+    cleanupPreview();
+    setCoverPreview(null);
     setError(null);
-  }, [cleanupThumbnailPreview, setError]);
+  }, [cleanupPreview, setError]);
 
   const handleInputChange = useCallback((event) => {
     const { name, value, type, checked } = event.target;
@@ -42,17 +46,39 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
     }));
   }, []);
 
-  const handleThumbnailChange = useCallback(
+  const handleCoverFileChange = useCallback(
     (event) => {
       const file = event.target.files?.[0];
       if (file) {
-        setThumbnailFile(file);
-        cleanupThumbnailPreview();
-        setThumbnailPreview(URL.createObjectURL(file));
+        setCoverFile(file);
+        cleanupPreview();
+        setCoverPreview(URL.createObjectURL(file));
       }
     },
-    [cleanupThumbnailPreview],
+    [cleanupPreview],
   );
+
+  const handleCoverUrlChange = useCallback((event) => {
+    const url = event.target.value;
+    setCoverUrl(url);
+    if (url) setCoverPreview(url);
+  }, []);
+
+  const handleCoverModeChange = useCallback((mode) => {
+    setCoverMode(mode);
+    setCoverFile(null);
+    if (mode === "url") {
+      setCoverUrl("");
+      setCoverPreview(null);
+    }
+  }, []);
+
+  const handleClearCover = useCallback(() => {
+    setCoverFile(null);
+    setCoverUrl("");
+    cleanupPreview();
+    setCoverPreview(null);
+  }, [cleanupPreview]);
 
   const startNew = useCallback(() => {
     resetForm();
@@ -77,8 +103,13 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
         isPublished: Boolean(blog.isPublished),
       });
 
-      const previewUrl = resolveThumbnailUrl(blog);
-      setThumbnailPreview(previewUrl || null);
+      const existingUrl = resolveThumbnailUrl(blog);
+      if (existingUrl) {
+        setCoverMode("url");
+        setCoverUrl(existingUrl);
+        setCoverPreview(existingUrl);
+      }
+
       setIsFormVisible(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
@@ -89,8 +120,8 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
     async (event) => {
       event.preventDefault();
 
-      if (!editingId && !thumbnailFile) {
-        setError("Yeni blog oluşturmak için kapak görseli seçmek zorunludur.");
+      if (!editingId && !coverFile && !coverUrl) {
+        setError("Yeni blog oluşturmak için kapak görseli zorunludur (URL veya dosya).");
         return;
       }
 
@@ -113,8 +144,10 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
         delete submission.tags;
       }
 
-      if (thumbnailFile) {
-        submission.thumbnail = thumbnailFile;
+      if (coverMode === "file" && coverFile) {
+        submission.thumbnail = coverFile;
+      } else if (coverMode === "url" && coverUrl) {
+        submission.thumbnailUrl = coverUrl;
       }
 
       try {
@@ -132,16 +165,7 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
         setLoading(false);
       }
     },
-    [
-      categories,
-      editingId,
-      fetchBlogs,
-      formData,
-      resetForm,
-      setError,
-      setLoading,
-      thumbnailFile,
-    ],
+    [categories, editingId, fetchBlogs, formData, resetForm, setError, setLoading, coverMode, coverFile, coverUrl],
   );
 
   return {
@@ -149,11 +173,17 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
     isFormVisible,
     editingId,
     formData,
-    thumbnailPreview,
+    coverMode,
+    coverUrl,
+    coverFile,
+    coverPreview,
     startNew,
     startEdit,
     handleInputChange,
-    handleThumbnailChange,
+    handleCoverFileChange,
+    handleCoverUrlChange,
+    handleCoverModeChange,
+    handleClearCover,
     handleSubmit,
     resetForm,
   };

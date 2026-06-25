@@ -1,6 +1,6 @@
-import { Save, X, Image, ArrowLeft } from "lucide-react";
+import { Save, X, Image, ArrowLeft, Upload, Link2 } from "lucide-react";
 
-const BlogForm = ({ editingId, loading, formData, categories, thumbnailPreview, onInputChange, onThumbnailChange, onSubmit, onCancel }) => {
+const BlogForm = ({ editingId, loading, formData, categories, coverPreview, coverMode, coverUrl, coverFile, onInputChange, onCoverFileChange, onCoverUrlChange, onCoverModeChange, onClearCover, onSubmit, onCancel }) => {
   return (
     <div className="admin-form-container">
       <div className="admin-form-header">
@@ -35,16 +35,51 @@ const BlogForm = ({ editingId, loading, formData, categories, thumbnailPreview, 
             <label htmlFor="tags">Etiketler (virgulle ayirin)</label>
             <input id="tags" type="text" name="tags" value={formData.tags} onChange={onInputChange} placeholder="tasarim, deneyim" />
           </div>
-          <div className="form-group form-group--file">
-            <label htmlFor="thumbnail">
-              Kapak Gorseli {editingId ? "(degistirmek icin yeni dosya secin)" : ""}
+          <div className="form-group">
+            <label>
+              Kapak Gorseli {editingId ? "(degistirmek icin yeni gorsel secin)" : ""}
             </label>
-            <div className="form-file-field">
-              <Image size={16} />
-              <input id="thumbnail" type="file" name="thumbnail" accept="image/*" onChange={onThumbnailChange} />
+
+            {coverPreview && (
+              <div className="res-cover-preview">
+                <img src={coverPreview} alt="Onizleme" />
+                <button type="button" className="res-cover-clear" onClick={onClearCover} aria-label="Gorseli kaldir">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
+            <div className="res-cover-mode-tabs">
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${coverMode === "url" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => onCoverModeChange("url")}
+              >
+                <Link2 size={14} /> URL
+              </button>
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${coverMode === "file" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => onCoverModeChange("file")}
+              >
+                <Upload size={14} /> Dosya Yukle
+              </button>
             </div>
-            {thumbnailPreview && (
-              <img src={thumbnailPreview} alt="Blog kapak onizlemesi" className="image-preview" />
+
+            {coverMode === "url" ? (
+              <input
+                type="url"
+                value={coverUrl}
+                onChange={onCoverUrlChange}
+                placeholder="https://example.com/image.jpg"
+                className="res-cover-url-input"
+              />
+            ) : (
+              <div className="form-file-field">
+                <Image size={16} />
+                <input id="thumbnail" type="file" name="thumbnail" accept="image/*" onChange={onCoverFileChange} />
+                {coverFile && <span className="res-cover-file-name">{coverFile.name}</span>}
+              </div>
             )}
           </div>
         </div>

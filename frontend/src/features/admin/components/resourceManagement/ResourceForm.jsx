@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, Link2, ImageIcon, X } from "lucide-react";
 import { createResource, updateResource } from "../../services/resourceService.js";
 import { showAdminToast } from "../../utils/adminToast.js";
 
@@ -44,6 +44,8 @@ const INITIAL_STATE = {
 };
 
 const ResourceForm = ({ editData, onSuccess, onCancel }) => {
+  const existingCover = editData?.coverImage || "";
+
   const [form, setForm] = useState(() => {
     if (editData) {
       return {
@@ -57,6 +59,7 @@ const ResourceForm = ({ editData, onSuccess, onCancel }) => {
         language: editData.language || "tr",
         difficulty: editData.difficulty || "",
         notes: editData.notes || "",
+        coverImageFit: editData.coverImageFit || "cover",
         isActive: editData.isActive !== false,
         isFeatured: editData.isFeatured === true,
       };
@@ -64,7 +67,10 @@ const ResourceForm = ({ editData, onSuccess, onCancel }) => {
     return { ...INITIAL_STATE };
   });
 
+  const [coverMode, setCoverMode] = useState(existingCover && !existingCover.startsWith("data:") ? "url" : "file");
+  const [coverUrl, setCoverUrl] = useState(coverMode === "url" ? existingCover : "");
   const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState(existingCover || "");
   const [submitting, setSubmitting] = useState(false);
 
   const handleChange = (field) => (e) => {
@@ -72,9 +78,42 @@ const ResourceForm = ({ editData, onSuccess, onCancel }) => {
     setForm((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleCoverChange = (e) => {
+  const handleCoverFileChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) setCoverFile(file);
+    if (file) {
+      setCoverFile(file);
+      setCoverPreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleCoverUrlChange = (e) => {
+    const url = e.target.value;
+    setCoverUrl(url);
+    if (url) {
+      setCoverPreview(url);
+    } else if (existingCover && coverMode === "url") {
+      setCoverPreview(existingCover);
+    } else {
+      setCoverPreview("");
+    }
+  };
+
+  const clearCover = () => {
+    setCoverFile(null);
+    setCoverUrl("");
+    setCoverPreview("");
+  };
+
+  const switchCoverMode = (mode) => {
+    setCoverMode(mode);
+    setCoverFile(null);
+    if (mode === "url") {
+      setCoverUrl(existingCover || "");
+      setCoverPreview(existingCover || "");
+    } else {
+      setCoverUrl("");
+      setCoverPreview(existingCover && coverMode === "file" ? existingCover : "");
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -95,9 +134,12 @@ const ResourceForm = ({ editData, onSuccess, onCancel }) => {
       formData.append("notes", form.notes);
       formData.append("isActive", String(form.isActive));
       formData.append("isFeatured", String(form.isFeatured));
+      formData.append("coverImageFit", form.coverImageFit || "cover");
 
-      if (coverFile) {
+      if (coverMode === "file" && coverFile) {
         formData.append("coverImage", coverFile);
+      } else if (coverMode === "url" && coverUrl) {
+        formData.append("coverImage", coverUrl);
       }
 
       if (editData) {
@@ -172,10 +214,80 @@ const ResourceForm = ({ editData, onSuccess, onCancel }) => {
             <label>Notlar</label>
             <textarea rows="2" value={form.notes} onChange={handleChange("notes")} />
           </div>
-          <div className="form-group">
+
+          <div className="form-group form-group--full">
             <label>Kapak Gorseli</label>
-            <input type="file" accept="image/*" onChange={handleCoverChange} />
+
+            {coverPreview && (
+              <div className="res-cover-preview">
+                <img src={coverPreview} alt="Onizleme" />
+                <button type="button" className="res-cover-clear" onClick={clearCover} aria-label="Gorseli kaldir">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
+            <div className="res-cover-mode-tabs">
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${coverMode === "url" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => switchCoverMode("url")}
+              >
+                <Link2 size={14} /> URL
+              </button>
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${coverMode === "file" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => switchCoverMode("file")}
+              >
+                <Upload size={14} /> Dosya Yukle
+              </button>
+            </div>
+
+            {coverMode === "url" ? (
+              <input
+                type="url"
+                value={coverUrl}
+                onChange={handleCoverUrlChange}
+                placeholder="https://example.com/image.jpg"
+                className="res-cover-url-input"
+              />
+            ) : (
+              <div className="form-file-field">
+                <ImageIcon size={16} />
+                <input type="file" accept="image/*" onChange={handleCoverFileChange} />
+                {coverFile && <span className="res-cover-file-name">{coverFile.name}</span>}
+              </div>
+            )}
           </div>
+
+          <div className="form-group">
+            <label>Gorsel Boyutlandirma</label>
+            <div className="res-cover-mode-tabs">
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${form.coverImageFit === "cover" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => setForm((prev) => ({ ...prev, coverImageFit: "cover" }))}
+              >
+                Kapla
+              </button>
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${form.coverImageFit === "contain" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => setForm((prev) => ({ ...prev, coverImageFit: "contain" }))}
+              >
+                Sigdir
+              </button>
+              <button
+                type="button"
+                className={`res-cover-mode-btn ${form.coverImageFit === "auto" ? "res-cover-mode-btn--active" : ""}`}
+                onClick={() => setForm((prev) => ({ ...prev, coverImageFit: "auto" }))}
+              >
+                Orjinal
+              </button>
+            </div>
+          </div>
+
           <div className="form-group form-group--checkbox">
             <label>
               <input type="checkbox" checked={form.isActive} onChange={handleChange("isActive")} />

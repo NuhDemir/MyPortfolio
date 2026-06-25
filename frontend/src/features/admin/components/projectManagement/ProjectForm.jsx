@@ -1,8 +1,8 @@
-import { Save, X, Image, Link, ArrowLeft } from "lucide-react";
+import { Save, X, Image, Upload, Link2, Link, ArrowLeft } from "lucide-react";
 import TechStackEditor from "./TechStackEditor.jsx";
 import CaseStudyEditor from "./CaseStudyEditor.jsx";
 
-const ProjectForm = ({ editingId, loading, formData, imagePreview, onInputChange, onFileChange, onSubmit, onCancel }) => {
+const ProjectForm = ({ editingId, loading, formData, coverPreview, coverMode, coverUrl, coverFile, onInputChange, onCoverFileChange, onCoverUrlChange, onCoverModeChange, onClearCover, onSubmit, onCancel }) => {
   if (!formData) return null;
 
   return (
@@ -81,14 +81,37 @@ const ProjectForm = ({ editingId, loading, formData, imagePreview, onInputChange
 
         <div className="form-grid">
           <div className="form-group">
-            <label htmlFor="image">
-              Proje Gorseli {editingId ? "(degistirmek icin yeni dosya secin)" : ""}
+            <label>
+              Proje Gorseli {editingId ? "(degistirmek icin yeni gorsel secin)" : ""}
             </label>
-            <div className="form-file-field">
-              <Image size={16} />
-              <input id="image" type="file" name="image" accept="image/*" onChange={onFileChange} />
+
+            {coverPreview && (
+              <div className="res-cover-preview">
+                <img src={coverPreview} alt="Onizleme" />
+                <button type="button" className="res-cover-clear" onClick={onClearCover} aria-label="Gorseli kaldir">
+                  <X size={14} />
+                </button>
+              </div>
+            )}
+
+            <div className="res-cover-mode-tabs">
+              <button type="button" className={`res-cover-mode-btn ${coverMode === "url" ? "res-cover-mode-btn--active" : ""}`} onClick={() => onCoverModeChange("url")}>
+                <Link2 size={14} /> URL
+              </button>
+              <button type="button" className={`res-cover-mode-btn ${coverMode === "file" ? "res-cover-mode-btn--active" : ""}`} onClick={() => onCoverModeChange("file")}>
+                <Upload size={14} /> Dosya Yukle
+              </button>
             </div>
-            {imagePreview && <img src={imagePreview} alt="Onizleme" className="image-preview" />}
+
+            {coverMode === "url" ? (
+              <input type="url" value={coverUrl} onChange={onCoverUrlChange} placeholder="https://example.com/image.jpg" className="res-cover-url-input" />
+            ) : (
+              <div className="form-file-field">
+                <Image size={16} />
+                <input id="image" type="file" name="image" accept="image/*" onChange={onCoverFileChange} />
+                {coverFile && <span className="res-cover-file-name">{coverFile.name}</span>}
+              </div>
+            )}
           </div>
 
           <div className="form-group">

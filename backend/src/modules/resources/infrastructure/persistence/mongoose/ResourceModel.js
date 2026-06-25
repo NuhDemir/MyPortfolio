@@ -38,6 +38,11 @@ const resourceSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  coverImageFit: {
+    type: String,
+    enum: ["cover", "contain", "auto"],
+    default: "cover",
+  },
   author: {
     type: String,
     default: "",

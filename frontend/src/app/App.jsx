@@ -30,6 +30,7 @@ const BlogDetailPage = lazy(() => import("@features/blog").then((m) => ({ defaul
 const ProjectsPage = lazy(() => import("@features/projects").then((m) => ({ default: m.ProjectsPage })));
 const ProjectDetailsPage = lazy(() => import("@features/projects").then((m) => ({ default: m.ProjectDetailsPage })));
 const ResourcesPage = lazy(() => import("@features/resources").then((m) => ({ default: m.ResourcesPage })));
+const ResourceDetailPage = lazy(() => import("@features/resources").then((m) => ({ default: m.ResourceDetailPage })));
 
 const AppContent = () => {
   const { role } = useUserRole();
@@ -48,13 +49,15 @@ const AppLayout = () => {
     location.pathname === "/" &&
     (role === "developer" || role === "recruiter");
 
+  const isHome = location.pathname === "/";
+
   return (
     <div className={`app-container show theme-${theme}`}>
       {!isRoleHome && <NavbarV2 />}
       <PageTransitionWrapper>
         {isRoleHome ? <AppContent /> : <Outlet />}
       </PageTransitionWrapper>
-      {!isRoleHome && <FooterV2 />}
+      {!isRoleHome && !isHome && <FooterV2 />}
       {!isRoleHome && <ScrollToTop />}
     </div>
   );
@@ -199,6 +202,18 @@ const App = () => {
                 }
               >
                 <ResourcesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="kaynaklar/:slug"
+            element={
+              <Suspense
+                fallback={
+                  <div className="component-loader">Yükleniyor...</div>
+                }
+              >
+                <ResourceDetailPage />
               </Suspense>
             }
           />

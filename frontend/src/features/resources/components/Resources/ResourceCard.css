@@ -46,6 +46,22 @@
   inset: 0;
 }
 
+.res-card-cover-img--contain {
+  object-fit: contain;
+  background: var(--ds-surface);
+}
+
+.res-card-cover-img--auto {
+  position: static;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+}
+
+.res-card-cover--auto {
+  aspect-ratio: auto;
+}
+
 .res-card-type-badge {
   position: absolute;
   top: var(--ds-space-3);

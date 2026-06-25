@@ -38,14 +38,25 @@ const serviceModalSchema = z.object({
   footnoteLinkUrl: z.string().trim().url().optional().or(z.literal("")),
 });
 
+const linkSchema = z.object({
+  label: z.string().trim().min(1).max(80),
+  url: z.string().trim().url(),
+});
+
 const serviceSchema = z.object({
   id: z.string().trim().min(2).max(50),
-  iconUrl: z.string().trim().url(),
+  iconUrl: z.string().trim().url().optional(),
   iconBgColor: z.string().trim().max(50).optional(),
   title: z.string().trim().min(2).max(120),
-  description: z.string().trim().min(2).max(500),
+  description: z.string().trim().min(2).max(800).optional(),
   order: z.coerce.number().int().min(0).optional(),
-  modal: serviceModalSchema,
+  image: z.string().trim().url().optional(),
+  problem: z.string().trim().max(1000).optional(),
+  solution: z.string().trim().max(1000).optional(),
+  desc: z.string().trim().max(1000).optional(),
+  tech: z.array(z.string().trim().min(1).max(80)).optional(),
+  links: z.array(linkSchema).optional(),
+  modal: serviceModalSchema.optional(),
 });
 
 export const updateAboutSchema = z

@@ -10,6 +10,7 @@ class CommentController {
 
   initializeRoutes() {
     // Public routes
+    this.router.get("/public", this.getPublicComments.bind(this));
     this.router.get(
       "/:resourceType/:resourceId",
       this.getCommentsByResource.bind(this)
@@ -66,6 +67,21 @@ class CommentController {
         this.middleware.authorizeAdmin,
         this.markAsSpam.bind(this)
       );
+    }
+  }
+
+  async getPublicComments(req, res, next) {
+    try {
+      const options = {
+        page: parseInt(req.query.page) || 1,
+        limit: parseInt(req.query.limit) || 50,
+        status: "approved",
+        sort: { createdAt: -1 },
+      };
+      const result = await this.service.getAllComments(options);
+      res.json(result);
+    } catch (error) {
+      next(error);
     }
   }
 
@@ -147,17 +163,6 @@ class CommentController {
         ipAddress: req.ip,
         userAgent: req.get("user-agent"),
       };
-
-      // Validate resourceType if provided
-      if (
-        commentData.resourceType &&
-        !["Blog", "Project"].includes(commentData.resourceType)
-      ) {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid resource type. Must be 'Blog' or 'Project'",
-        });
-      }
 
       const comment = await this.service.createComment(commentData);
       res.status(201).json(comment);

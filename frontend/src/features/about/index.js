@@ -7,6 +7,6 @@ export { Bio } from "./components/Bio.jsx";
 export { Skills } from "./components/Skills.jsx";
 export { Services } from "./components/Services.jsx";
 export { ResourcesTeaser } from "./components/ResourcesTeaser.jsx";
-export { getServicesData } from "./services/servicesDataService.js";
+export { useServices } from "./hooks/useServices.js";
 export { Timeline } from "./components/Timeline.jsx";
 export { CTA } from "./components/CTA.jsx";

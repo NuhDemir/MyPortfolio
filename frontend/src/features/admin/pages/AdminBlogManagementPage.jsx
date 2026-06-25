@@ -114,9 +114,15 @@ const AdminBlogManagementPage = () => {
           loading={loading}
           formData={editor.formData}
           categories={editor.categories}
-          thumbnailPreview={editor.thumbnailPreview}
+          coverPreview={editor.coverPreview}
+          coverMode={editor.coverMode}
+          coverUrl={editor.coverUrl}
+          coverFile={editor.coverFile}
           onInputChange={editor.handleInputChange}
-          onThumbnailChange={editor.handleThumbnailChange}
+          onCoverFileChange={editor.handleCoverFileChange}
+          onCoverUrlChange={editor.handleCoverUrlChange}
+          onCoverModeChange={editor.handleCoverModeChange}
+          onClearCover={editor.handleClearCover}
           onSubmit={editor.handleSubmit}
           onCancel={editor.resetForm}
         />

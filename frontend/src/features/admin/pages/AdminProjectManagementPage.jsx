@@ -74,9 +74,15 @@ const AdminProjectManagementPage = () => {
           editingId={editor.editingId}
           loading={loading}
           formData={editor.formData}
-          imagePreview={editor.imagePreview}
+          coverPreview={editor.coverPreview}
+          coverMode={editor.coverMode}
+          coverUrl={editor.coverUrl}
+          coverFile={editor.coverFile}
           onInputChange={editor.handleInputChange}
-          onFileChange={editor.handleFileChange}
+          onCoverFileChange={editor.handleCoverFileChange}
+          onCoverUrlChange={editor.handleCoverUrlChange}
+          onCoverModeChange={editor.handleCoverModeChange}
+          onClearCover={editor.handleClearCover}
           onSubmit={editor.handleSubmit}
           onCancel={editor.resetForm}
         />

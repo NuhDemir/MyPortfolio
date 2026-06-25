@@ -6,12 +6,10 @@ const commentSchema = new mongoose.Schema(
     resourceType: {
       type: String,
       enum: ["Blog", "Project"],
-      required: true,
       index: true,
     },
     resourceId: {
-      type: mongoose.Schema.Types.Mixed, // Support both ObjectId and String (for slugs)
-      required: true,
+      type: mongoose.Schema.Types.Mixed,
       index: true,
     },
     // Deprecated: Keep for backward compatibility
@@ -24,6 +22,7 @@ const commentSchema = new mongoose.Schema(
       name: { type: String, required: true, trim: true },
       email: { type: String, required: true, trim: true, lowercase: true },
       website: { type: String, trim: true },
+      jobTitle: { type: String, trim: true },
     },
     content: {
       type: String,
