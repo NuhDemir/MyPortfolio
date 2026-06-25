@@ -1,7 +1,3 @@
-export { Navbar } from "./components/Navbar/Navbar.jsx";
-export { NavbarMenuList } from "./components/Navbar/components/NavbarMenuList.jsx";
-export { NavbarPattern } from "./components/Navbar/components/NavbarPattern.jsx";
-export { ThemeToggleButton } from "./components/Navbar/components/ThemeToggleButton.jsx";
-export { MobileMenuToggle } from "./components/Navbar/components/MobileMenuToggle.jsx";
-export { NAVBAR_ITEMS } from "./components/Navbar/config/navItems.js";
-export { useScrollAnimation } from "./hooks/useScrollAnimation.js";
+export { NavbarV2 } from "./v2/NavbarV2.jsx";
+export { NavbarV2 as Navbar } from "./v2/NavbarV2.jsx";
+export { NAVBAR_ITEMS } from "./navItems.js";

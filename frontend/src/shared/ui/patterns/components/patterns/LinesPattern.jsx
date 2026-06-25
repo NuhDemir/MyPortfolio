@@ -6,13 +6,17 @@ const LinesPatternComponent = ({ className = "", opacity = 0.22 }) => {
 
   return (
     <div
-      className={`pattern-surface ${className}`.trim()}
-      style={{
-        "--pattern-image": preset.image,
-        "--pattern-size": preset.size,
-        "--pattern-opacity": opacity,
-      }}
+      className={`ds-pattern ${className}`.trim()}
       aria-hidden="true"
+      style={{
+        maskImage: preset.mask,
+        WebkitMaskImage: preset.mask,
+        maskSize: preset.size,
+        WebkitMaskSize: preset.size,
+        maskRepeat: "repeat",
+        WebkitMaskRepeat: "repeat",
+        opacity,
+      }}
     />
   );
 };

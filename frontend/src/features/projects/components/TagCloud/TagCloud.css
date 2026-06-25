@@ -1,0 +1,54 @@
+.tcloud {
+  padding: var(--ds-space-3) 0;
+}
+
+.tcloud__scroll {
+  display: flex;
+  gap: var(--ds-space-2);
+  overflow-x: auto;
+  padding-bottom: var(--ds-space-2);
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.tcloud__scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.tcloud__chip {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-xs);
+  padding: var(--ds-space-1) var(--ds-space-3);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-bg);
+  color: var(--ds-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--ds-transition-all);
+  flex-shrink: 0;
+}
+
+.tcloud__chip:hover {
+  border-color: var(--ds-border-active);
+  color: var(--ds-fg);
+}
+
+.tcloud__chip--active {
+  background: var(--ds-accent);
+  border-color: var(--ds-accent);
+  color: var(--ds-accent-on);
+}
+
+.tcloud__count {
+  font-family: var(--ds-font-mono);
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.tcloud__chip--active .tcloud__count {
+  opacity: 0.8;
+}

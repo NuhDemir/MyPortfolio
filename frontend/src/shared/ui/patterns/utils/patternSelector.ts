@@ -35,6 +35,11 @@ const PATTERN_KEYWORDS: Record<PatternType, string[]> = {
   circles: ["experience", "journey", "roadmap", "progress", "learning"],
   mesh: ["general", "other", "misc", "default"],
   naiveSketch: ["naive", "draw", "handmade", "music", "sketch"],
+  "micro-dot": ["apple", "soft", "minimal", "clean", "product", "premium"],
+  diagonal: ["motion", "dynamic", "speed", "fast", "agile"],
+  "gradient-mesh": ["ambient", "atmosphere", "depth", "organic", "fluid"],
+  "grid-fine": ["precision", "detail", "technical", "accurate", "blueprint"],
+  noise: ["texture", "film", "grain", "vintage", "photography", "analog"],
 };
 
 const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
@@ -78,6 +83,36 @@ const PATTERN_CONFIGS: Record<PatternType, PatternConfig> = {
     type: "naiveSketch",
     density: 9,
     opacity: 0.2,
+    animated: false,
+  },
+  "micro-dot": {
+    type: "micro-dot",
+    density: 20,
+    opacity: 0.18,
+    animated: false,
+  },
+  diagonal: {
+    type: "diagonal",
+    density: 12,
+    opacity: 0.1,
+    animated: false,
+  },
+  "gradient-mesh": {
+    type: "gradient-mesh",
+    density: 4,
+    opacity: 0.22,
+    animated: true,
+  },
+  "grid-fine": {
+    type: "grid-fine",
+    density: 10,
+    opacity: 0.12,
+    animated: false,
+  },
+  noise: {
+    type: "noise",
+    density: 5,
+    opacity: 0.15,
     animated: false,
   },
 };

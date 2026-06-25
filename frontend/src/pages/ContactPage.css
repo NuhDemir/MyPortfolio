@@ -1,181 +1,42 @@
-/* ═══════════════════════════════════════════════════════════════════════════
-   CONTACT PAGE v2 — Nike-inspired
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-.contact {
+.cp {
   padding-top: var(--ds-navbar-height);
   padding-bottom: var(--ds-space-20);
 }
 
-.contact__hero {
-  text-align: center;
-  padding: var(--ds-space-16) var(--ds-container-gutter) var(--ds-space-8);
-}
-
-.contact__title {
-  font-family: var(--ds-font-display);
-  font-weight: var(--ds-weight-display);
-  font-size: var(--ds-text-3xl);
-  line-height: var(--ds-leading-tight);
-  letter-spacing: var(--ds-tracking-display);
-  text-transform: uppercase;
-  color: var(--ds-fg);
-  margin-bottom: var(--ds-space-3);
-}
-
-.contact__subtitle {
-  font-family: var(--ds-font-body);
-  font-weight: var(--ds-weight-body);
-  font-size: var(--ds-text-lg);
-  color: var(--ds-muted);
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-.contact__grid {
+.cp__grid {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 var(--ds-container-gutter);
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 420px;
   gap: var(--ds-space-8);
 }
 
-/* ── Form Section ──────────────────────────────────────────────────────── */
-.contact__form-card {
-  background-color: var(--ds-bg);
+.cp__form {
+  background-color: var(--ds-surface);
   padding: var(--ds-space-8);
+  border-radius: var(--ds-radius-lg);
 }
 
-.contact__form-card h2 {
-  font-family: var(--ds-font-display);
-  font-weight: var(--ds-weight-medium);
-  font-size: var(--ds-text-xl);
-  margin-bottom: var(--ds-space-6);
-  color: var(--ds-fg);
-}
-
-/* ── Info Section ──────────────────────────────────────────────────────── */
-.contact__info-stack {
+.cp__side {
   display: flex;
   flex-direction: column;
-  gap: var(--ds-space-6);
+  gap: var(--ds-space-8);
 }
 
-.contact__info-card {
-  background-color: var(--ds-surface);
-  padding: var(--ds-space-6);
-}
-
-.contact__info-card h2 {
-  font-family: var(--ds-font-display);
-  font-weight: var(--ds-weight-medium);
-  font-size: var(--ds-text-lg);
-  margin-bottom: var(--ds-space-5);
-  color: var(--ds-fg);
-}
-
-.contact__info-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: var(--ds-space-4);
-}
-
-.contact__info-item {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--ds-space-3);
-  font-size: var(--ds-text-sm);
-  color: var(--ds-muted);
-}
-
-.contact__info-item svg {
-  flex-shrink: 0;
-  color: var(--ds-fg);
-  margin-top: 2px;
-}
-
-.contact__info-item strong {
-  display: block;
-  font-weight: var(--ds-weight-medium);
-  font-size: var(--ds-text-xs);
-  text-transform: uppercase;
-  letter-spacing: var(--ds-tracking-wide);
-  color: var(--ds-fg);
-  margin-bottom: 2px;
-}
-
-.contact__info-item a {
-  color: var(--ds-fg);
-  text-decoration: none;
-  transition: color var(--ds-motion-fast) var(--ds-ease-standard);
-}
-
-.contact__info-item a:hover {
-  color: var(--ds-muted);
-}
-
-.contact__social {
-  display: flex;
-  gap: var(--ds-space-2);
-  padding-top: var(--ds-space-4);
-  border-top: 1px solid var(--ds-border-soft);
-  margin-top: var(--ds-space-4);
-}
-
-.contact__social-link {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--ds-radius-pill);
-  color: var(--ds-fg);
-  background-color: var(--ds-bg);
-  border: 1px solid var(--ds-border-soft);
-  transition: var(--ds-transition-all);
-}
-
-.contact__social-link:hover {
-  background-color: var(--ds-accent);
-  border-color: var(--ds-accent);
-  color: var(--ds-accent-on);
-}
-
-/* ── Map ───────────────────────────────────────────────────────────────── */
-.contact__map {
-  overflow: hidden;
-  border: 1px solid var(--ds-border-soft);
-}
-
-.contact__map iframe {
-  display: block;
-  border: 0;
-}
-
-/* ── Comments ──────────────────────────────────────────────────────────── */
-.contact__comments {
-  padding: var(--ds-space-6);
-  background-color: var(--ds-surface);
-}
-
-.contact__comments h2 {
-  font-family: var(--ds-font-display);
-  font-weight: var(--ds-weight-medium);
-  font-size: var(--ds-text-lg);
-  margin-bottom: var(--ds-space-5);
-  color: var(--ds-fg);
-}
-
-/* ── Responsive ────────────────────────────────────────────────────────── */
-
-@media (max-width: 768px) {
-  .contact__grid {
+@media (max-width: 960px) {
+  .cp__grid {
     grid-template-columns: 1fr;
   }
 
-  .contact__title {
-    font-size: var(--ds-text-2xl);
+  .cp__side {
+    gap: var(--ds-space-6);
+  }
+}
+
+@media (max-width: 640px) {
+  .cp__form {
+    padding: var(--ds-space-6);
+    border-radius: var(--ds-radius-md);
   }
 }

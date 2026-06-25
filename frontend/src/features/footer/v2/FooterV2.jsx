@@ -13,7 +13,7 @@ export const FooterV2 = () => (
   <footer className="ft2" role="contentinfo">
     <div className="ft2__inner">
       <Link to="/" className="ft2__brand" aria-label="Nuh Demir Ana Sayfa">
-        <span className="ft2__brand-name">Nuh Demir</span>
+        <span className="ft2__brand-name">Music is life</span>
       </Link>
 
       <p className="ft2__copy">

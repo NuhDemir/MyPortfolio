@@ -1,5 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   APP BACKGROUND v2 — Soft dual-pattern backdrop
+   APP BACKGROUND v3 — Layered ambient backdrop, Apple-soft
+   Layer 1: Ambient gradient orbs (top-left, bottom-right)
+   Layer 2: Subtle pattern
+   All theme-responsive via CSS custom properties
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .ds-app-bg {
@@ -8,5 +11,44 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background-color: var(--ds-bg);
+}
+
+/* ── Ambient Orb: Top Left ─────────────────────────────────────────────── */
+.ds-app-bg::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  left: -15%;
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--ds-ambient-top-left, transparent),
+    transparent 70%
+  );
+  transition: background var(--ds-motion-base) var(--ds-ease-standard);
+}
+
+/* ── Ambient Orb: Bottom Right ─────────────────────────────────────────── */
+.ds-app-bg::after {
+  content: "";
+  position: absolute;
+  bottom: -20%;
+  right: -15%;
+  width: 55%;
+  height: 55%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    var(--ds-ambient-bottom-right, transparent),
+    transparent 70%
+  );
+  transition: background var(--ds-motion-base) var(--ds-ease-standard);
+}
+
+/* ── Pattern Layer ─────────────────────────────────────────────────────── */
+.ds-app-bg__pattern {
+  position: absolute;
+  inset: 0;
 }

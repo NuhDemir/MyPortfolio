@@ -1,11 +1,15 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   PATTERN BACKGROUND v2 — Subtle base for all pattern surfaces
+   PATTERN BACKGROUND v4 — Mask-based, theme-agnostic
+   SVG acts as alpha mask (via mask-image).
+   background-color: var(--ds-fg) → light=dark-gray  dark=white  (auto)
+   Opacity controlled by JS prop.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .ds-pattern {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-repeat: repeat;
   will-change: transform;
+  background-color: var(--ds-fg);
+  transition: background-color var(--ds-motion-base) var(--ds-ease-standard);
 }

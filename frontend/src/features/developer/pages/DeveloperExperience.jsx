@@ -7,7 +7,7 @@ import { FooterV2 } from "@features/footer/v2/FooterV2.jsx";
 import { Terminal as TerminalComponent, ProjectPanel, CodeViewer, ContactPanel } from "@features/developer";
 
 // Veri ve Stil
-import projectsData from "@features/projects/data/developerProjects.json";
+import projectsData from "@features/projects/data/projects.json";
 import "../styles/DeveloperExperience.css";
 
 // Başlangıçta gösterilecek karşılama bileşeni

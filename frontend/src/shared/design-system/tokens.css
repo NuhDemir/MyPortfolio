@@ -116,6 +116,14 @@
   --ds-transition-border: border-color var(--ds-motion-fast) var(--ds-ease-standard);
   --ds-transition-transform: transform var(--ds-motion-fast) var(--ds-ease-standard);
   --ds-transition-all: all var(--ds-motion-fast) var(--ds-ease-standard);
+
+  /* ── Theme Transition (Circle Reveal) ────────────────────────────────── */
+  --ds-theme-transition-duration: 500ms;
+  --ds-theme-transition-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Background Ambient ──────────────────────────────────────────────── */
+  --ds-ambient-top-left:     transparent;
+  --ds-ambient-bottom-right: transparent;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -154,6 +162,10 @@
   --ds-elev-raised: 0 0 0 1px var(--ds-border);
   --ds-divider:     0 -1px 0 0 var(--ds-border-soft) inset;
   --ds-focus-ring:  0 0 0 2px rgba(39, 93, 197, 1);
+
+  /* ── Background Ambient ──────────────────────────────────────────────── */
+  --ds-ambient-top-left:     rgba(99, 102, 241, 0.04);
+  --ds-ambient-bottom-right: rgba(236, 72, 153, 0.03);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -177,4 +189,53 @@
 /* ── Global background override ────────────────────────────────────────── */
 body {
   background-color: var(--ds-bg) !important;
+  transition: background-color var(--ds-motion-base) var(--ds-ease-standard),
+              color var(--ds-motion-base) var(--ds-ease-standard);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   VIEW TRANSITION API — Circle Reveal Theme Switch
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--ds-theme-transition-duration);
+  animation-timing-function: var(--ds-theme-transition-ease);
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation-name: vt-old-shrink;
+}
+
+::view-transition-new(root) {
+  animation-name: vt-circle-reveal;
+}
+
+@keyframes vt-circle-reveal {
+  from {
+    clip-path: circle(0 at var(--theme-toggle-x, 50vw) var(--theme-toggle-y, 50vh));
+  }
+  to {
+    clip-path: circle(var(--theme-toggle-r, 100vmax) at var(--theme-toggle-x, 50vw) var(--theme-toggle-y, 50vh));
+  }
+}
+
+@keyframes vt-old-shrink {
+  to {
+    opacity: 0.3;
+    transform: scale(0.98);
+    filter: blur(2px);
+  }
+}
+
+/* Disable view transitions for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+  body {
+    transition: none !important;
+  }
 }

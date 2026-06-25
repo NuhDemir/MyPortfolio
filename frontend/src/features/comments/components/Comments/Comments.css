@@ -1,0 +1,87 @@
+.cs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-6);
+}
+
+.cs__heading {
+  font-family: var(--ds-font-display);
+  font-weight: var(--ds-weight-medium);
+  font-size: var(--ds-text-xl);
+  color: var(--ds-fg);
+  margin: 0;
+}
+
+.cs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.cs__card {
+  position: relative;
+  background-color: var(--ds-bg);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: var(--ds-radius-md);
+  padding: var(--ds-space-6) var(--ds-space-6) var(--ds-space-5);
+  cursor: pointer;
+  transition: border-color var(--ds-motion-fast) var(--ds-ease-standard),
+              transform var(--ds-motion-fast) var(--ds-ease-standard);
+  outline: none;
+}
+
+.cs__card:hover {
+  border-color: var(--ds-border);
+}
+
+.cs__card--active {
+  border-color: var(--ds-fg);
+  transform: scale(1.01);
+}
+
+.cs__card:focus-visible {
+  box-shadow: var(--ds-focus-ring);
+}
+
+.cs__quote {
+  position: absolute;
+  top: var(--ds-space-2);
+  left: var(--ds-space-5);
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-4xl);
+  line-height: 1;
+  color: var(--ds-border-soft);
+  pointer-events: none;
+  user-select: none;
+}
+
+.cs__text {
+  position: relative;
+  margin: 0 0 var(--ds-space-4);
+  font-size: var(--ds-text-base);
+  line-height: var(--ds-leading-normal);
+  color: var(--ds-fg);
+  font-style: italic;
+}
+
+.cs__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: var(--ds-space-4);
+  border-top: 1px solid var(--ds-border-soft);
+}
+
+.cs__name {
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-fg);
+}
+
+.cs__role {
+  font-size: var(--ds-text-xs);
+  color: var(--ds-muted);
+}

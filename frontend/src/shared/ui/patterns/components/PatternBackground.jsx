@@ -13,11 +13,19 @@ const hashString = (input = "") => {
   return Math.abs(hash);
 };
 
+const pickRandomPreset = () => {
+  const idx = Math.floor(Math.random() * PATTERN_KEYS.length);
+  return PATTERN_PRESETS[PATTERN_KEYS[idx]];
+};
+
 const PatternBackgroundComponent = ({ variant = "random", opacity = 0.15, className = "", seed = "" }) => {
   const preset = useMemo(() => {
-    if (variant !== "random") return PATTERN_PRESETS[variant] ?? PATTERN_PRESETS.grid;
-    const idx = hashString(seed || window.location.pathname) % PATTERN_KEYS.length;
-    return PATTERN_PRESETS[PATTERN_KEYS[idx]];
+    if (variant === "random") {
+      return seed
+        ? PATTERN_PRESETS[PATTERN_KEYS[hashString(seed) % PATTERN_KEYS.length]]
+        : pickRandomPreset();
+    }
+    return PATTERN_PRESETS[variant] ?? PATTERN_PRESETS.grid;
   }, [seed, variant]);
 
   return (
@@ -25,8 +33,12 @@ const PatternBackgroundComponent = ({ variant = "random", opacity = 0.15, classN
       className={`ds-pattern ${className}`.trim()}
       aria-hidden="true"
       style={{
-        backgroundImage: preset.image,
-        backgroundSize: preset.size,
+        maskImage: preset.mask,
+        WebkitMaskImage: preset.mask,
+        maskSize: preset.size,
+        WebkitMaskSize: preset.size,
+        maskRepeat: "repeat",
+        WebkitMaskRepeat: "repeat",
         opacity,
       }}
     />

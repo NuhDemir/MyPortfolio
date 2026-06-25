@@ -1,0 +1,35 @@
+.prj-page {
+  max-width: var(--ds-container-max);
+  margin: 0 auto;
+  padding: var(--ds-space-8) var(--ds-container-gutter);
+}
+
+.prj-page__header {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-6);
+  margin-bottom: var(--ds-space-8);
+}
+
+.prj-page__back {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--ds-space-2) 0;
+}
+
+.prj-page__back:hover {
+  color: var(--ds-fg);
+}
+
+.prj-page__title {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-3xl);
+  font-weight: var(--ds-weight-display);
+  color: var(--ds-fg);
+  margin: 0;
+  letter-spacing: var(--ds-tracking-display);
+}

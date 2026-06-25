@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import projectsData from "@features/projects/data/developerProjects.json";
+import projectsData from "@features/projects/data/projects.json";
 import { ProjectModal } from "@shared";
 import "./style/RecruiterProjectGrid.css";
 

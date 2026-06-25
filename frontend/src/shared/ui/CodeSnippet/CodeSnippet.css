@@ -1,34 +1,96 @@
-.ds-dark .code-snip {
+.cs {
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-border);
+  overflow: hidden;
+  background: var(--ds-bg);
+  transition: var(--ds-transition-all);
+}
+
+.cs__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ds-space-2) var(--ds-space-4);
+  background: var(--ds-surface);
+  border-bottom: 1px solid var(--ds-border-soft);
+}
+
+.cs__dots {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cs__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.cs__dot--red {
+  background: #ff5f56;
+}
+
+.cs__dot--yellow {
+  background: #ffbd2e;
+}
+
+.cs__dot--green {
+  background: #27c93f;
+}
+
+.cs__file {
+  font-family: var(--ds-font-mono);
+  font-size: 11px;
+  color: var(--ds-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-left: var(--ds-space-4);
+}
+
+.cs__copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  padding: var(--ds-space-1) var(--ds-space-3);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-bg);
+  color: var(--ds-muted);
+  font-family: var(--ds-font-body);
+  font-size: 11px;
+  cursor: pointer;
+  transition: var(--ds-transition-all);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.cs__copy:hover {
+  border-color: var(--ds-border-active);
+  color: var(--ds-fg);
+  background: var(--ds-surface);
+}
+
+.cs pre {
+  margin: 0 !important;
+}
+
+.cs code {
+  font-family: var(--ds-font-mono) !important;
+}
+
+/* ── Dark mode override ─────────────────────────────────────────────────── */
+
+.ds-dark .cs {
   background: var(--ds-surface-2);
   border-color: var(--ds-border);
 }
 
-.code-snip {
-  border-radius: var(--ds-radius-sm);
-  border: 1px solid var(--ds-border);
-  overflow: hidden;
-  background: #1e1e1e;
+.ds-dark .cs__bar {
+  background: var(--ds-surface);
 }
 
-.code-snip__head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: var(--ds-space-2) var(--ds-space-4);
-  background: rgba(255, 255, 255, 0.04);
-  border-bottom: 1px solid var(--ds-border);
-}
-
-.code-snip__file {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  color: var(--ds-muted);
-}
-
-.code-snip__lang {
-  font-family: var(--ds-font-mono);
-  font-size: var(--ds-text-xs);
-  color: var(--ds-meta);
-  text-transform: uppercase;
-  letter-spacing: var(--ds-tracking-wide);
+.ds-dark .cs__copy {
+  background: var(--ds-surface);
 }

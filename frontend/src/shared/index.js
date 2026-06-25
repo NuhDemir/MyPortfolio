@@ -12,3 +12,10 @@ export { PatternBackground, PATTERN_PRESETS, PATTERN_VARIANTS, VINTAGE_NEUBRUTAL
 export { useSound } from "./hooks/useSound.js";
 export { useBackendKeepAlive } from "./hooks/useBackendKeepAlive.js";
 export { default as useAboutModalGsapAnimation } from "./hooks/useAboutModalGsapAnimation.js";
+export { default as Lightbox } from "./ui/Lightbox/Lightbox.jsx";
+export { default as BeforeAfterSlider } from "./ui/BeforeAfterSlider/BeforeAfterSlider.jsx";
+export { default as Reveal } from "./ui/Reveal/Reveal.jsx";
+export { default as CodeSnippet } from "./ui/CodeSnippet/CodeSnippet.jsx";
+export { default as HoverVideo } from "./ui/HoverVideo/HoverVideo.jsx";
+export { default as ErrorBoundary } from "./ui/ErrorBoundary/ErrorBoundary.jsx";
+export { Button, Card, Tag, Container, Stack, Grid, Section, Input, SearchInput, Textarea, Select, Field } from "./design-system/index.js";

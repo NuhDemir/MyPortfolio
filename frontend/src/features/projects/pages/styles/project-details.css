@@ -1,0 +1,194 @@
+.prj-detail {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--ds-space-8) var(--ds-container-gutter);
+}
+
+.prj-detail--notfound {
+  text-align: center;
+  padding-top: var(--ds-space-20);
+}
+
+.prj-detail--notfound h1 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-2xl);
+  font-weight: var(--ds-weight-display);
+  color: var(--ds-fg);
+  margin: var(--ds-space-6) 0 var(--ds-space-3);
+}
+
+.prj-detail--notfound p {
+  font-family: var(--ds-font-body);
+  color: var(--ds-muted);
+  margin: 0 0 var(--ds-space-6);
+}
+
+.prj-detail__back {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--ds-space-2) 0;
+}
+
+.prj-detail__back:hover {
+  color: var(--ds-fg);
+}
+
+.prj-detail__link {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-accent);
+  text-decoration: underline;
+}
+
+.prj-detail__topbar {
+  margin-bottom: var(--ds-space-6);
+}
+
+.prj-detail__hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-12);
+  align-items: center;
+  margin-bottom: var(--ds-space-8);
+}
+
+@media (max-width: 768px) {
+  .prj-detail__hero {
+    grid-template-columns: 1fr;
+    gap: var(--ds-space-6);
+  }
+}
+
+.prj-detail__hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-4);
+}
+
+.prj-detail__kickers {
+  display: flex;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+}
+
+.prj-detail__kicker {
+  font-family: var(--ds-font-body);
+  font-size: 11px;
+  font-weight: var(--ds-weight-semibold);
+  letter-spacing: var(--ds-tracking-wide);
+  text-transform: uppercase;
+  padding: var(--ds-space-1) var(--ds-space-3);
+  border-radius: var(--ds-radius-pill);
+  border: 1px solid var(--ds-border);
+  color: var(--ds-muted);
+  background: var(--ds-surface);
+}
+
+.prj-detail__kicker--feat {
+  background: var(--ds-accent);
+  color: var(--ds-accent-on);
+  border-color: var(--ds-accent);
+}
+
+.prj-detail__kicker--platform {
+  color: var(--ds-fg);
+  border-color: var(--ds-border-active);
+}
+
+.prj-detail__title {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-3xl);
+  font-weight: var(--ds-weight-display);
+  letter-spacing: var(--ds-tracking-display);
+  color: var(--ds-fg);
+  margin: 0;
+  line-height: var(--ds-leading-tight);
+}
+
+@media (max-width: 640px) {
+  .prj-detail__title {
+    font-size: var(--ds-text-2xl);
+  }
+}
+
+.prj-detail__tagline {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-lg);
+  color: var(--ds-muted);
+  margin: 0;
+  line-height: var(--ds-leading-body);
+}
+
+.prj-detail__ctas {
+  display: flex;
+  gap: var(--ds-space-3);
+  flex-wrap: wrap;
+  padding-top: var(--ds-space-2);
+}
+
+.prj-detail__cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  padding: var(--ds-space-3) var(--ds-space-6);
+  border-radius: var(--ds-radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--ds-transition-all);
+}
+
+.prj-detail__cta--primary {
+  background: var(--ds-accent);
+  color: var(--ds-accent-on);
+  border: 1px solid var(--ds-accent);
+}
+
+.prj-detail__cta--primary:hover {
+  background: var(--ds-accent-hover);
+}
+
+.prj-detail__cta--primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.prj-detail__cta--secondary {
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  border: 1px solid var(--ds-border);
+}
+
+.prj-detail__cta--secondary:hover {
+  background: var(--ds-surface);
+}
+
+.prj-detail__cta--ghost {
+  background: none;
+  color: var(--ds-muted);
+  border: 1px solid transparent;
+}
+
+.prj-detail__cta--ghost:hover {
+  color: var(--ds-fg);
+  background: var(--ds-surface);
+}
+
+.prj-detail__hero-right {
+  border-radius: var(--ds-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--ds-border);
+  aspect-ratio: 4 / 3;
+}
+
+.prj-detail__hero-img,
+.prj-detail__hero-right .hover-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

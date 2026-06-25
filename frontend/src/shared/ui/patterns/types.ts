@@ -10,7 +10,12 @@ export type PatternType =
   | "waves"
   | "mesh"
   | "circles"
-  | "naiveSketch";
+  | "naiveSketch"
+  | "micro-dot"
+  | "diagonal"
+  | "gradient-mesh"
+  | "grid-fine"
+  | "noise";
 
 export type PatternIntensity = "low" | "medium" | "high";
 

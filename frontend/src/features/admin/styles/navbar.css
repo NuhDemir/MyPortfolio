@@ -30,9 +30,9 @@
   top: -5rem;
 }
 
-.dark .anv2 {
-  background-color: var(--ds-surface-alpha, rgba(15, 15, 15, 0.7));
-  border-color: var(--ds-border-alpha, rgba(255, 255, 255, 0.08));
+.ds-dark .anv2 {
+  background-color: rgba(15, 15, 15, 0.7);
+  border-color: rgba(255, 255, 255, 0.08);
   box-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.5);
 }
 

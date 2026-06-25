@@ -1,0 +1,127 @@
+.pfoot {
+  margin: var(--ds-space-12) 0 var(--ds-space-8);
+}
+
+.pfoot__cta {
+  text-align: center;
+  padding: var(--ds-space-12) var(--ds-space-6);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface);
+  margin-bottom: var(--ds-space-8);
+}
+
+.pfoot__cta h2 {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-xl);
+  font-weight: var(--ds-weight-display);
+  color: var(--ds-fg);
+  margin: 0 0 var(--ds-space-2);
+  letter-spacing: var(--ds-tracking-display);
+}
+
+.pfoot__cta p {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  color: var(--ds-muted);
+  margin: 0 0 var(--ds-space-6);
+}
+
+.pfoot__cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--ds-space-3);
+  flex-wrap: wrap;
+}
+
+.pfoot__link {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  padding: var(--ds-space-3) var(--ds-space-6);
+  border-radius: var(--ds-radius-pill);
+  text-decoration: none;
+  transition: var(--ds-transition-all);
+}
+
+.pfoot__link--primary {
+  background: var(--ds-accent);
+  color: var(--ds-accent-on);
+  border: 1px solid var(--ds-accent);
+}
+
+.pfoot__link--primary:hover {
+  background: var(--ds-accent-hover);
+}
+
+.pfoot__link--ghost {
+  background: var(--ds-bg);
+  color: var(--ds-fg);
+  border: 1px solid var(--ds-border);
+}
+
+.pfoot__link--ghost:hover {
+  background: var(--ds-surface);
+}
+
+.pfoot__nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ds-space-4);
+}
+
+@media (max-width: 560px) {
+  .pfoot__nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+.pfoot__nav-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-4);
+  padding: var(--ds-space-5);
+  border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md);
+  text-decoration: none;
+  transition: var(--ds-transition-all);
+}
+
+.pfoot__nav-card:hover {
+  border-color: var(--ds-border-active);
+  background: var(--ds-surface);
+}
+
+.pfoot__nav-card--next {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.pfoot__nav-card--next > div {
+  text-align: right;
+}
+
+.pfoot__nav-label {
+  display: block;
+  font-family: var(--ds-font-body);
+  font-size: 10px;
+  font-weight: var(--ds-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--ds-tracking-wide);
+  color: var(--ds-meta);
+  margin-bottom: var(--ds-space-1);
+}
+
+.pfoot__nav-title {
+  font-family: var(--ds-font-display);
+  font-size: var(--ds-text-base);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-fg);
+}
+
+.pfoot__nav-card svg {
+  color: var(--ds-muted);
+  flex-shrink: 0;
+}

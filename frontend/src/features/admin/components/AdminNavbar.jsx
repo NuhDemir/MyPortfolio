@@ -87,7 +87,7 @@ const AdminNavbar = () => {
             <button
               type="button"
               className="anv2__theme-btn"
-              onClick={toggleTheme}
+              onClick={(e) => toggleTheme(e.currentTarget)}
               aria-label={`${theme === "light" ? "Koyu" : "Acik"} temaya gec`}
             >
               {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}

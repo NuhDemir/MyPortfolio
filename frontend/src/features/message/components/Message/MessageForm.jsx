@@ -1,161 +1,134 @@
-import React, { useState } from "react";
-import { IoClose, IoCheckmark, IoSend, IoPaperPlane } from "react-icons/io5";
-import "./MessageForm.scss"; // Entegre edilmiş SCSS dosyasını import et
+import { useState } from "react";
+import { Send, X, Check, FileText } from "lucide-react";
+import { Button, Field, Input, Textarea } from "@shared";
+import { submitContactForm } from "@features/contact/services/contactService";
+import "./MessageForm.css";
+
+const initialFormData = { name: "", email: "", message: "" };
 
 const MessageForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState(null);
-  const [isFormVisible, setIsFormVisible] = useState(false);
+  const [formData, setFormData] = useState(initialFormData);
+  const [status, setStatus] = useState("idle");
+  const [visible, setVisible] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+    setStatus("submitting");
 
     try {
-      const response = await fetch("https://formspree.io/f/xblojjrn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setIsSubmitted(true);
-        setIsFormVisible(false);
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        const data = await response.json();
-        throw new Error(
-          data.errors?.map((err) => err.message).join(", ") ||
-            "Mesaj gönderimi başarısız oldu."
-        );
-      }
-    } catch (err) {
-      setError(err.message || "Ağ hatası oluştu. Lütfen tekrar deneyin.");
-    } finally {
-      setIsSubmitting(false);
+      await submitContactForm(formData);
+      setStatus("success");
+      setVisible(false);
+      setFormData(initialFormData);
+    } catch {
+      setStatus("error");
     }
   };
 
-  const handleShowForm = () => setIsFormVisible(true);
-  const handleCloseForm = () => setIsFormVisible(false);
-  const handleReset = () => {
-    setIsSubmitted(false);
-    setError(null);
+  const reset = () => {
+    setStatus("idle");
+    setFormData(initialFormData);
   };
 
   return (
-    <section className="message-container">
-      {isSubmitted ? (
-        <div className="success-message">
-          <div className="success-icon">
-            <IoCheckmark size={32} />
-          </div>
-          <h2>Teşekkürler!</h2>
-          <p>
-            Mesajınız başarıyla gönderildi. En kısa sürede size geri dönüş
-            yapacağız.
+    <section className="mf">
+      {status === "success" ? (
+        <div className="mf__success">
+          <Check size={40} className="mf__success-icon" />
+          <h2 className="mf__success-title">Teşekkürler!</h2>
+          <p className="mf__success-text">
+            Mesajınız başarıyla gönderildi. En kısa sürede size dönüş yapacağız.
           </p>
-          <button onClick={handleReset} className="form-button">
-            <IoPaperPlane />
+          <Button variant="secondary" size="sm" icon={FileText} onClick={reset}>
             Yeni Mesaj Gönder
-          </button>
+          </Button>
         </div>
       ) : (
         <>
-          <header className="message-header">
-            <h1>Bana Mesaj Gönderin!</h1>
-            <p>
-              Fikirlerinizi, sorularınızı veya geri bildirimlerinizi
-              gönderebilirsiniz.
+          <header className="mf__header">
+            <h1 className="mf__title">Bana Mesaj Gönderin!</h1>
+            <p className="mf__subtitle">
+              Fikirlerinizi, sorularınızı veya geri bildirimlerinizi gönderebilirsiniz.
             </p>
-            {!isFormVisible && (
-              <button onClick={handleShowForm} className="form-button centered">
-                <IoSend />
+            {!visible && (
+              <Button
+                variant="primary"
+                size="lg"
+                icon={Send}
+                onClick={() => setVisible(true)}
+              >
                 Mesaj Gönder
-              </button>
+              </Button>
             )}
           </header>
 
-          {isFormVisible && (
-            <div className="form-wrapper">
-              <button
-                onClick={handleCloseForm}
-                className="close-button"
-                aria-label="Formu kapat"
+          {visible && (
+            <div className="mf__form-wrapper">
+              <Button
+                variant="ghost"
+                size="sm"
+                icon={X}
+                onClick={() => setVisible(false)}
+                className="mf__close"
               >
-                <IoClose size={56} /> Kapat
-              </button>
-              <form onSubmit={handleSubmit} className="message-form" noValidate>
-                <div className="form-group">
-                  <label htmlFor="name">İsim</label>
-                  <input
+                Kapat
+              </Button>
+
+              <form onSubmit={handleSubmit} noValidate className="mf__form">
+                <Field label="İsim">
+                  <Input
                     type="text"
-                    id="name"
                     name="name"
+                    placeholder="Adınız"
                     value={formData.name}
                     onChange={handleChange}
                     required
                   />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">E-posta</label>
-                  <input
+                </Field>
+
+                <Field label="E-posta">
+                  <Input
                     type="email"
-                    id="email"
                     name="email"
+                    placeholder="ornek@email.com"
                     value={formData.email}
                     onChange={handleChange}
                     required
                   />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="message">Mesajınız</label>
-                  <textarea
-                    id="message"
+                </Field>
+
+                <Field label="Mesajınız">
+                  <Textarea
                     name="message"
+                    placeholder="Mesajınızı buraya yazın..."
                     value={formData.message}
                     onChange={handleChange}
-                    rows="5"
+                    rows={5}
                     required
                   />
-                </div>
+                </Field>
 
-                {error && <div className="error-message">{error}</div>}
+                {status === "error" && (
+                  <p className="mf__error">
+                    Gönderim sırasında hata oluştu. Lütfen tekrar deneyin.
+                  </p>
+                )}
 
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="form-button"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="loader"></div>
-                        <span>Gönderiliyor...</span>
-                      </>
-                    ) : (
-                      <>
-                        <IoSend />
-                        <span>Mesaj Gönder</span>
-                      </>
-                    )}
-                  </button>
-                </div>
+                <Button
+                  type="submit"
+                  variant="primary"
+                  size="lg"
+                  full
+                  icon={Send}
+                  disabled={status === "submitting"}
+                >
+                  {status === "submitting" ? "Gönderiliyor..." : "Mesaj Gönder"}
+                </Button>
               </form>
             </div>
           )}
