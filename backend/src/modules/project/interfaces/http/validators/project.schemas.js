@@ -14,7 +14,7 @@ const jsonPreprocess = (value) => {
 const jsonObject = (schema) => z.preprocess(jsonPreprocess, schema);
 const jsonArray  = (schema) => z.preprocess(jsonPreprocess, schema);
 
-const optionalUrl = z.string().url().optional().or(z.literal("")).nullable().optional();
+const optionalUrl = z.string().optional().or(z.literal("")).nullable().optional();
 
 const tagsSchema = z
   .union([
