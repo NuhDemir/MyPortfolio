@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Clock, User, Calendar, RefreshCw, Eye, Database } from "lucide-react";
 import { LoadingSpinner, useDominantColor } from "@shared";
 import { CommentSection } from "@features/blog";
 import { useBlogDetail } from "../hooks/useBlogDetail.js";
@@ -20,7 +20,7 @@ const BlogDetailPage = () => {
     if (!blog) return null;
     return {
       publishedAt: formatToLocaleDate(blog.publishedAt || blog.updatedAt || blog.createdAt) || "Yeni",
-      updatedAt: blog.updatedAt ? formatToLocaleDate(blog.updatedAt, true) : null,
+      updatedAt: blog.updatedAt ? formatToLocaleDate(blog.updatedAt) : null,
       publisher: resolvePublisherName(blog.publisher || blog.authorDetails),
       subtitle: buildSubtitle(blog),
       tags: Array.isArray(blog.tags) ? blog.tags : [],
@@ -29,6 +29,8 @@ const BlogDetailPage = () => {
   }, [blog]);
 
   const glowColor = useDominantColor(metaData?.thumbnail);
+
+  const showMetaBar = metaData && (metaData.publisher || blog.readingTime || metaData.publishedAt);
 
   if (loading && !blog) {
     return (
@@ -94,17 +96,53 @@ const BlogDetailPage = () => {
             dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} />
         </section>
 
-        <section className="blog-detail__meta">
-          <div className="blog-detail__card">
-            <h2>Icerik Kunyesi</h2>
-            <ul>
-              {metaData.publisher && <li><span>Yazar</span><strong>{metaData.publisher}</strong></li>}
-              {blog.readingTime && <li><span>Okuma Suresi</span><strong>{blog.readingTime} dk</strong></li>}
-              {metaData.updatedAt && <li><span>Son Guncelleme</span><strong>{metaData.updatedAt}</strong></li>}
-              <li><span>Veri Kaynagi</span><strong>{dataSource === "live" ? "Canli Sunucu" : "Lokal Onbellek"}</strong></li>
-            </ul>
-          </div>
-        </section>
+        {showMetaBar && (
+          <section className="blog-detail__credits" aria-label="Icerik Kunyesi">
+            <div className="blog-credits">
+              <div className="blog-credits__row">
+                {metaData.publisher && (
+                  <span className="blog-credits__item">
+                    <User size={14} className="blog-credits__icon" />
+                    <span className="blog-credits__label">Yazan</span>
+                    <span className="blog-credits__value">{metaData.publisher}</span>
+                  </span>
+                )}
+                {blog.readingTime && (
+                  <span className="blog-credits__item">
+                    <Clock size={14} className="blog-credits__icon" />
+                    <span className="blog-credits__value">{blog.readingTime} dk okuma</span>
+                  </span>
+                )}
+                {blog.views != null && blog.views > 0 && (
+                  <span className="blog-credits__item">
+                    <Eye size={14} className="blog-credits__icon" />
+                    <span className="blog-credits__value">{blog.views.toLocaleString("tr-TR")} okunma</span>
+                  </span>
+                )}
+              </div>
+
+              <div className="blog-credits__row">
+                <span className="blog-credits__item">
+                  <Calendar size={14} className="blog-credits__icon" />
+                  <span className="blog-credits__label">Yayin</span>
+                  <span className="blog-credits__value">{metaData.publishedAt}</span>
+                </span>
+                {metaData.updatedAt && metaData.updatedAt !== metaData.publishedAt && (
+                  <span className="blog-credits__item">
+                    <RefreshCw size={14} className="blog-credits__icon" />
+                    <span className="blog-credits__label">Guncelleme</span>
+                    <span className="blog-credits__value">{metaData.updatedAt}</span>
+                  </span>
+                )}
+              </div>
+
+              <span className="blog-credits__source">
+                <Database size={12} />
+                {dataSource === "live" ? "Canli" : "Onbellek"}
+              </span>
+            </div>
+          </section>
+        )}
 
         {(blog._id || blog.id) && (
           <div className="blog-detail__layout">

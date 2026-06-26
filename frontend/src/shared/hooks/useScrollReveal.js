@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAnimation } from "framer-motion";
 
 export const revealVariants = {
@@ -32,10 +32,9 @@ export const useScrollReveal = ({
   duration = 0.55,
 } = {}) => {
   const controls = useAnimation();
-  const ref = useRef(null);
+  const [node, setNode] = useState(null);
 
   useEffect(() => {
-    const node = ref.current;
     if (!node) return;
 
     const observer = new IntersectionObserver(
@@ -52,10 +51,10 @@ export const useScrollReveal = ({
 
     observer.observe(node);
     return () => observer.disconnect();
-  }, [controls, threshold, once]);
+  }, [node, controls, threshold, once]);
 
   return {
-    ref,
+    ref: setNode,
     variants: revealVariants[variant] || revealVariants.fadeUp,
     initial: "hidden",
     animate: controls,

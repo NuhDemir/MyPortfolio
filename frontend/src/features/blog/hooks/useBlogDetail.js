@@ -1,16 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
-import { FALLBACK_BLOGS, fetchBlogBySlug } from "../services/blogService.js";
+import { useEffect, useState } from "react";
+import { fetchBlogBySlug } from "../services/blogService.js";
 
 export const useBlogDetail = (slug) => {
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dataSource, setDataSource] = useState("unknown");
-
-  const fallbackBlog = useMemo(() => {
-    if (!slug) return null;
-    const list = Array.isArray(FALLBACK_BLOGS) ? FALLBACK_BLOGS : [];
-    return list.find((item) => item.slug === slug || item.id === slug) || null;
-  }, [slug]);
 
   useEffect(() => {
     if (!slug) { setBlog(null); setLoading(false); return; }
@@ -23,12 +17,12 @@ export const useBlogDetail = (slug) => {
       try {
         const data = await fetchBlogBySlug(slug, { signal: controller.signal });
         if (!isMounted) return;
-        setBlog(data || fallbackBlog);
-        setDataSource(data ? "live" : (fallbackBlog ? "fallback" : "unknown"));
+        setBlog(data);
+        setDataSource(data ? "live" : "error");
       } catch {
         if (!isMounted) return;
-        setBlog(fallbackBlog);
-        setDataSource(fallbackBlog ? "fallback" : "error");
+        setBlog(null);
+        setDataSource("error");
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -36,7 +30,7 @@ export const useBlogDetail = (slug) => {
 
     load();
     return () => { isMounted = false; controller.abort(); };
-  }, [slug, fallbackBlog]);
+  }, [slug]);
 
   return { blog, loading, dataSource };
 };

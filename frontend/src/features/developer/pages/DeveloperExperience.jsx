@@ -6,8 +6,7 @@ import { NavbarV2 } from "@features/navbar/v2/NavbarV2.jsx";
 import { FooterV2 } from "@features/footer/v2/FooterV2.jsx";
 import { Terminal as TerminalComponent, ProjectPanel, CodeViewer, ContactPanel } from "@features/developer";
 
-// Veri ve Stil
-import projectsData from "@features/projects/data/projects.json";
+import { useProjectData } from "@features/projects/hooks/useProjectData.js";
 import "../styles/DeveloperExperience.css";
 
 // Başlangıçta gösterilecek karşılama bileşeni
@@ -44,6 +43,7 @@ const DeveloperExperience = () => {
   const [activeView, setActiveView] = useState("welcome");
   const [selectedProject, setSelectedProject] = useState(null);
   const terminalRef = useRef(null); // Terminal bileşenine erişmek için ref
+  const { projects: projectsData } = useProjectData();
 
   // Terminale programatik olarak komut göndermek için bir state
   const [commandToRun, setCommandToRun] = useState("");

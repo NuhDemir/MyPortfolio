@@ -134,7 +134,3 @@ export const skillsData = [
     ],
   },
 ];
-
-// Proje verilerini de buraya alalım ki linkleme yapabilelim
-import projects from "@features/projects/data/projects.json";
-export const projectsData = projects;

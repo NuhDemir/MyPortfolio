@@ -1,8 +1,5 @@
 import { axiosClient } from "@core";
-import projectsData from "../data/projects.json";
 import { REQUEST_TIMEOUT_MS } from "../constants";
-
-export const FALLBACK_PROJECTS = projectsData;
 
 const dedupe = (list) => {
   const map = new Map();
@@ -29,14 +26,14 @@ export const fetchProjects = async (options = {}) => {
         : response.data
           ? [response.data]
           : [];
-    const normalized = dedupe(items).length > 0 ? dedupe(items) : FALLBACK_PROJECTS;
+    const normalized = dedupe(items);
     return includeSource
-      ? { items: normalized, source: items.length > 0 ? "live" : "fallback" }
+      ? { items: normalized, source: items.length > 0 ? "live" : "empty" }
       : normalized;
   } catch {
     return includeSource
-      ? { items: FALLBACK_PROJECTS, source: "fallback" }
-      : FALLBACK_PROJECTS;
+      ? { items: [], source: "error" }
+      : [];
   }
 };
 
@@ -48,6 +45,8 @@ export const fetchProjectById = async (id, options = {}) => {
       signal,
     });
     if (response.data) return response.data;
-  } catch { /* fall through */ }
-  return FALLBACK_PROJECTS.find((p) => p.id === id || p.slug === id) || null;
+  } catch {
+    // fall through
+  }
+  return null;
 };

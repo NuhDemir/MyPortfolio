@@ -1,5 +1,4 @@
 import { axiosClient } from "@core";
-import servicesData from "../data/servicesData.json";
 
 const GITHUB_USER = "NuhDemir";
 const GITHUB_API = `https://api.github.com/users/${GITHUB_USER}`;
@@ -77,9 +76,8 @@ export const fetchSoundCloudStats = async (signal) => {
 export const fetchServices = async (signal) => {
   try {
     const { data } = await axiosClient.get("/about", { signal });
-    if (data?.services?.length > 0) return data.services;
-    return servicesData.services;
+    return data?.services || [];
   } catch {
-    return servicesData.services;
+    return [];
   }
 };

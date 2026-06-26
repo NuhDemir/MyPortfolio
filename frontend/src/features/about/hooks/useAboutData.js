@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { cloneDefaultAboutContent } from "@features/about";
 import { fetchAboutContent, fetchGitHubStats } from "../services/aboutService.js";
 
 const STATIC_METRICS = [
@@ -23,7 +22,7 @@ export const useAboutData = () => {
         fetchGitHubStats(controller.signal).catch(() => null),
       ]);
       if (cancelled) return;
-      setContent(about ?? cloneDefaultAboutContent());
+      setContent(about || null);
       setGithub(gh);
       setLoading(false);
     };

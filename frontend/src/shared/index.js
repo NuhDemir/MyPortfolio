@@ -22,3 +22,8 @@ export { default as CodeSnippet } from "./ui/CodeSnippet/CodeSnippet.jsx";
 export { default as HoverVideo } from "./ui/HoverVideo/HoverVideo.jsx";
 export { default as ErrorBoundary } from "./ui/ErrorBoundary/ErrorBoundary.jsx";
 export { Button, Card, Tag, Container, Stack, Grid, Section, Input, SearchInput, Textarea, Select, Field } from "./design-system/index.js";
+export { default as PageSkeleton } from "./ui/PageSkeleton/PageSkeleton.jsx";
+
+// Music Player
+export { SoundCloudProvider, useSoundCloud } from "./contexts/SoundCloudContext.jsx";
+export { default as FloatingPlayer } from "./ui/FloatingPlayer/FloatingPlayer.jsx";

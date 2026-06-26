@@ -1,591 +1,331 @@
-import React, {
-  forwardRef,
-  useState,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-} from "react";
-import { Play, Pause, SkipForward, Volume2, VolumeX } from "lucide-react";
+import React, { forwardRef, useState, useRef, useEffect, useLayoutEffect, useCallback } from "react";
+import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX, Shuffle, Repeat, Repeat1, ListMusic, Disc3 } from "lucide-react";
 import { gsap } from "gsap";
 import { PatternBackground } from "@shared";
+import "./style/AudioControls.css";
 
-const SOUNDCLOUD_PLAYLIST_URL =
-  "https://soundcloud.com/nuh-demir-210070335/sets/playlist";
-const SOUNDCLOUD_WIDGET_SCRIPT = "https://w.soundcloud.com/player/api.js";
+const SOUNDCLOUD_URL = "https://soundcloud.com/nuh-demir-210070335/sets/playlist";
+const WIDGET_SCRIPT = "https://w.soundcloud.com/player/api.js";
 
-const formatSoundCloudTitle = (title) => {
-  if (!title) {
-    return "SoundCloud Playlist";
-  }
+const REPEAT_MODES = ["none", "one", "all"];
+const REPEAT_ICONS = { none: Repeat, one: Repeat1, all: Repeat };
+const REPEAT_LABELS = { none: "Tekrar yok", one: "Tekrarla", all: "Tümünü tekrarla" };
+
+const formatTitle = (title) => {
+  if (!title) return "SoundCloud Playlist";
   return title.length > 42 ? `${title.slice(0, 39)}...` : title;
 };
 
-const loadSoundCloudWidgetScript = () => {
-  if (typeof window === "undefined") {
-    return Promise.reject(new Error("Window is not available"));
-  }
+const fmt = (t) => {
+  if (isNaN(t) || t <= 0) return "0:00";
+  const m = Math.floor(t / 60), s = Math.floor(t % 60);
+  return `${m}:${s < 10 ? "0" : ""}${s}`;
+};
 
+const loadSC = () => {
+  if (typeof window === "undefined") return Promise.reject();
   return new Promise((resolve, reject) => {
-    if (window.SC?.Widget && typeof window.SC.Widget === "function") {
-      resolve(window.SC);
-      return;
-    }
+    if (window.SC?.Widget) { resolve(window.SC); return; }
+    const el = document.querySelector(`script[src="${WIDGET_SCRIPT}"]`);
+    if (el && !el.crossOrigin) { el.addEventListener("load", () => resolve(window.SC), { once: true }); return; }
+    if (el) el.remove();
+    const s = document.createElement("script"); s.src = WIDGET_SCRIPT; s.async = true;
+    s.onload = () => setTimeout(() => resolve(window.SC), 100);
+    s.onerror = () => reject();
+    document.head.appendChild(s);
+  });
+};
 
-    const existingScript = document.querySelector(
-      `script[src="${SOUNDCLOUD_WIDGET_SCRIPT}"]`,
-    );
+const buildUrl = () => `https://w.soundcloud.com/player/?${new URLSearchParams({ url: SOUNDCLOUD_URL, auto_play: "true", hide_related: "true", show_comments: "false", show_user: "true", visual: "false", buying: "false", sharing: "false", download: "false" })}`;
 
-    if (existingScript) {
-      // If a previous build injected crossorigin, recreate the script without it.
-      if (existingScript.crossOrigin) {
-        existingScript.remove();
-      } else {
-        let loadHandler = null;
-        let errorHandler = null;
+const AudioControls = forwardRef(({ onIsPlayingChange, onAudioDataChange }, ref) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [currentTrack, setCurrentTrack] = useState(null);
+  const [volume, setVolume] = useState(0.7);
+  const [isMuted, setIsMuted] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [isShuffled, setIsShuffled] = useState(false);
+  const [repeatMode, setRepeatMode] = useState("none");
+  const [playlist, setPlaylist] = useState([]);
+  const [playlistOpen, setPlaylistOpen] = useState(false);
+  const [hoverTime, setHoverTime] = useState(null);
+  const [hoverX, setHoverX] = useState(0);
 
-        const cleanup = () => {
-          if (loadHandler) {
-            existingScript.removeEventListener("load", loadHandler);
-          }
-          if (errorHandler) {
-            existingScript.removeEventListener("error", errorHandler);
-          }
-        };
+  const iframeRef = useRef(null);
+  const widgetRef = useRef(null);
+  const progRef = useRef(null);
+  const rootRef = useRef(null);
+  const timelineRef = useRef(null);
 
-        loadHandler = () => {
-          cleanup();
-          if (window.SC?.Widget) {
-            resolve(window.SC);
+  const setControlsRef = useCallback((node) => {
+    rootRef.current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref) ref.current = node;
+  }, [ref]);
+
+  const refreshTrack = useCallback((w) => {
+    w?.getCurrentSound((s) => {
+      if (s) setCurrentTrack(s);
+    });
+  }, []);
+
+  const loadPlaylist = useCallback((w) => {
+    w?.getSounds((sounds) => {
+      if (Array.isArray(sounds) && sounds.length) setPlaylist(sounds);
+    });
+  }, []);
+
+  // ── GSAP Intro ────────────────────────────────────────────────────────
+  useLayoutEffect(() => {
+    const node = rootRef.current;
+    if (!node) return;
+    const ctx = gsap.context(() => {
+      gsap.set(node, { autoAlpha: 1, y: 0, rotate: 0, filter: "none" });
+      const tl = gsap.timeline({ defaults: { immediateRender: false } });
+      tl.from(node, { y: 64, autoAlpha: 0, rotate: 1.4, duration: 0.75, ease: "power3.out" })
+        .from(node.querySelector(".ac-info"), { y: 20, autoAlpha: 0, duration: 0.42, ease: "power2.out" }, "-=0.42")
+        .from(node.querySelectorAll(".ac-label, .ac-song"), { y: 8, autoAlpha: 0, stagger: 0.06, duration: 0.28, ease: "power1.out" }, "-=0.22")
+        .from(node.querySelector(".ac-timeline"), { autoAlpha: 0, scaleX: 0.32, transformOrigin: "left center", duration: 0.44, ease: "power2.out" }, "-=0.15")
+        .from(node.querySelectorAll(".ac-time"), { autoAlpha: 0, y: 7, stagger: 0.05, duration: 0.24, ease: "power1.out" }, "-=0.35")
+        .from(node.querySelector(".ac-ctrls"), { autoAlpha: 0, y: 18, duration: 0.34, ease: "power2.out" }, "-=0.2")
+        .from(node.querySelectorAll(".ac-btn, .ac-vol"), { autoAlpha: 0, y: 12, scale: 0.74, stagger: { each: 0.045, from: "center" }, duration: 0.4, ease: "back.out(1.7)" }, "-=0.2");
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
+  // ── Widget Init ───────────────────────────────────────────────────────
+  useEffect(() => {
+    let dead = false;
+    const init = async () => {
+      try {
+        const sc = await loadSC(); if (dead || !iframeRef.current) return;
+        const w = sc.Widget(iframeRef.current);
+        widgetRef.current = w;
+
+        w.bind(sc.Widget.Events.READY, () => {
+          if (dead) return;
+          setIsReady(true);
+          w.getDuration((d) => setDuration((d || 0) / 1000));
+          refreshTrack(w);
+          setTimeout(() => loadPlaylist(w), 800);
+          setTimeout(() => loadPlaylist(w), 2500);
+          w.play(); setIsPlaying(true); onIsPlayingChange?.(true);
+        });
+        w.bind(sc.Widget.Events.PLAY, () => {
+          if (dead) return;
+          setIsPlaying(true); onIsPlayingChange?.(true);
+          refreshTrack(w);
+          setTimeout(() => loadPlaylist(w), 600);
+        });
+        w.bind(sc.Widget.Events.PAUSE, () => {
+          if (dead) return;
+          setIsPlaying(false); onIsPlayingChange?.(false);
+        });
+        w.bind(sc.Widget.Events.PLAY_PROGRESS, (e) => {
+          if (dead) return;
+          setCurrentTime((e?.currentPosition || 0) / 1000);
+          w.getDuration((d) => setDuration((d || 0) / 1000));
+        });
+        w.bind(sc.Widget.Events.FINISH, () => {
+          if (dead) return;
+          if (repeatMode === "one") {
+            w.seekTo(0); w.play();
+          } else if (repeatMode === "all") {
+            refreshTrack(w); setTimeout(() => loadPlaylist(w), 400);
           } else {
-            reject(new Error("SC Widget not available after script load"));
+            refreshTrack(w);
           }
-        };
-
-        errorHandler = () => {
-          cleanup();
-          reject(new Error("SoundCloud widget script failed to load"));
-        };
-
-        existingScript.addEventListener("load", loadHandler, { once: false });
-        existingScript.addEventListener("error", errorHandler, { once: false });
-
-        if (
-          existingScript.readyState === "loaded" ||
-          existingScript.readyState === "complete"
-        ) {
-          loadHandler();
-        }
-        return;
-      }
-    }
-
-    const script = document.createElement("script");
-    script.src = SOUNDCLOUD_WIDGET_SCRIPT;
-    script.async = true;
-    script.onload = () => {
-      setTimeout(() => {
-        if (window.SC?.Widget && typeof window.SC.Widget === "function") {
-          resolve(window.SC);
-        } else {
-          reject(new Error("SC Widget not initialized properly"));
-        }
-      }, 100);
-    };
-    script.onerror = () =>
-      reject(new Error("SoundCloud widget script network error"));
-    document.head.appendChild(script);
-  });
-};
-
-const buildSoundCloudPlayerUrl = () => {
-  const query = new URLSearchParams({
-    url: SOUNDCLOUD_PLAYLIST_URL,
-    auto_play: "true",
-    hide_related: "true",
-    show_comments: "false",
-    show_user: "true",
-    show_reposts: "false",
-    show_teaser: "false",
-    visual: "false",
-    buying: "false",
-    sharing: "false",
-    download: "false",
-  });
-
-  return `https://w.soundcloud.com/player/?${query.toString()}`;
-};
-
-const AudioControls = forwardRef(
-  ({ onIsPlayingChange, onAudioDataChange }, ref) => {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [currentTime, setCurrentTime] = useState(0);
-    const [duration, setDuration] = useState(0);
-    const [currentSongName, setCurrentSongName] = useState(
-      "SoundCloud Playlist",
-    );
-    const [volume, setVolume] = useState(0.7);
-    const [isMuted, setIsMuted] = useState(false);
-    const [isWidgetReady, setIsWidgetReady] = useState(false);
-    const [isWidgetError, setIsWidgetError] = useState(false);
-
-    const iframeRef = useRef(null);
-    const widgetRef = useRef(null);
-    const progressRef = useRef(null);
-    const controlsRootRef = useRef(null);
-
-    const setControlsRef = (node) => {
-      controlsRootRef.current = node;
-
-      if (typeof ref === "function") {
-        ref(node);
-        return;
-      }
-
-      if (ref) {
-        ref.current = node;
-      }
-    };
-
-    useLayoutEffect(() => {
-      const rootNode = controlsRootRef.current;
-      if (!rootNode) {
-        return undefined;
-      }
-
-      const context = gsap.context(() => {
-        const soundtrackInfo = rootNode.querySelector(".soundtrack-info");
-        const soundtrackLabel = rootNode.querySelector(".soundtrack-label");
-        const songName = rootNode.querySelector(".song-name");
-        const timelineContainer = rootNode.querySelector(".timeline-container");
-        const controlsWrapper = rootNode.querySelector(".controls-wrapper");
-        const fallbackBox = rootNode.querySelector(".widget-error-fallback");
-        const controlButtons = rootNode.querySelectorAll(".control-button");
-        const volumeSlider = rootNode.querySelector(".volume-slider");
-        const timeDisplays = rootNode.querySelectorAll(".time-display");
-
-        gsap.set(rootNode, {
-          autoAlpha: 1,
-          y: 0,
-          rotate: 0,
-          filter: "none",
         });
-
-        const introTimeline = gsap.timeline({
-          defaults: {
-            immediateRender: false,
-          },
-        });
-
-        introTimeline
-          .from(rootNode, {
-            y: 64,
-            autoAlpha: 0,
-            rotate: 1.4,
-            duration: 0.75,
-            ease: "power3.out",
-            clearProps: "opacity,visibility,transform",
-          })
-          .from(
-            soundtrackInfo,
-            {
-              y: 20,
-              autoAlpha: 0,
-              duration: 0.42,
-              ease: "power2.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.42",
-          )
-          .from(
-            [soundtrackLabel, songName],
-            {
-              y: 8,
-              autoAlpha: 0,
-              stagger: 0.06,
-              duration: 0.28,
-              ease: "power1.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.22",
-          )
-          .from(
-            timelineContainer,
-            {
-              autoAlpha: 0,
-              scaleX: 0.32,
-              transformOrigin: "left center",
-              duration: 0.44,
-              ease: "power2.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.15",
-          )
-          .from(
-            timeDisplays,
-            {
-              autoAlpha: 0,
-              y: 7,
-              stagger: 0.05,
-              duration: 0.24,
-              ease: "power1.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.35",
-          )
-          .from(
-            controlsWrapper,
-            {
-              autoAlpha: 0,
-              y: 18,
-              duration: 0.34,
-              ease: "power2.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.2",
-          )
-          .from(
-            [...controlButtons, volumeSlider].filter(Boolean),
-            {
-              autoAlpha: 0,
-              y: 12,
-              scale: 0.74,
-              stagger: {
-                each: 0.045,
-                from: "center",
-              },
-              duration: 0.4,
-              ease: "back.out(1.7)",
-              clearProps: "opacity,visibility,transform",
-            },
-            "-=0.2",
-          )
-          .from(
-            fallbackBox,
-            {
-              autoAlpha: 0,
-              y: 14,
-              duration: 0.34,
-              ease: "power2.out",
-              clearProps: "opacity,visibility,transform",
-            },
-            "<",
-          );
-      }, controlsRootRef);
-
-      return () => {
-        context.revert();
-      };
-    }, []);
-
-    useEffect(() => {
-      let isUnmounted = false;
-
-      const initializeWidget = async () => {
-        try {
-          const sc = await loadSoundCloudWidgetScript();
-          if (isUnmounted) {
-            return;
-          }
-
-          if (!iframeRef.current || !iframeRef.current.ownerDocument) {
-            throw new Error("Iframe not mounted in DOM");
-          }
-
-          if (!sc?.Widget || typeof sc.Widget !== "function") {
-            throw new Error("SC Widget API not available");
-          }
-
-          let widget;
-          try {
-            widget = sc.Widget(iframeRef.current);
-          } catch (err) {
-            throw new Error(`Widget initialization error: ${err?.message}`)
-          }
-
-          if (!widget) {
-            throw new Error("Widget instance not created");
-          }
-
-          widgetRef.current = widget;
-
-          const handleReady = () => {
-            if (isUnmounted) {
-              return;
-            }
-
-            setIsWidgetReady(true);
-            widget.getDuration((durationMs) => {
-              setDuration((durationMs || 0) / 1000);
-            });
-            widget.getCurrentSound((sound) => {
-              setCurrentSongName(formatSoundCloudTitle(sound?.title));
-            });
-            widget.play();
-            setIsPlaying(true);
-            onIsPlayingChange(true);
-          };
-
-          const handlePlay = () => {
-            if (isUnmounted) {
-              return;
-            }
-            setIsPlaying(true);
-            onIsPlayingChange(true);
-          };
-
-          const handlePause = () => {
-            if (isUnmounted) {
-              return;
-            }
-            setIsPlaying(false);
-            onIsPlayingChange(false);
-          };
-
-          const handlePlayProgress = (event) => {
-            if (isUnmounted) {
-              return;
-            }
-
-            setCurrentTime((event?.currentPosition || 0) / 1000);
-            widget.getDuration((durationMs) => {
-              setDuration((durationMs || 0) / 1000);
-            });
-          };
-
-          const refreshCurrentTrack = () => {
-            widget.getCurrentSound((sound) => {
-              if (isUnmounted) {
-                return;
-              }
-              setCurrentSongName(formatSoundCloudTitle(sound?.title));
-            });
-          };
-
-          widget.bind(sc.Widget.Events.READY, handleReady);
-          widget.bind(sc.Widget.Events.PLAY, handlePlay);
-          widget.bind(sc.Widget.Events.PAUSE, handlePause);
-          widget.bind(sc.Widget.Events.PLAY_PROGRESS, handlePlayProgress);
-          widget.bind(sc.Widget.Events.FINISH, refreshCurrentTrack);
-
-          if (isUnmounted) {
-            widget.unbind(sc.Widget.Events.READY);
-            widget.unbind(sc.Widget.Events.PLAY);
-            widget.unbind(sc.Widget.Events.PAUSE);
-            widget.unbind(sc.Widget.Events.PLAY_PROGRESS);
-            widget.unbind(sc.Widget.Events.FINISH);
-          }
-        } catch (error) {
-          if (!isUnmounted) {
-            // Suppress CORS errors - they're expected due to SoundCloud API restrictions
-            // but don't require user action
-            const isCORSError = error?.message?.includes("script") || 
-                                error?.message?.includes("load");
-            
-            if (!isCORSError) {
-              console.error("SoundCloud widget init failed:", {
-                message: error?.message,
-                stack: error?.stack,
-                iframeRef: !!iframeRef.current,
-                SC: !!window.SC,
-              });
-            }
-            
-            setIsWidgetError(true);
-            setIsWidgetReady(false);
-          }
-        }
-      };
-
-      initializeWidget();
-
-      return () => {
-        isUnmounted = true;
-        setIsPlaying(false);
-      };
-    }, []);
-
-    useEffect(() => {
-      if (!widgetRef.current || !isWidgetReady) {
-        return;
-      }
-
-      widgetRef.current.setVolume((isMuted ? 0 : volume) * 100);
-    }, [isMuted, isWidgetReady, volume]);
-
-    const togglePlay = () => {
-      if (!isWidgetReady || !widgetRef.current) {
-        return;
-      }
-
-      if (isPlaying) {
-        widgetRef.current.pause();
-      } else {
-        widgetRef.current.play();
+      } catch {
+        if (!dead) { setIsError(true); setIsReady(false); }
       }
     };
+    init(); return () => { dead = true; };
+  }, []);
 
-    const playNextTrack = () => {
-      if (!isWidgetReady || !widgetRef.current) {
-        return;
+  // Re-bind repeat handler when mode changes
+  useEffect(() => {
+    const w = widgetRef.current;
+    if (!w || !isReady) return;
+  }, [repeatMode, isReady]);
+
+  useEffect(() => { if (widgetRef.current && isReady) widgetRef.current.setVolume((isMuted ? 0 : volume) * 100); }, [isMuted, isReady, volume]);
+  useEffect(() => {
+    if (!progRef.current || !duration) return;
+    progRef.current.style.width = `${Math.min(100, Math.max(0, (currentTime / duration) * 100))}%`;
+  }, [currentTime, duration]);
+
+  // ── Keyboard Shortcuts ────────────────────────────────────────────────
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
+      const w = widgetRef.current;
+      if (!w || !isReady) return;
+      switch (e.code) {
+        case "Space": e.preventDefault(); isPlaying ? w.pause() : w.play(); break;
+        case "ArrowLeft": e.preventDefault(); w.prev(); refreshTrack(w); break;
+        case "ArrowRight": e.preventDefault(); w.next(); refreshTrack(w); break;
+        case "ArrowUp": e.preventDefault(); setVolume((v) => Math.min(1, v + 0.05)); break;
+        case "ArrowDown": e.preventDefault(); setVolume((v) => Math.max(0, v - 0.05)); break;
+        case "KeyM": e.preventDefault(); setIsMuted((m) => !m); break;
       }
-
-      widgetRef.current.next();
-      widgetRef.current.getCurrentSound((sound) => {
-        setCurrentSongName(formatSoundCloudTitle(sound?.title));
-      });
     };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [isPlaying, isReady, refreshTrack]);
 
-    const handleVolumeChange = (e) => {
-      const newVolume = parseFloat(e.target.value);
-      setVolume(newVolume);
-      if (widgetRef.current) {
-        widgetRef.current.setVolume(newVolume * 100);
-      }
-      if (newVolume > 0 && isMuted) setIsMuted(false);
-    };
+  // ── Controls ──────────────────────────────────────────────────────────
+  const toggle = () => { if (!widgetRef.current) return; isPlaying ? widgetRef.current.pause() : widgetRef.current.play(); };
+  const prevTrack = () => { if (!widgetRef.current || !isReady) return; widgetRef.current.prev(); refreshTrack(widgetRef.current); };
+  const nextTrack = () => { if (!widgetRef.current || !isReady) return; widgetRef.current.next(); refreshTrack(widgetRef.current); };
+  const skipTo = (i) => { if (!widgetRef.current || !isReady) return; widgetRef.current.skip(i); refreshTrack(widgetRef.current); setPlaylistOpen(false); };
+  const toggleShuffle = () => setIsShuffled((s) => !s);
+  const cycleRepeat = () => { setRepeatMode((m) => REPEAT_MODES[(REPEAT_MODES.indexOf(m) + 1) % 3]); };
 
-    const toggleMute = () => {
-      const newMutedState = !isMuted;
-      setIsMuted(newMutedState);
-      if (widgetRef.current) {
-        widgetRef.current.setVolume(newMutedState ? 0 : volume * 100);
-      }
-    };
+  const seek = (e) => {
+    if (!widgetRef.current || !duration) return;
+    const r = e.currentTarget.getBoundingClientRect(), p = (e.clientX - r.left) / r.width;
+    const s = Math.max(0, Math.min(duration, p * duration));
+    widgetRef.current.seekTo(s * 1000); setCurrentTime(s);
+  };
 
-    const handleTimelineClick = (e) => {
-      if (!widgetRef.current || !duration) return;
-      const timeline = e.currentTarget;
-      const rect = timeline.getBoundingClientRect();
-      const pos = (e.clientX - rect.left) / rect.width;
-      const seekToSeconds = Math.max(0, Math.min(duration, pos * duration));
-      widgetRef.current.seekTo(seekToSeconds * 1000);
-      setCurrentTime(seekToSeconds);
-    };
+  const handleTimelineHover = (e) => {
+    const r = timelineRef.current?.getBoundingClientRect();
+    if (!r || !duration) return;
+    const p = (e.clientX - r.left) / r.width;
+    setHoverX(e.clientX - r.left);
+    setHoverTime(Math.max(0, p * duration));
+  };
 
-    useEffect(() => {
-      if (!progressRef.current || !duration) {
-        return;
-      }
+  const handleTimelineLeave = () => setHoverTime(null);
 
-      const progress = (currentTime / duration) * 100;
-      progressRef.current.style.width = `${Math.min(100, Math.max(0, progress))}%`;
-    }, [currentTime, duration]);
+  const nowName = formatTitle(currentTrack?.title);
+  const nowArt = currentTrack?.artwork_url;
+  const currentIdx = currentTrack ? playlist.findIndex((t) => t.title === currentTrack.title) : -1;
 
-    const formatTime = (time) => {
-      if (isNaN(time) || time === 0) return "0:00";
-      const minutes = Math.floor(time / 60);
-      const seconds = Math.floor(time % 60);
-      return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    };
+  return (
+    <div ref={setControlsRef} className="ac">
+      <PatternBackground variant="naiveSketch" opacity={0.26} className="ac-pattern" seed="ac-naive" />
 
-    return (
-      <div ref={setControlsRef} className="audio-controls">
-        <PatternBackground
-          variant="naiveSketch"
-          opacity={0.26}
-          className="audio-controls-pattern"
-          seed="audio-controls-naive"
-        />
-        <div className="soundtrack-info">
-          <div className="soundtrack-label">SARKILARIM</div>
-          <div className="song-name">{currentSongName}</div>
+      {/* ── Track Info + Artwork ──────────────────────────────────── */}
+      <div className="ac-info">
+        <div className={`ac-art ${isPlaying ? "ac-art--spinning" : ""} ac-art--3d`}>
+          {nowArt ? <img src={nowArt} alt="" /> : <Disc3 size={28} />}
         </div>
-
-        {isWidgetError && (
-          <div className="widget-error-fallback">
-            <p className="error-message">
-              Müzik oynatıcı yüklenemedi. Lütfen{" "}
-              <a
-                href={SOUNDCLOUD_PLAYLIST_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="fallback-link"
-              >
-                SoundCloud'ta dinle
-              </a>
-            </p>
-          </div>
-        )}
-
-        <div className="audio-player">
-          {/* Zaman Göstergesi ve Zaman Çubuğu */}
-          <div className="timeline-container">
-            <div className="time-display">{formatTime(currentTime)}</div>
-            <div className="timeline" onClick={handleTimelineClick}>
-              <div className="progress" ref={progressRef}></div>
-            </div>
-            <div className="time-display">{formatTime(duration)}</div>
-          </div>
-
-          {/* Kontrol Butonları */}
-          <div className="controls-wrapper">
-            <button
-              type="button"
-              className="control-button"
-              onClick={playNextTrack}
-              aria-label="Sonraki şarkıya geç"
-              disabled={!isWidgetReady}
-            >
-              <SkipForward size={24} strokeWidth={2} />
-            </button>
-            <button
-              type="button"
-              className="control-button play-button"
-              onClick={togglePlay}
-              disabled={!isWidgetReady}
-              aria-label={isPlaying ? "Müziği duraklat" : "Müziği oynat"}
-            >
-              {isPlaying ? (
-                <Pause size={28} strokeWidth={2} />
-              ) : (
-                <Play size={28} strokeWidth={2} />
-              )}
-            </button>
-            <div className="volume-control">
-              <button
-                type="button"
-                className="control-button volume-button"
-                onClick={toggleMute}
-                aria-label={isMuted || volume === 0 ? "Sesi aç" : "Sesi kapat"}
-              >
-                {isMuted || volume === 0 ? (
-                  <VolumeX size={22} strokeWidth={2} />
-                ) : (
-                  <Volume2 size={22} strokeWidth={2} />
-                )}
-              </button>
-              <input
-                type="range"
-                min="0"
-                max="1"
-                step="0.05"
-                value={isMuted ? 0 : volume}
-                onChange={handleVolumeChange}
-                className="volume-slider"
-                disabled={!isWidgetReady}
-              />
-            </div>
-          </div>
-          <iframe
-            ref={iframeRef}
-            title="SoundCloud playlist player"
-            src={buildSoundCloudPlayerUrl()}
-            allow="autoplay"
-            style={{
-              position: "fixed",
-              left: -10000,
-              top: 0,
-              width: 320,
-              height: 166,
-              opacity: 0.001,
-              pointerEvents: "none",
-              border: 0,
-            }}
-          />
+        <div className="ac-meta">
+          <span className="ac-label">ŞARKILARIM</span>
+          <span className="ac-song">{nowName}</span>
         </div>
       </div>
-    );
-  },
-);
 
+      {/* ── Error Fallback ────────────────────────────────────────── */}
+      {isError && (
+        <div className="ac-error">
+          <p>Müzik oynatıcı yüklenemedi.{" "}
+            <a href={SOUNDCLOUD_URL} target="_blank" rel="noopener noreferrer" className="ac-error-link">
+              SoundCloud&apos;ta dinle
+            </a>
+          </p>
+        </div>
+      )}
+
+      {/* ── Timeline ───────────────────────────────────────────────── */}
+      <div className="ac-timeline">
+        <span className="ac-time">{fmt(currentTime)}</span>
+        <div
+          className="ac-bar"
+          onClick={seek}
+          onMouseMove={handleTimelineHover}
+          onMouseLeave={handleTimelineLeave}
+          ref={timelineRef}
+        >
+          <div className={`ac-fill ${isPlaying ? "ac-fill--flow" : ""}`} ref={progRef} />
+          {hoverTime != null && (
+            <div className="ac-hover-tooltip" style={{ left: `${Math.min(100, Math.max(0, hoverX / (timelineRef.current?.offsetWidth || 1) * 100))}%` }}>
+              {fmt(hoverTime)}
+            </div>
+          )}
+        </div>
+        <span className="ac-time">{fmt(duration)}</span>
+      </div>
+
+      {/* ── Controls ───────────────────────────────────────────────── */}
+      <div className="ac-ctrls">
+        <div className="ac-ctrls__main">
+          <button type="button" className={`ac-btn ac-btn--toggle ${isShuffled ? "ac-btn--active" : ""}`} onClick={toggleShuffle} title="Karıştır" disabled={!isReady}>
+            <Shuffle size={16} />
+          </button>
+          <button type="button" className="ac-btn" onClick={prevTrack} disabled={!isReady} title="Önceki">
+            <SkipBack size={20} />
+          </button>
+          <button type="button" className="ac-btn ac-btn--play" onClick={toggle} disabled={!isReady} title={isPlaying ? "Duraklat" : "Oynat"}>
+            {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+          </button>
+          <button type="button" className="ac-btn" onClick={nextTrack} disabled={!isReady} title="Sonraki">
+            <SkipForward size={20} />
+          </button>
+          <button
+            type="button"
+            className={`ac-btn ac-btn--toggle ${repeatMode !== "none" ? "ac-btn--active" : ""}`}
+            onClick={cycleRepeat}
+            title={REPEAT_LABELS[repeatMode]}
+            disabled={!isReady}
+          >
+            {React.createElement(REPEAT_ICONS[repeatMode], { size: 16 })}
+            {repeatMode === "one" && <span className="ac-btn__dot" />}
+          </button>
+        </div>
+
+        <div className="ac-vol">
+          <button type="button" className="ac-btn ac-btn--sm" onClick={() => setIsMuted(!isMuted)} title={isMuted ? "Sesi aç" : "Sesi kapat"}>
+            {isMuted || volume === 0 ? <VolumeX size={16} /> : <Volume2 size={16} />}
+          </button>
+          <input type="range" min="0" max="1" step="0.05" value={isMuted ? 0 : volume} onChange={(e) => { setVolume(parseFloat(e.target.value)); if (isMuted) setIsMuted(false); }} className="ac-vol-slider" disabled={!isReady} />
+        </div>
+
+        <button type="button" className={`ac-btn ac-btn--toggle ${playlistOpen ? "ac-btn--active" : ""}`} onClick={() => setPlaylistOpen((o) => !o)} title="Parça listesi" disabled={!isReady}>
+          <ListMusic size={16} />
+          <span className="ac-btn__count">{playlist.length}</span>
+        </button>
+      </div>
+
+      {/* ── Playlist ────────────────────────────────────────────────── */}
+      {playlistOpen && playlist.length > 0 && (
+        <div className="ac-playlist">
+          <div className="ac-playlist__head">
+            <span>Parça Listesi</span>
+            <span className="ac-playlist__total">{playlist.length} parça</span>
+          </div>
+          <div className="ac-playlist__list">
+            {playlist.map((t, i) => {
+              const isActive = i === currentIdx;
+              return (
+                <button
+                  key={t.title + i}
+                  type="button"
+                  className={`ac-playlist__track ${isActive ? "ac-playlist__track--active" : ""} ${isActive && isPlaying ? "ac-playlist__track--playing" : ""}`}
+                  onClick={() => skipTo(i)}
+                >
+                  <span className="ac-playlist__idx">{isActive && isPlaying ? <Pause size={10} /> : isActive ? <Play size={10} /> : i + 1}</span>
+                  <span className="ac-playlist__art">
+                    {t.artwork_url ? <img src={t.artwork_url} alt="" /> : <Disc3 size={14} />}
+                  </span>
+                  <span className="ac-playlist__name">{t.title}</span>
+                  <span className="ac-playlist__dur">{fmt((t.duration || 0) / 1000)}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <iframe ref={iframeRef} title="SC" src={buildUrl()} allow="autoplay" style={{ position:"fixed",left:-9999,top:0,width:1,height:1,opacity:0,pointerEvents:"none",border:0 }} />
+    </div>
+  );
+});
+
+AudioControls.displayName = "AudioControls";
 export default AudioControls;

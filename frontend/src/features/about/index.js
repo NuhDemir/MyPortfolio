@@ -1,4 +1,3 @@
-export { DEFAULT_ABOUT_CONTENT, cloneDefaultAboutContent } from "./data/defaultAboutContent.js";
 export { useAboutData } from "./hooks/useAboutData.js";
 export { useAboutAnimations } from "./hooks/useAboutAnimations.js";
 export { Stats } from "./components/Stats.jsx";

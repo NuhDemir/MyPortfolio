@@ -1,0 +1,47 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLOATING ORBS — Ambient magnetic background particles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.floating-orbs {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.floating-orb {
+  position: absolute;
+  width: var(--orb-size);
+  height: var(--orb-size);
+  left: var(--orb-x);
+  top: var(--orb-y);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    var(--orb-color),
+    transparent 70%
+  );
+  filter: blur(60px);
+  opacity: var(--orb-opacity);
+  transform: translate(var(--orb-offset-x), var(--orb-offset-y));
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: orb-float var(--orb-duration) ease-in-out infinite;
+  animation-delay: var(--orb-delay);
+  will-change: transform;
+}
+
+@keyframes orb-float {
+  0%, 100% {
+    transform: translate(0, 0) translate(var(--orb-offset-x), var(--orb-offset-y));
+  }
+  25% {
+    transform: translate(var(--orb-drift-x), calc(var(--orb-drift-y) * -0.5)) translate(var(--orb-offset-x), var(--orb-offset-y));
+  }
+  50% {
+    transform: translate(calc(var(--orb-drift-x) * 0.3), calc(var(--orb-drift-y) * -1)) translate(var(--orb-offset-x), var(--orb-offset-y));
+  }
+  75% {
+    transform: translate(calc(var(--orb-drift-x) * -0.6), calc(var(--orb-drift-y) * -0.3)) translate(var(--orb-offset-x), var(--orb-offset-y));
+  }
+}

@@ -17,4 +17,4 @@ export { useProjectData } from "./hooks/useProjectData.js";
 export { useProjectFilters } from "./hooks/useProjectFilters.js";
 export { useProjectScroll } from "./hooks/useProjectScroll.js";
 export { useProjectAnalytics } from "./hooks/useProjectAnalytics.js";
-export { FALLBACK_PROJECTS, fetchProjects, fetchProjectById } from "./services/projectService.js";
+export { fetchProjects, fetchProjectById } from "./services/projectService.js";

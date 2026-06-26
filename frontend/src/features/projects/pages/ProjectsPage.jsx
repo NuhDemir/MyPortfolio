@@ -26,12 +26,10 @@ const ProjectsPage = () => {
     selectedTags, toggleTag,
     visibleItems, setVisibleItems,
     filters,
-    filterOptions,
-    allTags,
     clearFilters,
   } = useProjectFilters();
 
-  const { projects, processed } = useProjectData({ filters });
+  const { projects, processed, filterOptions, allTags } = useProjectData({ filters });
   const [likedMap, setLikedMap] = useState({});
   const [viewMap, setViewMap] = useState({});
 
@@ -63,18 +61,22 @@ const ProjectsPage = () => {
     setVisibleItems(6);
   };
 
-  const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revHeader = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revFilters = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
+  const revTags = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
+  const revHero = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 });
+  const revGrid = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 });
 
   return (
     <main className="prj-page">
-      <motion.header className="prj-page__header" {...rev}>
+      <motion.header className="prj-page__header" {...revHeader}>
         <button type="button" className="prj-page__back" onClick={() => navigate("/")}>
           ← Ana Sayfa
         </button>
         <h1 className="prj-page__title">Projeler</h1>
       </motion.header>
 
-      <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
+      <motion.div {...revFilters}>
         <ProjectFilters
           query={query} setQuery={setQuery}
           status={status} setStatus={setStatus}
@@ -90,13 +92,13 @@ const ProjectsPage = () => {
       </motion.div>
 
       {allTags.length > 0 && (
-        <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 })}>
+        <motion.div {...revTags}>
           <TagCloud tags={allTags} selectedTags={selectedTags} onToggle={toggleTag} />
         </motion.div>
       )}
 
-      {heroProject && nonHeroProjects.length > 0 && (
-        <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.3 })}>
+      {heroProject && (
+        <motion.section {...revHero}>
           <ProjectHero
             project={heroProject}
             onOpen={() => handleProjectClick(heroProject)}
@@ -107,19 +109,21 @@ const ProjectsPage = () => {
         </motion.section>
       )}
 
-      <motion.section {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.4 })}>
-        <ProjectGrid
-          projects={heroProject && nonHeroProjects.length > 0 ? nonHeroProjects : processed}
-          loading={false}
-          visibleItems={visibleItems}
-          setVisibleItems={setVisibleItems}
-          totalCount={nonHeroProjects.length || processed.length}
-          onProjectClick={handleProjectClick}
-          likedMap={likedMap}
-          onLike={handleLike}
-          viewMap={viewMap}
-        />
-      </motion.section>
+      {nonHeroProjects.length > 0 && (
+        <motion.section {...revGrid}>
+          <ProjectGrid
+            projects={nonHeroProjects}
+            loading={false}
+            visibleItems={visibleItems}
+            setVisibleItems={setVisibleItems}
+            totalCount={nonHeroProjects.length}
+            onProjectClick={handleProjectClick}
+            likedMap={likedMap}
+            onLike={handleLike}
+            viewMap={viewMap}
+          />
+        </motion.section>
+      )}
     </main>
   );
 };

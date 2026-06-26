@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import projectsData from "@features/projects/data/projects.json";
+import { useProjectData } from "@features/projects/hooks/useProjectData.js";
 import { ProjectModal } from "@shared";
 import "./style/RecruiterProjectGrid.css";
 
@@ -22,13 +22,13 @@ const itemVariants = {
   exit: { y: -20, opacity: 0 },
 };
 
-// Projelerdeki tüm etiketlerden benzersiz bir filtre listesi oluştur
-const allTags = ["Tümü", ...new Set(projectsData.flatMap((p) => p.tags))];
-
 const RecruiterProjectGrid = () => {
+  const { projects: projectsData } = useProjectData();
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState("Tümü");
+
+  const allTags = useMemo(() => ["Tümü", ...new Set(projectsData.flatMap((p) => p.tags || []))], [projectsData]);
 
   const handleCardClick = (project) => {
     setSelectedProject(project);

@@ -1,5 +1,4 @@
 import { axiosClient } from "@core";
-import fallbackBlogsRaw from "../data/blogs.json";
 
 const REQUEST_TIMEOUT_MS = 2800;
 
@@ -133,8 +132,6 @@ const matchesSlugOrId = (blog, slug) => {
   );
 };
 
-export const FALLBACK_BLOGS = normalizeBlogCollection(fallbackBlogsRaw);
-
 // Backend uykudayken kullanıcıyı bekletmemek için kısa timeout + lokal fallback.
 // Opsiyonel signal desteği ile istek iptal edilebilir.
 export const fetchBlogs = async (options = {}) => {
@@ -146,9 +143,9 @@ export const fetchBlogs = async (options = {}) => {
       signal,
     });
     const blogs = normalizeBlogCollection(response.data);
-    return blogs.length > 0 ? blogs : FALLBACK_BLOGS;
+    return blogs;
   } catch {
-    return FALLBACK_BLOGS;
+    return [];
   }
 };
 
@@ -165,11 +162,10 @@ export const fetchBlogBySlug = async (slug, options = {}) => {
       return blog;
     }
   } catch {
-    // No-op: fallback below
+    // No-op
   }
 
-  const found = FALLBACK_BLOGS.find((entry) => matchesSlugOrId(entry, slug));
-  return found || null;
+  return null;
 };
 
 export default {

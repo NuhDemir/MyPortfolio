@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pagination } from "@shared";
+import { Pagination, PageSkeleton, useScrollReveal } from "@shared";
 import { motion } from "framer-motion";
-import { useScrollReveal } from "@shared";
 import {
-  FALLBACK_BLOGS as fallbackBlogs,
   fetchBlogs,
 } from "@features/blog/services/blogService.js";
 import { stripHtml, buildExcerpt, formatToLocaleDate } from "../utils/blogFormatters.js";
@@ -48,9 +46,9 @@ const BlogCardItem = ({ blog, index }) => {
 };
 
 const BlogListPage = () => {
-  const [blogs, setBlogs] = useState(fallbackBlogs);
+  const [blogs, setBlogs] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [dataSource, setDataSource] = useState("fallback");
+  const [dataSource, setDataSource] = useState("unknown");
   const [selectedCategory, setSelectedCategory] = useState("tümü");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,19 +57,24 @@ const BlogListPage = () => {
   useEffect(() => {
     let isMounted = true;
     const controller = new AbortController();
+    let retryTimer;
 
     const loadBlogs = async () => {
+      if (!isMounted) return;
       setRefreshing(true);
       try {
         const data = await fetchBlogs({ signal: controller.signal });
         if (!isMounted) return;
-        const nextBlogs = Array.isArray(data) && data.length > 0 ? data : fallbackBlogs;
+        const nextBlogs = Array.isArray(data) ? data : [];
         setBlogs(nextBlogs);
-        setDataSource(Array.isArray(data) && data.length > 0 ? "live" : "fallback");
+        setDataSource(Array.isArray(data) && data.length > 0 ? "live" : "error");
       } catch {
         if (!isMounted) return;
-        setBlogs(fallbackBlogs);
-        setDataSource("fallback");
+        setDataSource("error");
+        // Retry until successful
+        retryTimer = setTimeout(() => {
+          if (isMounted) loadBlogs();
+        }, 3000);
       } finally {
         if (isMounted) setRefreshing(false);
       }
@@ -87,6 +90,7 @@ const BlogListPage = () => {
     return () => {
       isMounted = false;
       controller.abort();
+      clearTimeout(retryTimer);
       window.clearInterval(intervalId);
     };
   }, []);
@@ -144,7 +148,12 @@ const BlogListPage = () => {
     setCurrentPage(1);
   }, [selectedCategory, searchTerm]);
 
-  const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revFilters = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revPagination = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
+
+  if (refreshing && blogs.length === 0) {
+    return <PageSkeleton />;
+  }
 
   return (
     <main className="blog-page" id="blog">
@@ -152,7 +161,7 @@ const BlogListPage = () => {
         <motion.div
           className="blog-page__filters"
           aria-live="polite"
-          {...rev}
+          {...revFilters}
         >
           <div className="blog-page__chips">
             {categories.map((category) => (
@@ -191,7 +200,7 @@ const BlogListPage = () => {
         )}
 
         {publishedBlogs.length > 0 && (
-          <motion.div className="naive-pagination-wrapper" {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
+          <motion.div className="naive-pagination-wrapper" {...revPagination}>
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

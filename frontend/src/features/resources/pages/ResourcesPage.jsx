@@ -13,11 +13,13 @@ const ResourcesPage = () => {
     document.title = "Kaynaklar | Nuh Demir";
   }, []);
 
-  const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revHeader = useScrollReveal({ variant: "fadeUp", threshold: 0.08 });
+  const revFilters = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 });
+  const revGrid = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 });
 
   return (
     <div className="res-page">
-      <motion.section className="res-page__section" {...rev}>
+      <motion.section className="res-page__section" {...revHeader}>
         <div className="res-page__header">
           <h1 className="res-page__title">Kaynaklar</h1>
           <p className="res-page__subtitle">
@@ -25,11 +27,11 @@ const ResourcesPage = () => {
           </p>
         </div>
 
-        <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.1 })}>
+        <motion.div {...revFilters}>
           <ResourceFilters filters={filters} onChange={setFilters} />
         </motion.div>
 
-        <motion.div {...useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: 0.2 })}>
+        <motion.div {...revGrid}>
           <ResourceGrid resources={resources} loading={loading} />
         </motion.div>
       </motion.section>

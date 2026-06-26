@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { cloneDefaultAboutContent } from "@features/about";
 import {
   getAboutAdminContent,
   updateAboutAdminContent,
@@ -28,7 +27,7 @@ export const useAdminAbout = () => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [formData, setFormData] = useState(() =>
-    createFormDataFromContent(cloneDefaultAboutContent()),
+    createFormDataFromContent({}),
   );
   const [activeTab, setActiveTab] = useState("general");
 

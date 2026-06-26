@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
-import { fetchProjects, FALLBACK_PROJECTS } from "../services/projectService.js";
-import { POLL_INTERVAL_MS } from "../constants";
-import { sortProjects, filterProjects } from "../utils/projectFormatters.js";
+import { fetchProjects } from "../services/projectService.js";
+import { POLL_INTERVAL_MS, TAG_CLOUD_MAX } from "../constants";
+import { sortProjects, filterProjects, collectFilterOptions, collectAllTags } from "../utils/projectFormatters.js";
 
 export const useProjectData = ({ filters = {} } = {}) => {
-  const [projects, setProjects] = useState(FALLBACK_PROJECTS);
+  const [projects, setProjects] = useState([]);
 
   const filterKey = useMemo(
     () => JSON.stringify(filters),
@@ -24,10 +24,10 @@ export const useProjectData = ({ filters = {} } = {}) => {
         });
         if (!isMounted) return;
         const data = Array.isArray(response?.items) ? response.items : [];
-        setProjects(data.length > 0 ? data : FALLBACK_PROJECTS);
+        setProjects(data);
       } catch {
         if (!isMounted) return;
-        setProjects(FALLBACK_PROJECTS);
+        setProjects([]);
       }
     };
 
@@ -46,7 +46,10 @@ export const useProjectData = ({ filters = {} } = {}) => {
     [projects, filterKey],
   );
 
-  return { projects, processed };
+  const filterOptions = useMemo(() => collectFilterOptions(projects), [projects]);
+  const allTags = useMemo(() => collectAllTags(projects).slice(0, TAG_CLOUD_MAX), [projects]);
+
+  return { projects, processed, filterOptions, allTags };
 };
 
 export default useProjectData;

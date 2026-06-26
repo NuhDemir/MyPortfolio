@@ -14,7 +14,7 @@ import { DeveloperExperience } from "@features/developer";
 import { RecruiterExperience } from "@features/recruiter";
 import { useTheme } from "@core";
 import { useUserRole } from "@core";
-import { useBackendKeepAlive } from "@shared";
+import { useBackendKeepAlive, PageSkeleton, SoundCloudProvider, FloatingPlayer } from "@shared";
 import { PageTransitionWrapper } from "@core";
 import HomePage from "../pages/HomePage.jsx";
 import AboutPage from "../pages/AboutPage.jsx";
@@ -59,6 +59,8 @@ const AppLayout = () => {
       </PageTransitionWrapper>
       {!isRoleHome && !isHome && <FooterV2 />}
       {!isRoleHome && <ScrollToTop />}
+      {/* Floating music player — visible on all non-home pages */}
+      {!isHome && <FloatingPlayer />}
     </div>
   );
 };
@@ -130,97 +132,73 @@ const App = () => {
 
   return (
     <Router>
-      <AppBackground />
-      <Routes>
-        <Route
-          path="/admin/*"
-          element={
-            <Suspense
-              fallback={<div className="component-loader">Yükleniyor...</div>}
-            >
-              <AdminRoutes />
-            </Suspense>
-          }
-        />
-        <Route element={<AppLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="hakkimda" element={<AboutPage />} />
+      <SoundCloudProvider>
+        <AppBackground />
+        <Routes>
           <Route
-            path="projects"
+            path="/admin/*"
             element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <ProjectsPage />
+              <Suspense fallback={<PageSkeleton />}>
+                <AdminRoutes />
               </Suspense>
             }
           />
-          <Route
-            path="projects/:slugOrId"
-            element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <ProjectDetailsPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="blog"
-            element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <BlogListPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="blog/:slug"
-            element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <BlogDetailPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="kaynaklar"
-            element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <ResourcesPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="kaynaklar/:slug"
-            element={
-              <Suspense
-                fallback={
-                  <div className="component-loader">Yükleniyor...</div>
-                }
-              >
-                <ResourceDetailPage />
-              </Suspense>
-            }
-          />
-          <Route path="iletisim" element={<ContactPage />} />
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          <Route element={<AppLayout />}>
+            <Route index element={<HomePage />} />
+            <Route path="hakkimda" element={<AboutPage />} />
+            <Route
+              path="projects"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ProjectsPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="projects/:slugOrId"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ProjectDetailsPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="blog"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <BlogListPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="blog/:slug"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <BlogDetailPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="kaynaklar"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ResourcesPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="kaynaklar/:slug"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <ResourceDetailPage />
+                </Suspense>
+              }
+            />
+            <Route path="iletisim" element={<ContactPage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </SoundCloudProvider>
     </Router>
   );
 };

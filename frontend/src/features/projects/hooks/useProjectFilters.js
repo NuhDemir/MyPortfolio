@@ -1,7 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
-import { FALLBACK_PROJECTS } from "../services/projectService.js";
-import { collectAllTags, collectFilterOptions } from "../utils/projectFormatters.js";
-import { TAG_CLOUD_MAX } from "../constants";
+import { useState, useCallback } from "react";
 
 export const useProjectFilters = () => {
   const [query, setQuery] = useState("");
@@ -13,9 +10,6 @@ export const useProjectFilters = () => {
   const [caseStudyOnly, setCaseStudyOnly] = useState(false);
   const [selectedTags, setSelectedTags] = useState([]);
   const [visibleItems, setVisibleItems] = useState(6);
-
-  const filterOptions = useMemo(() => collectFilterOptions(FALLBACK_PROJECTS), []);
-  const allTags = useMemo(() => collectAllTags(FALLBACK_PROJECTS).slice(0, TAG_CLOUD_MAX), []);
 
   const toggleTag = useCallback((tagName) => {
     setSelectedTags((prev) =>
@@ -56,8 +50,6 @@ export const useProjectFilters = () => {
     selectedTags, toggleTag,
     visibleItems, setVisibleItems,
     filters,
-    filterOptions,
-    allTags,
     clearFilters,
   };
 };

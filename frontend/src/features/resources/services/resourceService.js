@@ -1,9 +1,6 @@
 import { axiosClient } from "@core";
-import fallbackData from "../data/resourcesFallback.json";
 
 const REQUEST_TIMEOUT_MS = 2800;
-
-export const FALLBACK_RESOURCES = fallbackData;
 
 const normalizeResource = (r) => ({
   ...r,
@@ -37,9 +34,9 @@ export const fetchResources = async (options = {}) => {
       params: buildQueryParams(filters),
     });
     const resources = normalizeCollection(response.data);
-    return resources.length > 0 ? resources : FALLBACK_RESOURCES;
+    return resources;
   } catch {
-    return FALLBACK_RESOURCES;
+    return [];
   }
 };
 
@@ -53,6 +50,6 @@ export const fetchResourceBySlug = async (slug, options = {}) => {
     });
     return normalizeResource(response.data);
   } catch {
-    return FALLBACK_RESOURCES.find((r) => r.slug === slug) || null;
+    return null;
   }
 };

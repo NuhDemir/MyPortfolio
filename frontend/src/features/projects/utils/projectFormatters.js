@@ -61,7 +61,7 @@ export const getProjectHeroMedia = (p) => ({
 });
 
 export const isProjectFeatured = (p) =>
-  p?.isFeatured === true || p?.featured === true;
+  p?.isFeatured === true || p?.featured === true || String(p?.isFeatured) === "true" || String(p?.featured) === "true";
 
 export const hasCaseStudy = (p) => {
   const cs = p?.caseStudy;

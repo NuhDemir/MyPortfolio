@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  FALLBACK_BLOGS as fallbackBlogs,
   fetchBlogs,
 } from "@features/blog/services/blogService.js";
 import {
@@ -80,9 +79,9 @@ const DoodleDots = ({ className }) => (
 );
 
 const BlogShowcase = () => {
-  const [blogs, setBlogs] = useState(fallbackBlogs);
+  const [blogs, setBlogs] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [dataSource, setDataSource] = useState("fallback");
+  const [dataSource, setDataSource] = useState("unknown");
 
   const DataSourceIcon = dataSource === "live" ? Wifi : WifiOff;
 
@@ -96,16 +95,15 @@ const BlogShowcase = () => {
       try {
         const data = await fetchBlogs({ signal: controller.signal });
         if (!isMounted) return;
-        const nextBlogs =
-          Array.isArray(data) && data.length > 0 ? data : fallbackBlogs;
+        const nextBlogs = Array.isArray(data) ? data : [];
         setBlogs(nextBlogs);
         setDataSource(
-          Array.isArray(data) && data.length > 0 ? "live" : "fallback",
+          Array.isArray(data) && data.length > 0 ? "live" : "error",
         );
       } catch {
         if (!isMounted) return;
-        setBlogs(fallbackBlogs);
-        setDataSource("fallback");
+        setBlogs([]);
+        setDataSource("error");
       } finally {
         if (isMounted) setRefreshing(false);
       }

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { skillsData, projectsData } from "./skillsData.jsx"; // Güncellenmiş veri dosyasını import et
+import { skillsData } from "./skillsData.jsx";
+import { useProjectData } from "@features/projects/hooks/useProjectData.js";
 import "./style/RecruiterSkills.css";
 
-const SkillDetailPanel = ({ skill }) => {
+const SkillDetailPanel = ({ skill, projectsData }) => {
   if (!skill) return null;
 
   const relatedProjects = projectsData.filter((p) =>
@@ -34,6 +35,7 @@ const SkillDetailPanel = ({ skill }) => {
 };
 
 const RecruiterSkills = () => {
+  const { projects: projectsData } = useProjectData();
   const [activeFilter, setActiveFilter] = useState("All");
   const [selectedSkill, setSelectedSkill] = useState(null);
 
@@ -98,12 +100,11 @@ const RecruiterSkills = () => {
               ))}
             </motion.div>
 
-            {/* Sadece bu kategorideki bir skill seçiliyse detay panelini göster */}
             <AnimatePresence>
               {selectedSkill &&
                 categoryData.skills.some(
                   (s) => s.name === selectedSkill.name
-                ) && <SkillDetailPanel skill={selectedSkill} />}
+                ) && <SkillDetailPanel skill={selectedSkill} projectsData={projectsData} />}
             </AnimatePresence>
           </motion.div>
         ))}

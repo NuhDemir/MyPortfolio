@@ -8,6 +8,7 @@ const TYPES = [
   { value: "makale", label: "Makaleler" },
   { value: "kurs", label: "Kurslar" },
   { value: "arac", label: "Araclar" },
+  {value: "diger", label: "Diger" }
 ];
 
 const ResourceFilters = React.memo(({ filters, onChange }) => {

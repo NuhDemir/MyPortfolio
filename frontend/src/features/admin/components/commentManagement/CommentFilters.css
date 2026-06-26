@@ -1,0 +1,6 @@
+.comment-filters {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  flex-wrap: wrap;
+}
