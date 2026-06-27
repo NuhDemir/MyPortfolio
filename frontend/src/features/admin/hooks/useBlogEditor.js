@@ -186,5 +186,6 @@ export const useBlogEditor = ({ fetchBlogs, setError, setLoading }) => {
     handleClearCover,
     handleSubmit,
     resetForm,
+    setFormData,
   };
 };

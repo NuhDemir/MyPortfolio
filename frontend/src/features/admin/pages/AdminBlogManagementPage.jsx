@@ -125,6 +125,7 @@ const AdminBlogManagementPage = () => {
           onClearCover={editor.handleClearCover}
           onSubmit={editor.handleSubmit}
           onCancel={editor.resetForm}
+          setFormData={editor.setFormData}
         />
       )}
 
