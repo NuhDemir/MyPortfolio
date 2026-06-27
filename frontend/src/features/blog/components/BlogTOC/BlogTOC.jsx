@@ -27,11 +27,19 @@ export const BlogTOC = ({ headings, activeId }) => {
             onClick={(e) => {
               e.preventDefault();
               if (isMobile) setIsOpen(false);
-              const target = document.getElementById(heading.id);
+              // Fallback to searching by text if ID is wiped out by React dangerouslySetInnerHTML
+              let target = document.getElementById(heading.id);
+              if (!target) {
+                target = Array.from(document.querySelectorAll("h2, h3")).find(
+                  (el) => el.innerText === heading.text
+                );
+              }
+              
               if (target) {
                 target.scrollIntoView({ behavior: "smooth", block: "start" });
-                // Fallback for some browsers where scrollIntoView smooth is buggy
                 window.history.pushState(null, "", `#${heading.id}`);
+              } else {
+                console.error("TOC scroll failed: Element not found", heading);
               }
             }}
           >
