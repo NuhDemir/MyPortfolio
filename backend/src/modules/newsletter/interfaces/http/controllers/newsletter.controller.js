@@ -1,5 +1,5 @@
 import asyncHandler from "express-async-handler";
-import { SubscriberModel } from "../infrastructure/persistence/mongoose/SubscriberModel.js";
+import { SubscriberModel } from "../../../infrastructure/persistence/mongoose/SubscriberModel.js";
 import axios from "axios";
 
 export const createNewsletterController = () => {
