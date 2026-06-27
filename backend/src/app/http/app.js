@@ -12,6 +12,8 @@ import { registerRoutes } from "./routes.js";
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:5173",
   "http://localhost:3000",
+  "https://nuhdemir.netlify.app",
+  "https://nuhdemirdev.onrender.com",
 ];
 
 const resolveAllowedOrigins = () => {

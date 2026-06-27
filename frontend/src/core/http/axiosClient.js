@@ -3,7 +3,10 @@ import { setupCache } from "axios-cache-interceptor";
 import { readStoredUser, clearStoredUser } from "../auth/authStorage.js";
 
 const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL?.trim() || "http://localhost:5000/api";
+  import.meta.env.VITE_API_BASE_URL?.trim() ||
+  (window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://nuhdemirdev.onrender.com/api");
 
 const baseAxios = axios.create({
   baseURL: API_BASE_URL,
