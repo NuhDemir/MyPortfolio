@@ -10,7 +10,7 @@ export class MongooseProjectRepository extends ProjectRepository {
       query.limit(options.limit);
     }
 
-    if (options.lean) {
+    if (options.lean !== false) {
       query.lean();
     }
 
@@ -21,7 +21,7 @@ export class MongooseProjectRepository extends ProjectRepository {
   async findById(id, options = {}) {
     const query = ProjectModel.findById(id);
 
-    if (options.lean) {
+    if (options.lean !== false) {
       query.lean();
     }
 
@@ -32,7 +32,7 @@ export class MongooseProjectRepository extends ProjectRepository {
   async findBySlug(slug, options = {}) {
     const query = ProjectModel.findOne({ slug });
 
-    if (options.lean) {
+    if (options.lean !== false) {
       query.lean();
     }
 

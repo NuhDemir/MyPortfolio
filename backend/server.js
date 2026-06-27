@@ -2,6 +2,7 @@ import path from "path";
 import fs from "fs";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import cron from "node-cron";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,6 +40,15 @@ const startServer = async () => {
       logger.info("Server started", {
         port,
         environment: process.env.NODE_ENV ?? "development",
+      });
+
+      // Keep-Alive Cron (Every 14 minutes)
+      const renderUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${port}`;
+      cron.schedule("*/14 * * * *", () => {
+        logger.info(`Sending keep-alive ping to ${renderUrl}/api/health`);
+        fetch(`${renderUrl}/api/health`).catch((err) =>
+          logger.error("Keep-alive ping failed", { error: err.message })
+        );
       });
     });
   } catch (error) {

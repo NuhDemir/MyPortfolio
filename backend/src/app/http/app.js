@@ -6,6 +6,7 @@ import {
   errorMiddleware,
   notFoundMiddleware,
 } from "../../shared/interfaces/http/middleware/error.middleware.js";
+import { cacheMiddleware } from "../../shared/interfaces/http/middleware/cache.middleware.js";
 import { registerRoutes } from "./routes.js";
 
 const DEFAULT_ALLOWED_ORIGINS = [
@@ -51,7 +52,7 @@ export const createHttpApp = ({
   app.use(
     rateLimit({
       windowMs: 15 * 60 * 1000,
-      max: 100,
+      max: 1000,
       standardHeaders: true,
       legacyHeaders: false,
       message: "Too many requests, please try again later.",
@@ -60,6 +61,9 @@ export const createHttpApp = ({
 
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: false }));
+
+  // Apply caching to GET routes (except admin and auth)
+  app.use(cacheMiddleware(300));
 
   registerRoutes(app);
 
