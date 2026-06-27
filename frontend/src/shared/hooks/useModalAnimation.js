@@ -44,12 +44,22 @@ export const useModalAnimation = (isOpen, onClose) => {
   useEffect(() => {
     if (!isOpen) return;
 
+    // Calculate scrollbar width to prevent layout shift
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    const originalPaddingRight = window.getComputedStyle(document.body).paddingRight;
+    const originalOverflow = document.body.style.overflow;
+
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${parseFloat(originalPaddingRight) + scrollbarWidth}px`;
+    }
     document.body.style.overflow = "hidden";
+
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };

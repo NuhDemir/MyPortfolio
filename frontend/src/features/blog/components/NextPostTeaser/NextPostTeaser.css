@@ -1,0 +1,112 @@
+.next-post-teaser-wrapper {
+  margin-top: 4rem;
+  margin-bottom: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 3rem;
+}
+
+.next-post-teaser-label {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary, #9ca3af);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.next-post-teaser {
+  display: block;
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  text-decoration: none;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.next-post-teaser:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.7);
+}
+
+.next-post-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+.next-post-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+
+.next-post-teaser:hover .next-post-bg img {
+  transform: scale(1.05);
+}
+
+.next-post-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to top, rgba(17, 17, 17, 0.9) 0%, rgba(17, 17, 17, 0.6) 100%);
+}
+
+.next-post-content {
+  position: relative;
+  z-index: 1;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.next-post-category {
+  display: inline-block;
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.next-post-content h2 {
+  font-size: 2rem;
+  color: var(--text-primary, #fff);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.next-post-content p {
+  color: var(--text-secondary, #9ca3af);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.next-post-read-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-primary, #3b82f6);
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: gap 0.2s ease;
+}
+
+.next-post-teaser:hover .next-post-read-btn {
+  gap: 0.75rem;
+}

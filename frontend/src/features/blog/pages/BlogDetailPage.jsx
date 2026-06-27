@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, Clock, User, Calendar, RefreshCw, Eye, Database, Heart, Mail } from "lucide-react";
 import { LoadingSpinner, useDominantColor } from "@shared";
@@ -6,6 +6,13 @@ import { CommentSection } from "@features/blog";
 import { useBlogDetail } from "../hooks/useBlogDetail.js";
 import { useLikeBlog } from "../hooks/useLikeBlog.js";
 import { NewsletterModal } from "../components/Newsletter/NewsletterModal.jsx";
+import { ReadingProgress } from "../components/ReadingProgress/ReadingProgress.jsx";
+import { BlogTOC } from "../components/BlogTOC/BlogTOC.jsx";
+import { FloatingActionPill } from "../components/FloatingActionPill/FloatingActionPill.jsx";
+import { HighlightShare } from "../components/HighlightShare/HighlightShare.jsx";
+import { NextPostTeaser } from "../components/NextPostTeaser/NextPostTeaser.jsx";
+import { useTableOfContents } from "../hooks/useTableOfContents.js";
+import { useHighlightShare } from "../hooks/useHighlightShare.js";
 import {
   buildSubtitle,
   formatToLocaleDate,
@@ -21,6 +28,14 @@ const BlogDetailPage = () => {
   const [hasScrolledPast, setHasScrolledPast] = useState(false);
   const blogId = blog?._id || blog?.id;
   const { likes, isLiked, isLiking, handleLike } = useLikeBlog(blogId, blog?.likes || 0);
+
+  const contentRef = useRef(null);
+  const { headings, activeId } = useTableOfContents(contentRef);
+  const selection = useHighlightShare(contentRef);
+
+  const handleCommentClick = () => {
+    document.getElementById("comments-section")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const metaData = useMemo(() => {
     if (!blog) return null;
@@ -81,6 +96,9 @@ const BlogDetailPage = () => {
 
   return (
     <main className="blog-page">
+      <ReadingProgress />
+      <HighlightShare selection={selection} />
+
       <div className="blog-page__glow" style={{ "--glow-color": glowColor }} />
       <div className="blog-page__container">
         <Link to="/blog" className="blog-detail__back">
@@ -116,29 +134,6 @@ const BlogDetailPage = () => {
 
             <div style={{ marginTop: "1.5rem", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
               <button
-                onClick={handleLike}
-                disabled={isLiked || isLiking}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "8px 16px",
-                  borderRadius: "24px",
-                  border: `1px solid ${isLiked ? "#ef4444" : "rgba(255,255,255,0.2)"}`,
-                  backgroundColor: isLiked ? "rgba(239, 68, 68, 0.15)" : "rgba(255,255,255,0.1)",
-                  color: isLiked ? "#ef4444" : "#ffffff",
-                  cursor: isLiked ? "default" : "pointer",
-                  transition: "all 0.2s ease",
-                  backdropFilter: "blur(10px)",
-                }}
-                className={!isLiked ? "like-btn-hover" : ""}
-                title={isLiked ? "Bu yazıyı zaten beğendiniz" : "Yazıyı beğen"}
-              >
-                <Heart size={18} fill={isLiked ? "#ef4444" : "none"} />
-                <span style={{ fontWeight: "600" }}>{likes.toLocaleString("tr-TR")}</span>
-              </button>
-
-              <button
                 onClick={() => setIsNewsletterOpen(true)}
                 style={{
                   display: "flex",
@@ -159,29 +154,21 @@ const BlogDetailPage = () => {
                 <Mail size={18} />
                 Bültene Abone Ol
               </button>
-
-              <style>{`
-                .like-btn-hover:hover, .newsletter-btn-hover:hover {
-                  background-color: rgba(255,255,255,0.2) !important;
-                  transform: scale(1.05);
-                }
-                .like-btn-hover:active, .newsletter-btn-hover:active {
-                  transform: scale(0.95);
-                }
-                .newsletter-btn-hover:hover {
-                  background-color: rgba(59, 130, 246, 0.3) !important;
-                  color: #fff !important;
-                  border-color: #3b82f6 !important;
-                }
-              `}</style>
             </div>
           </div>
         </header>
 
-        <section className="blog-detail__layout">
-          <article className="blog-detail__content"
-            dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} />
-        </section>
+        <div style={{ display: "flex", alignItems: "flex-start", position: "relative" }}>
+          <section className="blog-detail__layout" style={{ flex: 1, minWidth: 0 }}>
+            <article 
+              ref={contentRef}
+              className="blog-detail__content"
+              dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} 
+            />
+          </section>
+          
+          <BlogTOC headings={headings} activeId={activeId} />
+        </div>
 
         {showMetaBar && (
           <section className="blog-detail__credits" aria-label="Icerik Kunyesi">
@@ -232,11 +219,22 @@ const BlogDetailPage = () => {
         )}
 
         {(blog._id || blog.id) && (
-          <div className="blog-detail__layout">
-            <CommentSection blogId={blog._id || blog.id} />
-          </div>
+          <>
+            <NextPostTeaser currentBlogId={blog._id || blog.id} />
+            <div id="comments-section" className="blog-detail__layout">
+              <CommentSection blogId={blog._id || blog.id} />
+            </div>
+          </>
         )}
       </div>
+
+      <FloatingActionPill 
+        likes={likes}
+        isLiked={isLiked}
+        isLiking={isLiking}
+        onLike={handleLike}
+        onCommentClick={handleCommentClick}
+      />
 
       <NewsletterModal 
         isOpen={isNewsletterOpen} 
