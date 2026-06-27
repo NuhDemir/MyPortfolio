@@ -36,7 +36,18 @@ export const BlogTOC = ({ headings, activeId }) => {
               }
               
               if (target) {
-                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                // Delay scroll to prevent React state updates from cancelling the scroll
+                // Calculate position inside timeout so it accounts for layout shifts after menu closes
+                setTimeout(() => {
+                  const navbarHeight = 80;
+                  const targetPosition = target.getBoundingClientRect().top + window.scrollY - navbarHeight - 32;
+                  
+                  window.scrollTo({
+                    top: targetPosition,
+                    behavior: "smooth"
+                  });
+                }, 50);
+                
                 window.history.pushState(null, "", `#${heading.id}`);
               } else {
                 console.error("TOC scroll failed: Element not found", heading);
