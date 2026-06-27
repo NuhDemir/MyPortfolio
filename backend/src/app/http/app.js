@@ -65,6 +65,9 @@ export const createHttpApp = ({
   // Apply caching to GET routes (except admin and auth)
   app.use(cacheMiddleware(300));
 
+  // Ignore favicon requests
+  app.get("/favicon.ico", (req, res) => res.status(204).end());
+
   registerRoutes(app);
 
   // Simple root endpoint for API-only mode

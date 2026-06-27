@@ -303,7 +303,6 @@ aboutSchema.pre("validate", function (next) {
   next();
 });
 
-aboutSchema.index({ slug: 1 }, { unique: true });
 aboutSchema.index({ isActive: 1, updatedAt: -1 });
 
 export const AboutModel =
