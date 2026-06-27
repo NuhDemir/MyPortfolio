@@ -120,6 +120,18 @@ export class MongooseBlogRepository extends BlogRepository {
 
     return Blog.fromPersistence(document);
   }
+
+  async incrementLikes(id) {
+    const document = await BlogModel.findByIdAndUpdate(
+      id,
+      { $inc: { likes: 1 } },
+      { new: true }
+    )
+      .populate(authorPopulate)
+      .lean();
+
+    return Blog.fromPersistence(document);
+  }
 }
 
 const slugToObjectId = (value) => {

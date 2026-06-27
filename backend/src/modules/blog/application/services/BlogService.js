@@ -148,6 +148,14 @@ export class BlogService {
     }
     return result;
   }
+
+  async likeBlog(id) {
+    const result = await this.blogRepository.incrementLikes(id);
+    if (!result) {
+      throw new Error("Blog yazısı bulunamadı.");
+    }
+    return result;
+  }
 }
 
 export const createBlogService = ({ blogRepository }) =>

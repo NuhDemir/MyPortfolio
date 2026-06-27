@@ -168,7 +168,21 @@ export const fetchBlogBySlug = async (slug, options = {}) => {
   return null;
 };
 
+export const likeBlog = async (id, options = {}) => {
+  const { signal } = options;
+  try {
+    const response = await axiosClient.post(`/blog/${id}/like`, {}, {
+      timeout: REQUEST_TIMEOUT_MS,
+      signal,
+    });
+    return response.data;
+  } catch {
+    return null;
+  }
+};
+
 export default {
   fetchBlogs,
   fetchBlogBySlug,
+  likeBlog,
 };

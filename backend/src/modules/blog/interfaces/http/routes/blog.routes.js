@@ -46,6 +46,8 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
     controller.remove,
   );
 
+  router.post("/:id/like", controller.like);
+
   return router;
 };
 

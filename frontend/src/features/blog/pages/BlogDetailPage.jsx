@@ -1,9 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Clock, User, Calendar, RefreshCw, Eye, Database } from "lucide-react";
+import { ArrowLeft, Clock, User, Calendar, RefreshCw, Eye, Database, Heart, Mail } from "lucide-react";
 import { LoadingSpinner, useDominantColor } from "@shared";
 import { CommentSection } from "@features/blog";
 import { useBlogDetail } from "../hooks/useBlogDetail.js";
+import { useLikeBlog } from "../hooks/useLikeBlog.js";
+import { NewsletterModal } from "../components/Newsletter/NewsletterModal.jsx";
 import {
   buildSubtitle,
   formatToLocaleDate,
@@ -15,6 +17,10 @@ import "./styles/blog-detail.css";
 const BlogDetailPage = () => {
   const { slug } = useParams();
   const { blog, loading, dataSource } = useBlogDetail(slug);
+  const [isNewsletterOpen, setIsNewsletterOpen] = useState(false);
+  const [hasScrolledPast, setHasScrolledPast] = useState(false);
+  const blogId = blog?._id || blog?.id;
+  const { likes, isLiked, isLiking, handleLike } = useLikeBlog(blogId, blog?.likes || 0);
 
   const metaData = useMemo(() => {
     if (!blog) return null;
@@ -31,6 +37,25 @@ const BlogDetailPage = () => {
   const glowColor = useDominantColor(metaData?.thumbnail);
 
   const showMetaBar = metaData && (metaData.publisher || blog.readingTime || metaData.publishedAt);
+
+  // Auto-open newsletter modal when scrolling past 80%
+  useEffect(() => {
+    const handleScroll = () => {
+      if (hasScrolledPast) return;
+      const scrollY = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight;
+      const winHeight = window.innerHeight;
+      const scrollPercent = scrollY / (docHeight - winHeight);
+      
+      if (scrollPercent > 0.8) {
+        setIsNewsletterOpen(true);
+        setHasScrolledPast(true);
+      }
+    };
+    
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasScrolledPast]);
 
   if (loading && !blog) {
     return (
@@ -88,6 +113,68 @@ const BlogDetailPage = () => {
                 ))}
               </div>
             )}
+
+            <div style={{ marginTop: "1.5rem", display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+              <button
+                onClick={handleLike}
+                disabled={isLiked || isLiking}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "8px 16px",
+                  borderRadius: "24px",
+                  border: `1px solid ${isLiked ? "#ef4444" : "rgba(255,255,255,0.2)"}`,
+                  backgroundColor: isLiked ? "rgba(239, 68, 68, 0.15)" : "rgba(255,255,255,0.1)",
+                  color: isLiked ? "#ef4444" : "#ffffff",
+                  cursor: isLiked ? "default" : "pointer",
+                  transition: "all 0.2s ease",
+                  backdropFilter: "blur(10px)",
+                }}
+                className={!isLiked ? "like-btn-hover" : ""}
+                title={isLiked ? "Bu yazıyı zaten beğendiniz" : "Yazıyı beğen"}
+              >
+                <Heart size={18} fill={isLiked ? "#ef4444" : "none"} />
+                <span style={{ fontWeight: "600" }}>{likes.toLocaleString("tr-TR")}</span>
+              </button>
+
+              <button
+                onClick={() => setIsNewsletterOpen(true)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  padding: "8px 16px",
+                  borderRadius: "24px",
+                  border: "1px solid rgba(59, 130, 246, 0.5)",
+                  backgroundColor: "rgba(59, 130, 246, 0.15)",
+                  color: "#3b82f6",
+                  cursor: "pointer",
+                  transition: "all 0.2s ease",
+                  backdropFilter: "blur(10px)",
+                  fontWeight: "600",
+                }}
+                className="newsletter-btn-hover"
+              >
+                <Mail size={18} />
+                Bültene Abone Ol
+              </button>
+
+              <style>{`
+                .like-btn-hover:hover, .newsletter-btn-hover:hover {
+                  background-color: rgba(255,255,255,0.2) !important;
+                  transform: scale(1.05);
+                }
+                .like-btn-hover:active, .newsletter-btn-hover:active {
+                  transform: scale(0.95);
+                }
+                .newsletter-btn-hover:hover {
+                  background-color: rgba(59, 130, 246, 0.3) !important;
+                  color: #fff !important;
+                  border-color: #3b82f6 !important;
+                }
+              `}</style>
+            </div>
           </div>
         </header>
 
@@ -150,6 +237,11 @@ const BlogDetailPage = () => {
           </div>
         )}
       </div>
+
+      <NewsletterModal 
+        isOpen={isNewsletterOpen} 
+        onClose={() => setIsNewsletterOpen(false)} 
+      />
     </main>
   );
 };

@@ -8,6 +8,7 @@ import BlogCardGrid from "../components/blogManagement/BlogCardGrid.jsx";
 import BlogPreviewModal from "../components/blogManagement/BlogPreviewModal.jsx";
 import JsonTemplateModal from "../components/common/JsonTemplateModal.jsx";
 import JsonUploadModal from "../components/common/JsonUploadModal.jsx";
+import BlogStatisticsPanel from "../components/blogManagement/BlogStatisticsPanel.jsx";
 import { useAdminBlogs } from "../hooks/useAdminBlogs";
 import { useBlogEditor } from "../hooks/useBlogEditor";
 import { useBlogJsonImport } from "../hooks/useBlogJsonImport";
@@ -20,9 +21,9 @@ import {
   validateBlogJson,
 } from "../utils/blogJsonValidator.js";
 
-const blogJsonUploadTitle = "JSON ile Blog Yukle";
-const blogJsonUploadPlaceholder = "JSON verilerini buraya yapistirin...";
-const blogJsonTemplateDescription = "Blog yazisi eklemek icin asagidaki JSON formatini kullanin:";
+const blogJsonUploadTitle = "JSON ile Blog Yükle";
+const blogJsonUploadPlaceholder = "JSON verilerini buraya yapıştırın...";
+const blogJsonTemplateDescription = "Blog yazısı eklemek için aşağıdaki JSON formatını kullanın:";
 import "../styles/admin-shared.css";
 
 const INITIAL_FILTERS = { query: "", tag: "", status: "", isPublished: "", dateFrom: "", dateTo: "", sort: "newest" };
@@ -30,6 +31,7 @@ const INITIAL_FILTERS = { query: "", tag: "", status: "", isPublished: "", dateF
 const AdminBlogManagementPage = () => {
   const {
     blogs,
+    allBlogs,
     loading,
     error,
     hasMore,
@@ -50,6 +52,7 @@ const AdminBlogManagementPage = () => {
   const jsonImport = useBlogJsonImport({ fetchBlogs, setError, setLoading });
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [previewBlog, setPreviewBlog] = useState(null);
+  const [activeTab, setActiveTab] = useState("management"); // "management" | "statistics"
 
   const filteredBlogs = blogs
     .filter((b) => {
@@ -77,7 +80,7 @@ const AdminBlogManagementPage = () => {
       const response = await exportBlogsJson();
       downloadFromAxiosBlobResponse(response, "blogs-export.json");
     } catch (err) {
-      setError(err?.message || "Blog yazilari disa aktarilirken hata olustu.");
+      setError(err?.message || "Blog yazıları dışa aktarılırken hata oluştu.");
     } finally {
       setLoading(false);
     }
@@ -85,91 +88,122 @@ const AdminBlogManagementPage = () => {
 
   const handleCopyTemplate = useCallback(() => {
     navigator.clipboard.writeText(JSON.stringify(blogJsonTemplate, null, 2));
-    showAdminToast("Sablon panoya kopyalandi!", { type: "success" });
+    showAdminToast("Şablon panoya kopyalandı!", { type: "success" });
   }, []);
 
   return (
     <div className="admin-management-page">
-      <h1>Blog Yonetimi</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem", flexWrap: "wrap", gap: "1rem" }}>
+        <h1 style={{ margin: 0 }}>Blog Yönetimi</h1>
+        
+        <div className="res-cover-mode-tabs" style={{ margin: 0, padding: "4px", background: "var(--bg-secondary)", borderRadius: "12px" }}>
+          <button
+            type="button"
+            className={`res-cover-mode-btn ${activeTab === "management" ? "res-cover-mode-btn--active" : ""}`}
+            onClick={() => setActiveTab("management")}
+            style={{ border: "none", borderRadius: "8px", padding: "8px 20px", fontWeight: "500" }}
+          >
+            İçerik Yönetimi
+          </button>
+          <button
+            type="button"
+            className={`res-cover-mode-btn ${activeTab === "statistics" ? "res-cover-mode-btn--active" : ""}`}
+            onClick={() => setActiveTab("statistics")}
+            style={{ border: "none", borderRadius: "8px", padding: "8px 20px", fontWeight: "500" }}
+          >
+            İstatistikler & Analiz
+          </button>
+        </div>
+      </div>
 
       {error && <ErrorMessage message={error} />}
 
-      <BlogStatsBar stats={stats} />
-
-      {!editor.isFormVisible && (
+      {activeTab === "management" ? (
         <>
-          <BlogManagementActions
-            onNew={editor.startNew}
-            onOpenJson={jsonImport.openJsonModal}
-            onExportJson={handleExportJson}
-            loading={loading}
-          />
-          <BlogFilters filters={filters} onChange={setFilters} tags={tags} />
-        </>
-      )}
+          <BlogStatsBar stats={stats} />
 
-      {editor.isFormVisible && (
-        <BlogForm
-          editingId={editor.editingId}
+          {!editor.isFormVisible && (
+            <>
+              <BlogManagementActions
+                onNew={editor.startNew}
+                onOpenJson={jsonImport.openJsonModal}
+                onExportJson={handleExportJson}
+                loading={loading}
+              />
+              <BlogFilters filters={filters} onChange={setFilters} tags={tags} />
+            </>
+          )}
+
+          {editor.isFormVisible && (
+            <BlogForm
+              editingId={editor.editingId}
+              loading={loading}
+              formData={editor.formData}
+              categories={editor.categories}
+              coverPreview={editor.coverPreview}
+              coverMode={editor.coverMode}
+              coverUrl={editor.coverUrl}
+              coverFile={editor.coverFile}
+              onInputChange={editor.handleInputChange}
+              onCoverFileChange={editor.handleCoverFileChange}
+              onCoverUrlChange={editor.handleCoverUrlChange}
+              onCoverModeChange={editor.handleCoverModeChange}
+              onClearCover={editor.handleClearCover}
+              onSubmit={editor.handleSubmit}
+              onCancel={editor.resetForm}
+              setFormData={editor.setFormData}
+            />
+          )}
+
+          <BlogCardGrid
+            blogs={filteredBlogs}
+            loading={loading}
+            hasMore={hasMore}
+            onLoadMore={loadMore}
+            onEdit={editor.startEdit}
+            onDelete={handleDelete}
+            onToggleStatus={handleToggleStatus}
+            onToggleFeatured={handleToggleFeatured}
+            onPreview={setPreviewBlog}
+            onDuplicate={handleDuplicate}
+            onCopySlug={handleCopySlug}
+          />
+
+          <BlogPreviewModal
+            blog={previewBlog}
+            isOpen={!!previewBlog}
+            onClose={() => setPreviewBlog(null)}
+          />
+
+          <JsonUploadModal
+            isOpen={jsonImport.isJsonModalOpen}
+            loading={loading}
+            title={blogJsonUploadTitle}
+            jsonInput={jsonImport.jsonInput}
+            onChangeJsonInput={jsonImport.setJsonInput}
+            onClose={jsonImport.closeJsonModal}
+            onSubmit={jsonImport.handleJsonSubmit}
+            onOpenTemplate={() => jsonImport.setIsTemplateModalOpen(true)}
+            placeholder={blogJsonUploadPlaceholder}
+            validator={validateBlogJson}
+          />
+
+          <JsonTemplateModal
+            isOpen={jsonImport.isTemplateModalOpen}
+            onClose={() => jsonImport.setIsTemplateModalOpen(false)}
+            template={blogJsonTemplate}
+            onCopy={handleCopyTemplate}
+            description={blogJsonTemplateDescription}
+            infoItems={blogJsonTemplateInfoItems}
+          />
+        </>
+      ) : (
+        <BlogStatisticsPanel 
+          blogs={allBlogs || []} 
+          onRefresh={() => fetchBlogs(true)}
           loading={loading}
-          formData={editor.formData}
-          categories={editor.categories}
-          coverPreview={editor.coverPreview}
-          coverMode={editor.coverMode}
-          coverUrl={editor.coverUrl}
-          coverFile={editor.coverFile}
-          onInputChange={editor.handleInputChange}
-          onCoverFileChange={editor.handleCoverFileChange}
-          onCoverUrlChange={editor.handleCoverUrlChange}
-          onCoverModeChange={editor.handleCoverModeChange}
-          onClearCover={editor.handleClearCover}
-          onSubmit={editor.handleSubmit}
-          onCancel={editor.resetForm}
-          setFormData={editor.setFormData}
         />
       )}
-
-      <BlogCardGrid
-        blogs={filteredBlogs}
-        loading={loading}
-        hasMore={hasMore}
-        onLoadMore={loadMore}
-        onEdit={editor.startEdit}
-        onDelete={handleDelete}
-        onToggleStatus={handleToggleStatus}
-        onToggleFeatured={handleToggleFeatured}
-        onPreview={setPreviewBlog}
-        onDuplicate={handleDuplicate}
-        onCopySlug={handleCopySlug}
-      />
-
-      <BlogPreviewModal
-        blog={previewBlog}
-        isOpen={!!previewBlog}
-        onClose={() => setPreviewBlog(null)}
-      />
-
-      <JsonUploadModal
-        isOpen={jsonImport.isJsonModalOpen}
-        loading={loading}
-        title={blogJsonUploadTitle}
-        jsonInput={jsonImport.jsonInput}
-        onChangeJsonInput={jsonImport.setJsonInput}
-        onClose={jsonImport.closeJsonModal}
-        onSubmit={jsonImport.handleJsonSubmit}
-        onOpenTemplate={() => jsonImport.setIsTemplateModalOpen(true)}
-        placeholder={blogJsonUploadPlaceholder}
-        validator={validateBlogJson}
-      />
-
-      <JsonTemplateModal
-        isOpen={jsonImport.isTemplateModalOpen}
-        onClose={() => jsonImport.setIsTemplateModalOpen(false)}
-        template={blogJsonTemplate}
-        onCopy={handleCopyTemplate}
-        description={blogJsonTemplateDescription}
-        infoItems={blogJsonTemplateInfoItems}
-      />
     </div>
   );
 };

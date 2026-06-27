@@ -162,6 +162,7 @@ export const useAdminBlogs = () => {
     handleToggleFeatured,
     handleDuplicate,
     handleCopySlug,
+    allBlogs: allBlogsRef.current,
   };
 };
 

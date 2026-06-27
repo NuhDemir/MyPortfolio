@@ -6,6 +6,9 @@ import {
   fetchBlogs,
 } from "@features/blog/services/blogService.js";
 import { stripHtml, buildExcerpt, formatToLocaleDate } from "../utils/blogFormatters.js";
+import { useLikeBlog } from "../hooks/useLikeBlog.js";
+import { Heart } from "lucide-react";
+import { NewsletterBanner } from "../components/Newsletter/NewsletterBanner.jsx";
 import "./styles/blog-list.css";
 
 const BlogCardItem = ({ blog, index }) => {
@@ -13,34 +16,62 @@ const BlogCardItem = ({ blog, index }) => {
   const publishedDate = formatToLocaleDate(blog?.publishedAt || blog?.updatedAt || blog?.createdAt) ?? "Yeni";
   const excerpt = buildExcerpt(blog) || "Devamı için tıklayın.";
   const coverUrl = blog?.thumbnail?.url || blog?.thumbnail || blog?.coverImage || null;
+  const blogId = blog?._id || blog?.id;
+
+  const { likes, isLiked, isLiking, handleLike } = useLikeBlog(blogId, blog?.likes || 0);
 
   const rev = useScrollReveal({ variant: "fadeUp", threshold: 0.08, delay: index * 0.05 });
 
   return (
     <motion.article key={slug || `blog-${index}`} {...rev}>
-      <Link to={`/blog/${slug}`} className="blog-card">
-        <div className="blog-card__cover">
-          {coverUrl ? (
-            <img src={coverUrl} alt={blog.title} className="blog-card__cover-img" loading="lazy" />
-          ) : (
-            <div className="blog-card__cover-placeholder">
-              <span>{blog.title?.[0] || "B"}</span>
-            </div>
-          )}
-          <span className="blog-card__category-badge">
-            {blog.category || "Genel"}
-          </span>
-        </div>
-
-        <div className="blog-card__body">
-          <h3 className="blog-card__title">{blog.title}</h3>
-          <div className="blog-card__meta">
-            <span>{publishedDate}</span>
-            {blog.readingTime ? <span>{` • ${blog.readingTime} dk okuma`}</span> : null}
+      <div className="blog-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <Link to={`/blog/${slug}`} style={{ textDecoration: 'none', color: 'inherit', flexGrow: 1 }}>
+          <div className="blog-card__cover">
+            {coverUrl ? (
+              <img src={coverUrl} alt={blog.title} className="blog-card__cover-img" loading="lazy" />
+            ) : (
+              <div className="blog-card__cover-placeholder">
+                <span>{blog.title?.[0] || "B"}</span>
+              </div>
+            )}
+            <span className="blog-card__category-badge">
+              {blog.category || "Genel"}
+            </span>
           </div>
-          <p className="blog-card__excerpt">{excerpt}</p>
+
+          <div className="blog-card__body" style={{ paddingBottom: '0.5rem' }}>
+            <h3 className="blog-card__title">{blog.title}</h3>
+            <div className="blog-card__meta">
+              <span>{publishedDate}</span>
+              {blog.readingTime ? <span>{` • ${blog.readingTime} dk okuma`}</span> : null}
+            </div>
+            <p className="blog-card__excerpt">{excerpt}</p>
+          </div>
+        </Link>
+        <div style={{ padding: '0 1.5rem 1.5rem 1.5rem', display: 'flex', justifyContent: 'flex-start' }}>
+          <button
+            onClick={handleLike}
+            disabled={isLiked || isLiking}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              background: 'none',
+              border: 'none',
+              color: isLiked ? '#ef4444' : 'var(--text-tertiary)',
+              cursor: isLiked ? 'default' : 'pointer',
+              padding: 0,
+              transition: 'all 0.2s',
+              fontWeight: '500',
+              fontSize: '0.9rem'
+            }}
+            title={isLiked ? "Beğenildi" : "Beğen"}
+          >
+            <Heart size={16} fill={isLiked ? "#ef4444" : "none"} />
+            {likes.toLocaleString('tr-TR')}
+          </button>
         </div>
-      </Link>
+      </div>
     </motion.article>
   );
 };
@@ -192,11 +223,17 @@ const BlogListPage = () => {
             <p>Henüz yayınlanmış blog yazısı bulunmuyor.</p>
           </div>
         ) : (
-          <div className="blog-list">
-            {paginatedBlogs.map((blog, index) => (
-              <BlogCardItem key={blog?.slug || blog?.id || blog?._id || `blog-${index}`} blog={blog} index={index} />
-            ))}
-          </div>
+          <>
+            <motion.div {...revPagination}>
+              <NewsletterBanner />
+            </motion.div>
+            
+            <div className="blog-list">
+              {paginatedBlogs.map((blog, index) => (
+                <BlogCardItem key={blog?.slug || blog?.id || blog?._id || `blog-${index}`} blog={blog} index={index} />
+              ))}
+            </div>
+          </>
         )}
 
         {publishedBlogs.length > 0 && (

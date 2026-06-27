@@ -6,6 +6,8 @@ import updateBlogUseCase from "../../../application/use-cases/updateBlog.use-cas
 import deleteBlogUseCase from "../../../application/use-cases/deleteBlog.use-case.js";
 import exportBlogsJsonUseCase from "../../../application/use-cases/exportBlogsJson.use-case.js";
 
+import likeBlogUseCase from "../../../application/use-cases/likeBlog.use-case.js";
+
 export const createBlogController = (dependencies) => {
   const list = asyncHandler(async (req, res) => {
     const isAdmin = req.user?.role === "admin";
@@ -81,6 +83,11 @@ export const createBlogController = (dependencies) => {
     res.status(200).send(JSON.stringify(payload, null, 2));
   });
 
+  const like = asyncHandler(async (req, res) => {
+    const blog = await likeBlogUseCase(req.params.id, dependencies);
+    res.json({ message: "Blog beğenildi.", likes: blog.likes });
+  });
+
   return {
     list,
     get,
@@ -88,6 +95,7 @@ export const createBlogController = (dependencies) => {
     update,
     remove,
     exportJson,
+    like,
   };
 };
 
