@@ -30,7 +30,7 @@ const BlogDetailPage = () => {
   const { likes, isLiked, isLiking, handleLike } = useLikeBlog(blogId, blog?.likes || 0);
 
   const contentRef = useRef(null);
-  const { headings, activeId } = useTableOfContents(contentRef);
+  const { headings, activeId } = useTableOfContents(contentRef, blog?.content);
   const selection = useHighlightShare(contentRef);
 
   const handleCommentClick = () => {
@@ -158,7 +158,7 @@ const BlogDetailPage = () => {
           </div>
         </header>
 
-        <div style={{ display: "flex", alignItems: "flex-start", position: "relative" }}>
+        <div className="blog-content-wrapper">
           <section className="blog-detail__layout" style={{ flex: 1, minWidth: 0 }}>
             <article 
               ref={contentRef}

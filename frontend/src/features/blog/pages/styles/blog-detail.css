@@ -193,6 +193,20 @@
   backdrop-filter: blur(8px);
 }
 
+/* ── Article Content Wrapper ─────────────────────────────────────────────── */
+.blog-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .blog-content-wrapper {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
 /* ── Article Content Formatting ────────────────────────────────────────── */
 .blog-detail__content {
   font-family: var(--ds-font-body);
