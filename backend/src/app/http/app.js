@@ -64,8 +64,8 @@ export const createHttpApp = ({
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: false }));
 
-  // Apply caching to GET routes (except admin and auth)
-  app.use(cacheMiddleware(300));
+  // Cache removed to ensure always fresh data
+  // app.use(cacheMiddleware(300));
 
   // Ignore favicon requests
   app.get("/favicon.ico", (req, res) => res.status(204).end());
