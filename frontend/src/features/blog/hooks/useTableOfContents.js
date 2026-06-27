@@ -15,7 +15,8 @@ export const useTableOfContents = (contentRef, content) => {
       // Generate IDs if they don't exist
       const parsedHeadings = elements.map((elem, index) => {
         if (!elem.id) {
-          elem.id = `heading-${index}-${elem.innerText.replace(/\\s+/g, "-").toLowerCase()}`;
+          // Replace anything that is not a letter or number with a dash
+          elem.id = `heading-${index}-${elem.innerText.replace(/[^a-zA-Z0-9çğıöşüÇĞIÖŞÜ]/g, "-").toLowerCase()}`;
         }
         return {
           id: elem.id,

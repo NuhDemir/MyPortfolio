@@ -15,7 +15,7 @@ export const BlogTOC = ({ headings, activeId }) => {
 
   if (!headings || headings.length === 0) return null;
 
-  const TocContent = () => (
+  const tocContentJsx = (
     <ul className="blog-toc-list">
       {headings.map((heading) => (
         <li 
@@ -27,9 +27,12 @@ export const BlogTOC = ({ headings, activeId }) => {
             onClick={(e) => {
               e.preventDefault();
               if (isMobile) setIsOpen(false);
-              document.getElementById(heading.id)?.scrollIntoView({
-                behavior: "smooth",
-              });
+              const target = document.getElementById(heading.id);
+              if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+                // Fallback for some browsers where scrollIntoView smooth is buggy
+                window.history.pushState(null, "", `#${heading.id}`);
+              }
             }}
           >
             {heading.text}
@@ -54,7 +57,7 @@ export const BlogTOC = ({ headings, activeId }) => {
           />
         </button>
         <div className={`blog-toc-mobile-content ${isOpen ? "open" : ""}`}>
-          <TocContent />
+          {tocContentJsx}
         </div>
       </div>
     );
@@ -63,7 +66,7 @@ export const BlogTOC = ({ headings, activeId }) => {
   return (
     <nav className="blog-toc" aria-label="İçindekiler">
       <h4 className="blog-toc-title">İçindekiler</h4>
-      <TocContent />
+      {tocContentJsx}
     </nav>
   );
 };

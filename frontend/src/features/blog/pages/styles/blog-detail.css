@@ -224,6 +224,7 @@
   margin: var(--ds-space-10) 0 var(--ds-space-4);
   line-height: 1.2;
   letter-spacing: -0.02em;
+  scroll-margin-top: calc(var(--ds-navbar-height, 80px) + 2rem);
 }
 
 .blog-detail__content h2 { font-size: var(--ds-text-2xl); }

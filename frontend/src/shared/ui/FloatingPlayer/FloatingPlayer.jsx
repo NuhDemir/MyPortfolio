@@ -231,11 +231,18 @@ const CollapsedBubble = ({ onExpand }) => {
     if (dx < 8 && dy < 8) onExpand();
   };
 
+  const dragConstraints = useRef({
+    left: -window.innerWidth + 80,
+    right: 0,
+    top: -window.innerHeight + 80,
+    bottom: 0
+  });
+
   return (
     <motion.div
       className="fp"
       drag
-      dragConstraints={{ left: -window.innerWidth + 80, right: 0, top: -window.innerHeight + 80, bottom: 0 }}
+      dragConstraints={dragConstraints.current}
       dragControls={dragControls}
       dragMomentum={false}
       dragElastic={0.06}

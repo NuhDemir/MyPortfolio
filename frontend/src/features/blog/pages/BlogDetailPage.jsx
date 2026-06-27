@@ -159,6 +159,7 @@ const BlogDetailPage = () => {
         </header>
 
         <div className="blog-content-wrapper">
+          <BlogTOC headings={headings} activeId={activeId} />
           <section className="blog-detail__layout" style={{ flex: 1, minWidth: 0 }}>
             <article 
               ref={contentRef}
@@ -166,8 +167,6 @@ const BlogDetailPage = () => {
               dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} 
             />
           </section>
-          
-          <BlogTOC headings={headings} activeId={activeId} />
         </div>
 
         {showMetaBar && (
