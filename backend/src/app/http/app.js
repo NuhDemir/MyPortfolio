@@ -22,10 +22,10 @@ const resolveAllowedOrigins = () => {
     return DEFAULT_ALLOWED_ORIGINS;
   }
 
-  return rawOrigins
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
+  return Array.from(new Set([
+    ...DEFAULT_ALLOWED_ORIGINS,
+    ...rawOrigins.split(",").map((origin) => origin.trim()).filter(Boolean)
+  ]));
 };
 
 export const createHttpApp = ({

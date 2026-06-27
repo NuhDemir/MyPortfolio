@@ -5,7 +5,21 @@ const cache = new NodeCache({ stdTTL: 300, checkperiod: 320 });
 
 export const cacheMiddleware = (duration = 300) => {
   return (req, res, next) => {
-    if (req.method !== "GET" || req.originalUrl.includes('/auth') || req.originalUrl.includes('/admin')) {
+    if (req.method !== "GET") {
+      // If it's a mutation (POST, PUT, DELETE), clear cache for this base URL
+      if (req.method === "POST" || req.method === "PUT" || req.method === "DELETE" || req.method === "PATCH") {
+        const basePath = req.originalUrl.split('?')[0]; // e.g. /api/projects
+        clearCachePrefix(basePath);
+        // Also clear base paths if it's an ID route (e.g. /api/projects/123 -> clear /api/projects)
+        const parts = basePath.split('/');
+        if (parts.length > 3) {
+          clearCachePrefix(parts.slice(0, 3).join('/')); 
+        }
+      }
+      return next();
+    }
+
+    if (req.originalUrl.includes('/auth') || req.originalUrl.includes('/admin')) {
       return next();
     }
 
