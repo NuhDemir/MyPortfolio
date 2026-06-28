@@ -19,6 +19,7 @@ import {
   resolvePublisherName,
   resolveBlogThumbnail,
 } from "../utils/blogFormatters.js";
+import BlogContentRenderer from "../components/Interactive/BlogContentRenderer.jsx";
 import "./styles/blog-detail.css";
 
 const BlogDetailPage = () => {
@@ -94,6 +95,20 @@ const BlogDetailPage = () => {
     );
   }
 
+  // Guard: draft blogs should not be visible to public readers
+  const isDraft = blog?.status ? blog.status !== "published" : blog?.isPublished === false;
+  if (isDraft) {
+    return (
+      <main className="blog-page">
+        <div className="blog-page__container blog-page__centered">
+          <h1 className="blog-hero__title">Yazi Henuz Yayinda Degil</h1>
+          <p className="blog-hero__subtitle">Bu icerik taslak halinde, yayin yapildiginda erisebilirsiniz.</p>
+          <Link className="premium-btn" style={{ marginTop: "var(--ds-space-6)" }} to="/blog">Blog Sayfasina Don</Link>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="blog-page">
       <ReadingProgress />
@@ -161,11 +176,9 @@ const BlogDetailPage = () => {
         <div className="blog-content-wrapper">
           <BlogTOC headings={headings} activeId={activeId} />
           <section className="blog-detail__layout" style={{ flex: 1, minWidth: 0 }}>
-            <article 
-              ref={contentRef}
-              className="blog-detail__content"
-              dangerouslySetInnerHTML={{ __html: blog.content || "<p>Icerik hazirlik asamasinda.</p>" }} 
-            />
+            <article ref={contentRef}>
+              <BlogContentRenderer content={blog.content || ""} />
+            </article>
           </section>
         </div>
 

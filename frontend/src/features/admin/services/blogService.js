@@ -61,13 +61,23 @@ export const createBlog = async (blogData) => {
 
 export const updateBlog = async (id, updateData) => {
   try {
-    const formData = new FormData();
+    const hasFile = updateData.thumbnail instanceof File || updateData.thumbnail instanceof Blob;
 
-    Object.entries(updateData).forEach(([key, value]) => {
-      if (value === undefined || value === null) {
-        return;
+    if (!hasFile) {
+      // No file upload — send as JSON so booleans/numbers are preserved correctly
+      const body = { ...updateData };
+      // Convert tags array to comma-separated string for consistency with backend parser
+      if (Array.isArray(body.tags)) {
+        body.tags = body.tags.join(",");
       }
+      const response = await axiosClient.put(`/blog/${id}`, body);
+      return response.data;
+    }
 
+    // File upload path — use FormData
+    const formData = new FormData();
+    Object.entries(updateData).forEach(([key, value]) => {
+      if (value === undefined || value === null) return;
       if (key === "tags" && Array.isArray(value)) {
         formData.append(key, value.join(","));
       } else if (key === "isPublished") {

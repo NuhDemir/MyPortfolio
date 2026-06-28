@@ -73,14 +73,25 @@ export class MongooseBlogRepository extends BlogRepository {
       return null;
     }
 
-    const updated = await BlogModel.findByIdAndUpdate(
-      normalizedId,
-      updateData,
-      {
-        new: true,
-        runValidators: true,
+    // Use findById + save() so that pre("save") hooks fire.
+    // findByIdAndUpdate skips middleware hooks, causing isPublished to desync.
+    const doc = await BlogModel.findById(normalizedId).populate(authorPopulate);
+
+    if (!doc) {
+      return null;
+    }
+
+    // Apply each field from updateData onto the Mongoose document
+    Object.keys(updateData).forEach((key) => {
+      if (updateData[key] !== undefined) {
+        doc[key] = updateData[key];
       }
-    )
+    });
+
+    await doc.save();
+
+    // Re-fetch as lean to get the final state after hooks ran
+    const updated = await BlogModel.findById(normalizedId)
       .populate(authorPopulate)
       .lean();
 

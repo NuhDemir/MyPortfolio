@@ -128,9 +128,12 @@ const BlogListPage = () => {
 
   const publishedBlogs = useMemo(() => {
     const base = blogs.filter((blog) => {
-      const statusAllows = !blog?.status || blog.status === "published";
-      const explicitFlag = blog?.isPublished !== false;
-      return statusAllows && explicitFlag;
+      // A blog is visible to public readers ONLY when explicitly published.
+      // status takes precedence; isPublished is the fallback boolean.
+      if (blog?.status) {
+        return blog.status === "published";
+      }
+      return blog?.isPublished === true;
     });
 
     const term = searchTerm.trim().toLowerCase();

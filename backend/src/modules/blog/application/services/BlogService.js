@@ -126,6 +126,8 @@ export class BlogService {
     }
 
     if (payload.isPublished !== undefined) {
+      // Normalize to boolean (handles "false" strings from form data)
+      payload.isPublished = Boolean(payload.isPublished);
       payload.status = payload.isPublished ? "published" : "draft";
     }
 

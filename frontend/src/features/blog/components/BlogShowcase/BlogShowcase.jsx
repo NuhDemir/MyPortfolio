@@ -128,9 +128,10 @@ const BlogShowcase = () => {
 
   const visibleBlogs = useMemo(() => {
     const publishedOnly = blogs.filter((blog) => {
-      const statusAllows = !blog?.status || blog.status === "published";
-      const explicitFlag = blog?.isPublished !== false;
-      return statusAllows && explicitFlag;
+      if (blog?.status) {
+        return blog.status === "published";
+      }
+      return blog?.isPublished === true;
     });
     return sortBlogsByDate(publishedOnly).slice(0, BLOG_LIMIT);
   }, [blogs]);

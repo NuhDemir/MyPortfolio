@@ -1,0 +1,100 @@
+/* BlogTabs Component Styles */
+.btabs-wrap {
+  margin: var(--ds-space-8) 0;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: var(--ds-radius-md);
+  overflow: hidden;
+}
+
+.btabs-heading {
+  padding: var(--ds-space-3) var(--ds-space-5);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-semibold);
+  color: var(--ds-muted);
+  border-bottom: 1px solid var(--ds-border-soft);
+  background: var(--ds-bg);
+  font-family: var(--ds-font-body);
+}
+
+.btabs-nav {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--ds-bg);
+  border-bottom: 1px solid var(--ds-border-soft);
+  gap: 0;
+}
+
+.btabs-nav::-webkit-scrollbar { display: none; }
+
+.btabs-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-3) var(--ds-space-5);
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-sm);
+  font-weight: var(--ds-weight-medium);
+  color: var(--ds-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.btabs-tab:hover { color: var(--ds-fg); background: var(--ds-surface); }
+
+.btabs-tab--active {
+  color: var(--ds-fg);
+  border-bottom-color: var(--ds-fg);
+  background: var(--ds-surface);
+}
+
+.btabs-tab__icon { font-size: 14px; }
+
+.btabs-panel {
+  padding: var(--ds-space-5) var(--ds-space-5);
+}
+
+.btabs-code {
+  margin: 0;
+  padding: var(--ds-space-4);
+  background: #0d0d14;
+  border-radius: var(--ds-radius-sm);
+  overflow-x: auto;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  font-size: 13px;
+  line-height: 1.65;
+  color: #e2e8f0;
+}
+
+.btabs-code code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  color: inherit;
+}
+
+.btabs-text {
+  font-family: var(--ds-font-body);
+  font-size: var(--ds-text-base);
+  line-height: 1.7;
+  color: var(--ds-fg);
+  white-space: pre-wrap;
+}
+
+.btabs-error {
+  margin: var(--ds-space-6) 0;
+  padding: var(--ds-space-4);
+  background: rgba(244, 63, 94, 0.08);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: var(--ds-radius-sm);
+  color: #f43f5e;
+  font-size: var(--ds-text-sm);
+  font-family: var(--ds-font-body);
+}

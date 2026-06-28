@@ -41,5 +41,12 @@ export const resolvePublisherName = (publisher) => {
 export const normalizeSlug = (blog) =>
   blog?.slug || (blog?.title ? String(blog.title).toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "") : "");
 
-export const resolveBlogThumbnail = (blog) =>
-  blog?.thumbnail?.url || blog?.thumbnailUrl || blog?.thumbnail || blog?.coverImage || null;
+export const resolveBlogThumbnail = (blog) => {
+  let url = blog?.thumbnail?.url || blog?.thumbnailUrl || blog?.thumbnail || blog?.coverImage || null;
+  if (url && typeof url === "string" && url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+    if (!url.includes("f_auto")) {
+      url = url.replace("/upload/", "/upload/f_auto,q_auto/");
+    }
+  }
+  return url;
+};
