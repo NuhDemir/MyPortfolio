@@ -109,6 +109,8 @@ const MainImage = forwardRef(({ isPlaying }, ref) => {
         loading="eager"
         decoding="async"
         fetchPriority="high"
+        width={176}
+        height={176}
       />
     </div>
   );

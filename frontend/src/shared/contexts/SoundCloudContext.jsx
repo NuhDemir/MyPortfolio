@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useSoundCloudPlayer, buildSCUrl } from "../hooks/useSoundCloudPlayer.js";
 
 const SoundCloudContext = createContext(null);
@@ -9,11 +9,29 @@ const SoundCloudContext = createContext(null);
  */
 export const SoundCloudProvider = ({ children }) => {
   const player = useSoundCloudPlayer();
+  const [shouldLoad, setShouldLoad] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShouldLoad(true), 3500);
+    const handleInteraction = () => setShouldLoad(true);
+    
+    window.addEventListener("scroll", handleInteraction, { once: true });
+    window.addEventListener("click", handleInteraction, { once: true });
+    window.addEventListener("touchstart", handleInteraction, { once: true });
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleInteraction);
+      window.removeEventListener("click", handleInteraction);
+      window.removeEventListener("touchstart", handleInteraction);
+    };
+  }, []);
 
   return (
     <SoundCloudContext.Provider value={player}>
       {/* Hidden SC iframe — lives at app level, never unmounts */}
-      <iframe
+      {shouldLoad && (
+        <iframe
         ref={player.iframeRef}
         title="SoundCloud Player"
         src={buildSCUrl()}
@@ -29,6 +47,7 @@ export const SoundCloudProvider = ({ children }) => {
           border: 0,
         }}
       />
+      )}
       {children}
     </SoundCloudContext.Provider>
   );

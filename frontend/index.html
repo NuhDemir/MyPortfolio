@@ -33,8 +33,11 @@
   <!-- Figtree (Google Fonts) — primary display typeface -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" />
+  </noscript>
 
   <!-- Diğer kritik SVG'ler varsa (isteğe bağlı): -->
   <!-- <link rel="preload" href="https://res.cloudinary.com/dahmmlu7u/image/upload/v1775947794/portfolio/public/assets/icons/project/MyProject.svg" as="image" /> -->
