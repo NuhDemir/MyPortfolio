@@ -136,7 +136,7 @@ export const useAdminBlogs = () => {
     const totalReading = all.reduce((sum, b) => sum + (b.readingTime || 0), 0);
     const avgReadingTime = all.length > 0 ? Math.round(totalReading / all.length) : 0;
     return { published, drafts, totalViews, avgReadingTime };
-  }, []);
+  }, [blogs]);
 
   const tags = useMemo(() => {
     const set = new Set();

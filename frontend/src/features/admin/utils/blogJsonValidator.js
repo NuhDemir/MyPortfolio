@@ -88,167 +88,200 @@ export const validateBlogJson = (text) => {
 };
 
 export const BLOG_JSON_TEMPLATE = {
-  title: "Kapsamli Blog Sablonu: Interaktif Bilesenler Rehberi",
-  slug: "kapsamli-blog-sablonu-interaktif-rehber",
-  content: `# Interaktif Blog Bilesenlerinin Tam Rehberi
+  title: "Blog İçerik Yönetimi ve İnteraktif Bileşenler Kullanım Kılavuzu",
+  slug: "interaktif-bilesenler-kullanim-kilavuzu",
+  content: `# 🚀 İnteraktif Blog İçerik Yönetimi Kılavuzu
 
-Bu blog yazisinda kullanabileceginiz **tum interaktif bilesenler** asagida orneklerle aciklanmistir.
+Bu blog yazısı, sistemdeki **tüm interaktif bileşenlerin** nasıl kullanılacağını anlatan, aynı zamanda kendisi de bir örnek olan kapsamlı bir kullanım kılavuzudur. Markdown formatının esnekliği ile zenginleştirilmiş özel bileşenler sayesinde okuyucularınıza benzersiz bir deneyim sunabilirsiniz.
 
-## 1. Dinamik Grafik (Chart)
+---
+
+## 📊 1. Dinamik Grafikler (Chart)
+
+Verilerinizi görselleştirmek için Recharts tabanlı dinamik grafikler oluşturabilirsiniz. Grafik bileşeni veriyi JSON formatında okur.
+
+**Kullanım Kuralı:** Kod bloğu dili olarak \`chart\` belirleyin ve içerisine JSON objesi yazın.
+**Desteklenen Grafik Türleri (type):** \`bar\`, \`line\`, \`area\`, \`pie\`, \`radar\` (Kullanıcı arayüzden de değiştirebilir)
 
 \`\`\`chart
 {
-  "type": "bar",
-  "title": "Aylik Ziyaretci Istatistikleri",
-  "description": "Son 6 ayin benzersiz ziyaretci sayilari",
+  "type": "area",
+  "title": "Aylık Kullanıcı Etkileşim İstatistikleri",
+  "description": "Son 6 ayın sistem kullanım metrikleri (Gerçek Veri Örneği)",
   "data": [
-    { "ay": "Ocak",  "ziyaretci": 1200, "sayfa_goruntuleme": 3400 },
-    { "ay": "Subat", "ziyaretci": 1800, "sayfa_goruntuleme": 4200 },
-    { "ay": "Mart",  "ziyaretci": 2400, "sayfa_goruntuleme": 5800 },
-    { "ay": "Nisan", "ziyaretci": 1900, "sayfa_goruntuleme": 4600 },
-    { "ay": "Mayis", "ziyaretci": 3100, "sayfa_goruntuleme": 7200 },
-    { "ay": "Haziran", "ziyaretci": 2700, "sayfa_goruntuleme": 6300 }
+    { "ay": "Ocak",  "ziyaretci": 1200, "sayfa_goruntuleme": 3400, "etkilesim": 800 },
+    { "ay": "Şubat", "ziyaretci": 1800, "sayfa_goruntuleme": 4200, "etkilesim": 1200 },
+    { "ay": "Mart",  "ziyaretci": 2400, "sayfa_goruntuleme": 5800, "etkilesim": 1600 },
+    { "ay": "Nisan", "ziyaretci": 1900, "sayfa_goruntuleme": 4600, "etkilesim": 1100 },
+    { "ay": "Mayıs", "ziyaretci": 3100, "sayfa_goruntuleme": 7200, "etkilesim": 2100 },
+    { "ay": "Haziran", "ziyaretci": 2700, "sayfa_goruntuleme": 6300, "etkilesim": 1900 }
   ]
 }
 \`\`\`
 
-> Kullanici grafik turlerini (Bar, Line, Area, Pie, Radar) usteki sekmelerden secebilir.
+> **İpucu:** \`data\` dizisi içindeki anahtarlar (örn: "ziyaretci", "sayfa_goruntuleme") otomatik olarak grafikteki eksenlere ve çizgilere (line/bar) dönüştürülür. Renkler sistem temasına (Dark Mode) göre otomatik ayarlanır.
 
-## 2. Akis Semasi (Mermaid Diagram)
+---
+
+## 🗺️ 2. Akış Şemaları ve Mimari (Mermaid Diagram)
+
+Süreçleri, sistem mimarilerini veya veritabanı ilişkilerini çizmek için Mermaid.js entegrasyonu mevcuttur.
+
+**Kullanım Kuralı:** Kod bloğu dili olarak \`mermaid\` belirleyin.
 
 \`\`\`mermaid
 graph TD
-  A[Kullanici Istegi] --> B{Kimlik Dogrulama}
-  B -->|Basarili| C[API Gateway]
-  B -->|Basarisiz| D[401 Hatasi]
-  C --> E[Service Layer]
-  E --> F[(Veritabani)]
-  E --> G[Cache Redis]
-  F --> H[Response]
-  G --> H
+  A[Kullanıcı Arayüzü] -->|REST API| B(Backend Gateway)
+  B --> C{Kimlik Doğrulama}
+  C -->|Başarılı| D[Blog Servisi]
+  C -->|Geçersiz Token| E[401 Hata Yanıtı]
+  D --> F[(MongoDB)]
+  D --> G[Redis Cache]
+  G -->|Cache Miss| F
+  F --> H[JSON Yanıtı Dönüşü]
 \`\`\`
 
-## 3. Bilgi Testi (Quiz)
+> **Özellikler:** Sistemdeki koyu temaya (dark mode) tam uyumlu, yakınlaştırma (zoom) yapılabilen ve kaydırılabilir grafik alanına sahiptir.
+
+---
+
+## 🧠 3. Bilgi Testleri (Interactive Quiz)
+
+Okuyucunun konuyu anlayıp anlamadığını ölçlemek veya gamification (oyunlaştırma) unsurları eklemek için testler oluşturabilirsiniz.
+
+**Kullanım Kuralı:** Kod bloğu dili olarak \`quiz\` belirleyin. JSON objesi şu alanları almalıdır: \`question\`, \`options\` (Dizi), \`answer\` (Doğru şıkkın index'i 0'dan başlar), \`explanation\`, \`hint\` (Opsiyonel).
 
 \`\`\`quiz
 {
-  "question": "React'ta bir bilesenin yeniden render edilmesini onlemek icin hangi hook kullanilir?",
+  "question": "Aşağıdakilerden hangisi React mimarisinde 'Prop Drilling' problemini çözmek için kullanılan yöntemlerden biri DEĞİLDİR?",
   "options": [
-    "useEffect",
-    "useMemo",
-    "React.memo",
-    "useCallback"
+    "Context API kullanmak",
+    "Redux veya Zustand gibi State Management araçları",
+    "Bileşenleri (Component) iç içe çok derin hiyerarşilerde oluşturmak",
+    "Component Composition (Bileşen Birleştirme) deseni uygulamak"
   ],
   "answer": 2,
-  "explanation": "React.memo, bir bileseni sarar ve props degismediginde yeniden render'i onler. useMemo ise bir degerin hesaplanmasini, useCallback ise bir fonksiyonun yeniden olusturulmasini onler.",
-  "hint": "Bir Higher Order Component (HOC)'tur."
+  "explanation": "Bileşenleri çok derin hiyerarşilerde oluşturmak 'Prop Drilling' problemine YOL AÇAR, çözmez. Veriyi aşağı taşımak zorlaşır. Context API, Redux veya Composition bu sorunu çözer.",
+  "hint": "Sorunun kök nedeni olan davranışı düşünün."
 }
 \`\`\`
 
-## 4. Canli Kod Editorü (Code Playground)
+---
 
-Asagidaki kodu duzenleyip Calistir butonuna basin:
+## 💻 4. Canlı Kod Editörü ve Çalıştırma (Playground)
+
+JavaScript kodlarını doğrudan tarayıcı içerisinde (sandbox ortamında) çalıştırılabilir hale getirebilirsiniz. Eğitim yazıları ve algoritmalar için mükemmeldir.
+
+**Kullanım Kuralı:** Kod bloğu dilini \`js:live\`, \`jsx:live\` veya \`javascript:live\` olarak ayarlayın.
 
 \`\`\`js:live
-// Fibonacci dizisini hesapla
-const fibonacci = (n) => {
-  if (n <= 1) return n;
-  return fibonacci(n - 1) + fibonacci(n - 2);
+// Asenkron işlemleri ve Promise yapısını anlama
+const veriGetir = () => {
+  return new Promise((resolve) => {
+    console.log("Veriler sunucudan çekiliyor...");
+    setTimeout(() => {
+      resolve({ user: "Nuh Demir", role: "Software Developer" });
+    }, 1500);
+  });
 };
 
-for (let i = 0; i <= 10; i++) {
-  console.log(\`F(\${i}) = \${fibonacci(i)}\`);
-}
+const uygulamayiBaslat = async () => {
+  console.log("Uygulama başlıyor...");
+  const data = await veriGetir();
+  console.log("Başarılı! Gelen Veri:", data);
+};
+
+uygulamayiBaslat();
 \`\`\`
 
-## 5. Sekmeli Icerik (Tabs)
+> 💡 **Kısayol:** Editöre tıkladıktan sonra kodu çalıştırmak için \`Ctrl + Enter\` (Mac'te \`Cmd + Enter\`) tuşlarına basabilirsiniz.
+
+---
+
+## 📑 5. Sekmeli İçerik Görünümü (Tabs)
+
+Özellikle farklı programlama dillerindeki örnekleri, paket yöneticilerini (npm/yarn) veya alternatif çözümleri aynı anda göstermek için kullanılır.
+
+**Kullanım Kuralı:** Kod bloğu dilini \`tabs\` olarak belirleyin. \`title\` ve \`tabs\` (Dizi) alanlarını içeren bir JSON objesi verin.
 
 \`\`\`tabs
 {
-  "title": "Farkli Dillerde Merhaba Dunya",
+  "title": "API İstek Örnekleri (Axios vs Fetch)",
   "tabs": [
     {
-      "label": "JavaScript",
-      "icon": "🟨",
+      "label": "Axios",
+      "icon": "📦",
       "language": "js",
-      "content": "const greeting = 'Merhaba Dunya';\nconsole.log(greeting);"
+      "content": "import axios from 'axios';\\n\\nconst getData = async () => {\\n  const response = await axios.get('/api/blog');\\n  console.log(response.data);\\n};"
     },
     {
-      "label": "Python",
-      "icon": "🐍",
-      "language": "py",
-      "content": "greeting = 'Merhaba Dunya'\nprint(greeting)"
+      "label": "Fetch API",
+      "icon": "🌐",
+      "language": "js",
+      "content": "const getData = async () => {\\n  const res = await fetch('/api/blog');\\n  const data = await res.json();\\n  console.log(data);\\n};"
     },
     {
-      "label": "Go",
-      "icon": "🐹",
-      "language": "go",
-      "content": "package main\\n\\nimport \\"fmt\\"\\n\\nfunc main() {\\n  fmt.Println(\\"Merhaba Dunya\\")\\n}"
+      "label": "cURL",
+      "icon": "💻",
+      "language": "bash",
+      "content": "curl -X GET https://api.example.com/blog \\\\\\n     -H 'Accept: application/json'"
     }
   ]
 }
 \`\`\`
 
-## 6. Once / Sonra Kaydirici (Before / After Slider)
+---
 
-Asagidaki sentaksi kullanin. alt metin \`before-after\` kelimesini icermeli, src ise \`|ile ayrilan iki URL\` olmali:
+## 🖼️ 6. Görsel Karşılaştırma (Before/After Slider)
 
-![before-after Once|Sonra](https://res.cloudinary.com/dahmmlu7u/image/upload/v1782399637/portfolio/solidprincipl.jpg|https://res.cloudinary.com/dahmmlu7u/image/upload/v1782399637/portfolio/solidprincipl.jpg)
+Özellikle tasarım değişiklikleri, kod refactoring öncesi/sonrası, fotoğraf filtreleri gibi görsel kıyaslamalar yapmak için kullanılır.
 
-## 7. Normal Kod Blogu (Syntax Highlighted)
+**Kullanım Kuralı:** Standart Markdown görsel ekleme \`![alt metin](url)\` mantığını kullanır. Ancak **alt metinde mutlaka "before-after" kelimesi geçmeli**, parantez içerisindeki bağlantılar ise **"|" (boru) işaretiyle iki URL olarak** ayrılmalıdır. Alt metinde boru işareti kullanarak labelları da belirtebilirsiniz.
 
-\`\`\`typescript
-interface BlogPost {
-  title: string;
-  content: string;
-  tags: string[];
-  isPublished: boolean;
-  publishedAt?: Date;
-}
+**Örnek:** \`![before-after Eski Tasarım | Yeni Tasarım](eski.jpg|yeni.jpg)\`
 
-const createPost = (data: BlogPost): BlogPost => {
-  return { ...data, publishedAt: new Date() };
-};
-\`\`\`
-
-## 8. Tablo (Table)
-
-| Bilesen     | Markdown Kodu      | Interaktif |
-| ----------- | ------------------ | ---------- |
-| Grafik      | \\\`\\\`\\\`chart    | Evet       |
-| Mermaid     | \\\`\\\`\\\`mermaid  | Evet       |
-| Quiz        | \\\`\\\`\\\`quiz     | Evet       |
-| Playground  | \\\`\\\`\\\`js:live  | Evet       |
-| Sekmeler    | \\\`\\\`\\\`tabs     | Evet       |
-| Once/Sonra  | Ozel img sentaksi  | Evet       |
+![before-after Aydınlık Tema | Karanlık Tema](https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80|https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=800&q=80)
 
 ---
 
-Iyi yazi yazmalari!`,
+## 🎨 7. Klasik Markdown Özellikleri Desteği
+
+Tabii ki standart Markdown özellikleri, tablolar ve syntax highlighting da tamamen desteklenmektedir:
+
+| Özellik Türü | Kod Belirteci | Durum |
+| :--- | :--- | :---: |
+| Kod Blokları | \`js\`, \`css\`, \`html\` | 🟢 Aktif |
+| Alıntılar | \`>\` işareti ile | 🟢 Aktif |
+| Listeler | \`-\` veya \`1.\` ile | 🟢 Aktif |
+| Inline Kod | Tek ters tırnak | 🟢 Aktif |
+
+> Tüm kod bloklarında sağ üstte "Kopyala" butonu otomatik olarak eklenmektedir.
+
+---
+**Sonuç:** Bu şablonu kullanarak bloglarınızı sıradan makalelerden çıkarıp, kullanıcıların doğrudan etkileşime girebileceği dijital deneyimlere dönüştürebilirsiniz. Başarılar! 🚀`,
   category: "rehber",
-  tags: ["interaktif", "grafik", "quiz", "markdown", "rehber"],
+  tags: ["interaktif", "grafik", "quiz", "markdown", "kılavuz", "eğitim"],
   isPublished: false,
   status: "draft",
-  excerpt: "Blog yazisinda kullanabileceginiz tum interaktif bilesenler: Grafik, Mermaid, Quiz, Canli Kod Editoru, Sekmeli Icerik ve Once/Sonra Kaydirici.",
-  thumbnailUrl: "https://example.com/cover-image.jpg",
+  excerpt: "Grafikler, Mermaid akış şemaları, Quizler, Canlı JS Editörü, Sekmeli İçerikler ve Öncesi/Sonrası kaydırıcıları gibi tüm interaktif blog bileşenlerinin kapsamlı kullanım kılavuzu.",
+  thumbnailUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80",
   featured: true,
-  seoTitle: "Interaktif Blog Bilesenlerinin Tam Rehberi",
-  seoDescription: "Grafik, Quiz, Canli Kod ve Mermaid diyagramlarini blog yazilarina nasil eklersiniz ogrenin.",
+  seoTitle: "Blog Interaktif Bilesenler Tam Kullanım Kılavuzu | Admin",
+  seoDescription: "Sistemde bulunan tüm interaktif Markdown bileşenlerinin detaylı dokümantasyonu, JSON yapısı ve örnek kullanımları.",
   publishedAt: "2026-06-28T12:00:00.000Z"
 };
 
 export const BLOG_JSON_TEMPLATE_INFO = [
   { label: "title", text: "Blog başlığı (zorunlu, en az 3 karakter)" },
-  { label: "slug", text: "Özel URL uzantısı (opsiyonel, örn: 'benim-yazim')" },
-  { label: "content", text: "İçerik - Markdown formatında. Tablo, liste, kod ve görsel destekler (zorunlu)" },
-  { label: "category", text: "Kategori adı (opsiyonel, örn: 'teknoloji')" },
+  { label: "slug", text: "Özel URL uzantısı (opsiyonel, örn: 'benim-yazim'). Boş bırakılırsa başlıktan üretilir." },
+  { label: "content", text: "İçerik - Markdown formatında. Standart tablo/liste haricinde interaktif bileşenler (chart, quiz, mermaid, js:live, tabs) destekler. (zorunlu)" },
+  { label: "category", text: "Kategori adı (opsiyonel, örn: 'teknoloji', 'rehber')" },
   { label: "tags", text: "Etiketler dizisi (opsiyonel, örn: [\"react\", \"web\"])" },
-  { label: "isPublished", text: "Yayında mı? true/false (opsiyonel)" },
-  { label: "status", text: "Durum: draft | published | archived | scheduled (opsiyonel)" },
+  { label: "isPublished", text: "Yayında mı? true/false. True olduğunda herkes tarafından görülebilir." },
+  { label: "status", text: "Durum: draft | published | archived | scheduled (isPublished true ise otomatik published olur)" },
   { label: "publishedAt", text: "Yayın tarihi (opsiyonel, ISO format: '2026-06-28T12:00:00Z')" },
-  { label: "excerpt", text: "Kısa özet - Listelerde ve kartlarda görünür (opsiyonel)" },
-  { label: "thumbnailUrl", text: "Kapak görseli URL'i (opsiyonel, Cloudinary vb.)" },
-  { label: "featured", text: "Öne çıkan gönderi mi? true/false (opsiyonel)" },
-  { label: "seoTitle", text: "Arama motorları (SEO) için özel başlık (opsiyonel)" },
-  { label: "seoDescription", text: "Arama motorları (SEO) için özel açıklama (opsiyonel)" },
+  { label: "excerpt", text: "Kısa özet - Listelerde ve SEO aramalarında görünür (opsiyonel)" },
+  { label: "thumbnailUrl", text: "Kapak görseli URL'i (opsiyonel, Cloudinary, Unsplash vb.)" },
+  { label: "seoTitle", text: "Arama motorları için özel başlık (opsiyonel, boşsa title kullanılır)" },
+  { label: "seoDescription", text: "Arama motorları için meta açıklaması (opsiyonel, boşsa excerpt kullanılır)" }
 ];
