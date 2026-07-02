@@ -7,10 +7,21 @@ const loadSC = () => {
   if (typeof window === "undefined") return Promise.reject();
   return new Promise((resolve, reject) => {
     if (window.SC?.Widget) { resolve(window.SC); return; }
-    const el = document.querySelector(`script[src="${WIDGET_SCRIPT}"]`);
-    if (el && !el.crossOrigin) { el.addEventListener("load", () => resolve(window.SC), { once: true }); return; }
-    if (el) el.remove();
-    const s = document.createElement("script"); s.src = WIDGET_SCRIPT; s.async = true;
+    
+    const existingScript = document.querySelector(`script[src="${WIDGET_SCRIPT}"]`);
+    if (existingScript) {
+      const checkSC = setInterval(() => {
+        if (window.SC?.Widget) {
+          clearInterval(checkSC);
+          resolve(window.SC);
+        }
+      }, 50);
+      return;
+    }
+
+    const s = document.createElement("script");
+    s.src = WIDGET_SCRIPT;
+    s.async = true;
     s.onload = () => setTimeout(() => resolve(window.SC), 100);
     s.onerror = () => reject();
     document.head.appendChild(s);
@@ -94,8 +105,6 @@ export const useSoundCloudPlayer = () => {
           w.getCurrentSoundIndex((i) => { if (typeof i === "number") setIndex(i); });
           setTimeout(() => loadPlaylist(w), 800);
           setTimeout(() => loadPlaylist(w), 2000);
-          w.play();
-          setIsPlaying(true);
         });
         w.bind(sc.Widget.Events.PLAY, () => {
           if (!dead) { setIsPlaying(true); refresh(w); }
