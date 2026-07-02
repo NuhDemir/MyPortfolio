@@ -51,7 +51,7 @@ export const fmtTime = (t) => {
  * Single Source of Truth for SoundCloud playback.
  * Extracted from MainV2.jsx so it can live at App level via Context.
  */
-export const useSoundCloudPlayer = () => {
+export const useSoundCloudPlayer = (shouldLoad) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -89,6 +89,8 @@ export const useSoundCloudPlayer = () => {
   }, [appendToPlaylist]);
 
   useEffect(() => {
+    if (!shouldLoad) return;
+    
     let dead = false;
     const init = async () => {
       try {
@@ -126,7 +128,7 @@ export const useSoundCloudPlayer = () => {
     };
     init();
     return () => { dead = true; };
-  }, []);
+  }, [shouldLoad]);
 
   useEffect(() => {
     if (widgetRef.current && ready) {

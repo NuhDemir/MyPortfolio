@@ -8,8 +8,8 @@ const SoundCloudContext = createContext(null);
  * The hidden iframe lives here — only one instance, persists across routes.
  */
 export const SoundCloudProvider = ({ children }) => {
-  const player = useSoundCloudPlayer();
   const [shouldLoad, setShouldLoad] = useState(false);
+  const player = useSoundCloudPlayer(shouldLoad);
 
   useEffect(() => {
     const timer = setTimeout(() => setShouldLoad(true), 3500);
