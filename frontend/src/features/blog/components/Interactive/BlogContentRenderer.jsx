@@ -33,10 +33,10 @@ import React, { lazy, Suspense, memo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
+import { CodeBlock as PremiumCodeBlock } from "../../../../shared/components/ui/CodeBlock/CodeBlock.jsx";
 
 const BlogChart         = lazy(() => import("./BlogChart.jsx"));
-const BlogMermaid       = lazy(() => import("./BlogMermaid.jsx"));
-const BlogQuiz          = lazy(() => import("./BlogQuiz.jsx"));
+const BlogQuiz          = lazy(() => import("../../../../shared/components/ui/Quiz/Quiz.jsx"));
 const BlogCodePlayground= lazy(() => import("./BlogCodePlayground.jsx"));
 const BlogTabs          = lazy(() => import("./BlogTabs.jsx"));
 const BeforeAfterSlider = lazy(() => import("./BeforeAfterSlider.jsx"));
@@ -49,6 +49,7 @@ const Fallback = () => (
 const CodeBlock = memo(({ node, inline, className, children, ...props }) => {
   const raw = String(children).replace(/\n$/, "");
   const lang = (className || "").replace("language-", "").toLowerCase().trim();
+  const metaString = node?.data?.meta || "";
 
   if (inline) {
     return <code className="blog-inline-code" {...props}>{children}</code>;
@@ -59,15 +60,6 @@ const CodeBlock = memo(({ node, inline, className, children, ...props }) => {
     return (
       <Suspense fallback={<Fallback />}>
         <BlogChart chartData={raw} />
-      </Suspense>
-    );
-  }
-
-  // ── Mermaid ────────────────────────────────────────────────────────────
-  if (lang === "mermaid") {
-    return (
-      <Suspense fallback={<Fallback />}>
-        <BlogMermaid code={raw} />
       </Suspense>
     );
   }
@@ -100,21 +92,13 @@ const CodeBlock = memo(({ node, inline, className, children, ...props }) => {
     );
   }
 
-  // ── Default syntax-highlighted code block ─────────────────────────────
+  // ── Default Premium syntax-highlighted code block ────────────────────────
   return (
-    <pre className="blog-code-block">
-      <div className="blog-code-block__header">
-        {lang && <span className="blog-code-block__lang">{lang}</span>}
-        <button
-          className="blog-code-block__copy"
-          onClick={() => navigator.clipboard?.writeText(raw)}
-          aria-label="Kodu kopyala"
-        >
-          Kopyala
-        </button>
-      </div>
-      <code {...props}>{children}</code>
-    </pre>
+    <PremiumCodeBlock 
+      rawCode={raw} 
+      language={lang} 
+      metaString={metaString} 
+    />
   );
 });
 

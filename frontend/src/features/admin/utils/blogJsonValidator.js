@@ -123,28 +123,6 @@ Verilerinizi görselleştirmek için Recharts tabanlı dinamik grafikler oluştu
 
 ---
 
-## 🗺️ 2. Akış Şemaları ve Mimari (Mermaid Diagram)
-
-Süreçleri, sistem mimarilerini veya veritabanı ilişkilerini çizmek için Mermaid.js entegrasyonu mevcuttur.
-
-**Kullanım Kuralı:** Kod bloğu dili olarak \`mermaid\` belirleyin.
-
-\`\`\`mermaid
-graph TD
-  A[Kullanıcı Arayüzü] -->|REST API| B(Backend Gateway)
-  B --> C{Kimlik Doğrulama}
-  C -->|Başarılı| D[Blog Servisi]
-  C -->|Geçersiz Token| E[401 Hata Yanıtı]
-  D --> F[(MongoDB)]
-  D --> G[Redis Cache]
-  G -->|Cache Miss| F
-  F --> H[JSON Yanıtı Dönüşü]
-\`\`\`
-
-> **Özellikler:** Sistemdeki koyu temaya (dark mode) tam uyumlu, yakınlaştırma (zoom) yapılabilen ve kaydırılabilir grafik alanına sahiptir.
-
----
-
 ## 🧠 3. Bilgi Testleri (Interactive Quiz)
 
 Okuyucunun konuyu anlayıp anlamadığını ölçlemek veya gamification (oyunlaştırma) unsurları eklemek için testler oluşturabilirsiniz.
@@ -263,7 +241,7 @@ Tabii ki standart Markdown özellikleri, tablolar ve syntax highlighting da tama
   tags: ["interaktif", "grafik", "quiz", "markdown", "kılavuz", "eğitim"],
   isPublished: false,
   status: "draft",
-  excerpt: "Grafikler, Mermaid akış şemaları, Quizler, Canlı JS Editörü, Sekmeli İçerikler ve Öncesi/Sonrası kaydırıcıları gibi tüm interaktif blog bileşenlerinin kapsamlı kullanım kılavuzu.",
+  excerpt: "Grafikler, Quizler, Canlı JS Editörü, Sekmeli İçerikler ve Öncesi/Sonrası kaydırıcıları gibi tüm interaktif blog bileşenlerinin kapsamlı kullanım kılavuzu.",
   thumbnailUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&q=80",
   featured: true,
   seoTitle: "Blog Interaktif Bilesenler Tam Kullanım Kılavuzu | Admin",

@@ -1,0 +1,169 @@
+/* =========================================
+   Apple Standard Code Snippet Styles
+   ========================================= */
+
+.cb-container {
+  margin: var(--ds-space-6) 0;
+  border-radius: 12px;
+  background-color: #1e1e1e; /* VS Code / Xcode dark fallback */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: var(--ds-font-mono, monospace);
+  position: relative;
+}
+
+/* ── Header (Traffic Lights & Actions) ── */
+.cb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(40, 40, 40, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cb-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cb-traffic-lights {
+  display: flex;
+  gap: 8px;
+}
+
+.cb-traffic-lights span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.cb-mac-close { background-color: #ff5f56; }
+.cb-mac-min   { background-color: #ffbd2e; }
+.cb-mac-max   { background-color: #27c93f; }
+
+.cb-lang-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #a0a0a0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cb-filename {
+  color: #d1d5db;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: none;
+  font-family: var(--ds-font-body, sans-serif);
+}
+
+.cb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cb-btn {
+  background: transparent;
+  border: none;
+  color: #a0a0a0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.cb-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.cb-btn--active {
+  color: #10b981; /* Emerald/Green for copy success */
+}
+
+/* ── Content & Syntax Highlighter ── */
+.cb-content {
+  position: relative;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.cb-content::-webkit-scrollbar {
+  height: 8px;
+}
+.cb-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cb-content::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+/* Reset margin for pre tag inside syntax highlighter */
+.cb-content pre {
+  margin: 0 !important;
+  padding: 16px !important;
+  background: transparent !important; /* Let container handle background */
+}
+
+/* ── Line Highlighting & Diff ── */
+.cb-line {
+  display: inline-block;
+  width: 100%;
+  padding: 0 4px;
+  border-left: 4px solid transparent;
+  transition: background-color 0.2s;
+}
+
+.cb-line--highlighted {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-left-color: #6366f1; /* Indigo brand */
+}
+
+.cb-line--diff-add {
+  background-color: rgba(16, 185, 129, 0.15); /* Emerald */
+  border-left-color: #10b981;
+}
+
+.cb-line--diff-remove {
+  background-color: rgba(239, 68, 68, 0.15); /* Red */
+  border-left-color: #ef4444;
+}
+
+/* ── Terminal Simulation Mode ── */
+.cb-terminal {
+  background-color: #000;
+  border: 1px solid #333;
+}
+
+.cb-terminal .cb-header {
+  background: #111;
+  border-bottom: 1px solid #222;
+}
+
+.cb-terminal-prefix {
+  color: #10b981; /* Green prompt */
+  margin-right: 8px;
+  user-select: none;
+}
+
+.cb-terminal-path {
+  color: #3b82f6; /* Blue path */
+  margin-right: 8px;
+  user-select: none;
+}

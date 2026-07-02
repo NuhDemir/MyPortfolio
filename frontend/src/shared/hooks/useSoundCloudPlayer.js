@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-const SOUNDCLOUD_URL = "https://soundcloud.com/nuh-demir-210070335/sets/playlist";
+const SOUNDCLOUD_URL = "https://api.soundcloud.com/playlists/1863554286";
 const WIDGET_SCRIPT = "https://w.soundcloud.com/player/api.js";
 
 const loadSC = () => {
@@ -20,7 +20,7 @@ const loadSC = () => {
 export const buildSCUrl = () =>
   `https://w.soundcloud.com/player/?${new URLSearchParams({
     url: SOUNDCLOUD_URL,
-    auto_play: "true",
+    auto_play: "false",
     hide_related: "true",
     show_comments: "false",
     show_user: "true",

@@ -12,14 +12,14 @@ export const createBlogRouter = ({ middleware, ...dependencies }) => {
   const controller = createBlogController(dependencies);
   const upload = createBlogUpload();
 
-  router.get("/", controller.list);
+  router.get("/", middleware.optionalAuth, controller.list);
   router.get(
     "/export/json",
     middleware.protect,
     middleware.authorizeAdmin,
     controller.exportJson,
   );
-  router.get("/:slug", controller.get);
+  router.get("/:slug", middleware.optionalAuth, controller.get);
 
   router.post(
     "/",

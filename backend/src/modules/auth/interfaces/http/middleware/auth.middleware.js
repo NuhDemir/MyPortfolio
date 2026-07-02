@@ -44,8 +44,33 @@ export const createAuthMiddleware = ({ tokenService, userRepository }) => {
 
   const authorizeAdmin = authorize("admin");
 
+  const optionalAuth = asyncHandler(async (req, res, next) => {
+    const authHeader = req.headers.authorization ?? "";
+    const token = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
+
+    if (!token) return next();
+
+    try {
+      const decoded = tokenService.verify(token);
+      const user = await userRepository.findById(decoded.id, { includePassword: false });
+
+      if (user) {
+        req.user = {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          role: user.role,
+        };
+      }
+    } catch (error) {
+      // Ignore token errors for optional auth
+    }
+    next();
+  });
+
   return {
     protect,
+    optionalAuth,
     authorize,
     authorizeAdmin,
   };

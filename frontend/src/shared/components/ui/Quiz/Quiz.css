@@ -1,0 +1,308 @@
+/* =========================================
+   Apple Standard Premium Quiz Component
+   ========================================= */
+
+.qz-wrap {
+  margin: var(--ds-space-8) 0;
+  background: var(--ds-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  outline: none;
+  font-family: var(--ds-font-body, sans-serif);
+  white-space: normal; /* Crucial to override parent <pre> tag from Markdown */
+}
+
+/* ── Header ── */
+.qz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(40, 40, 40, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.qz-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qz-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #3b82f6; /* Apple Blue */
+}
+
+.qz-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ── Question ── */
+.qz-question {
+  font-family: var(--ds-font-display, sans-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--ds-fg);
+  padding: 24px 24px 16px;
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* ── Options ── */
+.qz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 24px 24px;
+}
+
+.qz-option {
+  display: flex;
+  align-items: flex-start; /* Crucial for multiline text */
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--ds-fg);
+  font-family: var(--ds-font-body, sans-serif);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.qz-option:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
+}
+
+.qz-option--selected {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 1px #3b82f6;
+}
+
+.qz-option--correct {
+  border-color: #10b981 !important;
+  background: rgba(16, 185, 129, 0.1) !important;
+  color: #10b981;
+}
+
+.qz-option--wrong {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444;
+}
+
+.qz-option--neutral {
+  opacity: 0.5;
+}
+
+/* Option Marker (A, B, C...) */
+.qz-option__marker {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.qz-option__text {
+  flex: 1;
+  margin-top: 4px; /* Align with center of marker naturally */
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+/* ── Actions ── */
+.qz-actions {
+  padding: 0 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.qz-submit {
+  padding: 12px 24px;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--ds-font-body, sans-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qz-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: var(--ds-border-soft);
+  color: var(--ds-muted);
+}
+
+.qz-submit:not(:disabled):hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+/* ── Result ── */
+.qz-result {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 20px 24px;
+  margin: 0 24px 24px;
+  border-radius: 12px;
+  border: 1px solid;
+  animation: qz-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes qz-fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.qz-result--correct {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.qz-result--wrong {
+  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.qz-result-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.qz-result__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.qz-result--correct .qz-result__icon {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.qz-result--wrong .qz-result__icon {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.qz-result__body {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.qz-result__verdict {
+  margin: 0 0 8px 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ds-fg);
+}
+
+.qz-result__explanation {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ds-muted);
+  line-height: 1.5;
+}
+
+.qz-reset {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: var(--ds-fg);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.qz-reset:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Responsive Mobile Adjustments ── */
+@media (max-width: 640px) {
+  .qz-question {
+    font-size: 1.05rem;
+    padding: 16px 16px 12px;
+  }
+  .qz-options {
+    padding: 0 16px 16px;
+  }
+  .qz-option {
+    padding: 12px;
+    gap: 12px;
+  }
+  .qz-actions {
+    padding: 0 16px 16px;
+  }
+  .qz-result {
+    margin: 0 16px 16px;
+    padding: 16px;
+  }
+  .qz-result-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .qz-result__body {
+    width: 100%;
+  }
+  .qz-reset {
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+  }
+}
