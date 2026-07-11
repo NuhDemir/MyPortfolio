@@ -37,8 +37,18 @@ const ServiceModal = ({ service, onClose }) => {
 
             <div className="svc-modal-grid">
               <div className="svc-modal-visual">
-                <PatternBackground seed={service.id} opacity={0.12} />
-                <span className="svc-modal-fallback">{service.title[0]}</span>
+                {(() => {
+                  const imgUrl = service.image || service.iconUrl || "";
+                  const src = imgUrl.startsWith("http://") || imgUrl.startsWith("https://") ? imgUrl : null;
+                  return src ? (
+                    <img src={src} alt={service.title} className="svc-modal-img" loading="lazy" />
+                  ) : (
+                    <>
+                      <PatternBackground seed={service.id} opacity={0.12} />
+                      <span className="svc-modal-fallback">{service.title[0]}</span>
+                    </>
+                  );
+                })()}
               </div>
 
               <div className="svc-modal-content">

@@ -3,6 +3,12 @@ import { useServices } from "../hooks/useServices.js";
 import ServiceModal from "./ServiceModal.jsx";
 import { PatternBackground, LoadingSpinner } from "@shared";
 
+/** Sadece harici (http/https) URL'leri kabul eder, local asset path'lerini reddeder */
+const getExternalImageUrl = (s) => {
+  const url = s.image || s.iconUrl || "";
+  return url.startsWith("http://") || url.startsWith("https://") ? url : null;
+};
+
 export const Services = () => {
   const { services, loading } = useServices();
   const [selected, setSelected] = useState(null);
@@ -31,9 +37,9 @@ export const Services = () => {
             onClick={() => setSelected(s)}
           >
             <div className="service-icon">
-              {s.iconUrl || s.image ? (
+              {getExternalImageUrl(s) ? (
                 <img
-                  src={s.iconUrl || s.image}
+                  src={getExternalImageUrl(s)}
                   alt={s.title}
                   className="service-icon-img"
                   loading="lazy"
