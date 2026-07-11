@@ -1,136 +1,427 @@
-.pfilters {
+/* ═══════════════════════════════════════════════════════════════════════
+   PROJECT FILTERS — Apple / Linear / Vercel quality
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Root ───────────────────────────────────────────────────────────── */
+.pf {
   display: flex;
   flex-direction: column;
   gap: var(--ds-space-3);
-  padding: var(--ds-space-4) 0;
+  padding: var(--ds-space-2) 0 var(--ds-space-4);
 }
 
-.pfilters__row {
+/* ══════════════════════════════════════════════════════════════════════
+   SEARCH BAR
+   ══════════════════════════════════════════════════════════════════════ */
+.pf__search-wrap {
+  position: relative;
   display: flex;
-  gap: var(--ds-space-2);
-  flex-wrap: wrap;
   align-items: center;
 }
 
-.pfilters__row--toggles {
-  justify-content: flex-start;
-}
-
-.pfilters__search {
-  position: relative;
-  flex: 1;
-  min-width: 200px;
-}
-
-.pfilters__search-icon {
+.pf__search-icon {
   position: absolute;
-  left: var(--ds-space-3);
-  top: 50%;
-  transform: translateY(-50%);
+  left: 14px;
   color: var(--ds-meta);
   pointer-events: none;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
 }
 
-.pfilters__input {
+.pf__search-input {
   width: 100%;
   font-family: var(--ds-font-body);
-  font-size: var(--ds-text-sm);
-  padding: var(--ds-space-2) var(--ds-space-8) var(--ds-space-2) var(--ds-space-8);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-pill);
-  background: var(--ds-bg);
+  font-size: 0.875rem;
+  line-height: 1;
+  padding: 0 40px 0 42px;
+  height: 42px;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: 12px;
   color: var(--ds-fg);
   outline: none;
-  transition: border-color var(--ds-motion-fast) var(--ds-ease-standard);
+  transition:
+    border-color 0.15s ease,
+    box-shadow   0.15s ease,
+    background   0.15s ease;
+  /* hide native search clear on webkit */
+  -webkit-appearance: none;
+  appearance: none;
 }
 
-.pfilters__input:focus {
+.pf__search-input::-webkit-search-cancel-button { display: none; }
+
+.pf__search-input::placeholder { color: var(--ds-meta); }
+
+.pf__search-input:focus {
   border-color: var(--ds-border-active);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-accent) 12%, transparent);
+  background: var(--ds-bg);
 }
 
-.pfilters__input::placeholder {
-  color: var(--ds-meta);
+.pf__search-input:focus ~ .pf__search-icon,
+.pf__search-wrap:focus-within .pf__search-icon {
+  color: var(--ds-accent);
 }
 
-.pfilters__clear-btn {
+.pf__search-clear {
   position: absolute;
-  right: var(--ds-space-2);
-  top: 50%;
-  transform: translateY(-50%);
+  right: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border: none;
   border-radius: 50%;
-  background: var(--ds-surface);
+  background: var(--ds-border-soft);
   color: var(--ds-muted);
   cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease, transform 0.12s ease;
 }
 
-.pfilters__clear-btn:hover {
+.pf__search-clear:hover {
+  background: var(--ds-border);
+  color: var(--ds-fg);
+  transform: scale(1.1);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   CHIP TRACK  (horizontal scroll on mobile)
+   ══════════════════════════════════════════════════════════════════════ */
+.pf__chips-track {
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  /* hide scrollbar on all browsers */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pf__chips-track::-webkit-scrollbar { display: none; }
+
+.pf__chips-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: max-content;
+  padding-bottom: 2px; /* room for focus rings */
+}
+
+.pf__chips-icon {
+  color: var(--ds-meta);
+  flex-shrink: 0;
+  margin-right: 2px;
+}
+
+.pf__chips-divider {
+  width: 1px;
+  height: 18px;
   background: var(--ds-border-soft);
-  color: var(--ds-fg);
+  margin: 0 4px;
+  flex-shrink: 0;
 }
 
-.pfilters__select {
-  font-family: var(--ds-font-body);
-  font-size: var(--ds-text-sm);
-  padding: var(--ds-space-2) var(--ds-space-4);
-  border: 1px solid var(--ds-border);
-  border-radius: var(--ds-radius-pill);
-  background: var(--ds-bg);
-  color: var(--ds-fg);
-  cursor: pointer;
-  outline: none;
-  min-width: 120px;
+/* ══════════════════════════════════════════════════════════════════════
+   CHIP SELECT  (custom dropdown)
+   ══════════════════════════════════════════════════════════════════════ */
+.pf-chip-select {
+  position: relative;
+  flex-shrink: 0;
 }
 
-.pfilters__select:focus {
-  border-color: var(--ds-border-active);
-}
-
-.pfilters__toggle {
+.pf-chip-select__trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--ds-space-2);
+  gap: 5px;
+  height: 32px;
+  padding: 0 12px;
   font-family: var(--ds-font-body);
-  font-size: var(--ds-text-sm);
+  font-size: 0.8125rem;
+  font-weight: 500;
   color: var(--ds-muted);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: 999px;
   cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color          0.12s ease,
+    border-color   0.12s ease,
+    background     0.12s ease,
+    box-shadow     0.12s ease;
   user-select: none;
 }
 
-.pfilters__toggle input[type="checkbox"] {
-  accent-color: var(--ds-accent);
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
+.pf-chip-select__trigger:hover {
+  color: var(--ds-fg);
+  border-color: var(--ds-border);
+  background: color-mix(in srgb, var(--ds-surface) 80%, var(--ds-fg) 4%);
 }
 
-.pfilters__toggle:has(input:checked) {
+.pf-chip-select__trigger:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ds-accent);
+}
+
+/* active state */
+.pf-chip-select--active .pf-chip-select__trigger {
+  color: var(--ds-accent);
+  background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ds-accent) 40%, transparent);
+}
+
+.pf-chip-select__label {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pf-chip-select__caret {
+  color: inherit;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.pf-chip-select__caret--open {
+  transform: rotate(180deg);
+}
+
+/* dropdown menu */
+.pf-chip-select__menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 148px;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: 12px;
+  box-shadow:
+    0 4px 6px -1px rgba(0,0,0,.08),
+    0 10px 20px -4px rgba(0,0,0,.12);
+  list-style: none;
+  margin: 0;
+  padding: 5px;
+  z-index: 60;
+  animation: pf-menu-in 0.14s ease both;
+}
+
+@keyframes pf-menu-in {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0)   scale(1); }
+}
+
+.pf-chip-select__option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  font-family: var(--ds-font-body);
+  font-size: 0.8125rem;
+  color: var(--ds-muted);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.1s ease, color 0.1s ease;
+  white-space: nowrap;
+  /* Reserve space for check icon so text doesn't shift */
+  padding-left: 10px;
+}
+
+.pf-chip-select__option svg { flex-shrink: 0; }
+
+.pf-chip-select__option:hover {
+  background: color-mix(in srgb, var(--ds-fg) 6%, transparent);
   color: var(--ds-fg);
 }
 
-.pfilters__reset {
+.pf-chip-select__option--selected {
+  color: var(--ds-accent);
+  font-weight: 500;
+}
+
+.pf-chip-select__option--selected:hover {
+  background: color-mix(in srgb, var(--ds-accent) 8%, transparent);
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   TOGGLE CHIP  (Featured / Case Study)
+   ══════════════════════════════════════════════════════════════════════ */
+.pf-toggle-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 12px;
   font-family: var(--ds-font-body);
-  font-size: var(--ds-text-xs);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ds-muted);
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color          0.12s ease,
+    background     0.12s ease,
+    border-color   0.12s ease,
+    box-shadow     0.12s ease;
+  user-select: none;
+}
+
+.pf-toggle-chip:hover {
+  color: var(--ds-fg);
+  border-color: var(--ds-border);
+}
+
+.pf-toggle-chip:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--ds-accent);
+}
+
+.pf-toggle-chip--on {
+  color: var(--ds-accent);
+  background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+  border-color: color-mix(in srgb, var(--ds-accent) 40%, transparent);
+}
+
+.pf-toggle-chip--on:hover {
+  background: color-mix(in srgb, var(--ds-accent) 16%, transparent);
+  color: var(--ds-accent);
+}
+
+.pf-toggle-chip__icon { flex-shrink: 0; }
+
+/* ══════════════════════════════════════════════════════════════════════
+   META ROW  (active badges + result count)
+   ══════════════════════════════════════════════════════════════════════ */
+.pf__meta-row {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  flex-wrap: wrap;
+  min-height: 24px;
+}
+
+.pf__active-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+/* ── Active badge pill ─────────────────────────────────────────────── */
+.pf-active-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 8px 0 10px;
+  font-family: var(--ds-font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ds-accent);
+  background: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-accent) 30%, transparent);
+  border-radius: 999px;
+  animation: pf-badge-in 0.15s ease both;
+}
+
+@keyframes pf-badge-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.pf-active-badge button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border: none;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ds-accent) 25%, transparent);
+  color: var(--ds-accent);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.1s ease;
+}
+
+.pf-active-badge button:hover {
+  background: color-mix(in srgb, var(--ds-accent) 40%, transparent);
+}
+
+/* ── Reset all ─────────────────────────────────────────────────────── */
+.pf__reset-all {
+  height: 24px;
+  padding: 0 10px;
+  font-family: var(--ds-font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--ds-meta);
   background: none;
-  border: none;
+  border: 1px solid var(--ds-border-soft);
+  border-radius: 999px;
   cursor: pointer;
-  text-decoration: underline;
-  padding: var(--ds-space-1) var(--ds-space-2);
+  white-space: nowrap;
+  transition: color 0.12s ease, border-color 0.12s ease, background 0.12s ease;
 }
 
-.pfilters__reset:hover {
+.pf__reset-all:hover {
   color: var(--ds-fg);
+  border-color: var(--ds-border);
+  background: color-mix(in srgb, var(--ds-surface) 80%, var(--ds-fg) 4%);
 }
 
-.pfilters__count {
+/* ── Result count ──────────────────────────────────────────────────── */
+.pf__count {
   font-family: var(--ds-font-body);
-  font-size: var(--ds-text-xs);
+  font-size: 0.75rem;
+  font-weight: 500;
   color: var(--ds-meta);
+  white-space: nowrap;
   margin-left: auto;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ══════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Tablet: tighten search input */
+@media (max-width: 768px) {
+  .pf__search-input {
+    height: 40px;
+    border-radius: 10px;
+  }
+}
+
+/* Mobile: full bleed, scroll chips row */
+@media (max-width: 480px) {
+  .pf {
+    gap: var(--ds-space-2);
+  }
+
+  .pf__search-input {
+    height: 38px;
+    font-size: 1rem; /* prevent zoom on iOS */
+  }
+
+  .pf__chips-track {
+    /* extend to edges on narrow viewports */
+    margin: 0 calc(-1 * var(--ds-container-gutter));
+    padding: 0 var(--ds-container-gutter);
+  }
+
+  .pf-chip-select__trigger,
+  .pf-toggle-chip {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 0.8rem;
+  }
+
+  .pf__count {
+    display: none; /* avoid crowding — count visible in badge row */
+  }
 }

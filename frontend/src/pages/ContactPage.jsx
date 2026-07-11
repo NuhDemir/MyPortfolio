@@ -22,7 +22,7 @@ const ContactPage = () => {
 
         <div className="cp__side">
           <ContactInfo />
-          <ContactComments />
+        
         </div>
       </motion.div>
     </div>

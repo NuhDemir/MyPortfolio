@@ -69,61 +69,62 @@ const ProjectsPage = () => {
 
   return (
     <main className="prj-page">
-      <motion.header className="prj-page__header" {...revHeader}>
-        <button type="button" className="prj-page__back" onClick={() => navigate("/")}>
-          ← Ana Sayfa
-        </button>
-        <h1 className="prj-page__title">Projeler</h1>
-      </motion.header>
+      <div className="prj-page__inner">
+        <motion.header className="prj-page__header" {...revHeader}>
+          <button type="button" className="prj-page__back" onClick={() => navigate("/")}>
+            ← Ana Sayfa
+          </button>
+               </motion.header>
 
-      <motion.div {...revFilters}>
-        <ProjectFilters
-          query={query} setQuery={setQuery}
-          status={status} setStatus={setStatus}
-          platform={platform} setPlatform={setPlatform}
-          difficulty={difficulty} setDifficulty={setDifficulty}
-          sortKey={sortKey} setSortKey={setSortKey}
-          featuredOnly={featuredOnly} setFeaturedOnly={setFeaturedOnly}
-          caseStudyOnly={caseStudyOnly} setCaseStudyOnly={setCaseStudyOnly}
-          filterOptions={filterOptions}
-          clearFilters={handleClearFilters}
-          resultCount={processed.length}
-        />
-      </motion.div>
-
-      {allTags.length > 0 && (
-        <motion.div {...revTags}>
-          <TagCloud tags={allTags} selectedTags={selectedTags} onToggle={toggleTag} />
+        <motion.div {...revFilters}>
+          <ProjectFilters
+            query={query} setQuery={setQuery}
+            status={status} setStatus={setStatus}
+            platform={platform} setPlatform={setPlatform}
+            difficulty={difficulty} setDifficulty={setDifficulty}
+            sortKey={sortKey} setSortKey={setSortKey}
+            featuredOnly={featuredOnly} setFeaturedOnly={setFeaturedOnly}
+            caseStudyOnly={caseStudyOnly} setCaseStudyOnly={setCaseStudyOnly}
+            filterOptions={filterOptions}
+            clearFilters={handleClearFilters}
+            resultCount={processed.length}
+          />
         </motion.div>
-      )}
 
-      {heroProject && (
-        <motion.section {...revHero}>
-          <ProjectHero
-            project={heroProject}
-            onOpen={() => handleProjectClick(heroProject)}
-            liked={likedMap[heroProject.id]}
-            onLike={() => handleLike(heroProject.id)}
-            views={viewMap[heroProject.id]}
-          />
-        </motion.section>
-      )}
+        {allTags.length > 0 && (
+          <motion.div {...revTags}>
+            <TagCloud tags={allTags} selectedTags={selectedTags} onToggle={toggleTag} />
+          </motion.div>
+        )}
 
-      {nonHeroProjects.length > 0 && (
-        <motion.section {...revGrid}>
-          <ProjectGrid
-            projects={nonHeroProjects}
-            loading={false}
-            visibleItems={visibleItems}
-            setVisibleItems={setVisibleItems}
-            totalCount={nonHeroProjects.length}
-            onProjectClick={handleProjectClick}
-            likedMap={likedMap}
-            onLike={handleLike}
-            viewMap={viewMap}
-          />
-        </motion.section>
-      )}
+        {heroProject && (
+          <motion.section {...revHero}>
+            <ProjectHero
+              project={heroProject}
+              onOpen={() => handleProjectClick(heroProject)}
+              liked={likedMap[heroProject.id]}
+              onLike={() => handleLike(heroProject.id)}
+              views={viewMap[heroProject.id]}
+            />
+          </motion.section>
+        )}
+
+        {nonHeroProjects.length > 0 && (
+          <motion.section {...revGrid}>
+            <ProjectGrid
+              projects={nonHeroProjects}
+              loading={false}
+              visibleItems={visibleItems}
+              setVisibleItems={setVisibleItems}
+              totalCount={nonHeroProjects.length}
+              onProjectClick={handleProjectClick}
+              likedMap={likedMap}
+              onLike={handleLike}
+              viewMap={viewMap}
+            />
+          </motion.section>
+        )}
+      </div>
     </main>
   );
 };

@@ -31,8 +31,19 @@ export const Services = () => {
             onClick={() => setSelected(s)}
           >
             <div className="service-icon">
-              <PatternBackground seed={s.id} opacity={0.28} />
-              <span>{s.title[0]}</span>
+              {s.iconUrl || s.image ? (
+                <img
+                  src={s.iconUrl || s.image}
+                  alt={s.title}
+                  className="service-icon-img"
+                  loading="lazy"
+                />
+              ) : (
+                <>
+                  <PatternBackground seed={s.id} opacity={0.28} />
+                  <span>{s.title[0]}</span>
+                </>
+              )}
             </div>
 
             <div className="service-body">
