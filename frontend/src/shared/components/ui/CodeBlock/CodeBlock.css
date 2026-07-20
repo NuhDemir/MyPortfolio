@@ -2,10 +2,67 @@
    Apple Standard Code Snippet Styles
    ========================================= */
 
+/* Wrapper for inline text snippet */
+.cb-text-snippet-wrapper {
+  position: relative;
+  display: block;
+  margin: 1.2em 0;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s, opacity 0.2s;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.cb-text-snippet-wrapper:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.cb-snippet-hover-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--ds-font-body, sans-serif);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.cb-text-snippet-wrapper:hover .cb-snippet-hover-overlay {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.cb-text-snippet-wrapper div {
+  font-family: inherit !important;
+}
+
+/* Modal Context Override */
+.cb-container--modal {
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+/* ── Original Editor / Container ── */
 .cb-container {
   margin: var(--ds-space-6) 0;
   border-radius: 12px;
-  background-color: #1e1e1e; /* VS Code / Xcode dark fallback */
   border: 1px solid rgba(255, 255, 255, 0.1);
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);

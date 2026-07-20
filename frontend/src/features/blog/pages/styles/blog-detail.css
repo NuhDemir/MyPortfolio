@@ -248,8 +248,7 @@
 .blog-detail__content blockquote {
   margin: var(--ds-space-8) 0;
   padding: var(--ds-space-4) var(--ds-space-6);
-  border-left: 2px solid var(--ds-fg);
-  background: var(--ds-surface);
+
   font-family: var(--ds-font-body);
   font-size: var(--ds-text-lg);
   color: var(--ds-fg);

@@ -1,6 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import Modal from "../../../ui/Modal.jsx";
+import { Expand } from "lucide-react";
 
 import { CodeBlockHeader } from "./CodeBlockHeader.jsx";
 import "./CodeBlock.css";
@@ -39,6 +41,7 @@ const parseMeta = (meta = "") => {
 
 export const CodeBlock = ({ rawCode, language, metaString }) => {
   const [wrapLines, setWrapLines] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
   const { highlightLines, fileName, isDiff, showLineNumbers } = useMemo(() => {
     return parseMeta(metaString);
@@ -83,29 +86,57 @@ export const CodeBlock = ({ rawCode, language, metaString }) => {
   const syntaxLang = autoDiff && language !== "diff" ? "diff" : language || "text";
 
   return (
-    <div className={`cb-container ${isTerminal ? 'cb-terminal' : ''}`}>
-      <CodeBlockHeader 
-        language={language} 
-        fileName={fileName} 
-        rawCode={rawCode} 
-        wrapLines={wrapLines} 
-        onToggleWrap={toggleWrap} 
-      />
-      <div className="cb-content">
+    <>
+      <div 
+        className="cb-text-snippet-wrapper" 
+        onClick={() => setIsModalOpen(true)}
+      >
         <SyntaxHighlighter
+          PreTag="div"
           language={syntaxLang}
           style={vscDarkPlus}
-          customStyle={{ margin: 0, padding: 0, background: "transparent" }}
-          showLineNumbers={showLineNumbers && !isTerminal}
-          wrapLines={true} // Required to apply lineProps
-          wrapLongLines={wrapLines}
-          lineProps={getLineProps}
-          lineNumberStyle={{ minWidth: "2.5em", paddingRight: "1em", color: "#6e7681", textAlign: "right" }}
+          customStyle={{ margin: 0, padding: 0, background: "transparent", display: "block" }}
+          showLineNumbers={false}
+          wrapLines={true}
+          wrapLongLines={true}
         >
           {rawCode}
         </SyntaxHighlighter>
+        <div className="cb-snippet-hover-overlay">
+          <Expand size={16} /> <span>Kodu İncele</span>
+        </div>
       </div>
-    </div>
+
+      <Modal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title={fileName ? `Kod Görünümü - ${fileName}` : "Kod Görünümü"}
+      >
+        <div className={`cb-container cb-container--modal ${isTerminal ? 'cb-terminal' : ''}`}>
+          <CodeBlockHeader 
+            language={language} 
+            fileName={fileName} 
+            rawCode={rawCode} 
+            wrapLines={wrapLines} 
+            onToggleWrap={toggleWrap} 
+          />
+          <div className="cb-content">
+            <SyntaxHighlighter
+              language={syntaxLang}
+              style={vscDarkPlus}
+              customStyle={{ margin: 0, padding: 0, background: "transparent" }}
+              showLineNumbers={showLineNumbers && !isTerminal}
+              wrapLines={true} // Required to apply lineProps
+              wrapLongLines={wrapLines}
+              lineProps={getLineProps}
+              lineNumberStyle={{ minWidth: "2.5em", paddingRight: "1em", color: "#6e7681", textAlign: "right" }}
+            >
+              {rawCode}
+            </SyntaxHighlighter>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };
 

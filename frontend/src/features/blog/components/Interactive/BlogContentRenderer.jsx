@@ -47,11 +47,23 @@ const Fallback = () => (
 
 // ── Code block dispatcher ────────────────────────────────────────────────────
 const CodeBlock = memo(({ node, inline, className, children, ...props }) => {
-  const raw = String(children).replace(/\n$/, "");
+  // Safely extract string from children to avoid [object Object]
+  const extractText = (child) => {
+    if (typeof child === 'string') return child;
+    if (typeof child === 'number') return String(child);
+    if (Array.isArray(child)) return child.map(extractText).join('');
+    if (child && child.props && child.props.children) return extractText(child.props.children);
+    return '';
+  };
+  const raw = extractText(children).replace(/\n$/, "");
   const lang = (className || "").replace("language-", "").toLowerCase().trim();
   const metaString = node?.data?.meta || "";
 
-  if (inline) {
+  // Treat as inline if explicitly inline, OR if it's a very short single-line snippet (<= 3 words)
+  const wordCount = raw.trim() ? raw.trim().split(/\s+/).length : 0;
+  const isShortSnippet = !raw.includes('\n') && wordCount <= 3;
+
+  if (inline || isShortSnippet) {
     return <code className="blog-inline-code" {...props}>{children}</code>;
   }
 
@@ -129,6 +141,7 @@ BlogImage.displayName = "BlogImage";
 
 // ── Custom component map ─────────────────────────────────────────────────────
 const COMPONENTS = {
+  pre: ({ children }) => <>{children}</>,
   code: CodeBlock,
   img: BlogImage,
   // Wrap table in a scroll div for mobile

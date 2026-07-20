@@ -91,9 +91,9 @@ const caseStudySchema = z
       .optional(),
     highlightCode: z
       .object({
-        language:    z.string().min(1).optional(),
-        fileName:    z.string().min(1).optional(),
-        codeSnippet: z.string().min(1).optional(),
+        language:    z.string().optional(),
+        fileName:    z.string().optional(),
+        codeSnippet: z.string().optional(),
         gistUrl:     optionalUrl,
       })
       .partial()

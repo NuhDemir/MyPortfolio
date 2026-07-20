@@ -1,4 +1,63 @@
 /* BlogCodePlayground Component Styles */
+
+/* Wrapper for inline text snippet */
+.bcp-text-snippet-wrapper {
+  position: relative;
+  display: block;
+  margin: 1.2em 0;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s, opacity 0.2s;
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", monospace;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
+
+.bcp-text-snippet-wrapper:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.bcp-snippet-hover-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(16, 185, 129, 0.8); /* Emerald green for playground */
+  backdrop-filter: blur(4px);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--ds-font-body, sans-serif);
+  font-weight: 600;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.bcp-text-snippet-wrapper:hover .bcp-snippet-hover-overlay {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.bcp-text-snippet-wrapper div {
+  font-family: inherit !important;
+}
+
+/* Modal Context Override */
+.bcp-wrap--modal {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+/* Original Playground Editor Styles */
 .bcp-wrap {
   margin: var(--ds-space-8) 0;
   background: #0d0d14;
