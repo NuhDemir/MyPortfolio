@@ -4,10 +4,18 @@ import { useTheme } from "../../../../core/context/ThemeContext.jsx";
 import "./BlogMermaid.css";
 
 let mermaidInstance = null;
+let elkRegistered = false;
 const getMermaid = async () => {
   if (!mermaidInstance) {
-    const mod = await import("mermaid");
-    mermaidInstance = mod.default;
+    const [mermaidMod, elkMod] = await Promise.all([
+      import("mermaid"),
+      import("@mermaid-js/layout-elk"),
+    ]);
+    mermaidInstance = mermaidMod.default;
+    if (!elkRegistered) {
+      mermaidInstance.registerLayoutLoaders(elkMod.default);
+      elkRegistered = true;
+    }
   }
   return mermaidInstance;
 };
@@ -43,13 +51,22 @@ const THEME_VARS = {
 
 // useMaxWidth:true → mermaid emits an SVG with a viewBox and width:100%,
 // so it always scales fluidly to the blog column's width (no manual zoom needed).
+// layout:"elk" swaps mermaid's default dagre layered algorithm for the ELK
+// engine, which packs nodes tighter and avoids the long, disproportionate
+// edges dagre produces on multi-branch flowcharts — shapes stay readable
+// instead of shrinking relative to over-long connector lines.
 const buildConfig = (theme) => ({
   startOnLoad: false,
   securityLevel: "strict",
   fontFamily: "var(--ds-font-body, -apple-system, 'SF Pro Text', Inter, sans-serif)",
   theme: theme === "dark" ? "dark" : "base",
   themeVariables: theme === "dark" ? THEME_VARS.dark : THEME_VARS.light,
-  flowchart: { useMaxWidth: true, htmlLabels: true, curve: "basis", padding: 14, nodeSpacing: 34, rankSpacing: 46 },
+  layout: "elk",
+  elk: {
+    mergeEdges: true,
+    nodePlacementStrategy: "NETWORK_SIMPLEX",
+  },
+  flowchart: { useMaxWidth: true, htmlLabels: true, curve: "basis", padding: 14, nodeSpacing: 28, rankSpacing: 40 },
   sequence: { useMaxWidth: true, wrap: true, boxMargin: 8, messageFontSize: 13, actorFontSize: 13 },
   gantt: { useMaxWidth: true },
   pie: { useMaxWidth: true },
