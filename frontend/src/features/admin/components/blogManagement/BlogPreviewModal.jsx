@@ -1,5 +1,6 @@
 import { X, Clock, Eye, ExternalLink } from "lucide-react";
 import { toTagsArray } from "../../utils/blogManagement";
+import BlogContentRenderer from "../../../blog/components/Interactive/BlogContentRenderer.jsx";
 import "./BlogCard.css";
 
 const BlogPreviewModal = ({ blog, isOpen, onClose }) => {
@@ -36,12 +37,11 @@ const BlogPreviewModal = ({ blog, isOpen, onClose }) => {
           </div>
         )}
 
-        <div
-          className="blog-preview__content"
-          dangerouslySetInnerHTML={{ __html: blog.contentHtml || blog.content || "" }}
-        />
+        <div className="blog-preview__content">
+          <BlogContentRenderer content={blog.content || ""} />
+        </div>
 
-        {blog.excerpt && !blog.contentHtml && (
+        {blog.excerpt && !blog.content && (
           <p className="blog-preview__excerpt">{blog.excerpt}</p>
         )}
       </div>
