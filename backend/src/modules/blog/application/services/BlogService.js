@@ -30,10 +30,7 @@ export class BlogService {
     const filter = isAdmin ? {} : { status: "published" };
     const blogs = await this.blogRepository.findAll(filter);
 
-    return blogs.map((blog) => ({
-      ...blog,
-      content: convertMarkdownToHtml(blog.content),
-    }));
+    return blogs;
   }
 
   async exportBlogsForJson() {
@@ -73,10 +70,7 @@ export class BlogService {
 
     await this.blogRepository.incrementViews(blog.id);
 
-    return {
-      ...blog,
-      content: convertMarkdownToHtml(blog.content),
-    };
+    return blog;
   }
 
   async createBlog(data) {
@@ -101,10 +95,7 @@ export class BlogService {
     payload.slug = await this.ensureUniqueSlug(data.slug ?? data.title);
 
     const created = await this.blogRepository.create(payload);
-    return {
-      ...created,
-      content: convertMarkdownToHtml(created.content),
-    };
+    return created;
   }
 
   async updateBlog(id, data) {
@@ -137,10 +128,7 @@ export class BlogService {
       throw new Error("Blog yazısı bulunamadı.");
     }
 
-    return {
-      ...updated,
-      content: convertMarkdownToHtml(updated.content),
-    };
+    return updated;
   }
 
   async deleteBlog(id) {
