@@ -136,7 +136,7 @@ const App = () => {
         <AppBackground />
         <Routes>
           <Route
-            path="/admin/*"
+            path="/dmr217cms/*"
             element={
               <Suspense fallback={<PageSkeleton />}>
                 <AdminRoutes />

@@ -36,6 +36,7 @@ import rehypeRaw from "rehype-raw";
 import { CodeBlock as PremiumCodeBlock } from "../../../../shared/components/ui/CodeBlock/CodeBlock.jsx";
 
 const BlogChart         = lazy(() => import("./BlogChart.jsx"));
+const BlogMermaid       = lazy(() => import("./BlogMermaid.jsx"));
 const BlogQuiz          = lazy(() => import("../../../../shared/components/ui/Quiz/Quiz.jsx"));
 const BlogCodePlayground= lazy(() => import("./BlogCodePlayground.jsx"));
 const BlogTabs          = lazy(() => import("./BlogTabs.jsx"));
@@ -72,6 +73,15 @@ const CodeBlock = memo(({ node, inline, className, children, ...props }) => {
     return (
       <Suspense fallback={<Fallback />}>
         <BlogChart chartData={raw} />
+      </Suspense>
+    );
+  }
+
+  // ── Mermaid ────────────────────────────────────────────────────────────
+  if (lang === "mermaid") {
+    return (
+      <Suspense fallback={<Fallback />}>
+        <BlogMermaid chart={raw} />
       </Suspense>
     );
   }
@@ -163,6 +173,15 @@ const COMPONENTS = {
   ),
 };
 
+// ── Pseudo-fence normalizer ──────────────────────────────────────────────────
+// Some content is authored with single backticks around multi-line blocks
+// (e.g. `mermaid\n...\n`) instead of proper triple-backtick fences. ReactMarkdown
+// treats those as inline code, so the block dispatcher above never sees them.
+// This upgrades single-backtick "lang\n...\n" blocks to real ``` fences.
+const PSEUDO_FENCE_RE = /(?<!`)`(?!`)([a-zA-Z][\w:+-]*)\n([\s\S]*?)(?<!`)`(?!`)/g;
+const normalizePseudoFences = (text) =>
+  text.replace(PSEUDO_FENCE_RE, (match, lang, body) => `\`\`\`${lang}\n${body}\n\`\`\``);
+
 // ── Main renderer ────────────────────────────────────────────────────────────
 const BlogContentRenderer = memo(({ content }) => {
   if (!content) return null;
@@ -173,7 +192,7 @@ const BlogContentRenderer = memo(({ content }) => {
         rehypePlugins={[rehypeRaw]}
         components={COMPONENTS}
       >
-        {content}
+        {normalizePseudoFences(content)}
       </ReactMarkdown>
     </div>
   );

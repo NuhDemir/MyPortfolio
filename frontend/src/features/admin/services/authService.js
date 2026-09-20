@@ -24,7 +24,7 @@ export const login = async (identity, password) => {
 
 export const logout = () => {
   clearStoredUser();
-  window.location.href = "/admin/login";
+  window.location.href = "/dmr217cms/login";
 };
 
 export const getCurrentUser = () => readStoredUser();

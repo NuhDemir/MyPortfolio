@@ -13,7 +13,7 @@ const userHasAccess = (user, allowedRoles) => {
   return allowedRoles.includes(user.role);
 };
 
-const ProtectedRoute = ({ allowedRoles = [], redirectTo = "/admin/login" }) => {
+const ProtectedRoute = ({ allowedRoles = [], redirectTo = "/dmr217cms/login" }) => {
   const user = readStoredUser();
 
   if (userHasAccess(user, allowedRoles)) {

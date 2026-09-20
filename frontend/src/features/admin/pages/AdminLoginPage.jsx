@@ -16,7 +16,7 @@ const AdminLoginPage = () => {
   useEffect(() => {
     const user = getCurrentUser();
     if (user?.token) {
-      navigate("/admin/dashboard", { replace: true });
+      navigate("/dmr217cms/dashboard", { replace: true });
     }
   }, [navigate]);
 
@@ -34,7 +34,7 @@ const AdminLoginPage = () => {
     try {
       await login(identity, password);
       refreshUser();
-      window.location.href = "/admin/dashboard";
+      window.location.href = "/dmr217cms/dashboard";
     } catch (err) {
       setError(err.message);
     } finally {

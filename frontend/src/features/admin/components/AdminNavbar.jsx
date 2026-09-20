@@ -43,20 +43,20 @@ const AdminNavbar = () => {
   }, [location.pathname]);
 
   const isActive = (to) => {
-    if (to === "/admin/dashboard") return location.pathname === "/admin/dashboard";
+    if (to === "/dmr217cms/dashboard") return location.pathname === "/dmr217cms/dashboard";
     return location.pathname.startsWith(to);
   };
 
   const handleLogout = () => {
     logout();
-    navigate("/admin/login");
+    navigate("/dmr217cms/login");
   };
 
   return (
     <>
       <header className={`anv2 ${hidden ? "anv2--hidden" : ""}`}>
         <div className="anv2__inner">
-          <NavLink to="/admin/dashboard" className="anv2__logo" aria-label="Dashboard">
+          <NavLink to="/dmr217cms/dashboard" className="anv2__logo" aria-label="Dashboard">
             <Bolt size={16} />
           </NavLink>
 

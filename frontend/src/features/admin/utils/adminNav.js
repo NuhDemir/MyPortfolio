@@ -7,42 +7,42 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 export const ADMIN_NAV_LINKS = [
   {
-    to: "/admin/dashboard",
+    to: "/dmr217cms/dashboard",
     label: "Dashboard",
     description: "Anlık gorunum",
     Icon: SpaceDashboardRoundedIcon,
     eyebrow: "Kontrol Merkezi",
   },
   {
-    to: "/admin/projects",
+    to: "/dmr217cms/projects",
     label: "Projeler",
     description: "Portfoy icerikleri",
     Icon: WorkspacesRoundedIcon,
     eyebrow: "Icerik Yonetimi",
   },
   {
-    to: "/admin/blog",
+    to: "/dmr217cms/blog",
     label: "Blog",
     description: "Yayin akisi",
     Icon: ArticleRoundedIcon,
     eyebrow: "Icerik Yonetimi",
   },
   {
-    to: "/admin/resources",
+    to: "/dmr217cms/resources",
     label: "Kaynaklar",
     description: "Onrrilen icerikler",
     Icon: LibraryBooksIcon,
     eyebrow: "Icerik Yonetimi",
   },
   {
-    to: "/admin/comments",
+    to: "/dmr217cms/comments",
     label: "Yorumlar",
     description: "Yorum yonetimi",
     Icon: CommentRoundedIcon,
     eyebrow: "Moderasyon",
   },
   {
-    to: "/admin/about",
+    to: "/dmr217cms/about",
     label: "About",
     description: "Hakkimda icerigi",
     Icon: ContactPageRoundedIcon,
@@ -74,7 +74,7 @@ export const getAdminPageMeta = (pathname) => {
     };
   }
 
-  if (path.startsWith("/admin")) {
+  if (path.startsWith("/dmr217cms")) {
     return DEFAULT_META;
   }
 

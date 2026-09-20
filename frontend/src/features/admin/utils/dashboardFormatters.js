@@ -53,8 +53,8 @@ export const getActivityHeadline = (item) => {
 };
 
 const ACTIVITY_ROUTES = {
-  project: "/admin/projects",
-  blog: "/admin/blog",
+  project: "/dmr217cms/projects",
+  blog: "/dmr217cms/blog",
 };
 
 export const getActivityRoute = (item) => {

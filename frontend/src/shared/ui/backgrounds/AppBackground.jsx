@@ -12,7 +12,7 @@ const AppBackground = () => {
   const { pathname } = useLocation();
   const [variant] = useState(pickRandom);
 
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/dmr217cms")) return null;
 
   return (
     <div className="ds-app-bg" aria-hidden="true">

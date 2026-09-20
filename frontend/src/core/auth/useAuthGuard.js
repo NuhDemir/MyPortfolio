@@ -4,7 +4,7 @@ import { readStoredUser } from "./authStorage.js";
 
 export const useAuthGuard = ({
   ensureAdmin = false,
-  redirectTo = "/admin/login",
+  redirectTo = "/dmr217cms/login",
 } = {}) => {
   const navigate = useNavigate();
   const [user, setUser] = useState(() => readStoredUser());

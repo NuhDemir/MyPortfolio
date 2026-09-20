@@ -29,7 +29,7 @@ const AdminRoutes = () => (
     <Route path="login" element={<AdminLoginPage />} />
     <Route
       element={
-        <ProtectedRoute allowedRoles={["admin"]} redirectTo="/admin/login" />
+        <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dmr217cms/login" />
       }
     >
       <Route element={<AdminLayout />}>

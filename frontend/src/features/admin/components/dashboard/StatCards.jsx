@@ -2,10 +2,10 @@ import { Link } from "react-router-dom";
 import { Blocks, FileText, MessageSquare, Contact, ChevronRight } from "lucide-react";
 
 const STAT_CARDS = [
-  { id: "projects", to: "/admin/projects", Icon: Blocks, label: "Projeler", note: "Portfoyde yayinlanan" },
-  { id: "blogs", to: "/admin/blog", Icon: FileText, label: "Blog Yazilari", note: "Editoryal icerik" },
-  { id: "comments", to: "/admin/comments", Icon: MessageSquare, label: "Yorumlar", noteFn: (s) => `${s.pendingCommentCount} beklemede` },
-  { id: "about", to: "/admin/about", Icon: Contact, label: "About", note: "Hakkimda icerigi", valueOverride: "CMS" },
+  { id: "projects", to: "/dmr217cms/projects", Icon: Blocks, label: "Projeler", note: "Portfoyde yayinlanan" },
+  { id: "blogs", to: "/dmr217cms/blog", Icon: FileText, label: "Blog Yazilari", note: "Editoryal icerik" },
+  { id: "comments", to: "/dmr217cms/comments", Icon: MessageSquare, label: "Yorumlar", noteFn: (s) => `${s.pendingCommentCount} beklemede` },
+  { id: "about", to: "/dmr217cms/about", Icon: Contact, label: "About", note: "Hakkimda icerigi", valueOverride: "CMS" },
 ];
 
 const StatCards = ({ stats }) => {

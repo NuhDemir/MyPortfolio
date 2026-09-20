@@ -3,10 +3,10 @@ import { Blocks, FileText, MessageSquare, Contact, CheckCircle, Clock } from "lu
 import { formatDay } from "../../utils/dashboardFormatters.js";
 
 const QUICK_LINKS = [
-  { to: "/admin/projects", Icon: Blocks, label: "Projeler" },
-  { to: "/admin/blog", Icon: FileText, label: "Blog" },
-  { to: "/admin/comments", Icon: MessageSquare, label: "Yorumlar" },
-  { to: "/admin/about", Icon: Contact, label: "About" },
+  { to: "/dmr217cms/projects", Icon: Blocks, label: "Projeler" },
+  { to: "/dmr217cms/blog", Icon: FileText, label: "Blog" },
+  { to: "/dmr217cms/comments", Icon: MessageSquare, label: "Yorumlar" },
+  { to: "/dmr217cms/about", Icon: Contact, label: "About" },
 ];
 
 const DashboardHero = ({ stats }) => {
